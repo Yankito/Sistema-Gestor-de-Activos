@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DashboardController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -15,6 +16,8 @@ Route::get('/', function () {
 Route::get('/register', function () {
     return view('register');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 // Ruta protegida para el registro
 Route::middleware('auth')->get('/register', function () {
