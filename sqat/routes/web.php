@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -9,6 +10,10 @@ Route :: get ('/login' , function () {
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/register', function () {
+    return view('register');
 });
 
 // Ruta protegida para el registro
