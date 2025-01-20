@@ -29,7 +29,7 @@
   <!-- Daterange picker -->
   <link rel="stylesheet" href="vendor/adminlte/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="vendor/adminlte/plugins/summernote/summernote-bs4.css">
 <script data-cfasync="false" nonce="0dee53e3-556b-42f5-b409-099c0e3badca">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="0dee53e3-556b-42f5-b409-099c0e3badca";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -58,6 +58,11 @@
             <button type="submit">Cerrar sesión</button>
         </for>
        </li>
+       @if($user->esAdministrador)
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="/register" class="nav-link">Registrar Admin</a>
+            </li>
+        @endif
     </ul>
 
     <!-- Right navbar links -->
@@ -222,46 +227,36 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{$cantidadActivos}}</h3>
 
-                <p>New Orders</p>
+                <p>Activos</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-laptop"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              @if($user->esAdministrador)
+                <a href="/activo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
+              @else
+                <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
+              @endif
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
 
-                <p>Bounce Rate</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{ $cantidadPersonas }}</h3>
 
-                <p>User Registrations</p>
+                <p>Personas</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
                 @if($user->esAdministrador)
-                <a href="/register" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="/persona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
                 @else
                 <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
                 @endif
@@ -274,14 +269,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{$cantidadUbicaciones}}</h3>
 
-                <p>Unique Visitors</p>
+                <p>Ubicaciones</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Registrar Ubicacion <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -315,6 +310,7 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
+<script src="vendor/adminlte/plugins/ControlSidebar.js"></script> <!-- Luego ControlSidebar -->
 <!-- Bootstrap 4 -->
 <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->

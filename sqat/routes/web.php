@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
+use App\Models\Activo;
+use App\Http\Controllers\ActivoController;
+use App\Http\Controllers\PersonaController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -17,7 +20,11 @@ Route::get('/register', function () {
     return view('register');
 });
 
+Route::get('/activo', [ActivoController::class, 'index']);
+
 Route::get('/dashboard', [DashboardController::class, 'index']);
+
+Route::get('/persona', [PersonaController::class,'index']);
 
 // Ruta protegida para el registro
 Route::middleware('auth')->get('/register', function () {
@@ -43,3 +50,5 @@ Route::post('/logout', function () {
 Route::middleware('auth')->get('/profile', function () {
     return view('profile');
 });
+
+Route::post('/activos', [ActivoController::class, 'store']);
