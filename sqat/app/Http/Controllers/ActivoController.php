@@ -24,9 +24,9 @@ class ActivoController extends Controller
         $activo->marca = $request->marca;
         $activo->modelo = $request->modelo;
         $activo->tipoActivo = $request->tipoActivo;
-        $activo->estado = $request->estado;
-        $activo->usuarioDeActivo = $request->usuarioDeActivo;
-        $activo->responsableDeActivo = $request->responsableDeActivo;
+        $activo->estado = 'DISPONIBLE';
+        $activo->usuarioDeActivo = 'null';
+        $activo->responsableDeActivo = 'null';
         $activo->docking = $request->has('docking');
         $activo->parlanteJabra = $request->has('parlanteJabra');
         $activo->discoDuroExt = $request->has('discoDuroExt');

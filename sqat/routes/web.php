@@ -20,12 +20,6 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/activo', [ActivoController::class, 'index']);
-
-Route::get('/dashboard', [DashboardController::class, 'index']);
-
-Route::get('/persona', [PersonaController::class,'index']);
-
 // Ruta protegida para el registro
 Route::middleware('auth')->get('/register', function () {
     if (Auth::check() && Auth::user()->esAdministrador) {
@@ -36,9 +30,10 @@ Route::middleware('auth')->get('/register', function () {
 });
 
 Route::middleware('auth')->post('/register', [AuthController::class, 'register']);
+Route::middleware('auth')->post('/persona', [PersonaController::class, 'store']);
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/activo', [ActivoController::class, 'index']);
     Route::get('/persona', [PersonaController::class,'index']);
 });

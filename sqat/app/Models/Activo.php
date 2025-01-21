@@ -8,6 +8,7 @@ class Activo extends Model
 {
     // Definir el nombre de la tabla si no sigue la convención
     protected $table = 'activos';
+    protected $primaryKey = 'nroSerie';
 
     // Definir los campos que pueden ser asignados masivamente
     protected $fillable = [

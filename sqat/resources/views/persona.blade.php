@@ -1,4 +1,3 @@
-@extends('layouts.app')  <!-- Esto extiende el layout app.blade.php -->
 <!doctype html>
 <html lang="en">
     <head>
@@ -27,7 +26,7 @@
 
                                         <h2>Registrar nueva Persona</h2>
 
-                                        <form action="/personas" method="POST">
+                                        <form action="/persona" method="POST">
                                             @csrf
 
                                             <!-- RUT -->
@@ -72,17 +71,6 @@
                                                 <input type="text" name="empresa" id="empresa" required class="form-control" />
                                             </div>
 
-                                            <!-- Estado de Empleado -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="estadoEmpleado">Estado de Empleado</label>
-                                                <select name="estadoEmpleado" id="estadoEmpleado" class="form-control" required>
-                                                    <option value="Activo">Activo</option>
-                                                    <option value="Inactivo">Inactivo</option>
-                                                    <option value="Licencia">Licencia</option>
-                                                    <option value="Vacaciones">Vacaciones</option>
-                                                </select>
-                                            </div>
-
                                             <!-- Centro Costo -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="centroCosto">Centro Costo</label>
@@ -110,7 +98,10 @@
                                             <!-- Usuario TI -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="usuarioTI">Usuario TI</label>
-                                                <input type="text" name="usuarioTI" id="usuarioTI" class="form-control" />
+                                                <select name="usuarioTI" id="usuarioTI" class="form-control" required>
+                                                    <option value="1">SI</option>
+                                                    <option value="0">NO</option>
+                                                </select>
                                             </div>
 
                                             <!-- Ubicación -->
@@ -127,9 +118,11 @@
                                             <!-- Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" >Activo</label>
-                                                <select name="usuarioDeActivo" class="form-control" required>
+                                                <select name="activo" id=activo class="form-control" required>
                                                     @foreach($activos as $activo)
-                                                        <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}} - {{$activo->modelo}} - {{$activo->marca}}</option>
+                                                        @if ($activo->estado == 'DISPONIBLE')
+                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}} - {{$activo->modelo}} - {{$activo->marca}}</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                             </div>
