@@ -23,6 +23,7 @@ class ActivoController extends Controller
         $activo->nroSerie = $request->nroSerie;
         $activo->marca = $request->marca;
         $activo->modelo = $request->modelo;
+        $activo->tipoActivo = $request->tipoActivo;
         $activo->estado = $request->estado;
         $activo->usuarioDeActivo = $request->usuarioDeActivo;
         $activo->responsableDeActivo = $request->responsableDeActivo;
