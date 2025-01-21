@@ -251,7 +251,7 @@
                 <p>Personas</p>
               </div>
               <div class="icon">
-                <i class="ion ion-person-add"></i>
+              <i class="ion ion-person-add" onclick="window.location.href='/tablaPersonas';"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
                 @if($user->esAdministrador)

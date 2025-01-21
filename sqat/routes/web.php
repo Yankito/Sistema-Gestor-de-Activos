@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Activo;
 use App\Http\Controllers\ActivoController;
 use App\Http\Controllers\PersonaController;
+use App\Http\Controllers\TablaPersonasController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -36,6 +37,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/activo', [ActivoController::class, 'index']);
     Route::get('/persona', [PersonaController::class,'index']);
+    Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
 });
 
 
