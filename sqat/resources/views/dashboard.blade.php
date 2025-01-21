@@ -135,11 +135,10 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Empresas Iansa</span>
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div>
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
