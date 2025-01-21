@@ -10,10 +10,10 @@ use App\Http\Controllers\PersonaController;
 
 Route :: get ('/login' , function () {
     return view ('login');
-});
+})->name('login');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 Route::get('/register', function () {
@@ -36,6 +36,12 @@ Route::middleware('auth')->get('/register', function () {
 });
 
 Route::middleware('auth')->post('/register', [AuthController::class, 'register']);
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/activo', [ActivoController::class, 'index']);
+    Route::get('/persona', [PersonaController::class,'index']);
+});
 
 
 Route::post('/login', [AuthController::class, 'login']);

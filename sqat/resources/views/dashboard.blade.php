@@ -47,22 +47,22 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="index3.html" class="nav-link">Inicio</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Contacto</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <form action="/logout" method="POST">
-            @csrf
-            <button type="submit">Cerrar sesión</button>
-        </for>
-       </li>
-       @if($user->esAdministrador)
+      @if($user->esAdministrador)
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="/register" class="nav-link">Registrar Admin</a>
             </li>
         @endif
+      <li class="nav-item d-none d-sm-inline-block">
+        <form action="/logout" method="POST" class= "d-inline">
+            @csrf
+            <button type="submit" class="btn btn-link nav-link">Cerrar sesión</button>
+        </for>
+       </li>
     </ul>
 
     <!-- Right navbar links -->

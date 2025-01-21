@@ -62,7 +62,7 @@ class AuthController extends Controller
 
         // Intentar autenticar al usuario
         if (Auth::attempt(credentials: $credentials)) {
-            return redirect('/dashboard'); // Redirigir a la página de perfil si el login es exitoso
+            return redirect()->intended('/dashboard'); // Redirigir a la página de perfil si el login es exitoso
         }
 
         // Si la autenticación falla, devolver con un mensaje de error
