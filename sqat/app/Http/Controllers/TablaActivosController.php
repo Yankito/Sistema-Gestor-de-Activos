@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Activo;
 
-class TablaActivos extends Controller
+class TablaActivosController extends Controller
 {
     public function index()
     {
