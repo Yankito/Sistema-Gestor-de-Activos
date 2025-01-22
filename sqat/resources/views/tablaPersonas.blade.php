@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Iansa | Tabla Personas</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -128,7 +128,24 @@
   $(function () {
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-      "buttons": ["copy", "csv", "excel", "print", "colvis"]
+      "buttons": [
+        { 
+            extend:"copy",
+            title: 'Iansa - Tabla de personas',
+        },
+        { 
+            extend:"csv",
+            title: 'Iansa - Tabla de personas',
+        },
+        { 
+            extend:"excel",
+            title: 'Iansa - Tabla de personas',
+        },
+        { 
+            extend:"print",
+            title: 'Iansa - Tabla de personas',
+        }, 
+        "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
 </script>

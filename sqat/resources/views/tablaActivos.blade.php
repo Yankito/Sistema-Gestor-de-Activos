@@ -132,7 +132,24 @@
   $(function () {
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-      "buttons": ["copy", "csv", "excel", "print", "colvis"]
+      "buttons": [
+        {
+            extend:"copy",
+            title: 'Iansa - Tabla de activos',
+        },
+        {
+            extend:"csv",
+            title: 'Iansa - Tabla de activos',
+        },
+        {
+            extend:"excel",
+            title: 'Iansa - Tabla de activos',
+        },
+        {
+            extend:"print",
+            title: 'Iansa - Tabla de activos',
+        }
+        , "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
 </script>
