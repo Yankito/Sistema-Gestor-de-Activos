@@ -13,13 +13,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Obtener el usuario autenticado
-        $user = Auth::user();
         $cantidadActivos = Activo::count();
         $cantidadPersonas = Persona::count();
         $cantidadUbicaciones = Ubicacion::count();
 
         // Pasar el usuario a la vista
-        return view('dashboard', compact('user', 'cantidadActivos','cantidadPersonas','cantidadUbicaciones'));
+        return view('dashboard', compact('cantidadActivos','cantidadPersonas','cantidadUbicaciones'));
     }
 }
