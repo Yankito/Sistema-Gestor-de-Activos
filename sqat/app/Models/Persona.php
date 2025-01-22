@@ -8,6 +8,7 @@ class Persona extends Model
 {
     // Nombre de la tabla asociada en la base de datos
     protected $table = 'personas';
+    protected $primaryKey = 'rut';
 
     // Campos que se pueden asignar masivamente
     protected $fillable = [

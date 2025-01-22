@@ -8,6 +8,7 @@ use App\Models\Activo;
 use App\Http\Controllers\ActivoController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\TablaPersonasController;
+use App\Http\Controllers\TablaActivos;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/activo', [ActivoController::class, 'index']);
     Route::get('/persona', [PersonaController::class,'index']);
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
+    Route::get('/tablaActivos', [TablaActivos::class, 'index']);
 });
 
 

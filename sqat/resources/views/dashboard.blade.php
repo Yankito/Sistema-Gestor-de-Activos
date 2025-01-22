@@ -204,7 +204,7 @@
                 <p>Activos</p>
               </div>
               <div class="icon">
-                <i class="ion ion-laptop"></i>
+                <i class="ion ion-laptop"  onclick="window.location.href='/tablaActivos';"></i>
               </div>
               @if($user->esAdministrador)
                 <a href="/activo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
