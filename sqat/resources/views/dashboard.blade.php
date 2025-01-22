@@ -203,7 +203,7 @@
 
                 <p>Activos</p>
               </div>
-              <div class="icon">
+              <div class="icon" style="cursor: pointer;">
                 <i class="ion ion-laptop"  onclick="window.location.href='/tablaActivos';"></i>
               </div>
               @if($user->esAdministrador)
@@ -223,7 +223,7 @@
 
                 <p>Personas</p>
               </div>
-              <div class="icon">
+              <div class="icon" style="cursor: pointer;">
               <i class="ion ion-person-add" onclick="window.location.href='/tablaPersonas';"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
