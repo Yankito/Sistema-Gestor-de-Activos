@@ -128,19 +128,22 @@
                   </thead>
                   <tbody>
                     @foreach($personas as $persona)
-                    <tr>
-                        <td>{{ $persona->rut }}</td>
-                        <td>{{ $persona->nombres }}</td>
-                        <td>{{ $persona->primerApellido }}</td>
-                        <td>
-                            <a href="{{ route('dashboard', $persona->id) }}" class="btn btn-primary">Editar</a>
-                            <form  method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $persona->rut }}</td>
+                            <td>{{ $persona->nombreUsuario }}</td>
+                            <td>{{ $persona->nombres }}</td>
+                            <td>{{ $persona->primerApellido }}</td>
+                            <td>{{ $persona->segundoApellido }}</td>
+                            <td>{{ $persona->supervisor }}</td>
+                            <td>{{ $persona->empresa }}</td>
+                            <td>{{ $persona->estadoEmpleado }}</td>
+                            <td>{{ $persona->centroCosto }}</td>
+                            <td>{{ $persona->denominacion }}</td>
+                            <td>{{ $persona->tituloPuesto }}</td>
+                            <td>{{ $persona->fechaInicio }}</td>
+                            <td>{{ $persona->usuarioTI }}</td>
+                            <td>{{ $persona->ubicacion }}</td>
+                        </tr>
                     @endforeach
                   </tbody>
                   <tfoot>
