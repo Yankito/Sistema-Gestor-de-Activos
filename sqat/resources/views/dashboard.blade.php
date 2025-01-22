@@ -70,8 +70,8 @@
 
                 <p>Activos</p>
               </div>
-              <div class="icon">
-                <i class="ion ion-laptop"></i>
+              <div class="icon" style="cursor: pointer;">
+                <i class="ion ion-laptop"  onclick="window.location.href='/tablaActivos';"></i>
               </div>
               @if($user->esAdministrador)
                 <a href="/activo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
@@ -90,7 +90,7 @@
 
                 <p>Personas</p>
               </div>
-              <div class="icon">
+              <div class="icon" style="cursor: pointer;">
               <i class="ion ion-person-add" onclick="window.location.href='/tablaPersonas';"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
