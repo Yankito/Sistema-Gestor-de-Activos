@@ -1,4 +1,3 @@
-@extends('layouts.app')  <!-- Esto extiende el layout app.blade.php -->
 <!doctype html>
 <html lang="en">
     <head>
@@ -57,33 +56,17 @@
                                                 <input type="text" name="modelo" id="modelo" required class="form-control" />
                                             </div>
 
-                                            <!-- Estado -->
+                                            <!-- Tipo de Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="estado">Estado</label>
-                                                <select name="estado" id="estado" class="form-control" required>
-                                                    <option value="ASIGNADO">Asignado</option>
-                                                    <option value="DISPONIBLE">Disponible</option>
-                                                    <option value="ROBADO">Robado</option>
-                                                    <option value="PARA BAJA">Para Baja</option>
-                                                    <option value="DONADO">Donado</option>
+                                                <label class="form-label" for="tipoActivo">Tipo de Activo</label>
+                                                <select name="tipoActivo" id="tipoActivo" class="form-control" required>
+                                                    <option value="LAPTOP">Laptop</option>
+                                                    <option value="DESKTOP">Desktop</option>
+                                                    <option value="MONITOR">Monitor</option>
+                                                    <option value="IMPRESORA">Impresora</option>
+                                                    <option value="CELULAR">Celular</option>
+                                                    <option value="OTRO">Otro</option>
                                                 </select>
-                                            </div>
-
-                                            <!-- Usuario de Activo -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="usuarioDeActivo">Usuario de Activo</label>
-                                                <select name="usuarioDeActivo" id="usuarioDeActivo" class="form-control" required>
-                                                    <!personas del modelo Persona>
-                                                    @foreach($personas as $persona)
-                                                        <option value="{{$persona->id}}">{{$persona->nombre}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <!-- Responsable de Activo -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="responsableDeActivo">Responsable de Activo</label>
-                                                <input type="text" name="responsableDeActivo" id="responsableDeActivo" class="form-control" />
                                             </div>
 
                                             <!-- Docking -->

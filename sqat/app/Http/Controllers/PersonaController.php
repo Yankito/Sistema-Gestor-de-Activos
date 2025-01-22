@@ -22,8 +22,8 @@ class PersonaController extends Controller
     // Mostrar el formulario para crear una nueva persona
     public function create()
     {
-        // Devolver la vista del formulario de creación
-        return view('personas.create');
+        $ubicaciones = Ubicacion::all(); // Cargar ubicaciones para el formulario
+        return view('persona', compact('ubicaciones'));
     }
 
     // Almacenar una nueva persona en la base de datos
@@ -31,90 +31,90 @@ class PersonaController extends Controller
     {
         // Validar la solicitud
         $request->validate([
-            'rut' => 'required|string|max:255|unique:personas',
-            'nombreUsuario' => 'required|string|max:255',
-            'nombres' => 'required|string|max:255',
-            'primerApellido' => 'required|string|max:255',
-            'segundoApellido' => 'nullable|string|max:255',
-            'supervisor' => 'nullable|string|max:255',
-            'empresa' => 'nullable|string|max:255',
-            'estadoEmpleado' => 'nullable|string|max:255',
-            'centroCosto' => 'nullable|string|max:255',
-            'denominacion' => 'nullable|string|max:255',
-            'tituloPuesto' => 'nullable|string|max:255',
-            'fechaInicio' => 'nullable|date',
-            'usuarioTI' => 'nullable|string|max:255',
-            'ubicacion' => 'nullable|integer',
+            'rut' => 'required|string|max:15|unique:personas',
+            'nombreUsuario' => 'required|string|max:50',
+            'nombres' => 'required|string|max:50',
+            'primerApellido' => 'required|string|max:25',
+            'segundoApellido' => 'nullable|string|max:25',
+            'supervisor' => 'nullable|string|max:60',
+            'empresa' => 'required|string|max:60',
+            'estadoEmpleado' => 'nullable|boolean',
+            'centroCosto' => 'required|string|max:50',
+            'denominacion' => 'required|string|max:60',
+            'tituloPuesto' => 'required|string|max:60',
+            'fechaInicio' => 'required|date',
+            'usuarioTI' => 'required|boolean',
+            'ubicacion' => 'nullable|exists:ubicaciones,id',
+            'activo' => 'required|exists:activos,nroSerie',
         ]);
 
+        // Establecer valor predeterminado para estadoEmpleado si no se proporciona
+        $data = $request->all();
+        $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
+
         // Crear una nueva persona con los datos validados
-        Persona::create($request->all());
+        Persona::create($data);
+
+        //Asignar persona a activo de tal numero de serie
+        $activo = Activo::where('nroSerie', $request->activo)->first();
+        $activo->usuarioDeActivo = $request->rut;
+        $activo->estado = 'ASIGNADO';
+        $activo->update();
 
         // Redirigir con un mensaje de éxito
-        return redirect()->route('personas.index')->with('success', 'Persona registrada correctamente');
+        return redirect()->route('dashboard')->with('success', 'Persona registrada correctamente');
     }
 
     // Mostrar una persona específica por su ID
     public function show($id)
     {
-        // Buscar la persona por ID o devolver un error 404 si no se encuentra
         $persona = Persona::findOrFail($id);
-
-        // Devolver la vista con los detalles de la persona
         return view('personas.show', compact('persona'));
     }
 
     // Mostrar el formulario para editar una persona existente
     public function edit($id)
     {
-        // Buscar la persona por ID
         $persona = Persona::findOrFail($id);
-
-        // Devolver la vista con el formulario de edición y la persona a editar
-        return view('personas.edit', compact('persona'));
+        $ubicaciones = Ubicacion::all(); // Cargar ubicaciones para el formulario
+        return view('personas.edit', compact('persona', 'ubicaciones'));
     }
 
     // Actualizar la persona en la base de datos
     public function update(Request $request, $id)
     {
-        // Validar la solicitud
         $request->validate([
-            'rut' => 'required|string|max:255|unique:personas,rut,' . $id,
-            'nombreUsuario' => 'required|string|max:255',
-            'nombres' => 'required|string|max:255',
-            'primerApellido' => 'required|string|max:255',
-            'segundoApellido' => 'nullable|string|max:255',
-            'supervisor' => 'nullable|string|max:255',
-            'empresa' => 'nullable|string|max:255',
-            'estadoEmpleado' => 'nullable|string|max:255',
-            'centroCosto' => 'nullable|string|max:255',
-            'denominacion' => 'nullable|string|max:255',
-            'tituloPuesto' => 'nullable|string|max:255',
-            'fechaInicio' => 'nullable|date',
-            'usuarioTI' => 'nullable|string|max:255',
-            'ubicacion' => 'nullable|integer',
+            'rut' => 'required|string|max:15|unique:personas,rut,' . $id,
+            'nombreUsuario' => 'required|string|max:50',
+            'nombres' => 'required|string|max:50',
+            'primerApellido' => 'required|string|max:25',
+            'segundoApellido' => 'nullable|string|max:25',
+            'supervisor' => 'nullable|string|max:60',
+            'empresa' => 'required|string|max:60',
+            'estadoEmpleado' => 'nullable|boolean',
+            'centroCosto' => 'required|string|max:50',
+            'denominacion' => 'required|string|max:60',
+            'tituloPuesto' => 'required|string|max:60',
+            'fechaInicio' => 'required|date',
+            'usuarioTI' => 'required|boolean',
+            'ubicacion' => 'nullable|exists:ubicaciones,id',
         ]);
 
-        // Buscar la persona a actualizar
         $persona = Persona::findOrFail($id);
 
-        // Actualizar la persona con los nuevos datos
-        $persona->update($request->all());
+        // Actualizar con los datos validados
+        $data = $request->all();
+        $persona->update($data);
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('personas.index')->with('success', 'Persona actualizada correctamente');
     }
 
     // Eliminar una persona de la base de datos
     public function destroy($id)
     {
-        // Buscar la persona a eliminar
         $persona = Persona::findOrFail($id);
-
-        // Eliminar la persona
         $persona->delete();
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('personas.index')->with('success', 'Persona eliminada correctamente');
     }
 }

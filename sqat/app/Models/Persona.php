@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Persona extends Model
 {
-    // Definir el nombre de la tabla si no sigue la convención
+    // Nombre de la tabla asociada en la base de datos
     protected $table = 'personas';
 
-    // Definir los campos que pueden ser asignados masivamente
+    // Campos que se pueden asignar masivamente
     protected $fillable = [
         'rut',
         'nombreUsuario',
@@ -27,15 +27,27 @@ class Persona extends Model
         'ubicacion',
     ];
 
-    // Si el campo 'rut' no es auto incrementable, desactivar el incremento automático
+    // Desactivar auto-incremento si el campo clave primaria no es un ID numérico
     public $incrementing = false;
 
-    // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
+    // Activar timestamps si se están usando las columnas created_at y updated_at
     public $timestamps = true;
 
-    // Relación con la tabla Ubicacion (cada Persona tiene una Ubicación)
+    // Relación con la tabla Ubicacion (cada Persona pertenece a una Ubicacion)
     public function ubicacion()
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion', 'id');
+    }
+
+    // Método para obtener el nombre completo de una persona
+    public function getNombreCompletoAttribute()
+    {
+        return "{$this->nombres} {$this->primerApellido} {$this->segundoApellido}";
+    }
+
+    // Scope para buscar personas activas
+    public function scopeActivas($query)
+    {
+        return $query->where('estadoEmpleado', true);
     }
 }

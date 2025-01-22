@@ -1,4 +1,3 @@
-@extends('layouts.app')  <!-- Esto extiende el layout app.blade.php -->
 <!doctype html>
 <html lang="en"></html>
     <head>

@@ -22,7 +22,7 @@ class CreatePersonasTable extends Migration
             $table->string('segundoApellido', 25)->nullable();  // 'segundoApellido' (opcional)
             $table->string('supervisor', 60)->nullable();  // 'supervisor' (opcional)
             $table->string('empresa', 60);         // 'empresa' (no nulo)
-            $table->boolean('estadoEmpleado');     // 'estadoEmpleado' (no nulo)
+            $table->boolean('estadoEmpleado')->default(true);  // 'estadoEmpleado' (no nulo)
             $table->string('centroCosto', 50);     // 'centroCosto' (no nulo)
             $table->string('denominacion', 60);    // 'denominacion' (no nulo)
             $table->string('tituloPuesto', 60);    // 'tituloPuesto' (no nulo)

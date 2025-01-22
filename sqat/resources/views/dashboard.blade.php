@@ -51,17 +51,8 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contacto</a>
       </li>
-      @if($user->esAdministrador)
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="/register" class="nav-link">Registrar Admin</a>
-            </li>
-        @endif
-      <li class="nav-item d-none d-sm-inline-block">
-        <form action="/logout" method="POST" class= "d-inline">
-            @csrf
-            <button type="submit" class="btn btn-link nav-link">Cerrar sesión</button>
-        </for>
-       </li>
+
+
     </ul>
 
     <!-- Right navbar links -->
@@ -160,12 +151,17 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
+                @if($user->esAdministrador)
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">Registrar Admin</a>
+                </ul>
+            @endif
+            <ul class="nav-item d-none d-sm-inline-block">
+                <form action="/logout" method="POST" class= "d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-link nav-link">Cerrar sesión</button>
+                </for>
             </ul>
           </li>
       </nav>
@@ -228,7 +224,7 @@
                 <p>Personas</p>
               </div>
               <div class="icon">
-                <i class="ion ion-person-add"></i>
+              <i class="ion ion-person-add" onclick="window.location.href='/tablaPersonas';"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
                 @if($user->esAdministrador)
