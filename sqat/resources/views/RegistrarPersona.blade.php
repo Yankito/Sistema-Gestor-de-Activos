@@ -1,3 +1,4 @@
+@extends('layouts.app')
 <!doctype html>
 <html lang="en">
     <head>
@@ -11,7 +12,7 @@
         <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
     </head>
 
-    <body>
+    @section('content')
         <section class="h-100 gradient-form" style="background-color: #eee;">
             <div class="container py-5 h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
@@ -26,7 +27,7 @@
 
                                         <h2>Registrar nueva Persona</h2>
 
-                                        <form action="/persona" method="POST">
+                                        <form action="/personas" method="POST">
                                             @csrf
 
                                             <!-- RUT -->
@@ -141,5 +142,5 @@
                 </div>
             </div>
         </section>
-    </body>
+    @endsection
 </html>
