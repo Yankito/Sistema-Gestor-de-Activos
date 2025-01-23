@@ -39,12 +39,12 @@
                         <form action="/login" method="POST">
                             @csrf
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <label class="form-label" for="form2Example11">Correo</label>
+                                <label class="form-label" for="correo">Correo</label>
                                 <input input type="email" name="correo" id="correo" required class="form-control"/>
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <label class="form-label" for="form2Example22">Password</label>
+                                <label class="form-label" for="contrasena">Password</label>
                                 <input type="password" name="contrasena" id="contrasena" required class="form-control" />
                             </div>
 
