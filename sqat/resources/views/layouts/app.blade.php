@@ -240,5 +240,89 @@
         <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+        <!-- Select2 -->
+        <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
+
+        <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+            theme: 'bootstrap4'
+            })
+        })
+
+
+    const selectDisplay = document.getElementById('selectDisplay');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const items = optionsContainer.querySelectorAll('.item');
+    const categories = optionsContainer.querySelectorAll('.category');
+    const activo = document.getElementById('activo');
+
+    // Mostrar/ocultar opciones al enfocar el campo
+    selectDisplay.addEventListener('focus', () => {
+        optionsContainer.style.display = 'block';
+    });
+
+    // Ocultar opciones cuando el usuario hace clic fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-select')) {
+            optionsContainer.style.display = 'none';
+        }
+    });
+
+    // Toggle category items
+    categories.forEach(category => {
+        category.addEventListener('click', () => {
+            const categoryName = category.dataset.category;
+            const categoryItems = document.querySelectorAll(`.item[data-category="${categoryName}"]`);
+            categoryItems.forEach(item => {
+                item.style.display = item.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+    });
+
+    // Filtrar opciones mientras el usuario escribe
+    selectDisplay.addEventListener('input', (e) => {
+        const searchText = e.target.value.toLowerCase();
+        filterOptions(searchText);
+    });
+
+    selectDisplay.addEventListener('click', () => {
+        optionsContainer.classList.toggle('active');
+        searchBox.style.display = optionsContainer.classList.contains('active') ? 'block' : 'none';
+        searchBox.value = ''; // Clear search on open
+        filterOptions(''); // Reset filter
+    });
+
+    const filterOptions = (text) => {
+        items.forEach(item => {
+            const content = item.textContent.toLowerCase();
+            item.style.display = content.includes(text) ? 'block' : 'none';
+        });
+
+        // Ocultar categorías si no tienen elementos visibles
+        categories.forEach(category => {
+            const relatedItems = Array.from(items).filter(
+                item => item.dataset.category === category.dataset.category && item.style.display === 'block'
+            );
+            category.style.display = relatedItems.length > 0 ? 'block' : 'none';
+        });
+    };
+
+    // Rellenar el campo con el texto seleccionado
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            selectDisplay.value = item.textContent;
+            activo.value = item.dataset.value;
+            optionsContainer.style.display = 'none';
+        });
+    });
+
+
+
+    </script>
+
+
+
 </body>
 </html>

@@ -25,11 +25,17 @@ class RegistrarActivoController extends Controller
         $activo->modelo = $request->modelo;
         $activo->tipoActivo = $request->tipoActivo;
         $activo->estado = 'DISPONIBLE';
-        $activo->usuarioDeActivo = 'null';
-        $activo->responsableDeActivo = 'null';
+        $activo->usuarioDeActivo = NULL;
+        $activo->responsableDeActivo = NULL;
+        $activo->docking = false;
+        $activo->parlanteJabra = false;
+        $activo->discoDuroExt = false;
+        $activo->impresoraExclusiva = false;
+        $activo->monitor = false;
+        $activo->mouse = false;
+        $activo->teclado = false;
 
         $accesorios[] = $request->accesorios;
-        dd($accesorios);
         $activo = $this->seleccionarAccesorios($activo, $accesorios);
 
         $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
@@ -43,6 +49,7 @@ class RegistrarActivoController extends Controller
 
     public function seleccionarAccesorios(Activo $activo, array $accesorios){
         foreach ($accesorios as $accesorio){
+
             switch ($accesorio){
                 case "docking":
                     $activo->docking = true;

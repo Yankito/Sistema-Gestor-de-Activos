@@ -6,11 +6,50 @@
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<style>
+        .custom-select {
+    position: relative;
+    width: 300px;
+}
+.select-display {
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+        }
 
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-        <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
+.options-container {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.category {
+            font-weight: bold;
+            padding: 10px;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+
+.item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.item:hover {
+    background: #ddd;
+}
+
+    </style>
+
     </head>
+
+
 
     @section('content')
         <section class="h-100 gradient-form" style="background-color: #eee;">
@@ -117,15 +156,36 @@
                                             </div>
 
                                             <!-- Activo -->
+
+
+
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" >Activo</label>
-                                                <select name="activo" id=activo class="form-control" required>
-                                                    @foreach($activos as $activo)
-                                                        @if ($activo->estado == 'DISPONIBLE')
-                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}} - {{$activo->modelo}} - {{$activo->marca}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
+                                                <div class="custom-select">
+                                                <input
+                                                    type="text"
+                                                    id="selectDisplay"
+                                                    placeholder="Seleccione una opción"
+                                                    style="width: 100%; padding: 10px; border: 1px solid #ccc;"
+                                                />
+                                                <input type="hidden" name="activo" id="activo" />
+                                                    <div class="options-container" id="optionsContainer" style="display: none;">
+                                                        <div class="category" data-category="desktop">Desktop</div>
+                                                        <div class="item" data-category="desktop" style="display: none;">Gaming PC</div>
+                                                        <div class="item" data-category="desktop" style="display: none;">Workstation</div>
+                                                        <div class="item" data-category="desktop" style="display: none;">Mini PC</div>
+                                                        <div class="category" data-category="laptop">Laptop</div>
+                                                        @foreach($activos as $activo)
+                                                            @if ($activo->estado == 'DISPONIBLE' && $activo->tipoActivo == 'LAPTOP')
+                                                                <div class="item" data-category="laptop" data-value="{{ $activo->nroSerie }}" style="display: none;">{{$activo->nroSerie}} - {{$activo->modelo}} - {{$activo->marca}}</div>
+                                                            @endif
+                                                        @endforeach
+                                                        <div class="category" data-category="monitor">Monitor</div>
+                                                        <div class="item" data-category="monitor" style="display: none;">4K Monitor</div>
+                                                        <div class="item" data-category="monitor" style="display: none;">Gaming Monitor</div>
+                                                        <div class="item" data-category="monitor" style="display: none;">Curved Monitor</div>
+                                                    </div>
+                                                </div>
                                             </div>
 
 
@@ -143,4 +203,6 @@
             </div>
         </section>
     @endsection
+
+
 </html>
