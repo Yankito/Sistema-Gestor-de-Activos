@@ -105,11 +105,11 @@
                 <a href="/dashboard" class="brand-link">
                 <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTE Logo"  width="200" height="auto"  style="opacity: .8">
                 </a>
-                <!-- Sidebar -->  
-            <div class="sidebar">  
+                <!-- Sidebar -->
+            <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                    <div class="image"> 
+                    <div class="image">
                     <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
@@ -137,7 +137,7 @@
                         <a href="#" class="nav-link active">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Menú 
+                            Menú
                             <i class="right fas fa-angle-left"></i>
                         </p>
                         </a>
@@ -173,7 +173,7 @@
                                 </a>
                             </li>
                             </ul>
-                        </li>  
+                        </li>
                             <!-- registrar persona -->
                             <li class="nav-item">
                             <a href="/registrarPersona" class="nav-link">
@@ -197,9 +197,9 @@
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-link nav-link"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
-                            </for>
+                            </form>
                         </ul>
-                    </li> 
+                    </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

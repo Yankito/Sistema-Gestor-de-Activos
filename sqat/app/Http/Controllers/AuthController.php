@@ -42,7 +42,7 @@ class AuthController extends Controller
         ]);
 
         // Redirigimos al administrador a la página de usuarios registrados
-        return redirect('/register')->with('success', 'Usuario registrado correctamente.');
+        return redirect('/dashboard')->with('success', 'Usuario registrado correctamente.');
     }
 
     // funcion para loguear un usuario
