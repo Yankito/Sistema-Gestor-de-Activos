@@ -177,7 +177,7 @@
 
       <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Rosario Norte 615, Piso 23. Las Condes Santiago - Chile - Tel. 800 540 099 .</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 3.2.0
