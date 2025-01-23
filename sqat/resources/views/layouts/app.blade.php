@@ -183,6 +183,16 @@
                             </p>
                             </a>
                         </li>
+                        <li>
+                            <!-- registrar ubicacion-->
+                            <li class="nav-item">
+                            <a href="/registrarUbicacion" class="nav-link">
+                            <i class="nav-icon fas fa-map-marker-alt"></i>
+                            <p>
+                                Registrar Ubicación
+                            </p>
+                            </a>
+                        </li>
                         <ul class="nav-item d-none d-sm-inline-block">
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
