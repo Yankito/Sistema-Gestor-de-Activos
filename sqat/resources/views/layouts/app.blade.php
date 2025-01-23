@@ -175,13 +175,22 @@
                                 </a>
                             </li>
                             </ul>
-                            <ul class="nav-item d-none d-sm-inline-block">
+                        </li>  
+                            <!-- registrar persona -->
+                            <li class="nav-item">
+                            <a href="/registrarPersona" class="nav-link">
+                            <i class="nav-icon fas fa-user-plus"></i>
+                            <p>
+                                Registrar Persona
+                            </p>
+                            </a>
+                        </li>
+                        <ul class="nav-item d-none d-sm-inline-block">
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-link nav-link"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
                             </for>
-                            </ul>
-                        </li>
+                        </ul>
                     </li> 
                     </ul>
                 </nav>
