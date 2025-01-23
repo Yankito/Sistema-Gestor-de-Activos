@@ -59,16 +59,15 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6" style="cursor: pointer;">
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
                 <h3>{{$cantidadActivos}}</h3>
-
                 <p>Activos</p>
               </div>
               <div class="icon" style="cursor: pointer;">
-                <i class="ion ion-laptop"  onclick="window.location.href='/tablaActivos';"></i>
+                <i class="ion ion-laptop"></i>
               </div>
               @if($user->esAdministrador)
                 <a href="/registrarActivo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
@@ -79,7 +78,7 @@
           </div>
 
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6" style = "cursor: pointer;"> 
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
@@ -88,7 +87,7 @@
                 <p>Personas</p>
               </div>
               <div class="icon" style="cursor: pointer;">
-              <i class="ion ion-person-add" onclick="window.location.href='/tablaPersonas';"></i>
+              <i class="ion ion-person-add"></i>
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
                 @if($user->esAdministrador)
@@ -101,7 +100,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6" style = "cursor: pointer;">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
