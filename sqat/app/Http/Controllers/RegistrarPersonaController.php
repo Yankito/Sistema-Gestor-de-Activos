@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 
-class PersonaController extends Controller
+class RegistrarPersonaController extends Controller
 {
     // Mostrar todos los registros de personas
     public function index()
@@ -16,14 +16,14 @@ class PersonaController extends Controller
         $ubicaciones = Ubicacion::all();
 
         // Devolver una vista con la lista de personas
-        return view('persona', compact('activos','ubicaciones'));
+        return view('registrarPersona', compact('activos','ubicaciones'));
     }
 
     // Mostrar el formulario para crear una nueva persona
     public function create()
     {
         $ubicaciones = Ubicacion::all(); // Cargar ubicaciones para el formulario
-        return view('persona', compact('ubicaciones'));
+        return view('registrarPersona', compact('ubicaciones'));
     }
 
     // Almacenar una nueva persona en la base de datos

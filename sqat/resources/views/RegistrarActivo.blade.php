@@ -1,3 +1,4 @@
+@extends('layouts.app')
 <!doctype html>
 <html lang="en">
     <head>
@@ -19,7 +20,7 @@
         <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
     </head>
 
-    <body>
+    @section('content')
         <section class="h-100 gradient-form" style="background-color: #eee;">
             <div class="container py-5 h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
@@ -69,46 +70,17 @@
                                                 </select>
                                             </div>
 
-                                            <!-- Docking -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="docking">¿Tiene Docking?</label>
-                                                <input type="checkbox" name="docking" id="docking" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Parlante Jabra -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="parlanteJabra">¿Tiene Parlante Jabra?</label>
-                                                <input type="checkbox" name="parlanteJabra" id="parlanteJabra" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Disco Duro Externo -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="discoDuroExt">¿Tiene Disco Duro Externo?</label>
-                                                <input type="checkbox" name="discoDuroExt" id="discoDuroExt" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Impresora Exclusiva -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="impresoraExclusiva">¿Tiene Impresora Exclusiva?</label>
-                                                <input type="checkbox" name="impresoraExclusiva" id="impresoraExclusiva" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Monitor -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="monitor">¿Tiene Monitor?</label>
-                                                <input type="checkbox" name="monitor" id="monitor" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Mouse -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="mouse">¿Tiene Mouse?</label>
-                                                <input type="checkbox" name="mouse" id="mouse" value="1" class="form-check-input" />
-                                            </div>
-
-                                            <!-- Teclado -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="teclado">¿Tiene Teclado?</label>
-                                                <input type="checkbox" name="teclado" id="teclado" value="1" class="form-check-input" />
+                                                <label class="form-label" for="accesorios">Seleccione los accesorios que tiene:</label>
+                                                <select name="accesorios[]" id="accesorios" class="form-control" multiple>
+                                                    <option value="DOCKING">Docking</option>
+                                                    <option value="PARLANTE_JABRA">Parlante Jabra</option>
+                                                    <option value="DISCO_DURO_EXT">Disco Duro Externo</option>
+                                                    <option value="IMPRESORA_EXCLUSIVA">Impresora Exclusiva</option>
+                                                    <option value="MONITOR">Monitor</option>
+                                                    <option value="MOUSE">Mouse</option>
+                                                    <option value="TECLADO">Teclado</option>
+                                                </select>
                                             </div>
 
                                             <!-- Justificación Doble Activo -->
@@ -136,5 +108,5 @@
                 </div>
             </div>
         </section>
-    </body>
+    @endsection
 </html>

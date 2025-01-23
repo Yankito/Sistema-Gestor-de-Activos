@@ -6,13 +6,13 @@ use App\Models\Activo;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 
-class ActivoController extends Controller
+class RegistrarActivoController extends Controller
 {
     // Obtener todos los activos
     public function index()
     {
         $personas = Persona::all();
-        return view('activo', compact('personas'));
+        return view('registrarActivo', compact('personas'));
     }
 
     // Crear un nuevo activo

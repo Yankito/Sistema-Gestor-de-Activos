@@ -74,7 +74,7 @@
                 <i class="ion ion-laptop"  onclick="window.location.href='/tablaActivos';"></i>
               </div>
               @if($user->esAdministrador)
-                <a href="/activo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="/registrarActivo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
               @else
                 <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
               @endif
@@ -95,7 +95,7 @@
               </div>
                 <!-- si usuario es administrador puede acceder a resigter-->
                 @if($user->esAdministrador)
-                <a href="/persona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="/registrarPersona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
                 @else
                 <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
                 @endif
