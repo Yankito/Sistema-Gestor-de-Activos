@@ -27,19 +27,47 @@ class RegistrarActivoController extends Controller
         $activo->estado = 'DISPONIBLE';
         $activo->usuarioDeActivo = 'null';
         $activo->responsableDeActivo = 'null';
-        $activo->docking = $request->has('docking');
-        $activo->parlanteJabra = $request->has('parlanteJabra');
-        $activo->discoDuroExt = $request->has('discoDuroExt');
-        $activo->impresoraExclusiva = $request->has('impresoraExclusiva');
-        $activo->monitor = $request->has('monitor');
-        $activo->mouse = $request->has('mouse');
-        $activo->teclado = $request->has('teclado');
+
+        $accesorios[] = $request->accesorios;
+        dd($accesorios);
+        $activo = $this->seleccionarAccesorios($activo, $accesorios);
+
         $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
         $activo->precio = $request->precio;
 
         $activo->save();
 
         return redirect('/dashboard')->with('success', 'Activo registrado correctamente');
+    }
+
+
+    public function seleccionarAccesorios(Activo $activo, array $accesorios){
+        foreach ($accesorios as $accesorio){
+            switch ($accesorio){
+                case "docking":
+                    $activo->docking = true;
+                    break;
+                case "parlanteJabra":
+                    $activo->parlanteJabra = true;
+                    break;
+                case "discoDuroExte":
+                    $activo->discoDuroExt = true;
+                    break;
+                case "impresoExclusiva":
+                    $activo->impresoraExclusiva = true;
+                    break;
+                case "monitor":
+                    $activo->monitor = true;
+                    break;
+                case "mouse":
+                    $activo->mouse = true;
+                    break;
+                case "teclado":
+                    $activo->telefono = true;
+                    break;
+            }
+        }
+        return $activo;
     }
 
     // Obtener un solo activo por su ID

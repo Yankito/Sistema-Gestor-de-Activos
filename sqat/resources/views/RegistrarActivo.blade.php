@@ -73,13 +73,13 @@
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="accesorios">Seleccione los accesorios que tiene:</label>
                                                 <select name="accesorios[]" id="accesorios" class="form-control" multiple>
-                                                    <option value="DOCKING">Docking</option>
-                                                    <option value="PARLANTE_JABRA">Parlante Jabra</option>
-                                                    <option value="DISCO_DURO_EXT">Disco Duro Externo</option>
-                                                    <option value="IMPRESORA_EXCLUSIVA">Impresora Exclusiva</option>
-                                                    <option value="MONITOR">Monitor</option>
-                                                    <option value="MOUSE">Mouse</option>
-                                                    <option value="TECLADO">Teclado</option>
+                                                    <option value="docking">Docking</option>
+                                                    <option value="parlanteJabra">Parlante Jabra</option>
+                                                    <option value="discoDuroExte">Disco Duro Externo</option>
+                                                    <option value="impresoraExclusiva">Impresora Exclusiva</option>
+                                                    <option value="monitor">Monitor</option>
+                                                    <option value="mouse">Mouse</option>
+                                                    <option value="teclado">Teclado</option>
                                                 </select>
                                             </div>
 

@@ -27,8 +27,6 @@
         <link rel="stylesheet" href="vendor/adminlte/plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="vendor/adminlte/plugins/summernote/summernote-bs4.css">
-        <!-- css-->
-        <link rel="stylesheet" href="resources/css/app.css">
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
