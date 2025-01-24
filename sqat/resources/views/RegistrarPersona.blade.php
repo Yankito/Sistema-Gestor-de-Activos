@@ -6,49 +6,16 @@
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<style>
-        .custom-select {
-    position: relative;
-    width: 300px;
-}
-.select-display {
-            padding: 10px;
-            border: 1px solid #ccc;
-            background: #fff;
-            cursor: pointer;
-        }
 
-.options-container {
-    position: absolute;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 100;
-}
+                <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
 
-.category {
-            font-weight: bold;
-            padding: 10px;
-            background: #f0f0f0;
-            cursor: pointer;
-        }
-
-.item {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.item:hover {
-    background: #ddd;
-}
-
-    </style>
-
-    </head>
-
+    <script data-cfasync="false" nonce="2823c135-4b84-4a99-b748-a0ec6bd3fac9">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="2823c135-4b84-4a99-b748-a0ec6bd3fac9";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
 
 
     @section('content')
@@ -158,36 +125,18 @@
                                             <!-- Activo -->
 
 
-
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" >Activo</label>
-                                                <div class="custom-select">
-                                                <input
-                                                    type="text"
-                                                    id="selectDisplay"
-                                                    placeholder="Seleccione una opción"
-                                                    style="width: 100%; padding: 10px; border: 1px solid #ccc;"
-                                                />
-                                                <input type="hidden" name="activo" id="activo" />
-                                                    <div class="options-container" id="optionsContainer" style="display: none;">
-                                                        <div class="category" data-category="desktop">Desktop</div>
-                                                        <div class="item" data-category="desktop" style="display: none;">Gaming PC</div>
-                                                        <div class="item" data-category="desktop" style="display: none;">Workstation</div>
-                                                        <div class="item" data-category="desktop" style="display: none;">Mini PC</div>
-                                                        <div class="category" data-category="laptop">Laptop</div>
-                                                        @foreach($activos as $activo)
-                                                            @if ($activo->estado == 'DISPONIBLE' && $activo->tipoActivo == 'LAPTOP')
-                                                                <div class="item" data-category="laptop" data-value="{{ $activo->nroSerie }}" style="display: none;">{{$activo->nroSerie}} - {{$activo->modelo}} - {{$activo->marca}}</div>
-                                                            @endif
-                                                        @endforeach
-                                                        <div class="category" data-category="monitor">Monitor</div>
-                                                        <div class="item" data-category="monitor" style="display: none;">4K Monitor</div>
-                                                        <div class="item" data-category="monitor" style="display: none;">Gaming Monitor</div>
-                                                        <div class="item" data-category="monitor" style="display: none;">Curved Monitor</div>
-                                                    </div>
+                                            <div class="form-outline mb-4">
+                                            <div class="form-group">
+                                                <label>Activos</label>
+                                                <select class="form-control select2bs4" style="width: 100%;">
+                                                    @foreach($activos as $activo)
+                                                        @if ($activo->estado == 'DISPONIBLE')
+                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
                                                 </div>
                                             </div>
-
 
                                             <!-- Botón de Enviar -->
                                             <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Persona</button>

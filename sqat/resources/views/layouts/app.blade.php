@@ -27,6 +27,17 @@
         <link rel="stylesheet" href="vendor/adminlte/plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="vendor/adminlte/plugins/summernote/summernote-bs4.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="vendor/adminlte/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -174,8 +185,10 @@
                             </li>
                             </ul>
                         </li>
-                            <!-- registrar persona -->
-                            <li class="nav-item">
+
+                        <!-- registrar persona -->
+                        @if($user->esAdministrador)
+                        <li class="nav-item">
                             <a href="/registrarPersona" class="nav-link">
                             <i class="nav-icon fas fa-user-plus"></i>
                             <p>
@@ -183,16 +196,21 @@
                             </p>
                             </a>
                         </li>
-                        <li>
-                            <!-- registrar ubicacion-->
+                        @endif
+
+
+
+                        <!-- registrar ubicacion-->
+                        @if($user->esAdministrador)
                             <li class="nav-item">
-                            <a href="/registrarUbicacion" class="nav-link">
-                            <i class="nav-icon fas fa-map-marker-alt"></i>
-                            <p>
-                                Registrar Ubicación
-                            </p>
-                            </a>
-                        </li>
+                                <a href="/registrarUbicacion" class="nav-link">
+                                <i class="nav-icon fas fa-map-marker-alt"></i>
+                                <p>
+                                    Registrar Ubicación
+                                </p>
+                                </a>
+                            </li>
+                        @endif
                         <ul class="nav-item d-none d-sm-inline-block">
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
@@ -285,80 +303,14 @@
 
         <script>
         $(function () {
+
+            $('.select2').select2()
             //Initialize Select2 Elements
             $('.select2bs4').select2({
             theme: 'bootstrap4'
             })
+
         })
-
-
-    const selectDisplay = document.getElementById('selectDisplay');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const items = optionsContainer.querySelectorAll('.item');
-    const categories = optionsContainer.querySelectorAll('.category');
-    const activo = document.getElementById('activo');
-
-    // Mostrar/ocultar opciones al enfocar el campo
-    selectDisplay.addEventListener('focus', () => {
-        optionsContainer.style.display = 'block';
-    });
-
-    // Ocultar opciones cuando el usuario hace clic fuera
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.custom-select')) {
-            optionsContainer.style.display = 'none';
-        }
-    });
-
-    // Toggle category items
-    categories.forEach(category => {
-        category.addEventListener('click', () => {
-            const categoryName = category.dataset.category;
-            const categoryItems = document.querySelectorAll(`.item[data-category="${categoryName}"]`);
-            categoryItems.forEach(item => {
-                item.style.display = item.style.display === 'none' ? 'block' : 'none';
-            });
-        });
-    });
-
-    // Filtrar opciones mientras el usuario escribe
-    selectDisplay.addEventListener('input', (e) => {
-        const searchText = e.target.value.toLowerCase();
-        filterOptions(searchText);
-    });
-
-    selectDisplay.addEventListener('click', () => {
-        optionsContainer.classList.toggle('active');
-        searchBox.style.display = optionsContainer.classList.contains('active') ? 'block' : 'none';
-        searchBox.value = ''; // Clear search on open
-        filterOptions(''); // Reset filter
-    });
-
-    const filterOptions = (text) => {
-        items.forEach(item => {
-            const content = item.textContent.toLowerCase();
-            item.style.display = content.includes(text) ? 'block' : 'none';
-        });
-
-        // Ocultar categorías si no tienen elementos visibles
-        categories.forEach(category => {
-            const relatedItems = Array.from(items).filter(
-                item => item.dataset.category === category.dataset.category && item.style.display === 'block'
-            );
-            category.style.display = relatedItems.length > 0 ? 'block' : 'none';
-        });
-    };
-
-    // Rellenar el campo con el texto seleccionado
-    items.forEach(item => {
-        item.addEventListener('click', () => {
-            selectDisplay.value = item.textContent;
-            activo.value = item.dataset.value;
-            optionsContainer.style.display = 'none';
-        });
-    });
-
-
 
     </script>
 
