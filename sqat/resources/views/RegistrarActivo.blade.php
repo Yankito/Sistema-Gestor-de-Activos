@@ -24,37 +24,41 @@
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-xl-10">
                         <div class="card rounded-3 text-black">
-                            <div class="row g-0">
-                                <div class="col-lg-6">
-                                    <div class="card-body p-md-5 mx-md-4">
-                                        <div class="text-center">
-                                            <img src="{{asset('pictures/Logo Empresas Iansa.png')}}"
-                                                style="width: 300px;" alt="logo">
-                                        </div>
+                            <div class="card-body p-md-5 mx-md-4">
+                                <div class="text-center mb-4">
+                                    <img src="{{asset('pictures/Logo Empresas Iansa.png')}}"
+                                        style="width: 300px;" alt="logo">
+                                </div>
 
-                                        <h2>Registrar nuevo activo</h2>
+                                <h2>Registrar nuevo activo</h2>
 
-                                        <form action="/activos" method="POST">
-                                            @csrf
-
+                                <form action="/activos" method="POST">
+                                    @csrf
+                                    <div class = "row">
+                                        <div class = " col-md-6">
                                             <!-- Nro Serie -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="nroSerie">Nro. Serie</label>
                                                 <input type="text" name="nroSerie" id="nroSerie" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class = " col-md-6">
                                             <!-- Marca -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="marca">Marca</label>
                                                 <input type="text" name="marca" id="marca" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class = " col-md-6">
                                             <!-- Modelo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="modelo">Modelo</label>
                                                 <input type="text" name="modelo" id="modelo" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class = " col-md-6">
                                             <!-- Tipo de Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="tipoActivo">Tipo de Activo</label>
@@ -67,20 +71,20 @@
                                                     <option value="OTRO">Otro</option>
                                                 </select>
                                             </div>
-
-                                            <!-- Precio -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="precio">Precio</label>
-                                                <input type="number" name="precio" id="precio" required class="form-control" />
-                                            </div>
-
-                                            <!-- Botón de Enviar -->
-                                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
-                                        </form>
-
-                                        <a href="/dashboard" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Volver atrás</a>
+                                        </div>
                                     </div>
-                                </div>
+
+                                    <!-- Precio -->
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <label class="form-label" for="precio">Precio</label>
+                                        <input type="number" name="precio" id="precio" required class="form-control" />
+                                    </div>
+
+                                    <!-- Botón de Enviar -->
+                                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
+                                </form>
+
+                                <a href="/dashboard" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Volver atrás</a>
                             </div>
                         </div>
                     </div>
@@ -88,4 +92,12 @@
             </div>
         </section>
     @endsection
+    <!-- Estilos -->
+    <style>
+        form .form-label {
+            font-size: 15px;
+            color: #4b4b4b;
+            font-family: 'Ubuntu', sans-serif;
+        }
+    </style>
 </html>
