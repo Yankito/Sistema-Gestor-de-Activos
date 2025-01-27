@@ -17,8 +17,6 @@
         <link rel="stylesheet" href="vendor/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
         <!-- iCheck -->
         <link rel="stylesheet" href="vendor/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-        <!-- JQVMap -->
-        <link rel="stylesheet" href="vendor/adminlte/plugins/jqvmap/jqvmap.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
         <!-- overlayScrollbars -->
@@ -145,7 +143,7 @@
                     <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                        <a href="#" class="nav-link active" style="background-color: #0a5964;">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Menú
@@ -256,16 +254,12 @@
         <script>
         $.widget.bridge('uibutton', $.ui.button)
         </script>
-        <script src="vendor/adminlte/plugins/ControlSidebar.js"></script> <!-- Luego ControlSidebar -->
         <!-- Bootstrap 4 -->
         <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- ChartJS -->
         <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
         <!-- Sparkline -->
         <script src="vendor/adminlte/plugins/sparklines/sparkline.js"></script>
-        <!-- JQVMap -->
-        <script src="vendor/adminlte/plugins/jqvmap/jquery.vmap.min.js"></script>
-        <script src="vendor/adminlte/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
         <!-- jQuery Knob Chart -->
         <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
         <!-- daterangepicker -->
@@ -279,10 +273,7 @@
         <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
         <!-- AdminLTE App -->
         <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="vendor/adminlte/dist/js/demo.js"></script>
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
+
 
         <!-- DataTables  & Plugins -->
         <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -301,6 +292,10 @@
         <!-- Select2 -->
         <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
+        <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+        <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
+
+
         <script>
         $(function () {
 
@@ -311,6 +306,8 @@
             })
 
         })
+
+
 
     </script>
 
