@@ -198,6 +198,17 @@
                                 </a>
                             </li>
                         @endif
+                        <!--importar Excell-->
+                        @if($user->esAdministrador)
+                            <li class="nav-item">
+                                <a href="/importar" class="nav-link">
+                                <i class="nav-icon fas fa-file-import"></i>
+                                <p>
+                                    Importar Datos
+                                </p>
+                                </a>
+                            </li>
+                        @endif
                         <ul class="nav-item d-none d-sm-inline-block">
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
