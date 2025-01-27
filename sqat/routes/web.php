@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardActivosController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesplegableController;
@@ -62,3 +63,4 @@ Route::middleware('auth')->get('/profile', function () {
 });
 
 Route::post('/activos', [RegistrarActivoController::class, 'store']);
+Route::get('/dashboardActivos', [DashboardActivosController::class, 'index']);
