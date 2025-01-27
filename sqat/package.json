@@ -15,6 +15,7 @@
         "vite": "^6.0"
     },
     "dependencies": {
-        "admin-lte": "^4.0.0-beta3"
+        "admin-lte": "^4.0.0-beta3",
+        "proj4": "^2.15.0"
     }
 }

@@ -1,15 +1,3 @@
-@extends('layouts.app')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
-
-@section('content')
 <div class="card bg-gradient-primary">
     <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
         <h3 class="card-title">
@@ -42,8 +30,21 @@
 <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function () {
+        // Array generado dinámicamente desde PHP
+        const ubicaciones = @json($ubicaciones);
+        const cantidadPorUbicacion = @json($cantidadPorUbicacion);
+
+        // Transformar datos para Highcharts
+        const puntosUbicaciones = ubicaciones.map(ubicacion => ({
+            name: ubicacion.sitio,
+            lat: parseFloat(ubicacion.latitud),
+            lon: parseFloat(ubicacion.longitud),
+            activos: cantidadPorUbicacion[ubicacion.sitio] || 0,
+            color: '#FF0000'
+        }));
+
+        // Configuración del mapa
         const chart = Highcharts.mapChart('chile-map', {
             chart: {
                 map: 'countries/cl/cl-all', // Mapa de Chile
@@ -59,6 +60,10 @@
                 enabled: true,
                 enableMouseWheelZoom: true // Permitir zoom con el scroll
             },
+            tooltip: {
+                headerFormat: '<b>{point.key}</b><br>',
+                pointFormat: 'Activos: {point.activos}' // Mostrar cantidad de activos en el tooltip
+            },
             series: [
                 {
                     name: 'Regiones',
@@ -67,15 +72,8 @@
                 },
                 {
                     type: 'mappoint',
-                    name: 'Ciudades',
-                    data: [
-                        {
-                            name: 'Rosario Norte',
-                            x: 0,
-                            y: 0,
-                            color: '#FF0000'
-                        }
-                    ],
+                    name: 'Ubicaciones',
+                    data: puntosUbicaciones, // Usar los puntos generados
                     marker: {
                         symbol: 'circle',
                         radius: 8,
@@ -85,7 +83,7 @@
                     },
                     dataLabels: {
                         enabled: true,
-                        format: '{point.name}', // Mostrar el nombre de la ciudad
+                        format: '{point.name}', // Mostrar solo el nombre del lugar en la etiqueta
                         color: '#FFFFFF',
                         style: {
                             textOutline: '1px contrast'
@@ -94,31 +92,5 @@
                 }
             ]
         });
-        Highcharts.addEvent(chart, 'click', function (event) {
-            // Obtener el objeto del clic
-            const point = chart.pointer.normalize(event); // Normalizar el evento
-
-            // Obtener las coordenadas geográficas desde el punto del mapa
-            const latLon = chart.pointer.getCoordinates(point);
-
-            // Verificar si las coordenadas existen
-            if (latLon) {
-                const lat = latLon.lat;
-                const lon = latLon.lon;
-
-                // Mostrar las coordenadas en el área designada
-                document.getElementById('coords').innerHTML = `Coordenadas: Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`;
-            } else {
-                // Si no se pueden obtener las coordenadas
-                document.getElementById('coords').innerHTML = `Coordenadas no disponibles`;
-            }
-        });
     });
 </script>
-@endsection
-
-
-
-
-</html>
-

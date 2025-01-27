@@ -13,6 +13,8 @@ class Ubicacion extends Model
     protected $fillable = [
         'sitio',
         'soporteTI',
+        'latitud',
+        'longitud'
     ];
 
     // Si no estás utilizando timestamps, puedes desactivarlos

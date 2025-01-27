@@ -19,15 +19,9 @@ class Activo extends Model
         'estado',
         'usuarioDeActivo',
         'responsableDeActivo',
-        'docking',
-        'parlanteJabra',
-        'discoDuroExt',
-        'impresoraExclusiva',
-        'monitor',
-        'mouse',
-        'teclado',
-        'justificacionDobleActivo',
         'precio',
+        'ubicacion',
+        'justificacionDobleActivo'
     ];
 
     // Si el campo 'nroSerie' no es auto incrementable, debes desactivar el incremento automático
@@ -46,4 +40,10 @@ class Activo extends Model
     {
         return $this->belongsTo(Persona::class, 'responsableDeActivo', 'rut');
     }
+
+    public function ubicacion()
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion', 'id');
+    }
+
 }
