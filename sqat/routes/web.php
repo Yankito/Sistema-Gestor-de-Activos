@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DesplegableController;
 use App\Models\Activo;
 use App\Http\Controllers\RegistrarActivoController;
 use App\Http\Controllers\RegistrarPersonaController;
@@ -42,6 +43,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
 });
 
+
+Route::get('/desplegable', function () {
+    return view('desplegable');
+});
 
 Route::post('/login', [AuthController::class, 'login']);
 
