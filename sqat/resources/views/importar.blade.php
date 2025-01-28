@@ -30,6 +30,9 @@
             <div class="card-body">
                 <!-- Botón para importar -->
                 <button id="importButton" class="btn btn-success">Importar Datos</button>
+                <!-- Botón para descargar el archivo Excel -->
+                <a href="{{ route('descargar.excel') }}" class="btn btn-primary">Descargar Excel de Muestra</a>
+          </div>
             </div>
             </div>
         </div>
