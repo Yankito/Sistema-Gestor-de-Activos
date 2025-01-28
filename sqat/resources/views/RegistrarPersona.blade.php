@@ -25,10 +25,10 @@
                     <div class="col-xl-10">
                         <div class="card rounded-3 text-black">
                         <!-- Aquí va el contenido de la página centrado-->
-                            <div class = "card-body p-md-5 mx-md-4"> 
+                            <div class = "card-body p-md-5 mx-md-4">
                                 <div class="text-center mb-4">
                                     <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
-                                </div>        
+                                </div>
 
                                 <h2>Registrar nueva Persona</h2>
                                 <form action="/personas" method="POST">
@@ -150,7 +150,7 @@
                                             <div class="form-outline mb-4">
                                                 <div class="form-group">
                                                     <label class = "form-label">Activos</label>
-                                                    <select class="form-control select2bs4" style="width: 100%;">
+                                                    <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         @foreach($activos as $activo)
                                                             @if ($activo->estado == 'DISPONIBLE')
                                                                 <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
@@ -160,12 +160,56 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-outline mb-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="asignarResponsable" name="asignarResponsable">
+                                                <label class="form-check-label" for="asignarResponsable">Asignar Responsable</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-outline mb-4" id="responsableSection" style="display: none;">
+                                            <div class="form-group">
+                                                <label class="form-label" for="responsable">Responsable</label>
+                                                <select name="responsable" id="responsable" select class="form-control select2bs4">
+                                                    <option value="" disabled selected>Seleccione un responsable</option>
+                                                    @foreach($personas as $persona)
+                                                        <option value="{{$persona->rut}}">{{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            document.getElementById('asignarResponsable').addEventListener('change', function() {
+                                                var responsableSection = document.getElementById('responsableSection');
+                                                var responsableSelect = document.getElementById('responsable');
+
+                                                if (this.checked) {
+                                                    responsableSection.style.display = 'block';
+                                                } else {
+                                                    responsableSection.style.display = 'none';
+                                                    // Resetea el valor del select antes de enviar el formulario
+                                                    responsableSelect.value = null;
+                                                }
+                                            });
+
+                                            // Resetea el valor del campo 'responsable' antes de enviar el formulario
+                                            document.querySelector('form').addEventListener('submit', function() {
+                                                var asignarResponsable = document.getElementById('asignarResponsable');
+                                                var responsableSelect = document.getElementById('responsable');
+
+                                                if (!asignarResponsable.checked) {
+                                                    responsableSelect.value = null;  // No envía el valor cuando no está marcado
+                                                }
+                                            });
+                                        </script>
+
                                     </div>
                                     <!-- Botón de Enviar -->
                                     <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit">Registrar Persona</button>
-                                    <!-- Botón de Volver atrás -->
-                                    <a href="/dashboard" type="button" class="btn btn-outline-danger text-center">Volver atrás</a>
                                 </form>
+                                <!-- Botón de Volver atrás -->
+                                <a href="/dashboard" type="button" class="btn btn-outline-danger text-center">Volver atrás</a>
                             </div>
                         </div>
                     </div>

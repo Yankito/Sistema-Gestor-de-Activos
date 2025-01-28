@@ -14,9 +14,10 @@ class RegistrarPersonaController extends Controller
     {
         $activos = Activo::all();
         $ubicaciones = Ubicacion::all();
+        $personas = Persona::all();
 
         // Devolver una vista con la lista de personas
-        return view('registrarPersona', compact('activos','ubicaciones'));
+        return view('registrarPersona', compact('activos','ubicaciones', 'personas'));
     }
 
     // Mostrar el formulario para crear una nueva persona
@@ -46,6 +47,7 @@ class RegistrarPersonaController extends Controller
             'usuarioTI' => 'required|boolean',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
             'activo' => 'required|exists:activos,nroSerie',
+            'responsable'=> 'nullable|string|max:15',
         ]);
 
         // Establecer valor predeterminado para estadoEmpleado si no se proporciona
@@ -59,6 +61,14 @@ class RegistrarPersonaController extends Controller
         $activo = Activo::where('nroSerie', $request->activo)->first();
         $activo->usuarioDeActivo = $request->rut;
         $activo->estado = 'ASIGNADO';
+
+        //Asignar responsable a activo de tal numero de serie
+        if($request->has('responsable') && $request->responsable != null){
+            $activo->responsableDeActivo = $request->responsable;
+        }
+        else{
+            $activo->responsableDeActivo = $request->rut;
+        }
         $activo->update();
 
         // Redirigir con un mensaje de éxito

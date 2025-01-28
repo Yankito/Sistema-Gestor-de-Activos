@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activo;
 use App\Models\Persona;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 
 class RegistrarActivoController extends Controller
@@ -12,7 +13,8 @@ class RegistrarActivoController extends Controller
     public function index()
     {
         $personas = Persona::all();
-        return view('registrarActivo', compact('personas'));
+        $ubicaciones = Ubicacion::all();
+        return view('registrarActivo', compact('personas', 'ubicaciones'));
     }
 
     // Crear un nuevo activo
@@ -27,54 +29,13 @@ class RegistrarActivoController extends Controller
         $activo->estado = 'DISPONIBLE';
         $activo->usuarioDeActivo = NULL;
         $activo->responsableDeActivo = NULL;
-        $activo->docking = false;
-        $activo->parlanteJabra = false;
-        $activo->discoDuroExt = false;
-        $activo->impresoraExclusiva = false;
-        $activo->monitor = false;
-        $activo->mouse = false;
-        $activo->teclado = false;
-
-        $accesorios[] = $request->accesorios;
-        $activo = $this->seleccionarAccesorios($activo, $accesorios);
-
+        $activo->ubicacion = $request->ubicacion;
         $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
         $activo->precio = $request->precio;
 
         $activo->save();
 
         return redirect('/dashboard')->with('success', 'Activo registrado correctamente');
-    }
-
-
-    public function seleccionarAccesorios(Activo $activo, array $accesorios){
-        foreach ($accesorios as $accesorio){
-
-            switch ($accesorio){
-                case "docking":
-                    $activo->docking = true;
-                    break;
-                case "parlanteJabra":
-                    $activo->parlanteJabra = true;
-                    break;
-                case "discoDuroExte":
-                    $activo->discoDuroExt = true;
-                    break;
-                case "impresoExclusiva":
-                    $activo->impresoraExclusiva = true;
-                    break;
-                case "monitor":
-                    $activo->monitor = true;
-                    break;
-                case "mouse":
-                    $activo->mouse = true;
-                    break;
-                case "teclado":
-                    $activo->telefono = true;
-                    break;
-            }
-        }
-        return $activo;
     }
 
     // Obtener un solo activo por su ID

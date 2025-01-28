@@ -111,13 +111,13 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ $tipo }}</p>
+                                <p>{{ ucfirst(strtolower($tipo))}}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
                             @if($user->esAdministrador)
-                                <a href="/registrarActivo/{{ $tipo }}" class="small-box-footer">Agregar {{ $tipo }} <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="/registrarActivo/{{ $tipo }}" class="small-box-footer">Agregar {{ ucfirst(strtolower($tipo)) }} <i class="fas fa-arrow-circle-right"></i></a>
                             @else
                                 <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
                             @endif
