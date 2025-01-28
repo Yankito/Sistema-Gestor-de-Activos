@@ -178,6 +178,88 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-outline mb-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="agregarActivo" name="agregarActivo">
+                                                <label class="form-check-label" for="agregarActivo">Agregar Activo</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-outline mb-4" id="activoSection" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Multiple</label>
+                                                <select class="select2bs4" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" id="activoSelect">
+                                                    @foreach($activos as $activo)
+                                                        @if ($activo->estado == 'DISPONIBLE')
+                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div id="justificacionContainer">
+                                                <!-- Aquí se generarán los campos de justificación para cada activo -->
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            // Cuando el select de activos cambie, actualizamos la justificación
+                                            document.getElementById('activoSection').addEventListener('change', function() {
+                                                var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
+                                                var justificacionContainer = document.getElementById('justificacionContainer');
+
+                                                // Limpiar cualquier justificación previa
+                                                justificacionContainer.innerHTML = '';
+
+                                                // Para cada activo seleccionado, generar un campo de justificación
+                                                selectedActivos.forEach(function(activo) {
+                                                    var div = document.createElement('div');
+                                                    div.classList.add('form-group');
+
+                                                    var label = document.createElement('label');
+                                                    label.classList.add('form-label');
+                                                    label.textContent = 'Justificación para ' + activo;
+
+                                                    var input = document.createElement('input');
+                                                    input.type = 'text';
+                                                    input.name = 'justificacion_' + activo;
+                                                    input.classList.add('form-control');
+
+                                                    div.appendChild(label);
+                                                    div.appendChild(input);
+                                                    justificacionContainer.appendChild(div);
+                                                });
+                                            });
+                                        </script>
+
+
+                                        <script>
+                                            document.getElementById('agregarActivo').addEventListener('change', function() {
+                                                var activoSection = document.getElementById('activoSection');
+                                                var activoJustificacion = document.getElementById('activoJustificacion');
+                                                var activoSeleccion = document.getElementById('activoSeleccion');
+
+                                                if (this.checked) {
+                                                    activoSection.style.display = 'block';
+                                                } else {
+                                                    activoSection.style.display = 'none';
+                                                    // Resetea los valores de los campos antes de enviar el formulario
+                                                    activoJustificacion.value = '';
+                                                    activoSeleccion.value = null;
+                                                }
+                                            });
+
+                                            // Resetea los valores de los campos antes de enviar el formulario
+                                            document.querySelector('form').addEventListener('submit', function() {
+                                                var agregarActivo = document.getElementById('agregarActivo');
+                                                var activoJustificacion = document.getElementById('activoJustificacion');
+                                                var activoSeleccion = document.getElementById('activoSeleccion');
+
+                                                if (!agregarActivo.checked) {
+                                                    activoJustificacion.value = '';
+                                                    activoSeleccion.value = null;  // No envía el valor cuando no está marcado
+                                                }
+                                            });
+                                        </script>
 
                                         <script>
                                             document.getElementById('asignarResponsable').addEventListener('change', function() {

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,41 +39,29 @@
                     <th>Estado</th>
                     <th>Usuario</th>
                     <th>responsable</th>
-                    <th>Docking</th>
-                    <th>Parlante jabra</th>
-                    <th>HDD externo</th>
-                    <th>Impresora exclusiva</th>
-                    <th>Monitor</th>
-                    <th>Mouse</th>
-                    <th>Teclado</th>
+                    <th>Ubicación</th>
                     <th>Justificación</th>
                   </tr>
                   </thead>
                   <tbody>
                     @foreach($activos as $activo)
                    <tr>
-                      <td>{{ $activo->nroSerie }}</td>
-                      <td>{{ $activo->marca }}</td>
-                      <td>{{ $activo->modelo }}</td>
-                      <td>{{ $activo->precio }}</td>
-                      <td>{{ $activo->tipoActivo }}</td>
-                      <td>{{ $activo->estado }}</td>
-                      <td>{{ $activo->usuarioDeActivo }}</td>
-                      <td>{{ $activo->responsableDeActivo }}</td>
-                      <td>{{ $activo->docking }}</td>
-                      <td>{{ $activo->parlanteJabra }}</td>
-                      <td>{{ $activo->discoDuroExt }}</td>
-                      <td>{{ $activo->impresoraExclusiva }}</td>
-                      <td>{{ $activo->monitor }}</td>
-                      <td>{{ $activo->mouse }}</td>
-                      <td>{{ $activo->teclado }}</td>
-                      <td>{{ $activo->justificacionDobleActivo }}</td>
+                        <td>{{ $activo->nroSerie }}</td>
+                        <td>{{ $activo->marca }}</td>
+                        <td>{{ $activo->modelo }}</td>
+                        <td>{{ $activo->precio }}</td>
+                        <td>{{ $activo->tipoActivo }}</td>
+                        <td>{{ $activo->estado }}</td>
+                        <td>{{ $activo->usuarioDeActivo }}</td>
+                        <td>{{ $activo->responsableDeActivo }}</td>
+                        <td>{{ $activo->ubicacion }}</td>
+                        <td>{{ $activo->justificacionDobleActivo }}</td>
                     </tr>
                     @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Número de serie</th>
+                  <th>Número de serie</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Precio</th>
@@ -81,13 +69,7 @@
                     <th>Estado</th>
                     <th>Usuario</th>
                     <th>responsable</th>
-                    <th>Docking</th>
-                    <th>Parlante jabra</th>
-                    <th>HDD externo</th>
-                    <th>Impresora exclusiva</th>
-                    <th>Monitor</th>
-                    <th>Mouse</th>
-                    <th>Teclado</th>
+                    <th>Ubicación</th>
                     <th>Justificación</th>
                   </tr>
                   </tfoot>
