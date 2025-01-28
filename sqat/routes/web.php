@@ -11,6 +11,7 @@ use App\Http\Controllers\RegistrarActivoController;
 use App\Http\Controllers\RegistrarPersonaController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
+use App\Http\Controllers\ImportarController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -42,6 +43,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/registrarPersona', [RegistrarPersonaController::class,'index']);
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
+    Route::get('/importar', [ImportarController::class, 'index']);
 });
 
 
@@ -64,3 +66,4 @@ Route::middleware('auth')->get('/profile', function () {
 
 Route::post('/activos', [RegistrarActivoController::class, 'store']);
 Route::get('/dashboardActivos', [DashboardActivosController::class, 'index']);
+

@@ -125,17 +125,6 @@
                     <a href="#" class="d-block">{{ $user->nombres }}</a>
                     </div>
                 </div>
-                <!-- SidebarSearch Form -->
-                <div class="form-inline" style="margin-right: 10px;">
-                    <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                        </button>
-                    </div>
-                    </div>
-                </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2" style="margin-right: 10px;">
@@ -205,6 +194,17 @@
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p>
                                     Registrar Ubicación
+                                </p>
+                                </a>
+                            </li>
+                        @endif
+                        <!--importar Excell-->
+                        @if($user->esAdministrador)
+                            <li class="nav-item">
+                                <a href="/importar" class="nav-link">
+                                <i class="nav-icon fas fa-file-import"></i>
+                                <p>
+                                    Importar Datos
                                 </p>
                                 </a>
                             </li>

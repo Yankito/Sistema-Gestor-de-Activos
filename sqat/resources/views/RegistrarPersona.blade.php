@@ -24,84 +24,104 @@
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-xl-10">
                         <div class="card rounded-3 text-black">
-                            <div class="row g-0">
-                                <div class="col-lg-6">
-                                    <div class="card-body p-md-5 mx-md-4">
-                                        <div class="text-center">
-                                            <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
-                                        </div>
+                        <!-- Aquí va el contenido de la página centrado-->
+                            <div class = "card-body p-md-5 mx-md-4"> 
+                                <div class="text-center mb-4">
+                                    <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
+                                </div>        
 
-                                        <h2>Registrar nueva Persona</h2>
-
-                                        <form action="/personas" method="POST">
-                                            @csrf
-
+                                <h2>Registrar nueva Persona</h2>
+                                <form action="/personas" method="POST">
+                                    @csrf
+                                    <div class = "row">
+                                        <div class="col-md-6">
                                             <!-- RUT -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="rut">RUT</label>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
                                             </div>
-
-                                            <!-- Nombre de Usuario -->
+                                        </div>
+                                        <div class="col-md-6">
+                                        <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="nombreUsuario">Nombre de Usuario</label>
                                                 <input type="text" name="nombreUsuario" id="nombreUsuario" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class="col-md-6">
                                             <!-- Nombres -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="nombres">Nombres</label>
                                                 <input type="text" name="nombres" id="nombres" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                             <!-- Primer Apellido -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="primerApellido">Primer Apellido</label>
                                                 <input type="text" name="primerApellido" id="primerApellido" required class="form-control" />
                                             </div>
-
-                                            <!-- Segundo Apellido -->
+                                        </div>
+                                    </div>
+                                    <!-- Segundo Apellido -->
+                                    <div class = "row">
+                                        <div class="col-md-6">
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="segundoApellido">Segundo Apellido</label>
                                                 <input type="text" name="segundoApellido" id="segundoApellido" class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                             <!-- Supervisor -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="supervisor">Supervisor</label>
                                                 <input type="text" name="supervisor" id="supervisor" class="form-control" />
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class = "col-md-6">
                                             <!-- Empresa -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="empresa">Empresa</label>
                                                 <input type="text" name="empresa" id="empresa" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class = "col-md-6">
                                             <!-- Centro Costo -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="centroCosto">Centro Costo</label>
                                                 <input type="text" name="centroCosto" id="centroCosto" class="form-control" />
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class = "col-md-6">
                                             <!-- Denominación -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="denominacion">Denominación</label>
                                                 <input type="text" name="denominacion" id="denominacion" class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class = "col-md-6">
                                             <!-- Título Puesto -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="tituloPuesto">Título Puesto</label>
                                                 <input type="text" name="tituloPuesto" id="tituloPuesto" class="form-control" />
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class = "col-md-6">
                                             <!-- Fecha Inicio -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="fechaInicio">Fecha Inicio</label>
                                                 <input type="date" name="fechaInicio" id="fechaInicio" required class="form-control" />
                                             </div>
-
+                                        </div>
+                                        <div class = "col-md-6">
                                             <!-- Usuario TI -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="usuarioTI">Usuario TI</label>
@@ -110,8 +130,11 @@
                                                     <option value="0">NO</option>
                                                 </select>
                                             </div>
-
-                                            <!-- Ubicación -->
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class = "col-md-6">
+                                             <!-- Ubicación -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="ubicacion">Ubicación</label>
                                                 <select name="ubicacion" id="ubicacion" class="form-control" required>
@@ -121,36 +144,41 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
+                                        </div>
+                                        <div class = "col-md-6">
                                             <!-- Activo -->
-
-
                                             <div class="form-outline mb-4">
-                                            <div class="form-group">
-                                                <label>Activos</label>
-                                                <select class="form-control select2bs4" style="width: 100%;">
-                                                    @foreach($activos as $activo)
-                                                        @if ($activo->estado == 'DISPONIBLE')
-                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
+                                                <div class="form-group">
+                                                    <label class = "form-label">Activos</label>
+                                                    <select class="form-control select2bs4" style="width: 100%;">
+                                                        @foreach($activos as $activo)
+                                                            @if ($activo->estado == 'DISPONIBLE')
+                                                                <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-
-                                            <!-- Botón de Enviar -->
-                                            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Persona</button>
-                                        </form>
-
-                                        <a href="/dashboard" type="button" class="btn btn-outline-danger">Volver atrás</a>
+                                        </div>
                                     </div>
-                                </div>
+                                    <!-- Botón de Enviar -->
+                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit">Registrar Persona</button>
+                                    <!-- Botón de Volver atrás -->
+                                    <a href="/dashboard" type="button" class="btn btn-outline-danger text-center">Volver atrás</a>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <!-- Estilos -->
+        <style>
+            form .form-label {
+                font-size: 15px;
+                color: #4b4b4b;
+            }
+        </style>
     @endsection
 
 
