@@ -3,15 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Activo;
-use App\Models\Ubicacion;
 
-class DashboardActivosController extends Controller
+class RegistrarUbicacionController extends Controller
 {
     public function index()
     {
-
+        return view('registrarUbicacion');
     }
-
-
 }

@@ -72,13 +72,30 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class = " col-md-6">
+                                            <!-- Precio -->
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <label class="form-label" for="precio">Precio</label>
+                                                <input type="number" name="precio" id="precio" required class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class = " col-md-6">
+                                            <!-- Ubicación -->
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <label class="form-label" for="ubicacion">Ubicación</label>
+                                                <select name="ubicacion" id="ubicacion" class="form-control" required>
+                                                    @foreach($ubicaciones as $ubicacion)
+                                                        <option value="{{$ubicacion->id}}">{{$ubicacion->sitio}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
 
-                                    <!-- Precio -->
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <label class="form-label" for="precio">Precio</label>
-                                        <input type="number" name="precio" id="precio" required class="form-control" />
-                                    </div>
+
 
                                     <!-- Botón de Enviar -->
                                     <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
@@ -91,6 +108,17 @@
                 </div>
             </div>
         </section>
+
+        @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+        @endif
     @endsection
     <!-- Estilos -->
     <style>
@@ -100,4 +128,6 @@
             font-family: 'Ubuntu', sans-serif;
         }
     </style>
+
+
 </html>

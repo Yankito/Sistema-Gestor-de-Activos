@@ -18,6 +18,8 @@ class CreateUbicacionesTable extends Migration
             $table->id();  // 'id' es el campo de la clave primaria
             $table->string('sitio', 255);  // 'sitio' (no nulo)
             $table->string('soporteTI', 255);  // 'soporteTI' (no nulo)
+            $table->decimal('latitud', 10, 7);  // 'latitud' con precisión de hasta 10 dígitos y 7 decimales
+            $table->decimal('longitud', 10, 7);  // 'longitud' con precisión de hasta 10 dígitos y 7 decimales
             $table->timestamps();  // Timestamps para created_at y updated_at
         });
     }

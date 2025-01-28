@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activo;
 use App\Models\Persona;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 
 class RegistrarActivoController extends Controller
@@ -12,69 +13,33 @@ class RegistrarActivoController extends Controller
     public function index()
     {
         $personas = Persona::all();
-        return view('registrarActivo', compact('personas'));
+        $ubicaciones = Ubicacion::all();
+        return view('registrarActivo', compact('personas', 'ubicaciones'));
     }
 
     // Crear un nuevo activo
-    public function store(Request $request)
-    {
-        $activo = new Activo();
+    public function store(Request $request){
+        try {
+            $activo = new Activo();
 
-        $activo->nroSerie = $request->nroSerie;
-        $activo->marca = $request->marca;
-        $activo->modelo = $request->modelo;
-        $activo->tipoActivo = $request->tipoActivo;
-        $activo->estado = 'DISPONIBLE';
-        $activo->usuarioDeActivo = NULL;
-        $activo->responsableDeActivo = NULL;
-        $activo->docking = false;
-        $activo->parlanteJabra = false;
-        $activo->discoDuroExt = false;
-        $activo->impresoraExclusiva = false;
-        $activo->monitor = false;
-        $activo->mouse = false;
-        $activo->teclado = false;
+            $activo->nroSerie = $request->nroSerie;
+            $activo->marca = $request->marca;
+            $activo->modelo = $request->modelo;
+            $activo->tipoActivo = $request->tipoActivo;
+            $activo->estado = 'DISPONIBLE';
+            $activo->usuarioDeActivo = NULL;
+            $activo->responsableDeActivo = NULL;
+            $activo->ubicacion = $request->ubicacion;
+            $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
+            $activo->precio = $request->precio;
 
-        $accesorios[] = $request->accesorios;
-        $activo = $this->seleccionarAccesorios($activo, $accesorios);
-
-        $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
-        $activo->precio = $request->precio;
-
-        $activo->save();
-
-        return redirect('/dashboard')->with('success', 'Activo registrado correctamente');
-    }
-
-
-    public function seleccionarAccesorios(Activo $activo, array $accesorios){
-        foreach ($accesorios as $accesorio){
-
-            switch ($accesorio){
-                case "docking":
-                    $activo->docking = true;
-                    break;
-                case "parlanteJabra":
-                    $activo->parlanteJabra = true;
-                    break;
-                case "discoDuroExte":
-                    $activo->discoDuroExt = true;
-                    break;
-                case "impresoExclusiva":
-                    $activo->impresoraExclusiva = true;
-                    break;
-                case "monitor":
-                    $activo->monitor = true;
-                    break;
-                case "mouse":
-                    $activo->mouse = true;
-                    break;
-                case "teclado":
-                    $activo->telefono = true;
-                    break;
-            }
+            $activo->save();
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
+        } catch (\Exception $e) {
+            // Si ocurre un error, redirigir con mensaje de error a la página actual
+            return back()->withInput()->with('error', 'Hubo un problema al registrar el activo: ' . $e->getMessage());
         }
-        return $activo;
     }
 
     // Obtener un solo activo por su ID
