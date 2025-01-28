@@ -28,52 +28,56 @@ class RegistrarPersonaController extends Controller
     }
 
     // Almacenar una nueva persona en la base de datos
-    public function store(Request $request)
-    {
-        // Validar la solicitud
-        $request->validate([
-            'rut' => 'required|string|max:15|unique:personas',
-            'nombreUsuario' => 'required|string|max:50',
-            'nombres' => 'required|string|max:50',
-            'primerApellido' => 'required|string|max:25',
-            'segundoApellido' => 'nullable|string|max:25',
-            'supervisor' => 'nullable|string|max:60',
-            'empresa' => 'required|string|max:60',
-            'estadoEmpleado' => 'nullable|boolean',
-            'centroCosto' => 'required|string|max:50',
-            'denominacion' => 'required|string|max:60',
-            'tituloPuesto' => 'required|string|max:60',
-            'fechaInicio' => 'required|date',
-            'usuarioTI' => 'required|boolean',
-            'ubicacion' => 'nullable|exists:ubicaciones,id',
-            'activo' => 'required|exists:activos,nroSerie',
-            'responsable'=> 'nullable|string|max:15',
-        ]);
+    public function store(Request $request){
+        try {
+            // Validar la solicitud
+            $request->validate([
+                'rut' => 'required|string|max:15|unique:personas',
+                'nombreUsuario' => 'required|string|max:50',
+                'nombres' => 'required|string|max:50',
+                'primerApellido' => 'required|string|max:25',
+                'segundoApellido' => 'nullable|string|max:25',
+                'supervisor' => 'nullable|string|max:60',
+                'empresa' => 'required|string|max:60',
+                'estadoEmpleado' => 'nullable|boolean',
+                'centroCosto' => 'required|string|max:50',
+                'denominacion' => 'required|string|max:60',
+                'tituloPuesto' => 'required|string|max:60',
+                'fechaInicio' => 'required|date',
+                'usuarioTI' => 'required|boolean',
+                'ubicacion' => 'nullable|exists:ubicaciones,id',
+                'activo' => 'required|exists:activos,nroSerie',
+                'responsable'=> 'nullable|string|max:15',
+            ]);
 
-        // Establecer valor predeterminado para estadoEmpleado si no se proporciona
-        $data = $request->all();
-        $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
+            // Establecer valor predeterminado para estadoEmpleado si no se proporciona
+            $data = $request->all();
+            $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
 
-        // Crear una nueva persona con los datos validados
-        Persona::create($data);
+            // Crear una nueva persona con los datos validados
+            Persona::create($data);
 
-        //Asignar persona a activo de tal numero de serie
-        $activo = Activo::where('nroSerie', $request->activo)->first();
-        $activo->usuarioDeActivo = $request->rut;
-        $activo->estado = 'ASIGNADO';
+            // Asignar persona a activo de tal numero de serie
+            $activo = Activo::where('nroSerie', $request->activo)->first();
+            if (!$activo) {
+                throw new \Exception('El activo no se encontró.');
+            }
 
-        //Asignar responsable a activo de tal numero de serie
-        if($request->has('responsable') && $request->responsable != null){
-            $activo->responsableDeActivo = $request->responsable;
+            $activo->usuarioDeActivo = $request->rut;
+            $activo->estado = 'ASIGNADO';
+
+            // Asignar responsable a activo de tal numero de serie
+            $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
+            $activo->update();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('dashboard')->with('success', 'Persona registrada correctamente');
+        } catch (\Exception $e) {
+            // Si ocurre un error, redirigir con mensaje de error a la página actual
+            return back()->withInput()->with('error', 'Hubo un problema al registrar la persona o asignar el activo: ' . $e->getMessage());
         }
-        else{
-            $activo->responsableDeActivo = $request->rut;
-        }
-        $activo->update();
-
-        // Redirigir con un mensaje de éxito
-        return redirect()->route('dashboard')->with('success', 'Persona registrada correctamente');
     }
+
 
     // Mostrar una persona específica por su ID
     public function show($id)

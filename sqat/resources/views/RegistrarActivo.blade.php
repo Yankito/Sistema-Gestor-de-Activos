@@ -108,6 +108,17 @@
                 </div>
             </div>
         </section>
+
+        @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+        @endif
     @endsection
     <!-- Estilos -->
     <style>
@@ -117,4 +128,6 @@
             font-family: 'Ubuntu', sans-serif;
         }
     </style>
+
+
 </html>

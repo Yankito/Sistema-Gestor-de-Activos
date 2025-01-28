@@ -120,9 +120,6 @@
             ]
         });
         console.log('Centro calculado:', { centerLat, centerLon });
-        chart.mapView.addEventListener('afterSetExtremes', function () {
-        console.log('Nivel actual de zoom:', this.zoom);
-    });
 
     });
 </script>

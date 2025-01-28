@@ -9,6 +9,7 @@ use App\Http\Controllers\DesplegableController;
 use App\Models\Activo;
 use App\Http\Controllers\RegistrarActivoController;
 use App\Http\Controllers\RegistrarPersonaController;
+use App\Http\Controllers\RegistrarUbicacionController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
@@ -41,6 +42,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/registrarActivo', [RegistrarActivoController::class, 'index']);
     Route::get('/registrarPersona', [RegistrarPersonaController::class,'index']);
+    Route::get('/registrarUbicacion', [RegistrarUbicacionController::class, 'index']);
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);

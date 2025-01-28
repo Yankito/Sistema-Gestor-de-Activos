@@ -36,6 +36,8 @@
             crossorigin="anonymous"
         />
 
+        <!--<link rel="stylesheet" href="vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css"> -->
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -294,6 +296,8 @@
 
         <script src="https://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
+
+
 
 
         <script>

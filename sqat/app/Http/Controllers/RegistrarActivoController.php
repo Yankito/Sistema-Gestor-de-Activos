@@ -18,24 +18,28 @@ class RegistrarActivoController extends Controller
     }
 
     // Crear un nuevo activo
-    public function store(Request $request)
-    {
-        $activo = new Activo();
+    public function store(Request $request){
+        try {
+            $activo = new Activo();
 
-        $activo->nroSerie = $request->nroSerie;
-        $activo->marca = $request->marca;
-        $activo->modelo = $request->modelo;
-        $activo->tipoActivo = $request->tipoActivo;
-        $activo->estado = 'DISPONIBLE';
-        $activo->usuarioDeActivo = NULL;
-        $activo->responsableDeActivo = NULL;
-        $activo->ubicacion = $request->ubicacion;
-        $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
-        $activo->precio = $request->precio;
+            $activo->nroSerie = $request->nroSerie;
+            $activo->marca = $request->marca;
+            $activo->modelo = $request->modelo;
+            $activo->tipoActivo = $request->tipoActivo;
+            $activo->estado = 'DISPONIBLE';
+            $activo->usuarioDeActivo = NULL;
+            $activo->responsableDeActivo = NULL;
+            $activo->ubicacion = $request->ubicacion;
+            $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
+            $activo->precio = $request->precio;
 
-        $activo->save();
-
-        return redirect('/dashboard')->with('success', 'Activo registrado correctamente');
+            $activo->save();
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
+        } catch (\Exception $e) {
+            // Si ocurre un error, redirigir con mensaje de error a la página actual
+            return back()->withInput()->with('error', 'Hubo un problema al registrar el activo: ' . $e->getMessage());
+        }
     }
 
     // Obtener un solo activo por su ID
