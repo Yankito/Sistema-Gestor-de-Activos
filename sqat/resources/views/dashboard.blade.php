@@ -59,53 +59,74 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6" style="cursor: pointer;">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>{{$cantidadActivos}}</h3>
-                <p>Activos</p>
-              </div>
-              <div class="icon" style="cursor: pointer;">
-                <i class="ion ion-laptop"></i>
-              </div>
-              @if($user->esAdministrador)
-                <a href="/registrarActivo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
-              @else
-                <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
-              @endif
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-6" style="cursor: pointer;">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{$cantidadActivos}}</h3>
+                        <p>Activos</p>
+                    </div>
+                    <div class="icon" style="cursor: pointer;">
+                        <i class="ion ion-laptop"></i>
+                    </div>
+                    @if($user->esAdministrador)
+                        <a href="/registrarActivo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
+                    @else
+                        <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
+                    @endif
+                    </div>
+                </div>
+
+                <!-- ./col -->
+                <div class="col-lg-3 col-6" style = "cursor: pointer;">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ $cantidadPersonas }}</h3>
+                        <p>Personas</p>
+                    </div>
+                    <div class="icon" style="cursor: pointer;">
+                    <i class="ion ion-person-add"></i>
+                    </div>
+                        <!-- si usuario es administrador puede acceder a resigter-->
+                        @if($user->esAdministrador)
+                        <a href="/registrarPersona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
+                        @else
+                        <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
+                        @endif
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                @foreach($tipoDeActivos as $tipo => $cantidad)
+                    <div class="col-lg-3 col-6" style="cursor: pointer;">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ $cantidad }}</h3>
+                                <p>{{ $tipo }}</p>
+                            </div>
+                            <div class="icon" style="cursor: pointer;">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            @if($user->esAdministrador)
+                                <a href="/registrarActivo/{{ $tipo }}" class="small-box-footer">Agregar {{ $tipo }} <i class="fas fa-arrow-circle-right"></i></a>
+                            @else
+                                <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
             </div>
-          </div>
+        </div>
 
-          <!-- ./col -->
-          <div class="col-lg-3 col-6" style = "cursor: pointer;">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>{{ $cantidadPersonas }}</h3>
-
-                <p>Personas</p>
-              </div>
-              <div class="icon" style="cursor: pointer;">
-              <i class="ion ion-person-add"></i>
-              </div>
-                <!-- si usuario es administrador puede acceder a resigter-->
-                @if($user->esAdministrador)
-                <a href="/registrarPersona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
-                @else
-                <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
-                @endif
-
-
-            </div>
-          </div>
-          <!-- ./col -->
-          <!-- ./col -->
-
-      </div><!-- /.container-fluid -->
 
 
             <div class="container-fluid">

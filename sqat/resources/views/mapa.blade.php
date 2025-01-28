@@ -2,12 +2,9 @@
     <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
         <h3 class="card-title">
             <i class="fas fa-map-marker-alt mr-1"></i>
-            Mapa de Chile
+            Mapa de activos por ubicación
         </h3>
         <div class="card-tools">
-            <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-                <i class="far fa-calendar-alt"></i>
-            </button>
             <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
                 <i class="fas fa-minus"></i>
             </button>
@@ -18,10 +15,6 @@
         <div id="chile-map" style="height: 450px; width: 100%;"></div>
     </div>
 
-    <div class="card-footer bg-transparent">
-        <p class="text-white text-center">Mapa interactivo de Chile</p>
-        <div id="coords" class="text-white text-center"></div> <!-- Mostrar coordenadas -->
-    </div>
 </div>
 
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
@@ -32,8 +25,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Array generado dinámicamente desde PHP
-        const ubicaciones = @json($ubicaciones);
-        const cantidadPorUbicacion = @json($cantidadPorUbicacion);
+        const ubicaciones = JSON.parse('{!! json_encode($ubicaciones) !!}');
+        const cantidadPorUbicacion = JSON.parse('{!! json_encode($cantidadPorUbicacion) !!}');
 
         // Transformar datos para Highcharts
         const puntosUbicaciones = ubicaciones.map(ubicacion => ({
@@ -43,6 +36,17 @@
             activos: cantidadPorUbicacion[ubicacion.sitio] || 0,
             color: '#FF0000'
         }));
+
+        // Calcular automáticamente el centro y zoom en función de las ubicaciones
+        const latitudes = puntosUbicaciones.map(punto => punto.lat);
+        const longitudes = puntosUbicaciones.map(punto => punto.lon);
+        const minLat = Math.min(...latitudes);
+        const maxLat = Math.max(...latitudes);
+        const minLon = Math.min(...longitudes);
+        const maxLon = Math.max(...longitudes);
+
+        const centerLat = (minLat + maxLat) / 2;
+        const centerLon = (minLon + maxLon) / 2;
 
         // Configuración del mapa
         const chart = Highcharts.mapChart('chile-map', {
@@ -58,7 +62,30 @@
             },
             mapNavigation: {
                 enabled: true,
-                enableMouseWheelZoom: true // Permitir zoom con el scroll
+                enableMouseWheelZoom: true, // Permitir zoom con el scroll
+                    buttons: {
+                    zoomIn: {
+                        onclick: function () {
+                            this.mapView.zoomBy(1); // Zoom in
+                            console.log('Zoom In: Nivel actual de zoom:', this.mapView.zoom);
+                        }
+                    },
+                    zoomOut: {
+                        onclick: function () {
+                            this.mapView.zoomBy(-1); // Zoom out
+                            console.log('Zoom Out: Nivel actual de zoom:', this.mapView.zoom);
+                        }
+                    }
+                }
+            },
+            mapView: {
+                // Definir las coordenadas iniciales del centro del mapa y el zoom
+                center: {
+                    x: centerLon,
+                    y: centerLat
+                },
+                zoom: -2
+
             },
             tooltip: {
                 headerFormat: '<b>{point.key}</b><br>',
@@ -77,7 +104,7 @@
                     marker: {
                         symbol: 'circle',
                         radius: 8,
-                        fillColor: '#FF0000', // Rojo para destacar el punto
+                        fillColor: '#0aa40d', // Rojo para destacar el punto
                         lineColor: '#000000',
                         lineWidth: 1
                     },
@@ -92,5 +119,10 @@
                 }
             ]
         });
+        console.log('Centro calculado:', { centerLat, centerLon });
+        chart.mapView.addEventListener('afterSetExtremes', function () {
+        console.log('Nivel actual de zoom:', this.zoom);
+    });
+
     });
 </script>
