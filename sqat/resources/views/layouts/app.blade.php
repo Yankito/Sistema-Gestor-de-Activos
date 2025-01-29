@@ -36,6 +36,21 @@
             crossorigin="anonymous"
         />
 
+        <!-- Leaflet CSS -->
+        <link
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            rel="stylesheet"
+        />
+
+
+
+        <!-- Leaflet JavaScript -->
+        <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            crossorigin="anonymous"
+        ></script>
+
+
         <!--<link rel="stylesheet" href="vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css"> -->
 
     </head>
@@ -51,62 +66,10 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="dashboard" class="nav-link">Inicio</a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contacto</a>
-            </li>
-
 
             </ul>
 
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <div class="navbar-search-block">
-                <form class="form-inline">
-                    <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Buscar..." aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                        <i class="fas fa-search"></i>
-                        </button>
-                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                        <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                </div>
-            </li>
 
-            <!-- Notifications Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                </div>
-            </li>
-            </ul>
         </nav>
         <!-- /.navbar -->
 
@@ -177,20 +140,26 @@
 
                         <!-- registrar persona -->
                         @if($user->esAdministrador)
-                        <li class="nav-item">
-                            <a href="/registrarPersona" class="nav-link">
-                            <i class="nav-icon fas fa-user-plus"></i>
-                            <p>
-                                Registrar Persona
-                            </p>
-                            </a>
-                        </li>
-                        @endif
+                            <li class="nav-item">
+                                <a href="/registrarActivo" class="nav-link">
+                                <i class="nav-icon fas fa-laptop"></i>
+                                <p>
+                                    Registrar Activo
+                                </p>
+                                </a>
+                            </li>
 
+                            <!-- registrar persona -->
+                            <li class="nav-item">
+                                <a href="/registrarPersona" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Registrar Persona
+                                </p>
+                                </a>
+                            </li>
 
-
-                        <!-- registrar ubicacion-->
-                        @if($user->esAdministrador)
+                            <!-- registrar ubicacion-->
                             <li class="nav-item">
                                 <a href="/registrarUbicacion" class="nav-link">
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
@@ -199,9 +168,8 @@
                                 </p>
                                 </a>
                             </li>
-                        @endif
-                        <!--importar Excell-->
-                        @if($user->esAdministrador)
+
+                            <!--importar Excell-->
                             <li class="nav-item">
                                 <a href="/importar" class="nav-link">
                                 <i class="nav-icon fas fa-file-import"></i>
@@ -214,7 +182,7 @@
                         <ul class="nav-item d-none d-sm-inline-block">
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-link nav-link"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
+                                <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
                             </form>
                         </ul>
                     </li>

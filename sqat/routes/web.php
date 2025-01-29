@@ -68,7 +68,7 @@ Route::middleware('auth')->get('/profile', function () {
 });
 
 Route::post('/activos', [RegistrarActivoController::class, 'store']);
-Route::get('/dashboardActivos', [DashboardActivosController::class, 'index']);
+Route::post('/ubicaciones', [RegistrarUbicacionController::class, 'store']);
 
 
 
