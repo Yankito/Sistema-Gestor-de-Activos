@@ -21,8 +21,11 @@ class ImportarController extends Controller
         $path = $request->file('file')->getRealPath();
         $spreadsheet = IOFactory::load($path);
         $sheet = $spreadsheet->getActiveSheet();
-        $data = $sheet->toArray();
+        $data = $sheet->toArray(null, true, true, false);
+        $datawithoutheader = array_slice($data, 1);
+        //dd($data);
 
-        return view('/importar', ['data' => $data]);
+
+        return view('/importar', ['data' => $datawithoutheader]);
     }
 }
