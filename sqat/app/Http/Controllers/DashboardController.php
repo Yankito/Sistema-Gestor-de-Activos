@@ -20,9 +20,9 @@ class DashboardController extends Controller
         $activos = Activo::all();
         $cantidadPorUbicacion = $this->calcularActivosPorUbicacion();
         $ubicaciones = Ubicacion::all();
-        $tipoDeActivos = $this->obtenerTiposDeActivos();
+        $modelos = $this->obtenerModelos();
         // Pasar el usuario a la vista
-        return view('dashboard', compact('cantidadActivos','cantidadPersonas','cantidadUbicaciones','activos','cantidadPorUbicacion','ubicaciones', 'tipoDeActivos'));
+        return view('dashboard', compact('cantidadActivos','cantidadPersonas','cantidadUbicaciones','activos','cantidadPorUbicacion','ubicaciones', 'modelos'));
     }
 
     public function calcularActivosPorUbicacion(){
@@ -34,13 +34,13 @@ class DashboardController extends Controller
         return $cantidadPorUbicacion;
     }
 
-    public function obtenerTiposDeActivos(){
+    public function obtenerModelos(){
         $activos = Activo::all();
-        $tipos = [];
+        $modelos = [];
         foreach ($activos as $activo) {
-            $activo->tipoActivo = strtoupper($activo->tipoActivo);
-            $tipos[$activo->tipoActivo] = Activo::where('tipoActivo', $activo->tipoActivo)->count();
+            $activo->modelo = strtoupper($activo->modelo);
+            $modelos[$activo->modelo] = Activo::where('modelo', $activo->modelo)->count();
         }
-        return $tipos;
+        return $modelos;
     }
 }

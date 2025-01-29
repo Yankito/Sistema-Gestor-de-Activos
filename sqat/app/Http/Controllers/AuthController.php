@@ -48,12 +48,6 @@ class AuthController extends Controller
     // funcion para loguear un usuario
     public function login(Request $request)
     {
-        // Agregar dd() para depurar
-        //dd($request->all()); // Esto imprimirá todos los datos del formulario y detendrá la ejecución
-
-        //ver todos los usuarios de la base de datos
-        //dd(Usuario::all());
-
         // Obtener las credenciales
         $credentials = [
             'correo' => $request->correo,

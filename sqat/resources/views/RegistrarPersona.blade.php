@@ -15,8 +15,7 @@
             crossorigin="anonymous"
         />
 
-    <script data-cfasync="false" nonce="2823c135-4b84-4a99-b748-a0ec6bd3fac9">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="2823c135-4b84-4a99-b748-a0ec6bd3fac9";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
-
+    </head>
 
     @section('content')
         <section class="h-100 gradient-form" style="background-color: #eee;">
@@ -178,16 +177,18 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="form-outline mb-4">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="agregarActivo" name="agregarActivo">
-                                                <label class="form-check-label" for="agregarActivo">Agregar Activo</label>
+                                                <label class="form-check-label" for="agregarActivo">Agregar Activo adicional</label>
                                             </div>
                                         </div>
+
                                         <div class="form-outline mb-4" id="activoSection" style="display: none;">
                                             <div class="form-group">
-                                                <label>Multiple</label>
-                                                <select class="select2bs4" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" id="activoSelect">
+                                                <label class="form-label" for="activoSelect">Activos adicionales</label>
+                                                <select class="select2bs4" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" name="activoSelect[]" id="activoSelect">
                                                     @foreach($activos as $activo)
                                                         @if ($activo->estado == 'DISPONIBLE')
                                                             <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
@@ -196,95 +197,9 @@
                                                 </select>
                                             </div>
 
-                                            <div id="justificacionContainer">
-                                                <!-- Aquí se generarán los campos de justificación para cada activo -->
-                                            </div>
+                                            <!-- Contenedor para las justificaciones dinámicas -->
+                                            <div id="justificacionContainer"></div>
                                         </div>
-
-                                        <script>
-                                            // Cuando el select de activos cambie, actualizamos la justificación
-                                            document.getElementById('activoSection').addEventListener('change', function() {
-                                                var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
-                                                var justificacionContainer = document.getElementById('justificacionContainer');
-
-                                                // Limpiar cualquier justificación previa
-                                                justificacionContainer.innerHTML = '';
-
-                                                // Para cada activo seleccionado, generar un campo de justificación
-                                                selectedActivos.forEach(function(activo) {
-                                                    var div = document.createElement('div');
-                                                    div.classList.add('form-group');
-
-                                                    var label = document.createElement('label');
-                                                    label.classList.add('form-label');
-                                                    label.textContent = 'Justificación para ' + activo;
-
-                                                    var input = document.createElement('input');
-                                                    input.type = 'text';
-                                                    input.name = 'justificacion_' + activo;
-                                                    input.classList.add('form-control');
-
-                                                    div.appendChild(label);
-                                                    div.appendChild(input);
-                                                    justificacionContainer.appendChild(div);
-                                                });
-                                            });
-                                        </script>
-
-
-                                        <script>
-                                            document.getElementById('agregarActivo').addEventListener('change', function() {
-                                                var activoSection = document.getElementById('activoSection');
-                                                var activoJustificacion = document.getElementById('activoJustificacion');
-                                                var activoSeleccion = document.getElementById('activoSeleccion');
-
-                                                if (this.checked) {
-                                                    activoSection.style.display = 'block';
-                                                } else {
-                                                    activoSection.style.display = 'none';
-                                                    // Resetea los valores de los campos antes de enviar el formulario
-                                                    activoJustificacion.value = '';
-                                                    activoSeleccion.value = null;
-                                                }
-                                            });
-
-                                            // Resetea los valores de los campos antes de enviar el formulario
-                                            document.querySelector('form').addEventListener('submit', function() {
-                                                var agregarActivo = document.getElementById('agregarActivo');
-                                                var activoJustificacion = document.getElementById('activoJustificacion');
-                                                var activoSeleccion = document.getElementById('activoSeleccion');
-
-                                                if (!agregarActivo.checked) {
-                                                    activoJustificacion.value = '';
-                                                    activoSeleccion.value = null;  // No envía el valor cuando no está marcado
-                                                }
-                                            });
-                                        </script>
-
-                                        <script>
-                                            document.getElementById('asignarResponsable').addEventListener('change', function() {
-                                                var responsableSection = document.getElementById('responsableSection');
-                                                var responsableSelect = document.getElementById('responsable');
-
-                                                if (this.checked) {
-                                                    responsableSection.style.display = 'block';
-                                                } else {
-                                                    responsableSection.style.display = 'none';
-                                                    // Resetea el valor del select antes de enviar el formulario
-                                                    responsableSelect.value = null;
-                                                }
-                                            });
-
-                                            // Resetea el valor del campo 'responsable' antes de enviar el formulario
-                                            document.querySelector('form').addEventListener('submit', function() {
-                                                var asignarResponsable = document.getElementById('asignarResponsable');
-                                                var responsableSelect = document.getElementById('responsable');
-
-                                                if (!asignarResponsable.checked) {
-                                                    responsableSelect.value = null;  // No envía el valor cuando no está marcado
-                                                }
-                                            });
-                                        </script>
 
                                     </div>
                                     <!-- Botón de Enviar -->
@@ -298,6 +213,96 @@
                 </div>
             </div>
         </section>
+
+
+        <script>
+            document.getElementById('agregarActivo').addEventListener('change', function() {
+                var activoSection = document.getElementById('activoSection');
+                if (this.checked) {
+                    activoSection.style.display = 'block';
+                    console.log('Mostrar activoSection');
+                } else {
+                    activoSection.style.display = 'none';
+                    // Limpiar justificaciones al desmarcar
+                    document.getElementById('justificacionContainer').innerHTML = '';
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Verifica que el select con id 'activoSelect' existe
+                const selectElement = document.getElementById('activoSelect');
+
+                if (selectElement) {
+                    console.log('Elemento select encontrado:', selectElement);
+
+                    // Inicializa select2
+                    $(selectElement).select2();
+
+                    // Escucha el cambio de selección usando select2
+                    $(selectElement).on('change', function() {
+                        var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
+                        console.log('Activos seleccionados:', selectedActivos);  // Debería imprimir los valores seleccionados
+                        updateJustifications(selectedActivos); // Actualiza las justificaciones cada vez que se seleccionen activos
+                    });
+                } else {
+                    console.error('El elemento select con id "activoSelect" no se encuentra.');
+                }
+            });
+
+            // Función que maneja la creación de campos de justificación
+            function updateJustifications(selectedActivos) {
+                var justificacionContainer = document.getElementById('justificacionContainer');
+
+                // Limpiar cualquier justificación previa
+                justificacionContainer.innerHTML = '';
+
+                // Para cada activo seleccionado, generar un campo de justificación
+                selectedActivos.forEach(function(activo) {
+                    var div = document.createElement('div');
+                    div.classList.add('form-group');
+
+                    var label = document.createElement('label');
+                    label.classList.add('form-label');
+                    label.textContent = 'Justificación para ' + activo;
+
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = 'justificacion_' + activo;
+                    input.classList.add('form-control');
+
+                    div.appendChild(label);
+                    div.appendChild(input);
+                    justificacionContainer.appendChild(div);
+                });
+            }
+
+        </script>
+
+        <script>
+            document.getElementById('asignarResponsable').addEventListener('change', function() {
+                var responsableSection = document.getElementById('responsableSection');
+                var responsableSelect = document.getElementById('responsable');
+
+                if (this.checked) {
+                    responsableSection.style.display = 'block';
+                } else {
+                    responsableSection.style.display = 'none';
+                    // Resetea el valor del select antes de enviar el formulario
+                    responsableSelect.value = null;
+                }
+            });
+
+            // Resetea el valor del campo 'responsable' antes de enviar el formulario
+            document.querySelector('form').addEventListener('submit', function() {
+                var asignarResponsable = document.getElementById('asignarResponsable');
+                var responsableSelect = document.getElementById('responsable');
+
+                if (!asignarResponsable.checked) {
+                    responsableSelect.value = null;  // No envía el valor cuando no está marcado
+                }
+            });
+        </script>
+
         <!-- Estilos -->
         <style>
             form .form-label {

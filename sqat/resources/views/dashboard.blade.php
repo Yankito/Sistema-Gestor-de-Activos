@@ -90,19 +90,19 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                @foreach($tipoDeActivos as $tipo => $cantidad)
+                @foreach($modelos as $modelo => $cantidad)
                     <div class="col-lg-3 col-6" style="cursor: pointer;">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(strtolower($tipo))}}</p>
+                                <p>{{ ucfirst(strtolower($modelo))}}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
                             @if($user->esAdministrador)
-                                <a href="/registrarActivo/{{ $tipo }}" class="small-box-footer">Agregar {{ ucfirst(strtolower($tipo)) }} <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="/registrarActivo/{{ $modelo }}" class="small-box-footer">Agregar {{ ucfirst(strtolower($modelo)) }} <i class="fas fa-arrow-circle-right"></i></a>
                             @else
                                 <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
                             @endif

@@ -54,15 +54,8 @@
                                         <div class = " col-md-6">
                                             <!-- Modelo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="modelo">Modelo</label>
-                                                <input type="text" name="modelo" id="modelo" required class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class = " col-md-6">
-                                            <!-- Tipo de Activo -->
-                                            <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="tipoActivo">Tipo de Activo</label>
-                                                <select name="tipoActivo" id="tipoActivo" class="form-control" required>
+                                                <label class="form-label" for="mocelo">Modelo</label>
+                                                <select name="mocelo" id="mocelo" class="form-control" required>
                                                     <option value="LAPTOP">Laptop</option>
                                                     <option value="DESKTOP">Desktop</option>
                                                     <option value="MONITOR">Monitor</option>
@@ -94,8 +87,6 @@
                                         </div>
 
                                     </div>
-
-
 
                                     <!-- Botón de Enviar -->
                                     <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
