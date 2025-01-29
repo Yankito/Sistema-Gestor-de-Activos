@@ -28,8 +28,70 @@
                 <h3 class="card-title">Importar</h3>
             </div>
             <div class="card-body">
-                <!-- Botón para importar -->
-                <button id="importButton" class="btn btn-success">Importar Datos</button>
+                <!--Formulario para cargar archivo excel-->
+                <form action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="file" class="form-control" required>
+                    <button type="submit" class="btn btn-success">Importar Datos</button>
+                    <!--mostrar tabla con los datos del archivo excel-->
+                    @if (isset($data))
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>rut</th>
+                                    <th>nombreUsuario</th>
+                                    <th>nombres</th>
+                                    <th>primerApellido</th>
+                                    <th>segundoApellido</th>
+                                    <th>supervisor</th>
+                                    <th>empresa</th>
+                                    <th>estadoEmpleado</th>
+                                    <th>centroCosto</th>
+                                    <th>denominacion</th>
+                                    <th>tituloPuesto</th>
+                                    <th>fechaInicio</th>
+                                    <th>usuarioTI</th>
+                                    <th>nroSerie</th>
+                                    <th>marca</th>
+                                    <th>modelo</th>
+                                    <th>estado</th>
+                                    <th>responsableDeActivo</th>
+                                    <th>precio</th>
+                                    <th>ubicacion</th>
+                                    <th>justificacionDobleActivo</th>     
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $row)
+                                    <tr>
+                                        <td>{{ $row[0]}}</td>
+                                        <td>{{ $row[1] }}</td>
+                                        <td>{{ $row[2] }}</td>
+                                        <td>{{ $row[3] }}</td>
+                                        <td>{{ $row[4] }}</td>
+                                        <td>{{ $row[5]}}</td>
+                                        <td>{{ $row[6]}}</td>
+                                        <td>{{ $row[7]}}</td>
+                                        <td>{{ $row[8]}}</td>
+                                        <td>{{ $row[9]}}</td>
+                                        <td>{{ $row[10]}}</td>
+                                        <td>{{ $row[11]}}</td>
+                                        <td>{{ $row[12]}}</td>
+                                        <td>{{ $row[13]}}</td>
+                                        <td>{{ $row[14]}}</td>
+                                        <td>{{ $row[15]}}</td>
+                                        <td>{{ $row[16]}}</td>
+                                        <td>{{ $row[17]}}</td>
+                                        <td>{{ $row[18]}}</td>
+                                        <td>{{ $row[19]}}</td>
+                                        <td>{{ $row[20]}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif 
+                </form>
                 <!-- Botón para descargar el archivo Excel -->
                 <a href="{{ route('descargar.excel') }}" class="btn btn-primary">Descargar Excel de Muestra</a>
           </div>

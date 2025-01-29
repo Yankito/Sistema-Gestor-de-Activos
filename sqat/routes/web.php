@@ -77,3 +77,4 @@ Route::get('/descargarExcel', function () {
     return Response::download($filePath, 'ImportarDatos.xlsx');
 })->name('descargar.excel');
 
+Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
