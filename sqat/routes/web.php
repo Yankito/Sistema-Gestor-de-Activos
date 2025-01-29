@@ -13,6 +13,7 @@ use App\Http\Controllers\RegistrarUbicacionController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
+use Illuminate\Support\Facades\Response;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -69,3 +70,11 @@ Route::middleware('auth')->get('/profile', function () {
 Route::post('/activos', [RegistrarActivoController::class, 'store']);
 Route::post('/ubicaciones', [RegistrarUbicacionController::class, 'store']);
 
+
+
+Route::get('/descargarExcel', function () {
+    $filePath = public_path('excel/ImportarDatos.xlsx');
+    return Response::download($filePath, 'ImportarDatos.xlsx');
+})->name('descargar.excel');
+
+Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');

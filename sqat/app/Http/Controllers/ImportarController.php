@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Models\Activo;
 
 class ImportarController extends Controller
 {
@@ -10,5 +12,17 @@ class ImportarController extends Controller
     {
         // Lógica para la vista o los datos que quieras mostrar
         return view('/importar');
+    }
+
+    public function importExcel(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+        $path = $request->file('file')->getRealPath();
+        $spreadsheet = IOFactory::load($path);
+        $sheet = $spreadsheet->getActiveSheet();
+        $data = $sheet->toArray();
+
+        return view('/importar', ['data' => $data]);
     }
 }
