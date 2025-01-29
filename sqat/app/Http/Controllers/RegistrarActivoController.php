@@ -25,7 +25,6 @@ class RegistrarActivoController extends Controller
             $activo->nroSerie = $request->nroSerie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
-            $activo->tipoActivo = $request->tipoActivo;
             $activo->estado = 'DISPONIBLE';
             $activo->usuarioDeActivo = NULL;
             $activo->responsableDeActivo = NULL;
