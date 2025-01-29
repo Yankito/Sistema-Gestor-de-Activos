@@ -53,7 +53,7 @@ class RegistrarPersonaController extends Controller
             // Establecer valor predeterminado para estadoEmpleado si no se proporciona
             $data = $request->all();
             $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
-
+            //dd($request, $data);
             // Crear una nueva persona con los datos validados
             Persona::create($data);
 
