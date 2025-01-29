@@ -16,7 +16,7 @@ class CreateActivosTable extends Migration
             $table->string('usuarioDeActivo', 15)->nullable();
             $table->string('responsableDeActivo', 15)->nullable();
             $table->integer('precio');
-            $table->integer('ubicacion');
+            $table->unsignedBigInteger('ubicacion')->nullable();
             $table->text('justificacionDobleActivo')->nullable();
 
             // Relacionar las claves foráneas con la tabla Persona (si es que ya tienes la tabla Persona)
