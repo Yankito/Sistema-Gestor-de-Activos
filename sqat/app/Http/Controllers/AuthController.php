@@ -29,46 +29,51 @@ class AuthController extends Controller
          * @param \Illuminate\Http\Request $request The incoming request instance.
          * @return void
          */
-        $request->validate([
-            'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/'],
-            'nombres' => 'required|string|max:255',
-            'primerApellido' => 'required|string|max:255',
-            'segundoApellido' => 'nullable|string|max:255',
-            'contrasena' => 'required|min:6',
-        ], [
-            'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
-        ]);
+        try{
+            $request->validate([
+                'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/'],
+                'nombres' => 'required|string|max:255',
+                'primerApellido' => 'required|string|max:255',
+                'segundoApellido' => 'nullable|string|max:255',
+                'contrasena' => 'required',
+            ], [
+                'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
+            ]);
 
-        if (!Auth::user()->esAdministrador) {
-            return redirect('/')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
+            if (!Auth::user()->esAdministrador) {
+                return redirect('/')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
+            }
+            // validamos los datos
+            $validator = Validator::make($request->all(), [
+                'correo' => 'required|email|unique:usuarios',
+                'nombres' => 'required|string',
+                'primerApellido' => 'required|string',
+                'segundoApellido' => 'string',
+                'contrasena' => 'required|string|min:6',
+                'esAdministrador' => 'boolean',
+            ]);
+
+            // si la validacion falla, retornamos un error
+            if ($validator->fails()) {
+                return back()->withInput()->with('error', 'Hubo un problema al registrar el usuario: ');
+            }
+
+            // creamos el usuario
+            $usuario = Usuario::create([
+                'correo' => $request->correo,
+                'nombres' => $request->nombres,
+                'primerApellido' => $request->primerApellido,
+                'segundoApellido' => $request->segundoApellido,
+                'contrasena' => Hash::make($request->contrasena),
+                'esAdministrador' => $request->esAdministrador ?? false,
+            ]);
+
+            // Redirigimos al administrador a la página de usuarios registrados
+            return redirect('/dashboard')->with('success', 'Usuario registrado correctamente.');
+        } catch (\Exception $e) {
+            // Si ocurre un error, redirigir con mensaje de error a la página actual
+            return back()->withInput()->with('error', 'Hubo un problema al registrar el usuario: ' . $e->getMessage());
         }
-        // validamos los datos
-        $validator = Validator::make($request->all(), [
-            'correo' => 'required|email|unique:usuarios',
-            'nombres' => 'required|string',
-            'primerApellido' => 'required|string',
-            'segundoApellido' => 'string',
-            'contrasena' => 'required|string|min:6',
-            'esAdministrador' => 'boolean',
-        ]);
-
-        // si la validacion falla, retornamos un error
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        // creamos el usuario
-        $usuario = Usuario::create([
-            'correo' => $request->correo,
-            'nombres' => $request->nombres,
-            'primerApellido' => $request->primerApellido,
-            'segundoApellido' => $request->segundoApellido,
-            'contrasena' => Hash::make($request->contrasena),
-            'esAdministrador' => $request->esAdministrador ?? false,
-        ]);
-
-        // Redirigimos al administrador a la página de usuarios registrados
-        return redirect('/dashboard')->with('success', 'Usuario registrado correctamente.');
     }
 
     // funcion para loguear un usuario

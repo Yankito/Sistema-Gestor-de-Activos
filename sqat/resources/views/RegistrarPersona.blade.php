@@ -36,14 +36,18 @@
                                         <div class="col-md-6">
                                             <!-- RUT -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="rut">RUT</label>
+                                                <label class="form-label" for="rut">RUT <span class="required-asterisk">*</span></label>
+                                                <label class="form-label">Formato: 12345678-9</label>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
+                                                <span id="rutError" class="text-danger" style="display:none;">RUT inválido. Use el formato 12345678-9.</span>
+                                                <span id="rutRepetido" class="text-danger" style="display:none;">El RUT ya se encuentra registrado.</span>
                                             </div>
+
                                         </div>
                                         <div class="col-md-6">
                                         <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="nombreUsuario">Nombre de Usuario</label>
+                                            <label class="form-label" for="nombreUsuario">Nombre de Usuario <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="nombreUsuario" id="nombreUsuario" required class="form-control" />
                                             </div>
                                         </div>
@@ -52,14 +56,14 @@
                                         <div class="col-md-6">
                                             <!-- Nombres -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="nombres">Nombres</label>
+                                            <label class="form-label" for="nombres">Nombres <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="nombres" id="nombres" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <!-- Primer Apellido -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="primerApellido">Primer Apellido</label>
+                                            <label class="form-label" for="primerApellido">Primer Apellido <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="primerApellido" id="primerApellido" required class="form-control" />
                                             </div>
                                         </div>
@@ -84,15 +88,15 @@
                                         <div class = "col-md-6">
                                             <!-- Empresa -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="empresa">Empresa</label>
+                                            <label class="form-label" for="empresa">Empresa <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="empresa" id="empresa" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Centro Costo -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="centroCosto">Centro Costo</label>
-                                                <input type="text" name="centroCosto" id="centroCosto" class="form-control" />
+                                                <label class="form-label" for="centroCosto">Centro Costo <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="centroCosto" id="centroCosto" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -100,15 +104,15 @@
                                         <div class = "col-md-6">
                                             <!-- Denominación -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="denominacion">Denominación</label>
-                                                <input type="text" name="denominacion" id="denominacion" class="form-control" />
+                                                <label class="form-label" for="denominacion">Denominación <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="denominacion" id="denominacion" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Título Puesto -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="tituloPuesto">Título Puesto</label>
-                                                <input type="text" name="tituloPuesto" id="tituloPuesto" class="form-control" />
+                                                <label class="form-label" for="tituloPuesto">Título Puesto <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="tituloPuesto" id="tituloPuesto" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -203,7 +207,7 @@
 
                                     </div>
                                     <!-- Botón de Enviar -->
-                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit">Registrar Persona</button>
+                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit" id="botonRegistrar">Registrar Persona</button>
                                 </form>
                                 <!-- Botón de Volver atrás -->
                                 <a href="/dashboard" type="button" class="btn btn-outline-danger text-center">Volver atrás</a>
@@ -220,7 +224,6 @@
                 var activoSection = document.getElementById('activoSection');
                 if (this.checked) {
                     activoSection.style.display = 'block';
-                    console.log('Mostrar activoSection');
                 } else {
                     activoSection.style.display = 'none';
                     // Limpiar justificaciones al desmarcar
@@ -233,15 +236,12 @@
                 const selectElement = document.getElementById('activosAdicionales');
 
                 if (selectElement) {
-                    console.log('Elemento select encontrado:', selectElement);
-
                     // Inicializa select2
                     $(selectElement).select2();
 
                     // Escucha el cambio de selección usando select2
                     $(selectElement).on('change', function() {
                         var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
-                        console.log('Activos seleccionados:', selectedActivos);  // Debería imprimir los valores seleccionados
                         updateJustifications(selectedActivos); // Actualiza las justificaciones cada vez que se seleccionen activos
                     });
                 } else {
@@ -307,14 +307,11 @@
                 const activosAdicionalesSelect = document.getElementById('activosAdicionales');
 
                 if (selectElement) {
-                    console.log('Elemento select encontrado:', selectElement);
-
                     // Inicializa select2
                     $(selectElement).select2();
 
                     // Escucha el cambio de selección usando select2
                     $(selectElement).on('change', function() {
-                        console.log('Activo seleccionado:', this.value);
                         updateActivosAdicionales();
                     });
                 } else {
@@ -365,13 +362,109 @@
         </script>
 
 
-        <!-- Estilos -->
-        <style>
-            form .form-label {
-                font-size: 15px;
-                color: #4b4b4b;
-            }
-        </style>
+            <script>
+                function validarRUT(rut) {
+                    // Eliminar puntos y guion
+                    rut = rut.replace(/[.\-]/g, '');
+
+                    // Validación con expresión regular
+                    const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
+                    if (!rutRegex.test(rut)) {
+                        return false;
+                    }
+
+                    // Verificar el dígito verificador
+                    let rutBody = rut.slice(0, -1);
+                    let dv = rut.slice(-1).toUpperCase();
+
+                    let suma = 0;
+                    let multiplicador = 2;
+
+                    for (let i = rutBody.length - 1; i >= 0; i--) {
+                        suma += parseInt(rutBody.charAt(i)) * multiplicador;
+                        multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+                    }
+
+                    let dvCalculado = 11 - (suma % 11);
+                    if (dvCalculado === 11) dvCalculado = '0';
+                    if (dvCalculado === 10) dvCalculado = 'K';
+
+                    return dv === dvCalculado.toString();
+                }
+
+                async function comprobarRutRepetido(rut) {
+                    // Comprobar si el RUT ya existe en la base de datos
+                    try {
+                        let response = await fetch('/personas/' + rut);
+                        if (response.ok) {
+                            let data = await response.json();
+                            console.log(data);
+                            return data.exists;
+                        } else {
+                            throw new Error('Error al comprobar el RUT');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        return false;
+                    }
+                }
+
+                document.getElementById('rut').addEventListener('blur', function() {
+                    var rut = this.value;
+                    var errorSpan = document.getElementById('rutError');
+                    var repetidoSpan = document.getElementById('rutRepetido');
+
+                    if (!validarRUT(rut)) {
+                        errorSpan.style.display = 'block';
+                        this.classList.add('is-invalid');
+                        repetidoSpan.style.display = 'none';
+                    } else {
+                        errorSpan.style.display = 'none';
+                        this.classList.remove('is-invalid');
+                        if(comprobarRutRepetido(rut)==true) {
+                            repetidoSpan.style.display = 'block';
+                            this.classList.add('is-invalid');
+                        } else {
+                            repetidoSpan.style.display = 'none';
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+
+                document.getElementById('botonRegistrar').addEventListener('click', function(event) {
+                    var rut = document.getElementById('rut').value;
+                    var errorSpan = document.getElementById('rutError');
+                    var repetidoSpan = document.getElementById('rutRepetido');
+
+                    if (!validarRUT(rut)) {
+                        errorSpan.style.display = 'block';
+                        document.getElementById('rut').classList.add('is-invalid');
+                        document.getElementById('rut').focus();
+                        event.preventDefault();
+                    }
+                    else{
+                        if(comprobarRutRepetido(rut) == true) {
+                            repetidoSpan.style.display = 'block';
+                            document.getElementById('rut').classList.add('is-invalid');
+                            document.getElementById('rut').focus();
+                            event.preventDefault();
+                        }
+                    }
+                });
+
+
+            </script>
+
+            <style>
+                .is-invalid {
+                    border: 1px solid red;
+                    background-color: #ffe6e6;
+                }
+                form .form-label {
+                    font-size: 15px;
+                    color: #4b4b4b;
+                }
+            </style>
     @endsection
 
 

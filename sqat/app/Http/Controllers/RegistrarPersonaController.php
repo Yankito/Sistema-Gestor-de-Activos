@@ -31,24 +31,24 @@ class RegistrarPersonaController extends Controller
     public function store(Request $request){
         try {
             // Validar la solicitud
-            $request->validate([
-                'rut' => 'required|string|max:15|unique:personas',
-                'nombreUsuario' => 'required|string|max:50',
-                'nombres' => 'required|string|max:50',
-                'primerApellido' => 'required|string|max:25',
-                'segundoApellido' => 'nullable|string|max:25',
-                'supervisor' => 'nullable|string|max:60',
-                'empresa' => 'required|string|max:60',
-                'estadoEmpleado' => 'nullable|boolean',
-                'centroCosto' => 'required|string|max:50',
-                'denominacion' => 'required|string|max:60',
-                'tituloPuesto' => 'required|string|max:60',
-                'fechaInicio' => 'required|date',
-                'usuarioTI' => 'required|boolean',
-                'ubicacion' => 'nullable|exists:ubicaciones,id',
-                'activo' => 'required|exists:activos,nroSerie',
-                'responsable'=> 'nullable|string|max:15',
-            ]);
+        $request->validate([
+            'rut' => 'required|string|max:15|unique:personas,rut|regex:/^\d{7,8}-[\dkK]$/',
+            'nombreUsuario' => 'required|string|max:50',
+            'nombres' => 'required|string|max:50',
+            'primerApellido' => 'required|string|max:25',
+            'segundoApellido' => 'nullable|string|max:25',
+            'supervisor' => 'nullable|string|max:60',
+            'empresa' => 'required|string|max:60',
+            'estadoEmpleado' => 'nullable|boolean',
+            'centroCosto' => 'required|string|max:50',
+            'denominacion' => 'required|string|max:60',
+            'tituloPuesto' => 'required|string|max:60',
+            'fechaInicio' => 'required|date',
+            'usuarioTI' => 'required|boolean',
+            'ubicacion' => 'nullable|exists:ubicaciones,id',
+        ],[
+            'rut.rexex' => 'El campo rut debe ser un rut válido',
+        ]);
 
             // Establecer valor predeterminado para estadoEmpleado si no se proporciona
             $data = $request->all();
@@ -65,6 +65,7 @@ class RegistrarPersonaController extends Controller
 
             $activo->usuarioDeActivo = $request->rut;
             $activo->estado = 'ASIGNADO';
+            $activo->ubicacion = $request->ubicacion;
 
             // Asignar responsable a activo de tal numero de serie
             $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
@@ -110,7 +111,7 @@ class RegistrarPersonaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'rut' => 'required|string|max:15|unique:personas,rut,' . $id,
+            'rut' => 'required|string|max:15|unique:personas,rut,' . $id . '|regex:/^\d{7,8}-[\dkK]$/',
             'nombreUsuario' => 'required|string|max:50',
             'nombres' => 'required|string|max:50',
             'primerApellido' => 'required|string|max:25',
@@ -124,6 +125,8 @@ class RegistrarPersonaController extends Controller
             'fechaInicio' => 'required|date',
             'usuarioTI' => 'required|boolean',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
+        ],[
+            'rut.rexex' => 'El campo rut debe ser un rut válido',
         ]);
 
         $persona = Persona::findOrFail($id);
@@ -142,5 +145,11 @@ class RegistrarPersonaController extends Controller
         $persona->delete();
 
         return redirect()->route('personas.index')->with('success', 'Persona eliminada correctamente');
+    }
+
+    public function checkRut($rut)
+    {
+        $persona = Persona::where('rut', $rut)->first();
+        return response()->json(['exists' => $persona !== null]);
     }
 }

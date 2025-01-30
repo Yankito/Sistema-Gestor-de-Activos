@@ -110,29 +110,5 @@
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- Page specific script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-      "buttons": [
-        {
-            extend:"copy",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"csv",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"excel",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"print",
-            title: 'Iansa - Tabla de activos',
-        }
-        , "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  });
-</script>
+
 </html>

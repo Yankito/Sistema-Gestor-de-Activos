@@ -70,7 +70,7 @@ Route::middleware('auth')->get('/profile', function () {
 
 Route::post('/activos', [RegistrarActivoController::class, 'store']);
 Route::post('/ubicaciones', [RegistrarUbicacionController::class, 'store']);
-
+Route::get('/personas/{rut}', [RegistrarPersonaController::class, 'checkRut']);
 
 
 Route::get('/descargarExcel', function () {
@@ -80,5 +80,4 @@ Route::get('/descargarExcel', function () {
 
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
 Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');
-
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);

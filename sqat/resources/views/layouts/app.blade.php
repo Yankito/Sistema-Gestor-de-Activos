@@ -273,22 +273,59 @@
         <script src="https://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
 
-
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-        $(function () {
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
+            $(function () {
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+
             })
 
-        })
+        </script>
 
+        <style>
+            .required-asterisk {
+                color: red;
+            }
+        </style>
 
-
+    <!-- script para exportar a excel, pdf, etc -->
+    <script>
+    $(function () {
+        $("#example1").DataTable({
+        "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
+        "buttons": [
+            {
+                extend:"copy",
+                title: 'Iansa - Tabla de activos',
+                text: "Copiar",
+            },
+            {
+                extend:"csv",
+                title: 'Iansa - Tabla de activos',
+                text:"CSV",
+            },
+            {
+                extend:"excel",
+                title: 'Iansa - Tabla de activos',
+                text:"Excel",
+            },
+            {
+                extend:"print",
+                title: 'Iansa - Tabla de activos',
+                text: "Imprimir",
+            },
+            {
+                extend: "colvis",
+                text: "Visibilidad de columnas", // Cambiar "Column visibility" por "Visibilidad de columnas"
+            }
+            ]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
     </script>
-
 
 
 </body>
