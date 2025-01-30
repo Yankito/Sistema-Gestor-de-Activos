@@ -13,6 +13,7 @@ use App\Http\Controllers\RegistrarUbicacionController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
+use App\Http\Controllers\TablaDatosController;
 use Illuminate\Support\Facades\Response;
 
 Route :: get ('/login' , function () {
@@ -79,3 +80,4 @@ Route::get('/descargarExcel', function () {
 
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
 Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');
+Route::get('/tablaDatos', [TablaDatosController::class, 'index']);

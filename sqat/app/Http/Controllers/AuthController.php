@@ -13,6 +13,32 @@ class AuthController extends Controller
     // funcion para registrar un usuario
     public function register(Request $request)
     {
+        /**
+         * Validates the incoming request data for user authentication.
+         *
+         * Validation rules:
+         * - 'correo': Required, must be a valid email address with the domain @iansa.cl.
+         * - 'nombres': Required, must be a string with a maximum length of 255 characters.
+         * - 'primerApellido': Required, must be a string with a maximum length of 255 characters.
+         * - 'segundoApellido': Optional, must be a string with a maximum length of 255 characters.
+         * - 'contrasena': Required, must be at least 6 characters long.
+         *
+         * Custom error messages:
+         * - 'correo.regex': 'Solo se pueden registrar con dominio @iansa.cl'
+         *
+         * @param \Illuminate\Http\Request $request The incoming request instance.
+         * @return void
+         */
+        $request->validate([
+            'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/'],
+            'nombres' => 'required|string|max:255',
+            'primerApellido' => 'required|string|max:255',
+            'segundoApellido' => 'nullable|string|max:255',
+            'contrasena' => 'required|min:6',
+        ], [
+            'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
+        ]);
+
         if (!Auth::user()->esAdministrador) {
             return redirect('/')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
         }
