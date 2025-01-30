@@ -123,30 +123,5 @@
 <script src="vendor/adminlte/dist/js/adminlte.min.js?v=3.2.0"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-      "buttons": [
-        { 
-            extend:"copy",
-            title: 'Iansa - Tabla de personas',
-        },
-        { 
-            extend:"csv",
-            title: 'Iansa - Tabla de personas',
-        },
-        { 
-            extend:"excel",
-            title: 'Iansa - Tabla de personas',
-        },
-        { 
-            extend:"print",
-            title: 'Iansa - Tabla de personas',
-        }, 
-        "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  });
-</script>
+
 </html>

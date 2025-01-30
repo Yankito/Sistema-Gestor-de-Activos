@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class = "row">
                                 <div class = "col-md-6">
                                     <div data-mdb-input-init class="form-outline mb-4">
@@ -114,6 +114,17 @@
             });
         });
     </script>
+        @if(session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "{{ session('error') }}",
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
+        @endif
+
     @endsection
     <!-- estilos -->
     <style>

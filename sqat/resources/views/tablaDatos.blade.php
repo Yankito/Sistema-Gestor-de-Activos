@@ -44,9 +44,8 @@
                                     <th>Titulo Puesto</th>
                                     <th>Fecha Inicio</th>
                                     <th>Usuario TI</th>
-                                    <th>Ubicación</th>
-                                    <th>Creado en</th>
-                                    <th>Actualizado en</th>
+                                    <th>Sitio</th>
+                                    <th>Soporte TI</th>
                                     <th>Nro Serie</th>
                                     <th>Marca</th>
                                     <th>Modelo</th>
@@ -54,10 +53,7 @@
                                     <th>Usuario de Activo</th>
                                     <th>Responsable de Activo</th>
                                     <th>Precio</th>
-                                    <th>Ubicación</th>
                                     <th>Justificación Doble Activo</th>
-                                    <th>Sitio</th>
-                                    <th>Soporte TI</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -70,26 +66,22 @@
                                     <td>{{ $dato->segundoApellido }}</td>
                                     <td>{{ $dato->supervisor }}</td>
                                     <td>{{ $dato->empresa }}</td>
-                                    <td>{{ $dato->estadoEmpleado }}</td>
+                                    <td>{{ $dato->estadoEmpleado == 1 ? 'Sí' : 'No' }}</td>
                                     <td>{{ $dato->centroCosto }}</td>
                                     <td>{{ $dato->denominacion }}</td>
                                     <td>{{ $dato->tituloPuesto }}</td>
                                     <td>{{ $dato->fechaInicio }}</td>
-                                    <td>{{ $dato->usuarioTI }}</td>
-                                    <td>{{ $dato->ubicacion }}</td>
-                                    <td>{{ $dato->created_at }}</td>
-                                    <td>{{ $dato->updated_at }}</td>
+                                    <td>{{ $dato->usuarioTI  == 1 ? 'Sí' : 'No' }}</td>
+                                    <td>{{ $dato->sitio }}</td>
+                                    <td>{{ $dato->soporteTI }}</td>
                                     <td>{{ $dato->nroSerie }}</td>
                                     <td>{{ $dato->marca }}</td>
                                     <td>{{ $dato->modelo }}</td>
-                                    <td>{{ $dato->estado }}</td>
+                                    <td>{{ $dato->estado}}</td>
                                     <td>{{ $dato->usuarioDeActivo }}</td>
                                     <td>{{ $dato->responsableDeActivo }}</td>
                                     <td>{{ $dato->precio }}</td>
-                                    <td>{{ $dato->ubicacion }}</td>
                                     <td>{{ $dato->justificacionDobleActivo }}</td>
-                                    <td>{{ $dato->sitio }}</td>
-                                    <td>{{ $dato->soporteTI }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -97,7 +89,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </section>
     @endsection
 
@@ -123,30 +115,5 @@
 <script src="vendor/adminlte/dist/js/adminlte.min.js?v=3.2.0"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-      "buttons": [
-        {
-            extend:"copy",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"csv",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"excel",
-            title: 'Iansa - Tabla de activos',
-        },
-        {
-            extend:"print",
-            title: 'Iansa - Tabla de activos',
-        }
-        , "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  });
-</script>
+
 </html>
