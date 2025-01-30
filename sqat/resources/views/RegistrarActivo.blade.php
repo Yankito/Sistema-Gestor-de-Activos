@@ -54,8 +54,8 @@
                                         <div class = " col-md-6">
                                             <!-- Modelo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="mocelo">Modelo</label>
-                                                <select name="mocelo" id="mocelo" class="form-control" required>
+                                                <label class="form-label" for="modelo">Modelo</label>
+                                                <select name="modelo" id="modelo" class="form-control" required>
                                                     <option value="LAPTOP">Laptop</option>
                                                     <option value="DESKTOP">Desktop</option>
                                                     <option value="MONITOR">Monitor</option>
@@ -100,16 +100,6 @@
             </div>
         </section>
 
-        @if(session('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: "{{ session('error') }}",
-                confirmButtonText: 'Aceptar'
-            });
-        </script>
-        @endif
     @endsection
     <!-- Estilos -->
     <style>

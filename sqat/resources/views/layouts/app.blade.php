@@ -265,22 +265,22 @@
         <script src="https://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
 
-
-
-
         <script>
-        $(function () {
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
+            $(function () {
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+
             })
 
-        })
+        </script>
 
-
-
-    </script>
-
+        <style>
+            .required-asterisk {
+                color: red;
+            }
+        </style>
 
 
 </body>
