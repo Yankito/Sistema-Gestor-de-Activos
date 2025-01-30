@@ -125,16 +125,24 @@
                             </p>
                             </a>
                             <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="/tablaActivos" class="nav-link">
-                                <p>Activos</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/tablaPersonas" class="nav-link">
-                                <p>Personas</p>
-                                </a>
-                            </li>
+                                <li class = "nav-item">
+                                    <a href = "/tablaDatos" class = "nav-link">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>Datos</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/tablaActivos" class="nav-link">
+                                    <i class="nav-icon fas fa-laptop"></i>
+                                    <p>Activos</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/tablaPersonas" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>Personas</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

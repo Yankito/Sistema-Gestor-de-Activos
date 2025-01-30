@@ -37,13 +37,18 @@
 
                         <h2>Registrar nuevo usuario</h2>
 
-                        <form action="/register" method="POST">
+                        <form id= "registroForm" action="/register" method="POST">
                             @csrf
                             <div class = "row">
                                 <div class = "col-md-6">
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <label class="form-label" for="correo">Correo electrónico</label>
                                         <input type="email" name="correo" id="correo" required class="form-control"/>
+                                        @if($errors->has('correo'))
+                                            <div class="alert alert-danger">
+                                                <p>{{ $errors->first('correo') }}</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class = "col-md-6">
@@ -90,6 +95,25 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let correoInput = document.getElementById("correo");
+            let mensajeError = document.createElement("div");
+            mensajeError.className = "text-danger";
+            correoInput.parentNode.appendChild(mensajeError);
+
+            correoInput.addEventListener("input", function () {
+                let correo = correoInput.value;
+                let regex = /^[a-zA-Z0-9._%+-]+@iansa\.cl$/;
+
+                if (!regex.test(correo) && correo.length > 0) {
+                    mensajeError.textContent = "Solo se pueden registrar correos con dominio @iansa.cl";
+                } else {
+                    mensajeError.textContent = "";
+                }
+            });
+        });
+    </script>
     @endsection
     <!-- estilos -->
     <style>
