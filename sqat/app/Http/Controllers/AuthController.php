@@ -35,7 +35,7 @@ class AuthController extends Controller
                 'nombres' => 'required|string|max:255',
                 'primerApellido' => 'required|string|max:255',
                 'segundoApellido' => 'nullable|string|max:255',
-                'contrasena' => 'required',
+                'contrasena' => 'required|min:6',
             ], [
                 'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
             ]);
