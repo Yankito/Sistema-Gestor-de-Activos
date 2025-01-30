@@ -78,3 +78,4 @@ Route::get('/descargarExcel', function () {
 })->name('descargar.excel');
 
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
+Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');

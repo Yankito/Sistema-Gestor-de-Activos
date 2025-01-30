@@ -16,97 +16,75 @@
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
-<script data-cfasync="false" nonce="084c37db-8d53-4826-86ca-d286c27f94af">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="084c37db-8d53-4826-86ca-d286c27f94af";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
+  <script data-cfasync="false" nonce="084c37db-8d53-4826-86ca-d286c27f94af">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="084c37db-8d53-4826-86ca-d286c27f94af";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
     @section('content')
-    <!-- section con un texto de bienvenido a importar -->
-    <section class="content">
-    <div class="container-fluid">
-        <div class="row">
-        <div class="col-12">
-            <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Importar</h3>
-            </div>
-            <div class="card-body">
-                <!--Formulario para cargar archivo excel-->
-                <form action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file" name="file" class="form-control" required>
-                    <button type="submit" class="btn btn-success">Importar Datos</button>
-                    <!--mostrar tabla con los datos del archivo excel-->
-                    @if (isset($data))
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>rut</th>
-                                    <th>nombreUsuario</th>
-                                    <th>nombres</th>
-                                    <th>primerApellido</th>
-                                    <th>segundoApellido</th>
-                                    <th>supervisor</th>
-                                    <th>empresa</th>
-                                    <th>estadoEmpleado</th>
-                                    <th>centroCosto</th>
-                                    <th>denominacion</th>
-                                    <th>tituloPuesto</th>
-                                    <th>fechaInicio</th>
-                                    <th>usuarioTI</th>
-                                    <th>nroSerie</th>
-                                    <th>marca</th>
-                                    <th>modelo</th>
-                                    <th>estado</th>
-                                    <th>responsableDeActivo</th>
-                                    <th>precio</th>
-                                    <th>ubicacion</th>
-                                    <th>justificacionDobleActivo</th>     
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Importar</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Formulario para cargar archivo excel -->
+                                <form action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="file" class="form-control" required>
+                                    <button type="submit" class="btn btn-success">Importar Datos</button>
+                                </form>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $row)
-                                    <tr>
-                                        <td>{{ $row[0]}}</td>
-                                        <td>{{ $row[1] }}</td>
-                                        <td>{{ $row[2] }}</td>
-                                        <td>{{ $row[3] }}</td>
-                                        <td>{{ $row[4] }}</td>
-                                        <td>{{ $row[5]}}</td>
-                                        <td>{{ $row[6]}}</td>
-                                        <td>{{ $row[7]}}</td>
-                                        <td>{{ $row[8]}}</td>
-                                        <td>{{ $row[9]}}</td>
-                                        <td>{{ $row[10]}}</td>
-                                        <td>{{ $row[11]}}</td>
-                                        <td>{{ $row[12]}}</td>
-                                        <td>{{ $row[13]}}</td>
-                                        <td>{{ $row[14]}}</td>
-                                        <td>{{ $row[15]}}</td>
-                                        <td>{{ $row[16]}}</td>
-                                        <td>{{ $row[17]}}</td>
-                                        <td>{{ $row[18]}}</td>
-                                        <td>{{ $row[19]}}</td>
-                                        <td>{{ $row[20]}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @endif 
-                </form>
-                <!-- Botón para descargar el archivo Excel -->
-                <a href="{{ route('descargar.excel') }}" class="btn btn-primary">Descargar Excel de Muestra</a>
-          </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-    </section>
+                                @if (isset($data) && count($data) > 0)
+                                    <form action="{{ route('confirmar.importacion') }}" method="POST">
+                                        @csrf
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>rut</th>
+                                                    <th>nombreUsuario</th>
+                                                    <th>nombres</th>
+                                                    <th>primerApellido</th>
+                                                    <th>segundoApellido</th>
+                                                    <th>supervisor</th>
+                                                    <th>empresa</th>
+                                                    <th>estadoEmpleado</th>
+                                                    <th>centroCosto</th>
+                                                    <th>denominacion</th>
+                                                    <th>tituloPuesto</th>
+                                                    <th>fechaInicio</th>
+                                                    <th>usuarioTI</th>
+                                                    <th>nroSerie</th>
+                                                    <th>marca</th>
+                                                    <th>modelo</th>
+                                                    <th>estado</th>
+                                                    <th>responsableDeActivo</th>
+                                                    <th>precio</th>
+                                                    <th>ubicacion</th>
+                                                    <th>justificacionDobleActivo</th>     
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($data as $row)
+                                                    <tr>
+                                                        @foreach ($row as $cell)
+                                                            <td>{{ $cell }}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <button id="importButton" class="btn btn-success" type="submit">Confirmar Importación</button>
+                                    </form>
+                                @endif 
 
-    <script>
-    // Función para manejar el evento del botón
-    document.getElementById('importButton').addEventListener('click', function() {
-        alert('¡Felicidades, haz importado todo!(MENTIRA AUN NO PASA NA)');
-    });
+                                <!-- Botón para descargar el archivo Excel de muestra -->
+                                <a href="{{ route('descargar.excel') }}" class="btn btn-primary">Descargar Excel de Muestra</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </script>
 
             
