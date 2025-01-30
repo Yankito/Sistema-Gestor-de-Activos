@@ -53,7 +53,7 @@ class RegistrarPersonaController extends Controller
             // Establecer valor predeterminado para estadoEmpleado si no se proporciona
             $data = $request->all();
             $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
-
+            //dd($request, $data);
             // Crear una nueva persona con los datos validados
             Persona::create($data);
 
@@ -70,6 +70,18 @@ class RegistrarPersonaController extends Controller
             $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
             $activo->update();
 
+            if (!empty($data['activosAdicionales']) && is_array($data['activosAdicionales'])) {
+                foreach ($data['activosAdicionales'] as $nroSerie) {
+                    $activoAdicional = Activo::where('nroSerie', $nroSerie)->first();
+                    if ($activoAdicional) {
+                        $activoAdicional->usuarioDeActivo = $request->rut;
+                        $activoAdicional->estado = 'ASIGNADO';
+                        $activoAdicional->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
+                        $activoAdicional->justificacionDobleActivo = $data['justificaciones'][$nroSerie] ?? null;
+                        $activoAdicional->update();
+                    }
+                }
+            }
             // Redirigir con un mensaje de éxito
             return redirect()->route('dashboard')->with('success', 'Persona registrada correctamente');
         } catch (\Exception $e) {

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!doctype html>
-<html lang="en">
+<html lang="es">
     <head>
         <title>Registrar Persona</title>
         <!-- Required meta tags -->
@@ -187,8 +187,8 @@
 
                                         <div class="form-outline mb-4" id="activoSection" style="display: none;">
                                             <div class="form-group">
-                                                <label class="form-label" for="activoSelect">Activos adicionales</label>
-                                                <select class="select2bs4" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" name="activoSelect[]" id="activoSelect">
+                                                <label class="form-label" for="activosAdicionales">Activos adicionales</label>
+                                                <select class="select2bs4" multiple="multiple" data-placeholder="Seleccione un activo" style="width: 100%;" name="activosAdicionales[]" id="activosAdicionales">
                                                     @foreach($activos as $activo)
                                                         @if ($activo->estado == 'DISPONIBLE')
                                                             <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
@@ -229,8 +229,8 @@
             });
 
             document.addEventListener('DOMContentLoaded', function() {
-                // Verifica que el select con id 'activoSelect' existe
-                const selectElement = document.getElementById('activoSelect');
+                // Verifica que el select con id 'activosAdicionales' existe
+                const selectElement = document.getElementById('activosAdicionales');
 
                 if (selectElement) {
                     console.log('Elemento select encontrado:', selectElement);
@@ -245,7 +245,7 @@
                         updateJustifications(selectedActivos); // Actualiza las justificaciones cada vez que se seleccionen activos
                     });
                 } else {
-                    console.error('El elemento select con id "activoSelect" no se encuentra.');
+                    console.error('El elemento select con id "activosAdicionales" no se encuentra.');
                 }
             });
 
@@ -267,8 +267,9 @@
 
                     var input = document.createElement('input');
                     input.type = 'text';
-                    input.name = 'justificacion_' + activo;
+                    input.name = 'justificaciones[' + activo + ']';
                     input.classList.add('form-control');
+                    input.id = 'justificaciones[' + activo + ']';
 
                     div.appendChild(label);
                     div.appendChild(input);
@@ -276,9 +277,6 @@
                 });
             }
 
-        </script>
-
-        <script>
             document.getElementById('asignarResponsable').addEventListener('change', function() {
                 var responsableSection = document.getElementById('responsableSection');
                 var responsableSelect = document.getElementById('responsable');
@@ -301,7 +299,71 @@
                     responsableSelect.value = null;  // No envía el valor cuando no está marcado
                 }
             });
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Verifica que el select con id 'activosAdicionales' existe
+                const selectElement = document.getElementById('activo');
+                const activosAdicionalesSelect = document.getElementById('activosAdicionales');
+
+                if (selectElement) {
+                    console.log('Elemento select encontrado:', selectElement);
+
+                    // Inicializa select2
+                    $(selectElement).select2();
+
+                    // Escucha el cambio de selección usando select2
+                    $(selectElement).on('change', function() {
+                        console.log('Activo seleccionado:', this.value);
+                        updateActivosAdicionales();
+                    });
+                } else {
+                    console.error('El elemento select con id "activosAdicionales" no se encuentra.');
+                }
+            });
+
+            function updateActivosAdicionales() {
+                var activoSeleccionado = document.getElementById('activo').value;
+                var activosAdicionalesSelect = document.getElementById('activosAdicionales');
+
+                // Guardar las selecciones actuales
+                var seleccionados = Array.from(activosAdicionalesSelect.selectedOptions).map(opt => opt.value);
+
+                // Limpiar el select de activos adicionales
+                activosAdicionalesSelect.innerHTML = '';
+
+                // Agregar las opciones filtradas (excluyendo el activo seleccionado)
+                var activos = JSON.parse('{!! json_encode($activos) !!}');
+                activos.forEach(function(activo) {
+                    if (activo.estado === 'DISPONIBLE' && activo.nroSerie !== activoSeleccionado) {
+                        var option = document.createElement('option');
+                        option.value = activo.nroSerie;
+                        option.textContent = activo.nroSerie;
+
+                        // Restaurar selección si estaba previamente seleccionado
+                        if (seleccionados.includes(option.value)) {
+                            option.selected = true;
+                        }
+
+                        activosAdicionalesSelect.appendChild(option);
+                    }
+                });
+
+                // eliminar justificacion de activos que ya no están seleccionados
+                updateJustifications(Array.from(activosAdicionalesSelect.selectedOptions).map(opt => opt.value));
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                updateActivosAdicionales(); // Aplicar filtro al cargar la página
+
+                // Manejar el evento de selección de activos adicionales
+                $('#activosAdicionales').on('change', function() {
+                    var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
+                    updateJustifications(selectedActivos);
+                });
+            });
         </script>
+
 
         <!-- Estilos -->
         <style>
