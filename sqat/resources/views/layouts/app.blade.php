@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <link rel="icon" href="{{ asset('pictures/iconoIansa.png') }}" type="image/x-icon">
+
         <!-- CSS de AdminLTE -->
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
 
@@ -52,6 +54,8 @@
 
 
         <!--<link rel="stylesheet" href="vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css"> -->
+                <!-- favicon -->
+        <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
 
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
