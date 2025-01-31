@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 
-class RegistrarPersonaController extends Controller
+class PersonaController extends Controller
 {
     // Mostrar todos los registros de personas
-    public function index()
+    public function registro()
     {
         $activos = Activo::all();
         $ubicaciones = Ubicacion::all();
@@ -58,27 +58,29 @@ class RegistrarPersonaController extends Controller
             Persona::create($data);
 
             // Asignar persona a activo de tal numero de serie
-            $activo = Activo::where('nroSerie', $request->activo)->first();
+            $activo = Activo::where('id', $request->activo)->first();
             if (!$activo) {
                 throw new \Exception('El activo no se encontró.');
             }
 
-            $activo->usuarioDeActivo = $request->rut;
+            $idPersona = Persona::where('id', $request->rut)->first()->id;
+
+            $activo->usuarioDeActivo = $idPersona;
             $activo->estado = 'ASIGNADO';
             $activo->ubicacion = $request->ubicacion;
 
             // Asignar responsable a activo de tal numero de serie
-            $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
+            $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
             $activo->update();
 
             if (!empty($data['activosAdicionales']) && is_array($data['activosAdicionales'])) {
-                foreach ($data['activosAdicionales'] as $nroSerie) {
-                    $activoAdicional = Activo::where('nroSerie', $nroSerie)->first();
+                foreach ($data['activosAdicionales'] as $id) {
+                    $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
-                        $activoAdicional->usuarioDeActivo = $request->rut;
+                        $activoAdicional->usuarioDeActivo = $idPersona;
                         $activoAdicional->estado = 'ASIGNADO';
-                        $activoAdicional->responsableDeActivo = $request->has('responsable') ? $request->responsable : $request->rut;
-                        $activoAdicional->justificacionDobleActivo = $data['justificaciones'][$nroSerie] ?? null;
+                        $activoAdicional->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
+                        $activoAdicional->justificacionDobleActivo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();
                     }
                 }

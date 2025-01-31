@@ -8,7 +8,6 @@ class Activo extends Model
 {
     // Definir el nombre de la tabla si no sigue la convención
     protected $table = 'activos';
-    protected $primaryKey = 'nroSerie';
 
     // Definir los campos que pueden ser asignados masivamente
     protected $fillable = [
@@ -23,21 +22,18 @@ class Activo extends Model
         'justificacionDobleActivo'
     ];
 
-    // Si el campo 'nroSerie' no es auto incrementable, debes desactivar el incremento automático
-    public $incrementing = false;
-
     // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
     public $timestamps = true;
 
     // Relación con la tabla Persona
     public function usuarioDeActivo()
     {
-        return $this->belongsTo(Persona::class, 'usuarioDeActivo', 'rut');
+        return $this->belongsTo(Persona::class, 'usuarioDeActivo', 'id');
     }
 
     public function responsableDeActivo()
     {
-        return $this->belongsTo(Persona::class, 'responsableDeActivo', 'rut');
+        return $this->belongsTo(Persona::class, 'responsableDeActivo', 'id');
     }
 
     public function ubicacion()

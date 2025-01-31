@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,22 +90,17 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                @foreach($modelos as $modelo => $cantidad)
+                @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
                     <div class="col-lg-3 col-6" style="cursor: pointer;">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(strtolower($modelo))}}</p>
+                                <p>{{ ucfirst(strtolower($tipoDeActivo))}}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            @if($user->esAdministrador)
-                                <a href="/registrarActivo/{{ $modelo }}" class="small-box-footer">Agregar {{ ucfirst(strtolower($modelo)) }} <i class="fas fa-arrow-circle-right"></i></a>
-                            @else
-                                <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-                            @endif
                         </div>
                     </div>
                 @endforeach

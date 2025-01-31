@@ -2,9 +2,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 
-class tablaDatosController extends Controller
+class TablaDatosController extends Controller
 {
     public function index()
     {

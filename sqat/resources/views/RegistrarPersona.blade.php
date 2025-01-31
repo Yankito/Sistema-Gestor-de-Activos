@@ -30,7 +30,7 @@
                                 </div>
 
                                 <h2>Registrar nueva Persona</h2>
-                                <form action="/personas" method="POST">
+                                <form action="/personas" method="POST" id="formPersona">
                                     @csrf
                                     <div class = "row">
                                         <div class="col-md-6">
@@ -156,7 +156,7 @@
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         @foreach($activos as $activo)
                                                             @if ($activo->estado == 'DISPONIBLE')
-                                                                <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
+                                                                <option value="{{$activo->id}}">{{$activo->nroSerie}}</option>
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -176,7 +176,7 @@
                                                 <select name="responsable" id="responsable" select class="form-control select2bs4">
                                                     <option value="" disabled selected>Seleccione un responsable</option>
                                                     @foreach($personas as $persona)
-                                                        <option value="{{$persona->rut}}">{{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}</option>
+                                                        <option value="{{$persona->id}}">{{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -195,7 +195,7 @@
                                                 <select class="select2bs4" multiple="multiple" data-placeholder="Seleccione un activo" style="width: 100%;" name="activosAdicionales[]" id="activosAdicionales">
                                                     @foreach($activos as $activo)
                                                         @if ($activo->estado == 'DISPONIBLE')
-                                                            <option value="{{$activo->nroSerie}}">{{$activo->nroSerie}}</option>
+                                                            <option value="{{$activo->id}}">{{$activo->nroSerie}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>
@@ -329,12 +329,17 @@
                 // Limpiar el select de activos adicionales
                 activosAdicionalesSelect.innerHTML = '';
 
+                console.log(activoSeleccionado);
+
                 // Agregar las opciones filtradas (excluyendo el activo seleccionado)
                 var activos = JSON.parse('{!! json_encode($activos) !!}');
                 activos.forEach(function(activo) {
-                    if (activo.estado === 'DISPONIBLE' && activo.nroSerie !== activoSeleccionado) {
+                    if (activo.estado === 'DISPONIBLE' && parseInt(activo.id) !== parseInt(activoSeleccionado)) {
+                        console.log("activo: "+activo.id);
+                        console.log("activoSeleccionado: "+activoSeleccionado);
+                        console.log(activo.id !== activoSeleccionado);
                         var option = document.createElement('option');
-                        option.value = activo.nroSerie;
+                        option.value = activo.id;
                         option.textContent = activo.nroSerie;
 
                         // Restaurar selección si estaba previamente seleccionado
@@ -398,8 +403,8 @@
                         let response = await fetch('/personas/' + rut);
                         if (response.ok) {
                             let data = await response.json();
-                            console.log(data);
-                            return data.exists;
+                            console.log(data['exists']);
+                            return data['exists'];
                         } else {
                             throw new Error('Error al comprobar el RUT');
                         }
@@ -409,7 +414,7 @@
                     }
                 }
 
-                document.getElementById('rut').addEventListener('blur', function() {
+                document.getElementById('rut').addEventListener('blur', async function() {
                     var rut = this.value;
                     var errorSpan = document.getElementById('rutError');
                     var repetidoSpan = document.getElementById('rutRepetido');
@@ -421,7 +426,7 @@
                     } else {
                         errorSpan.style.display = 'none';
                         this.classList.remove('is-invalid');
-                        if(comprobarRutRepetido(rut)==true) {
+                        if(await comprobarRutRepetido(rut)) {
                             repetidoSpan.style.display = 'block';
                             this.classList.add('is-invalid');
                         } else {
@@ -431,7 +436,10 @@
                     }
                 });
 
-                document.getElementById('botonRegistrar').addEventListener('click', function(event) {
+
+                document.getElementById('formPersona').addEventListener('submit', async function(event) {
+                    event.preventDefault();
+
                     var rut = document.getElementById('rut').value;
                     var errorSpan = document.getElementById('rutError');
                     var repetidoSpan = document.getElementById('rutRepetido');
@@ -443,15 +451,18 @@
                         event.preventDefault();
                     }
                     else{
-                        if(comprobarRutRepetido(rut) == true) {
+                        if(await comprobarRutRepetido(rut)) {
                             repetidoSpan.style.display = 'block';
                             document.getElementById('rut').classList.add('is-invalid');
                             document.getElementById('rut').focus();
                             event.preventDefault();
                         }
+                        else{
+                            this.submit();
+                        }
                     }
-                });
 
+                });
 
             </script>
 

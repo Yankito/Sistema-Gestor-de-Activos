@@ -9,9 +9,11 @@ class CreateActivosTable extends Migration
     public function up()
     {
         Schema::create('activos', function (Blueprint $table) {
-            $table->string('nroSerie', 50)->primary(); // Define el campo nroSerie como clave primaria
+            $table->id();
+            $table->string('nroSerie', 50)->unique(); // Define el campo nroSerie como clave primaria
             $table->string('marca', 50);
             $table->string('modelo', 50);
+            $table->string('tipoDeActivo', 50);
             $table->enum('estado', ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO']);
             $table->string('usuarioDeActivo', 15)->nullable();
             $table->string('responsableDeActivo', 15)->nullable();

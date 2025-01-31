@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,7 +60,7 @@
                                                     <th>responsableDeActivo</th>
                                                     <th>precio</th>
                                                     <th>ubicacion</th>
-                                                    <th>justificacionDobleActivo</th>     
+                                                    <th>justificacionDobleActivo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -75,7 +75,7 @@
                                         </table>
                                         <button id="importButton" class="btn btn-success" type="submit">Confirmar Importación</button>
                                     </form>
-                                @endif 
+                                @endif
 
                                 <!-- Botón para descargar el archivo Excel de muestra -->
                                 <a href="{{ route('descargar.excel') }}" class="btn btn-primary">Descargar Excel de Muestra</a>
@@ -87,7 +87,7 @@
         </section>
     </script>
 
-            
+
     @endsection
 
 

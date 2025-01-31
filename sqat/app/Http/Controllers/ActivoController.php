@@ -7,10 +7,10 @@ use App\Models\Persona;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 
-class RegistrarActivoController extends Controller
+class ActivoController extends Controller
 {
     // Obtener todos los activos
-    public function index()
+    public function registro()
     {
         $personas = Persona::all();
         $ubicaciones = Ubicacion::all();
@@ -25,6 +25,7 @@ class RegistrarActivoController extends Controller
             $activo->nroSerie = $request->nroSerie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
+            $activo->tipoDeActivo = $request->tipoDeActivo;
             $activo->estado = 'DISPONIBLE';
             $activo->usuarioDeActivo = NULL;
             $activo->responsableDeActivo = NULL;

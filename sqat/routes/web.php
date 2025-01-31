@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesplegableController;
 use App\Models\Activo;
-use App\Http\Controllers\RegistrarActivoController;
-use App\Http\Controllers\RegistrarPersonaController;
-use App\Http\Controllers\RegistrarUbicacionController;
+use App\Http\Controllers\ActivoController;
+use App\Http\Controllers\PersonaController;
+use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
@@ -38,13 +38,13 @@ Route::middleware('auth')->get('/register', function () {
 });
 
 Route::middleware('auth')->post('/register', [AuthController::class, 'register']);
-Route::middleware('auth')->post('/personas', [RegistrarPersonaController::class, 'store']);
+Route::middleware('auth')->post('/personas', [PersonaController::class, 'store']);
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/registrarActivo', [RegistrarActivoController::class, 'index']);
-    Route::get('/registrarPersona', [RegistrarPersonaController::class,'index']);
-    Route::get('/registrarUbicacion', [RegistrarUbicacionController::class, 'index']);
+    Route::get('/registrarActivo', [ActivoController::class, 'registro']);
+    Route::get('/registrarPersona', [PersonaController::class,'registro']);
+    Route::get('/registrarUbicacion', [UbicacionController::class, 'registro']);
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
@@ -68,9 +68,10 @@ Route::middleware('auth')->get('/profile', function () {
     return view('profile');
 });
 
-Route::post('/activos', [RegistrarActivoController::class, 'store']);
-Route::post('/ubicaciones', [RegistrarUbicacionController::class, 'store']);
-Route::get('/personas/{rut}', [RegistrarPersonaController::class, 'checkRut']);
+Route::post('/activos', [ActivoController::class, 'store']);
+Route::post('/ubicaciones', [UbicacionController::class, 'store']);
+Route::get('/personas/{rut}', [PersonaController::class, 'checkRut']);
+Route::get('/register/{correo}', [AuthController::class, 'checkCorreo']);
 
 
 Route::get('/descargarExcel', function () {
