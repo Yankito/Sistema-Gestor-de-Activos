@@ -22,8 +22,8 @@ class CreateActivosTable extends Migration
             $table->text('justificacionDobleActivo')->nullable();
 
             // Relacionar las claves foráneas con la tabla Persona (si es que ya tienes la tabla Persona)
-            $table->foreign('usuarioDeActivo')->references('rut')->on('personas')->onDelete('set null');
-            $table->foreign('responsableDeActivo')->references('rut')->on('personas')->onDelete('set null');
+            $table->foreign('usuarioDeActivo')->references('id')->on('personas')->onDelete('set null');
+            $table->foreign('responsableDeActivo')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('ubicacion')->references('id')->on('ubicaciones')->onDelete('set null');
 
             $table->timestamps(); // Añadir campos created_at y updated_at

@@ -63,8 +63,7 @@ class PersonaController extends Controller
                 throw new \Exception('El activo no se encontró.');
             }
 
-            $idPersona = Persona::where('id', $request->rut)->first()->id;
-
+            $idPersona = Persona::where('rut', $request->rut)->first()->id;
             $activo->usuarioDeActivo = $idPersona;
             $activo->estado = 'ASIGNADO';
             $activo->ubicacion = $request->ubicacion;

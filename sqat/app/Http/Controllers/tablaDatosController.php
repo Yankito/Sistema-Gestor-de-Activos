@@ -9,7 +9,7 @@ class TablaDatosController extends Controller
     public function index()
     {
         $datos = DB::table('personas')
-            ->leftJoin('activos', 'personas.rut', '=', 'activos.usuarioDeActivo')
+            ->leftJoin('activos', 'personas.id', '=', 'activos.usuarioDeActivo')
             ->leftJoin('ubicaciones',DB::raw('COALESCE(activos.ubicacion, personas.ubicacion)'), '=', 'ubicaciones.id')
             ->select(
                 'personas.*',
