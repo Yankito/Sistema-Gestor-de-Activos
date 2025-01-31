@@ -15,8 +15,8 @@ class CreateActivosTable extends Migration
             $table->string('modelo', 50);
             $table->string('tipoDeActivo', 50);
             $table->enum('estado', ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO']);
-            $table->string('usuarioDeActivo', 15)->nullable();
-            $table->string('responsableDeActivo', 15)->nullable();
+            $table->unsignedBigInteger('usuarioDeActivo')->nullable();
+            $table->unsignedBigInteger('responsableDeActivo')->nullable();
             $table->integer('precio');
             $table->unsignedBigInteger('ubicacion')->nullable();
             $table->text('justificacionDobleActivo')->nullable();
