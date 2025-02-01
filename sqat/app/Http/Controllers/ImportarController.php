@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Activo;
 
 class ImportarController extends Controller
@@ -37,14 +39,14 @@ class ImportarController extends Controller
         try {
             foreach ($dataWithoutHeader as $row) {
                 if (count($row) < 21) continue; // Evita filas incompletas excepto justificacionDobleActivo
-                
+
                 $estadoEmpleado = strtolower(trim($row[7])) == 'activo' ? 1 : 0;
                 $usuarioTI = strtolower(trim($row[12])) == 'si' ? 1 : 0;
                 $fechaInicio = date('Y-m-d', strtotime(str_replace(['/','-'], '-', $row[11])));
                 $estado = strtoupper(trim($row[16]));
                 $ubicacion = Ubicacion::whereRaw("LOWER(nombre) = ?", [strtolower(trim($row[20]))])->first();
                 if (!$ubicacion) continue; // Si la ubicación no existe, salta la fila
-                
+
                 // Insertar o actualizar personas
                 Persona::updateOrCreate(
                     ['rut' => trim($row[0])],

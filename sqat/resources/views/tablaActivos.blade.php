@@ -39,29 +39,31 @@
                     <th>Estado</th>
                     <th>Usuario</th>
                     <th>responsable</th>
-                    <th>Ubicación</th>
+                    <th>Sitio</th>
+                    <th>Soporte TI</th>
                     <th>Justificación</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach($activos as $activo)
+                    @foreach($datos as $dato)
                    <tr>
-                        <td>{{ $activo->nroSerie }}</td>
-                        <td>{{ $activo->marca }}</td>
-                        <td>{{ $activo->modelo }}</td>
-                        <td>{{ $activo->precio }}</td>
-                        <td>{{ $activo->tipoActivo }}</td>
-                        <td>{{ $activo->estado }}</td>
-                        <td>{{ $activo->usuarioDeActivo }}</td>
-                        <td>{{ $activo->responsableDeActivo }}</td>
-                        <td>{{ $activo->ubicacion }}</td>
-                        <td>{{ $activo->justificacionDobleActivo }}</td>
+                        <td>{{ $dato->nroSerie }}</td>
+                        <td>{{ $dato->marca }}</td>
+                        <td>{{ $dato->modelo }}</td>
+                        <td>{{ $dato->precio }}</td>
+                        <td>{{ $dato->tipoDeActivo }}</td>
+                        <td>{{ $dato->estado }}</td>
+                        <td>{{ $dato->rutUsuario}}</td>
+                        <td>{{ $dato->rutResponsable}}</td>
+                        <td>{{ $dato->sitio }}</td>
+                        <td>{{ $dato->soporteTI }}</td>
+                        <td>{{ $dato->justificacionDobleActivo }}</td>
                     </tr>
                     @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
-                  <th>Número de serie</th>
+                    <th>Número de serie</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Precio</th>
@@ -69,7 +71,8 @@
                     <th>Estado</th>
                     <th>Usuario</th>
                     <th>responsable</th>
-                    <th>Ubicación</th>
+                    <th>Sitio</th>
+                    <th>Soporte TI</th>
                     <th>Justificación</th>
                   </tr>
                   </tfoot>

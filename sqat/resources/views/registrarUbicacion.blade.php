@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!doctype html>
-<html lang="en">
+<html lang="es">
     <head>
         <title>Registrar Ubicación</title>
         <!-- Required meta tags -->

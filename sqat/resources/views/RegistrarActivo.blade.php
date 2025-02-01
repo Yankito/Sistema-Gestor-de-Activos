@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!doctype html>
-<html lang="en">
+<html lang="es">
     <head>
         <title>Registrar Activo</title>
         <!-- Required meta tags -->
@@ -47,13 +47,19 @@
                                                 <input type="text" name="marca" id="marca" required class="form-control" />
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class = "row">
                                         <div class = " col-md-6">
                                             <!-- Modelo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="modelo">Modelo</label>
-                                                <select name="modelo" id="modelo" class="form-control" required>
+                                                <input type="text" name="modelo" id="modelo" required class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class = " col-md-6">
+                                            <!-- Tipo de Activo -->
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <label class="form-label" for="tipoDeActivo">Tipo de Activo</label>
+                                                <select name="tipoDeActivo" id="tipoDeActivo" class="form-control" required>
                                                     <option value="LAPTOP">Laptop</option>
                                                     <option value="DESKTOP">Desktop</option>
                                                     <option value="MONITOR">Monitor</option>

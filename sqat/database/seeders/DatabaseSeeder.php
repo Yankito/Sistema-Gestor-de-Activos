@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call(UbicacionesSeeder::class);
-
+        $this->call(PersonasSeeder::class);
+        $this->call(ActivosSeeder::class);
+        $this->call(UsuariosSeeder::class);
     }
 }

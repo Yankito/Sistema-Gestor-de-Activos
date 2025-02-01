@@ -48,7 +48,7 @@ class AuthController extends Controller
                 'correo' => 'required|email|unique:usuarios',
                 'nombres' => 'required|string',
                 'primerApellido' => 'required|string',
-                'segundoApellido' => 'string',
+                'segundoApellido' => 'nullable|string',
                 'contrasena' => 'required|string|min:6',
                 'esAdministrador' => 'boolean',
             ]);
@@ -100,4 +100,12 @@ class AuthController extends Controller
         Auth::logout();
         return response()->json(['message' => 'sesion cerrada'], 200);
     }
+
+
+    public function checkCorreo($correo)
+    {
+        $usuario = Usuario::where('correo', $correo)->first();
+        return response()->json(['exists' => $usuario !== null]);
+    }
+
 }

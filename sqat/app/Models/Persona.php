@@ -8,8 +8,6 @@ class Persona extends Model
 {
     // Nombre de la tabla asociada en la base de datos
     protected $table = 'personas';
-    protected $primaryKey = 'rut';
-
     // Campos que se pueden asignar masivamente
     protected $fillable = [
         'rut',
@@ -27,9 +25,6 @@ class Persona extends Model
         'usuarioTI',
         'ubicacion',
     ];
-
-    // Desactivar auto-incremento si el campo clave primaria no es un ID numérico
-    public $incrementing = false;
 
     // Activar timestamps si se están usando las columnas created_at y updated_at
     public $timestamps = true;

@@ -78,8 +78,8 @@
                                     <td>{{ $dato->marca }}</td>
                                     <td>{{ $dato->modelo }}</td>
                                     <td>{{ $dato->estado}}</td>
-                                    <td>{{ $dato->usuarioDeActivo }}</td>
-                                    <td>{{ $dato->responsableDeActivo }}</td>
+                                    <td>{{ $dato->rutUsuario }}</td>
+                                    <td>{{ $dato->rutResponsable }}</td>
                                     <td>{{ $dato->precio }}</td>
                                     <td>{{ $dato->justificacionDobleActivo }}</td>
                                     </tr>
