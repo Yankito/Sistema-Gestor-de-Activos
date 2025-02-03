@@ -14,8 +14,7 @@
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
+
     <style>
         .filter-container {
         display: none;
@@ -32,12 +31,7 @@
         cursor: pointer;
         font-size: 10px;
         }
-        .action-btns {
-          text-align: center;
-        }
-        .action-btns button {
-            margin: 0 5px;
-        }
+
     </style>
 </head>
     @section('content')
@@ -75,6 +69,10 @@
                         @foreach($datos as $dato)
                             <tr>
                                 <td class="action-btns">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
+                                onclick="cargarActivo({{ $dato->id }})">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
                                     <button class="btn btn-primary btn-sm" onclick="editar({{ $dato->id }})">
                                     <i class="fas fa-edit"></i> Editar
                                     </button>
@@ -125,13 +123,22 @@
       </div>
       <!-- /.container-fluid -->
     </section>
+
+
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            @if (isset($activo))
+              @include('activos.editarActivo')
+            @endif
+          </div>
+        </div>
+      </div>
+
     @endsection
 
 
-<!-- jQuery -->
-<script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <!-- DataTables  & Plugins -->
 <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -145,8 +152,7 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="vendor/adminlte/dist/js/adminlte.min.js?v=3.2.0"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- Page specific script -->
@@ -154,9 +160,32 @@
 <script src="{{ asset('js/tablas.js') }}"></script>
 
 <script>
+    function cargarActivo(id) {
+        $.ajax({
+            url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
+            type: 'GET',
+            success: function(data) {
+                $('#modal-default .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
+            },
+            error: function() {
+                alert('Error al cargar los datos del activo.');
+            }
+        });
+    }
+
+
   function editar(id) {
-    // Aquí puedes agregar la lógica para editar el elemento
-    alert('Editar: ' + id);
+    $.ajax({
+      url: 'editarActivo/' + id,
+      type: 'GET',
+      success: function (data) {
+        $("#editarContenido").html(data); // Carga la vista en el modal
+        $("#editarModal").modal("show"); // Muestra el modal
+      },
+      error: function () {
+        alert("Error al cargar la vista de edición.");
+      },
+    });
   }
 
   function eliminar(id) {

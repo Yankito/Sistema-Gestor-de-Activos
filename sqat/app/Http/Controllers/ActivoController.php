@@ -16,7 +16,7 @@ class ActivoController extends Controller
     {
         $personas = Persona::all();
         $ubicaciones = Ubicacion::all();
-        return view('registrarActivo', compact('personas', 'ubicaciones'));
+        return view('activos.registrarActivo', compact('personas', 'ubicaciones'));
     }
 
     // Crear un nuevo activo
@@ -65,8 +65,9 @@ class ActivoController extends Controller
     public function update(Request $request, $id)
     {
         $activo = Activo::findOrFail($id);
+        dd($request->all());
         $activo->update($request->all());
-        return response()->json($activo, 200);
+        return redirect()->back()->with('success', 'Activo actualizado correctamente.');
     }
 
     // Eliminar un activo
@@ -74,5 +75,12 @@ class ActivoController extends Controller
     {
         Activo::destroy($id);
         return response()->json(null, 204);
+    }
+
+    public function editar($id){
+        $activo = Activo::findOrFail($id);
+        $ubicaciones = Ubicacion::all();
+        $personas = Persona::all();
+        return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
     }
 }

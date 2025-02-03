@@ -20,14 +20,14 @@ class PersonaController extends Controller
         $personas = Persona::all();
 
         // Devolver una vista con la lista de personas
-        return view('registrarPersona', compact('activos','ubicaciones', 'personas'));
+        return view('personas.registrarPersona', compact('activos','ubicaciones', 'personas'));
     }
 
     // Mostrar el formulario para crear una nueva persona
     public function create()
     {
         $ubicaciones = Ubicacion::all(); // Cargar ubicaciones para el formulario
-        return view('registrarPersona', compact('ubicaciones'));
+        return view('personas.registrarPersona', compact('ubicaciones'));
     }
 
     // Almacenar una nueva persona en la base de datos

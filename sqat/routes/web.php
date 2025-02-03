@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
     Route::get('/subdashboard', [SubDashboardController::class, 'index']);
+    Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
 });
 
 
@@ -85,3 +86,4 @@ Route::get('/descargarExcel', function () {
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
 Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
+Route::post('/activos/{id}', [ActivoController::class, 'update'])->name('activos.update');

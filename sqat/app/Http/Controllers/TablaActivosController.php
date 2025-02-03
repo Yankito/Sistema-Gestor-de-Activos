@@ -21,6 +21,6 @@ class TablaActivosController extends Controller
             )
             ->get();
 
-        return view('tablaActivos', compact('datos'));
+        return view('activos.tablaActivos', compact('datos'));
     }
 }
