@@ -6,6 +6,9 @@ use App\Models\Activo;
 use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Ubicacion;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
+
 
 class PersonaController extends Controller
 {
@@ -72,6 +75,13 @@ class PersonaController extends Controller
             $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
             $activo->update();
 
+            $registro = new Registro();
+            $registro->persona = $activo->responsableDeActivo;
+            $registro->activo = $activo->id;
+            $registro->tipoCambio = 'ASIGNACION';
+            $registro->encargadoCambio = Auth::user()->id;
+            $registro->save();
+
             if (!empty($data['activosAdicionales']) && is_array($data['activosAdicionales'])) {
                 foreach ($data['activosAdicionales'] as $id) {
                     $activoAdicional = Activo::where('id', $id)->first();
@@ -81,6 +91,14 @@ class PersonaController extends Controller
                         $activoAdicional->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
                         $activoAdicional->justificacionDobleActivo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();
+
+                        $registroAdicional = new Registro();
+                        $registroAdicional->persona = $activo->responsableDeActivo;
+                        $registroAdicional->activo = $activo->id;
+                        $registroAdicional->tipoCambio = 'ASIGNACION';
+                        $registroAdicional->encargadoCambio = Auth::user()->id;
+                        $registroAdicional->save();
+
                     }
                 }
             }

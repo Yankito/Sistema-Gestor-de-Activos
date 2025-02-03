@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Tabla Activos</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -32,6 +32,12 @@
         cursor: pointer;
         font-size: 10px;
         }
+        .action-btns {
+          text-align: center;
+        }
+        .action-btns button {
+            margin: 0 5px;
+        }
     </style>
 </head>
     @section('content')
@@ -48,41 +54,51 @@
                 <div style = "overflow-x:auto;">
                   <table id="tabla" class="table">
                     <thead>
-                    <tr>
-                      @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
-                        <th>
-                          {{ $columna }}
-                          <!-- boton filtro -->
-                          <button class="filter-btn" data-index="{{ $index }}">
-                            <i class="fas fa-filter"></i>
-                          </button>
-                          <div class="filter-container" id="filter-{{ $index }}">
-                            <input type="text" class="column-search" data-index="{{ $index }}" placeholder="Buscar...">
-                            <div class="checkbox-filters" data-index="{{ $index }}"></div>
-                          </div>
-                        </th>
-                      @endforeach
-                    </tr>
+                        <tr>
+                            <th>Acciones</th>
+                            @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
+                                <th>
+                                {{ $columna }}
+                                <!-- boton filtro -->
+                                <button class="filter-btn" data-index="{{ $index }}">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                                <div class="filter-container" id="filter-{{ $index }}">
+                                    <input type="text" class="column-search" data-index="{{ $index }}" placeholder="Buscar...">
+                                    <div class="checkbox-filters" data-index="{{ $index }}"></div>
+                                </div>
+                                </th>
+                            @endforeach
+                        </tr>
                     </thead>
                     <tbody>
-                      @foreach($datos as $dato)
-                    <tr>
-                          <td>{{ $dato->nroSerie }}</td>
-                          <td>{{ $dato->marca }}</td>
-                          <td>{{ $dato->modelo }}</td>
-                          <td>{{ $dato->precio }}</td>
-                          <td>{{ $dato->tipoDeActivo }}</td>
-                          <td>{{ $dato->estado }}</td>
-                          <td>{{ $dato->rutUsuario}}</td>
-                          <td>{{ $dato->rutResponsable}}</td>
-                          <td>{{ $dato->sitio }}</td>
-                          <td>{{ $dato->soporteTI }}</td>
-                          <td>{{ $dato->justificacionDobleActivo }}</td>
-                      </tr>
-                      @endforeach
+                        @foreach($datos as $dato)
+                            <tr>
+                                <td class="action-btns">
+                                    <button class="btn btn-primary btn-sm" onclick="editar({{ $dato->id }})">
+                                    <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="eliminar({{ $dato->id }})">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                                <td>{{ $dato->nroSerie }}</td>
+                                <td>{{ $dato->marca }}</td>
+                                <td>{{ $dato->modelo }}</td>
+                                <td>{{ $dato->precio }}</td>
+                                <td>{{ $dato->tipoDeActivo }}</td>
+                                <td>{{ $dato->estado }}</td>
+                                <td>{{ $dato->rutUsuario}}</td>
+                                <td>{{ $dato->rutResponsable}}</td>
+                                <td>{{ $dato->sitio }}</td>
+                                <td>{{ $dato->soporteTI }}</td>
+                                <td>{{ $dato->justificacionDobleActivo }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
                     <tr>
+                      <th>Acciones</th> <!-- Nueva columna para los botones -->
                       <th>Número de serie</th>
                       <th>Marca</th>
                       <th>Modelo</th>
@@ -137,5 +153,18 @@
 
 <script src="{{ asset('js/tablas.js') }}"></script>
 
+<script>
+  function editar(id) {
+    // Aquí puedes agregar la lógica para editar el elemento
+    alert('Editar: ' + id);
+  }
+
+  function eliminar(id) {
+    // Aquí puedes agregar la lógica para eliminar el elemento
+    if (confirm('¿Estás seguro de que quieres eliminar este activo?')) {
+      alert('Eliminar: ' + id);
+    }
+  }
+</script>
 
 </html>
