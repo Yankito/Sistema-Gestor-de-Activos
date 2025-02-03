@@ -154,7 +154,7 @@
                         @if($user->esAdministrador)
                             <li class="nav-item">
                                 <a href="/registrarActivo" class="nav-link">
-                                <i class="nav-icon fas fa-laptop"></i>
+                                <i class="nav-icon fas fa-laptop-medical"></i>
                                 <p>
                                     Dar activo de alta
                                 </p>

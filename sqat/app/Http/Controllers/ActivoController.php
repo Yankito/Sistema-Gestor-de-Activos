@@ -32,6 +32,12 @@ class ActivoController extends Controller
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
             $activo->precio = $request->precio;
+            //dd($request);
+
+            if($request->responsable != NULL){
+                $activo->usuarioDeActivo = $request->responsable;
+                $activo->responsableDeActivo = $request->responsable;
+            }
 
             $activo->save();
             // Redirigir con un mensaje de éxito

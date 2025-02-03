@@ -329,15 +329,10 @@
                 // Limpiar el select de activos adicionales
                 activosAdicionalesSelect.innerHTML = '';
 
-                console.log(activoSeleccionado);
-
                 // Agregar las opciones filtradas (excluyendo el activo seleccionado)
                 var activos = JSON.parse('{!! json_encode($activos) !!}');
                 activos.forEach(function(activo) {
                     if (activo.estado === 'DISPONIBLE' && parseInt(activo.id) !== parseInt(activoSeleccionado)) {
-                        console.log("activo: "+activo.id);
-                        console.log("activoSeleccionado: "+activoSeleccionado);
-                        console.log(activo.id !== activoSeleccionado);
                         var option = document.createElement('option');
                         option.value = activo.id;
                         option.textContent = activo.nroSerie;
@@ -403,7 +398,6 @@
                         let response = await fetch('/personas/' + rut);
                         if (response.ok) {
                             let data = await response.json();
-                            console.log(data['exists']);
                             return data['exists'];
                         } else {
                             throw new Error('Error al comprobar el RUT');
