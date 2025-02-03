@@ -294,40 +294,7 @@
             }
         </style>
 
-    <!-- script para exportar a excel, pdf, etc -->
-    <script>
-    $(function () {
-        $("#example1").DataTable({
-        "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-        "buttons": [
-            {
-                extend:"copy",
-                title: 'Iansa - Tabla de activos',
-                text: "Copiar",
-            },
-            {
-                extend:"csv",
-                title: 'Iansa - Tabla de activos',
-                text:"CSV",
-            },
-            {
-                extend:"excel",
-                title: 'Iansa - Tabla de activos',
-                text:"Excel",
-            },
-            {
-                extend:"print",
-                title: 'Iansa - Tabla de activos',
-                text: "Imprimir",
-            },
-            {
-                extend: "colvis",
-                text: "Visibilidad de columnas", // Cambiar "Column visibility" por "Visibilidad de columnas"
-            }
-            ]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-    </script>
+
 
 
 </body>

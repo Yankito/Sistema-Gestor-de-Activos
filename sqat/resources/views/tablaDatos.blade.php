@@ -46,7 +46,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div style = "overflow-x:auto;">
-                                <table id="example1" class="table">
+                                <table id="tabla" class="table">
                                     <thead>
                                     <tr>
                                         @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer apellido", "Segundo apellido", "Supervisor", "Empresa", "Estado empleado", "Centro de costo", "Denominación", "Título de puesto", "Fecha de inicio", "Usuario TI", "Sitio", "Soporte TI", "Número de serie", "Marca", "Modelo", "Estado", "Rut usuario", "Rut responsable", "Precio", "Justificación doble activo"] as $index => $columna)
@@ -62,7 +62,7 @@
                                                 </div>
                                             </th>
                                         @endforeach
-                                    </tr> 
+                                    </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($datos as $dato)
@@ -123,36 +123,5 @@
 <script src="vendor/adminlte/dist/js/adminlte.min.js?v=3.2.0"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
-<script>
-  $(document).ready(function() {
-    let table = $('#example1').DataTable();
-    $('.filter-btn').click(function() {
-      let index = $(this).data('index');
-      $(`#filter-${index}`).toggle();
-    });
-    $('.column-search').on('keyup', function() {
-      let index = $(this).data('index');
-      table.column(index).search(this.value).draw();
-    });
-    table.columns().every(function(index) {
-      let column = this;
-      let uniqueValues = new Set();
-      column.data().each(function(value) {
-        uniqueValues.add(value);
-      });
-      let checkboxContainer = $(`.checkbox-filters[data-index="${index}"]`);
-      uniqueValues.forEach(value => {
-        checkboxContainer.append(
-          `<label><input type="checkbox" class="column-checkbox" data-index="${index}" value="${value}"> ${value}</label><br>`
-        );
-      });
-      checkboxContainer.on('change', 'input', function() {
-        let checkedValues = checkboxContainer.find('input:checked').map(function() {
-          return $.fn.dataTable.util.escapeRegex($(this).val());
-        }).get().join('|');
-        column.search(checkedValues.length ? `^(${checkedValues})$` : '', true, false).draw();
-      });
-    });
-  });
-</script>
+<script src="{{ asset('js/tablas.js') }}"></script>
 </html>

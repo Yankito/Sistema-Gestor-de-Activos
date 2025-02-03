@@ -33,8 +33,8 @@
       font-size: 10px;
     }
   </style>
-<script data-cfasync="false" nonce="084c37db-8d53-4826-86ca-d286c27f94af">try{(function(w,d){!function(a,b,c,d){if(a.zaraz)console.error("zaraz is loaded twice");else{a[c]=a[c]||{};a[c].executed=[];a.zaraz={deferred:[],listeners:[]};a.zaraz._v="5848";a.zaraz._n="084c37db-8d53-4826-86ca-d286c27f94af";a.zaraz.q=[];a.zaraz._f=function(e){return async function(){var f=Array.prototype.slice.call(arguments);a.zaraz.q.push({m:e,a:f})}};for(const g of["track","set","debug"])a.zaraz[g]=a.zaraz._f(g);a.zaraz.init=()=>{var h=b.getElementsByTagName(d)[0],i=b.createElement(d),j=b.getElementsByTagName("title")[0];j&&(a[c].t=b.getElementsByTagName("title")[0].text);a[c].x=Math.random();a[c].w=a.screen.width;a[c].h=a.screen.height;a[c].j=a.innerHeight;a[c].e=a.innerWidth;a[c].l=a.location.href;a[c].r=b.referrer;a[c].k=a.screen.colorDepth;a[c].n=b.characterSet;a[c].o=(new Date).getTimezoneOffset();if(a.dataLayer)for(const k of Object.entries(Object.entries(dataLayer).reduce(((l,m)=>({...l[1],...m[1]})),{})))zaraz.set(k[0],k[1],{scope:"page"});a[c].q=[];for(;a.zaraz.q.length;){const n=a.zaraz.q.shift();a[c].q.push(n)}i.defer=!0;for(const o of[localStorage,sessionStorage])Object.keys(o||{}).filter((q=>q.startsWith("_zaraz_"))).forEach((p=>{try{a[c]["z_"+p.slice(7)]=JSON.parse(o.getItem(p))}catch{a[c]["z_"+p.slice(7)]=o.getItem(p)}}));i.referrerPolicy="origin";i.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(a[c])));h.parentNode.insertBefore(i,h)};["complete","interactive"].includes(b.readyState)?zaraz.init():a.addEventListener("DOMContentLoaded",zaraz.init)}}(w,d,"zarazData","script");window.zaraz._p=async bs=>new Promise((bt=>{if(bs){bs.e&&bs.e.forEach((bu=>{try{const bv=d.querySelector("script[nonce]"),bw=bv?.nonce||bv?.getAttribute("nonce"),bx=d.createElement("script");bw&&(bx.nonce=bw);bx.innerHTML=bu;bx.onload=()=>{d.head.removeChild(bx)};d.head.appendChild(bx)}catch(by){console.error(`Error executing script: ${bu}\n`,by)}}));Promise.allSettled((bs.f||[]).map((bz=>fetch(bz[0],bz[1]))))}bt()}));zaraz._p({"e":["(function(w,d){})(window,document)"]});})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
-    @section('content')
+</head>
+@section('content')
     <section class = "content">
       <div class="container-fluid">
         <div class="row">
@@ -46,7 +46,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div style = "overflow-x:auto">
-                  <table id="example1" class="table">
+                  <table id="tabla" class="table">
                     <thead>
                     <tr>
                         @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer Apellido", "Segundo Apellido", "Supervisor", "Empresa", "Estado empleado", "Centro Costo", "Denominacion", "Titulo Puesto", "Fecha Inicio", "Usuario TI", "Ubicacion"] as $index => $columna)
@@ -141,36 +141,5 @@
 <script src="vendor/adminlte/dist/js/adminlte.min.js?v=3.2.0"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
-<script>
-  $(document).ready(function() {
-    let table = $('#example1').DataTable();
-    $('.filter-btn').click(function() {
-      let index = $(this).data('index');
-      $(`#filter-${index}`).toggle();
-    });
-    $('.column-search').on('keyup', function() {
-      let index = $(this).data('index');
-      table.column(index).search(this.value).draw();
-    });
-    table.columns().every(function(index) {
-      let column = this;
-      let uniqueValues = new Set();
-      column.data().each(function(value) {
-        uniqueValues.add(value);
-      });
-      let checkboxContainer = $(`.checkbox-filters[data-index="${index}"]`);
-      uniqueValues.forEach(value => {
-        checkboxContainer.append(
-          `<label><input type="checkbox" class="column-checkbox" data-index="${index}" value="${value}"> ${value}</label><br>`
-        );
-      });
-      checkboxContainer.on('change', 'input', function() {
-        let checkedValues = checkboxContainer.find('input:checked').map(function() {
-          return $.fn.dataTable.util.escapeRegex($(this).val());
-        }).get().join('|');
-        column.search(checkedValues.length ? `^(${checkedValues})$` : '', true, false).draw();
-      });
-    });
-  });
-</script>
+<script src="{{ asset('js/tablas.js') }}"></script>
 </html>
