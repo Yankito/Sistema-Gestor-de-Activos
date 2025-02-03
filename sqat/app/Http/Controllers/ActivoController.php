@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ActivoController extends Controller
@@ -32,14 +34,19 @@ class ActivoController extends Controller
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
             $activo->precio = $request->precio;
-            //dd($request);
 
+            $activo->save();
             if($request->responsable != NULL){
                 $activo->usuarioDeActivo = $request->responsable;
                 $activo->responsableDeActivo = $request->responsable;
-            }
 
-            $activo->save();
+                $registro = new Registro();
+                $registro->persona = $request->responsable;
+                $registro->activo = $activo->id;
+                $registro->tipoCambio = 'ASIGNACION';
+                $registro->encargadoCambio = Auth::user()->id;
+                $registro->save();
+            }
             // Redirigir con un mensaje de éxito
             return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
         } catch (\Exception $e) {
