@@ -36,8 +36,8 @@
                                         <div class = " col-md-6">
                                             <!-- Nro Serie -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="nroSerie">Nro. Serie</label>
-                                                <input type="text" name="nroSerie" id="nroSerie" required class="form-control" />
+                                                <label class="form-label" for="nro_serie">Nro. Serie</label>
+                                                <input type="text" name="nro_serie" id="nro_serie" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = " col-md-6">
@@ -58,8 +58,8 @@
                                         <div class = " col-md-6">
                                             <!-- Tipo de Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="tipoDeActivo">Tipo de Activo</label>
-                                                <select name="tipoDeActivo" id="tipoDeActivo" class="form-control" required>
+                                                <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
+                                                <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
                                                     <option value="LAPTOP">Laptop</option>
                                                     <option value="DESKTOP">Desktop</option>
                                                     <option value="MONITOR">Monitor</option>

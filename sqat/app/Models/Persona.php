@@ -11,18 +11,18 @@ class Persona extends Model
     // Campos que se pueden asignar masivamente
     protected $fillable = [
         'rut',
-        'nombreUsuario',
+        'nombre_usuario',
         'nombres',
-        'primerApellido',
-        'segundoApellido',
+        'primer_apellido',
+        'segundo_apellido',
         'supervisor',
         'empresa',
-        'estadoEmpleado',
-        'centroCosto',
+        'estado_empleado',
+        'centro_costo',
         'denominacion',
-        'tituloPuesto',
-        'fechaInicio',
-        'usuarioTI',
+        'titulo_puesto',
+        'fecha_inicio',
+        'usuario_ti',
         'ubicacion',
     ];
 
@@ -38,12 +38,12 @@ class Persona extends Model
     // Método para obtener el nombre completo de una persona
     public function getNombreCompletoAttribute()
     {
-        return "{$this->nombres} {$this->primerApellido} {$this->segundoApellido}";
+        return "{$this->nombres} {$this->primer_apellido} {$this->segundo_apellido}";
     }
 
     // Scope para buscar personas activas
     public function scopeActivas($query)
     {
-        return $query->where('estadoEmpleado', true);
+        return $query->where('estado_empleado', true);
     }
 }

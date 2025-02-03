@@ -17,18 +17,18 @@ class CreatePersonasTable extends Migration
             // Definir la estructura de la tabla
             $table->id();
             $table->string('rut', 15)->unique();  // 'rut' como clave primaria
-            $table->string('nombreUsuario', 50);   // 'nombreUsuario' (no nulo)
+            $table->string('nombre_usuario', 50);   // 'nombreUsuario' (no nulo)
             $table->string('nombres', 50);         // 'nombres' (no nulo)
-            $table->string('primerApellido', 25);  // 'primerApellido' (no nulo)
-            $table->string('segundoApellido', 25)->nullable();  // 'segundoApellido' (opcional)
+            $table->string('primer_apellido', 25);  // 'primerApellido' (no nulo)
+            $table->string('segundo_apellido', 25)->nullable();  // 'segundoApellido' (opcional)
             $table->string('supervisor', 60)->nullable();  // 'supervisor' (opcional)
             $table->string('empresa', 60);         // 'empresa' (no nulo)
-            $table->boolean('estadoEmpleado')->default(true);  // 'estadoEmpleado' (no nulo)
-            $table->string('centroCosto', 50);     // 'centroCosto' (no nulo)
+            $table->boolean('estado_empleado')->default(true);  // 'estadoEmpleado' (no nulo)
+            $table->string('centro_costo', 50);     // 'centroCosto' (no nulo)
             $table->string('denominacion', 60);    // 'denominacion' (no nulo)
-            $table->string('tituloPuesto', 60);    // 'tituloPuesto' (no nulo)
-            $table->date('fechaInicio');           // 'fechaInicio' (no nulo)
-            $table->boolean('usuarioTI');          // 'usuarioTI' (no nulo)
+            $table->string('titulo_puesto', 60);    // 'tituloPuesto' (no nulo)
+            $table->date('fecha_inicio');           // 'fechaInicio' (no nulo)
+            $table->boolean('usuario_ti');          // 'usuarioTI' (no nulo)
             $table->unsignedBigInteger('ubicacion')->nullable();  // 'ubicacion' (referencia a la tabla 'ubicaciones')
 
             // Definir la relación con la tabla 'ubicaciones'

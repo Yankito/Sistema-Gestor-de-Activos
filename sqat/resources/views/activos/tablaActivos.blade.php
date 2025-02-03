@@ -73,24 +73,22 @@
                                 onclick="cargarActivo({{ $dato->id }})">
                                     <i class="fas fa-edit"></i> Editar
                                 </button>
-                                    <button class="btn btn-primary btn-sm" onclick="editar({{ $dato->id }})">
-                                    <i class="fas fa-edit"></i> Editar
-                                    </button>
+
                                     <button class="btn btn-danger btn-sm" onclick="eliminar({{ $dato->id }})">
                                     <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </td>
-                                <td>{{ $dato->nroSerie }}</td>
+                                <td>{{ $dato->nro_serie }}</td>
                                 <td>{{ $dato->marca }}</td>
                                 <td>{{ $dato->modelo }}</td>
                                 <td>{{ $dato->precio }}</td>
-                                <td>{{ $dato->tipoDeActivo }}</td>
+                                <td>{{ $dato->tipo_de_activo }}</td>
                                 <td>{{ $dato->estado }}</td>
-                                <td>{{ $dato->rutUsuario}}</td>
-                                <td>{{ $dato->rutResponsable}}</td>
+                                <td>{{ $dato->rut_usuario}}</td>
+                                <td>{{ $dato->rut_responsable}}</td>
                                 <td>{{ $dato->sitio }}</td>
-                                <td>{{ $dato->soporteTI }}</td>
-                                <td>{{ $dato->justificacionDobleActivo }}</td>
+                                <td>{{ $dato->soporte_ti }}</td>
+                                <td>{{ $dato->justificacion_doble_activo }}</td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -36,26 +36,26 @@ class PersonaController extends Controller
             // Validar la solicitud
         $request->validate([
             'rut' => 'required|string|max:15|unique:personas,rut|regex:/^\d{7,8}-[\dkK]$/',
-            'nombreUsuario' => 'required|string|max:50',
+            'nombre_usuario' => 'required|string|max:50',
             'nombres' => 'required|string|max:50',
-            'primerApellido' => 'required|string|max:25',
-            'segundoApellido' => 'nullable|string|max:25',
+            'primer_apellido' => 'required|string|max:25',
+            'segundo_apellido' => 'nullable|string|max:25',
             'supervisor' => 'nullable|string|max:60',
             'empresa' => 'required|string|max:60',
-            'estadoEmpleado' => 'nullable|boolean',
-            'centroCosto' => 'required|string|max:50',
+            'estado_empleado' => 'nullable|boolean',
+            'centro_costo' => 'required|string|max:50',
             'denominacion' => 'required|string|max:60',
-            'tituloPuesto' => 'required|string|max:60',
-            'fechaInicio' => 'required|date',
-            'usuarioTI' => 'required|boolean',
+            'titulo_puesto' => 'required|string|max:60',
+            'fecha_inicio' => 'required|date',
+            'usuario_ti' => 'required|boolean',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
         ],[
             'rut.rexex' => 'El campo rut debe ser un rut válido',
         ]);
 
-            // Establecer valor predeterminado para estadoEmpleado si no se proporciona
+            // Establecer valor predeterminado para estado_empleado si no se proporciona
             $data = $request->all();
-            $data['estadoEmpleado'] = $data['estadoEmpleado'] ?? true;
+            $data['estado_empleado'] = $data['estado_empleado'] ?? true;
             //dd($request, $data);
             // Crear una nueva persona con los datos validados
             Persona::create($data);
@@ -67,36 +67,36 @@ class PersonaController extends Controller
             }
 
             $idPersona = Persona::where('rut', $request->rut)->first()->id;
-            $activo->usuarioDeActivo = $idPersona;
+            $activo->usuario_de_activo = $idPersona;
             $activo->estado = 'ASIGNADO';
             $activo->ubicacion = $request->ubicacion;
 
             // Asignar responsable a activo de tal numero de serie
-            $activo->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
+            $activo->responsable_de_activo = $request->has('responsable') ? $request->responsable : $idPersona;
             $activo->update();
 
             $registro = new Registro();
-            $registro->persona = $activo->responsableDeActivo;
+            $registro->persona = $activo->responsable_de_activo;
             $registro->activo = $activo->id;
-            $registro->tipoCambio = 'ASIGNACION';
-            $registro->encargadoCambio = Auth::user()->id;
+            $registro->tipo_cambio = 'ASIGNACION';
+            $registro->encargado_cambio = Auth::user()->id;
             $registro->save();
 
             if (!empty($data['activosAdicionales']) && is_array($data['activosAdicionales'])) {
                 foreach ($data['activosAdicionales'] as $id) {
                     $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
-                        $activoAdicional->usuarioDeActivo = $idPersona;
+                        $activoAdicional->usuario_de_activo = $idPersona;
                         $activoAdicional->estado = 'ASIGNADO';
-                        $activoAdicional->responsableDeActivo = $request->has('responsable') ? $request->responsable : $idPersona;
-                        $activoAdicional->justificacionDobleActivo = $data['justificaciones'][$id] ?? null;
+                        $activoAdicional->responsable_de_activo = $request->has('responsable') ? $request->responsable : $idPersona;
+                        $activoAdicional->justificacion_doble_activo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();
 
                         $registroAdicional = new Registro();
-                        $registroAdicional->persona = $activo->responsableDeActivo;
+                        $registroAdicional->persona = $activo->responsable_de_activo;
                         $registroAdicional->activo = $activo->id;
-                        $registroAdicional->tipoCambio = 'ASIGNACION';
-                        $registroAdicional->encargadoCambio = Auth::user()->id;
+                        $registroAdicional->tipo_cambio = 'ASIGNACION';
+                        $registroAdicional->encargado_cambio = Auth::user()->id;
                         $registroAdicional->save();
 
                     }
@@ -131,18 +131,18 @@ class PersonaController extends Controller
     {
         $request->validate([
             'rut' => 'required|string|max:15|unique:personas,rut,' . $id . '|regex:/^\d{7,8}-[\dkK]$/',
-            'nombreUsuario' => 'required|string|max:50',
+            'nombre_usuario' => 'required|string|max:50',
             'nombres' => 'required|string|max:50',
-            'primerApellido' => 'required|string|max:25',
-            'segundoApellido' => 'nullable|string|max:25',
+            'primer_apellido' => 'required|string|max:25',
+            'segundo_apellido' => 'nullable|string|max:25',
             'supervisor' => 'nullable|string|max:60',
             'empresa' => 'required|string|max:60',
-            'estadoEmpleado' => 'nullable|boolean',
-            'centroCosto' => 'required|string|max:50',
+            'estado_empleado' => 'nullable|boolean',
+            'centro_costo' => 'required|string|max:50',
             'denominacion' => 'required|string|max:60',
-            'tituloPuesto' => 'required|string|max:60',
-            'fechaInicio' => 'required|date',
-            'usuarioTI' => 'required|boolean',
+            'titulo_puesto' => 'required|string|max:60',
+            'fecha_inicio' => 'required|date',
+            'usuario_ti' => 'required|boolean',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
         ],[
             'rut.rexex' => 'El campo rut debe ser un rut válido',

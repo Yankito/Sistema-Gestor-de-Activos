@@ -24,27 +24,27 @@ class ActivoController extends Controller
         try {
             $activo = new Activo();
 
-            $activo->nroSerie = $request->nroSerie;
+            $activo->nro_serie = $request->nro_serie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
-            $activo->tipoDeActivo = $request->tipoDeActivo;
+            $activo->tipo_de_activo = $request->tipo_de_activo;
             $activo->estado = 'DISPONIBLE';
-            $activo->usuarioDeActivo = NULL;
-            $activo->responsableDeActivo = NULL;
+            $activo->usuario_de_activo = NULL;
+            $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
-            $activo->justificacionDobleActivo = $request->justificacionDobleActivo;
+            $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
             $activo->precio = $request->precio;
 
             $activo->save();
             if($request->responsable != NULL){
-                $activo->usuarioDeActivo = $request->responsable;
-                $activo->responsableDeActivo = $request->responsable;
+                $activo->usuario_de_activo = $request->responsable;
+                $activo->responsable_de_activo = $request->responsable;
 
                 $registro = new Registro();
                 $registro->persona = $request->responsable;
                 $registro->activo = $activo->id;
-                $registro->tipoCambio = 'ASIGNACION';
-                $registro->encargadoCambio = Auth::user()->id;
+                $registro->tipo_cambio = 'ASIGNACION';
+                $registro->encargado_cambio = Auth::user()->id;
                 $registro->save();
             }
             // Redirigir con un mensaje de éxito
@@ -78,9 +78,12 @@ class ActivoController extends Controller
     }
 
     public function editar($id){
-        $activo = Activo::findOrFail($id);
+
+
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacion')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();
+
         return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
     }
 }

@@ -20,12 +20,12 @@ class Registro extends Model
     public $timestamps = true;
 
     // Relación con la tabla Persona
-    public function usuarioDeActivo()
+    public function persona()
     {
         return $this->belongsTo(Persona::class, 'persona', 'id');
     }
 
-    public function responsableDeActivo()
+    public function activo()
     {
         return $this->belongsTo(Activo::class, 'activo', 'id');
     }

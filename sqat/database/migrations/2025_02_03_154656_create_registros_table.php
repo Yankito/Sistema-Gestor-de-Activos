@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('persona')->nullable();
             $table->unsignedBigInteger('activo')->nullable();
-            $table->enum('tipoCambio', ['ASIGNACION', 'DESVINCULACION','CREADO','MODIFICADO']);
-            $table->unsignedBigInteger('encargadoCambio');
+            $table->enum('tipo_cambio', ['ASIGNACION', 'DESVINCULACION','CREADO','MODIFICADO']);
+            $table->unsignedBigInteger('encargado_cambio');
             $table->timestamps();
 
             $table->foreign('persona')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('activo')->references('id')->on('activos')->onDelete('set null');
-            $table->foreign('encargadoCambio')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('encargado_cambio')->references('id')->on('usuarios')->onDelete('cascade');
         });
     }
 

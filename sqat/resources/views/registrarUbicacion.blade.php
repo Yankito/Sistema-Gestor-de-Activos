@@ -46,8 +46,8 @@
 
                                         <div class="col-md-6">
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="soporteTI">Soporte TI</label>
-                                                <input type="text" name="soporteTI" id="soporteTI" class="form-control" />
+                                                <label class="form-label" for="soporte_ti">Soporte TI</label>
+                                                <input type="text" name="soporte_ti" id="soporte_ti" class="form-control" />
                                             </div>
                                         </div>
 

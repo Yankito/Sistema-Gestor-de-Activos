@@ -68,28 +68,28 @@
                                         @foreach($datos as $dato)
                                         <tr>
                                         <td>{{ $dato->rut }}</td>
-                                        <td>{{ $dato->nombreUsuario }}</td>
+                                        <td>{{ $dato->nombre_usuario }}</td>
                                         <td>{{ $dato->nombres }}</td>
-                                        <td>{{ $dato->primerApellido }}</td>
-                                        <td>{{ $dato->segundoApellido }}</td>
+                                        <td>{{ $dato->primer_apellido }}</td>
+                                        <td>{{ $dato->segundo_apellido }}</td>
                                         <td>{{ $dato->supervisor }}</td>
                                         <td>{{ $dato->empresa }}</td>
-                                        <td>{{ $dato->estadoEmpleado == 1 ? 'Sí' : 'No' }}</td>
-                                        <td>{{ $dato->centroCosto }}</td>
+                                        <td>{{ $dato->estado_empleado == 1 ? 'Sí' : 'No' }}</td>
+                                        <td>{{ $dato->centro_costo }}</td>
                                         <td>{{ $dato->denominacion }}</td>
-                                        <td>{{ $dato->tituloPuesto }}</td>
-                                        <td>{{ $dato->fechaInicio }}</td>
-                                        <td>{{ $dato->usuarioTI  == 1 ? 'Sí' : 'No' }}</td>
+                                        <td>{{ $dato->titulo_puesto }}</td>
+                                        <td>{{ $dato->fecha_inicio }}</td>
+                                        <td>{{ $dato->usuario_ti  == 1 ? 'Sí' : 'No' }}</td>
                                         <td>{{ $dato->sitio }}</td>
-                                        <td>{{ $dato->soporteTI }}</td>
-                                        <td>{{ $dato->nroSerie }}</td>
+                                        <td>{{ $dato->soporte_ti }}</td>
+                                        <td>{{ $dato->nro_serie }}</td>
                                         <td>{{ $dato->marca }}</td>
                                         <td>{{ $dato->modelo }}</td>
                                         <td>{{ $dato->estado}}</td>
-                                        <td>{{ $dato->rutUsuario }}</td>
-                                        <td>{{ $dato->rutResponsable }}</td>
+                                        <td>{{ $dato->rut_usuario }}</td>
+                                        <td>{{ $dato->rut_responsable }}</td>
                                         <td>{{ $dato->precio }}</td>
-                                        <td>{{ $dato->justificacionDobleActivo }}</td>
+                                        <td>{{ $dato->justificacion_doble_activo }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

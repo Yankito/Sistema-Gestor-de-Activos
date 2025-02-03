@@ -7,6 +7,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Activo;
+use App\Models\Ubicacion;
+use App\Models\Persona;
+use Illuminate\Support\Facades\DB;
+
+
 
 class ImportarController extends Controller
 {
@@ -38,7 +43,7 @@ class ImportarController extends Controller
         DB::beginTransaction();
         try {
             foreach ($dataWithoutHeader as $row) {
-                if (count($row) < 21) continue; // Evita filas incompletas excepto justificacionDobleActivo
+                if (count($row) < 21) continue; // Evita filas incompletas excepto justificacion_doble_activo
 
                 $estadoEmpleado = strtolower(trim($row[7])) == 'activo' ? 1 : 0;
                 $usuarioTI = strtolower(trim($row[12])) == 'si' ? 1 : 0;
@@ -51,18 +56,18 @@ class ImportarController extends Controller
                 Persona::updateOrCreate(
                     ['rut' => trim($row[0])],
                     [
-                        'nombreUsuario' => trim($row[1]),
+                        'nombre_usuario' => trim($row[1]),
                         'nombres' => trim($row[2]),
-                        'primerApellido' => trim($row[3]),
-                        'segundoApellido' => trim($row[4]),
+                        'primer_apellido' => trim($row[3]),
+                        'segundo_apellido' => trim($row[4]),
                         'supervisor' => trim($row[5]),
                         'empresa' => trim($row[6]),
-                        'estadoEmpleado' => $estadoEmpleado,
-                        'centroCosto' => trim($row[8]),
+                        'estado_empleado' => $estadoEmpleado,
+                        'centro_costo' => trim($row[8]),
                         'denominacion' => trim($row[9]),
-                        'tituloPuesto' => trim($row[10]),
-                        'fechaInicio' => $fechaInicio,
-                        'usuarioTI' => $usuarioTI,
+                        'titulo_puesto' => trim($row[10]),
+                        'fecha_inicio' => $fechaInicio,
+                        'usuario_ti' => $usuarioTI,
                         'ubicacion' => $ubicacion->id
                     ]
                 );
@@ -74,11 +79,11 @@ class ImportarController extends Controller
                         'marca' => trim($row[14]),
                         'modelo' => trim($row[15]),
                         'estado' => $estado,
-                        'usuarioDeActivo' => trim($row[0]),
-                        'responsableDeActivo' => trim($row[17]),
+                        'usuario_de_activo' => trim($row[0]),
+                        'responsable_de_activo' => trim($row[17]),
                         'precio' => (int) trim($row[18]),
                         'ubicacion' => $ubicacion->id,
-                        'justificacionDobleActivo' => trim($row[19])
+                        'justificacion_doble_activo' => trim($row[19])
                     ]
                 );
             }

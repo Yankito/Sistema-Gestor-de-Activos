@@ -68,18 +68,18 @@
                       @foreach($personas as $persona)
                           <tr>
                               <td>{{ $persona->rut }}</td>
-                              <td>{{ $persona->nombreUsuario }}</td>
+                              <td>{{ $persona->nombre_usuario }}</td>
                               <td>{{ $persona->nombres }}</td>
-                              <td>{{ $persona->primerApellido }}</td>
-                              <td>{{ $persona->segundoApellido }}</td>
+                              <td>{{ $persona->primer_apellido }}</td>
+                              <td>{{ $persona->segundo_apellido }}</td>
                               <td>{{ $persona->supervisor }}</td>
                               <td>{{ $persona->empresa }}</td>
-                              <td>{{ $persona->estadoEmpleado }}</td>
-                              <td>{{ $persona->centroCosto }}</td>
+                              <td>{{ $persona->estado_empleado }}</td>
+                              <td>{{ $persona->centro_costo }}</td>
                               <td>{{ $persona->denominacion }}</td>
-                              <td>{{ $persona->tituloPuesto }}</td>
-                              <td>{{ $persona->fechaInicio }}</td>
-                              <td>{{ $persona->usuarioTI }}</td>
+                              <td>{{ $persona->titulo_puesto }}</td>
+                              <td>{{ $persona->fecha_inicio }}</td>
+                              <td>{{ $persona->usuario_ti }}</td>
                               <td>{{ $persona->ubicacion }}</td>
                           </tr>
                       @endforeach
@@ -87,18 +87,18 @@
                     <tfoot>
                     <tr>
                       <th>rut</th>
-                      <th>nombreUsuario</th>
+                      <th>nombre_usuario</th>
                       <th>nombres</th>
-                      <th>primerApellido</th>
-                      <th>segundoApellido</th>
+                      <th>primer_apellido</th>
+                      <th>segundo_apellido</th>
                       <th>supervisor</th>
                       <th>empresa</th>
-                      <th>estadoEmpleado</th>
-                      <th>centroCosto</th>
+                      <th>estado_empleado</th>
+                      <th>centro_costo</th>
                       <th>denominacion</th>
-                      <th>tituloPuesto</th>
-                      <th>fechaInicio</th>
-                      <th>usuarioTI</th>
+                      <th>titulo_puesto</th>
+                      <th>fecha_inicio</th>
+                      <th>usuario_ti</th>
                       <th>ubicacion</tr>
                     </tr>
                     </tfoot>

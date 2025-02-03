@@ -41,8 +41,8 @@ class DashboardController extends Controller
         $activos = Activo::all();
         $tiposDeActivo = [];
         foreach ($activos as $activo) {
-            $activo->tipoDeActivo = strtoupper($activo->tipoDeActivo);
-            $tiposDeActivo[$activo->tipoDeActivo] = Activo::where('tipoDeActivo', $activo->tipoDeActivo)->count();
+            $activo->tipo_de_activo = strtoupper($activo->tipo_de_activo);
+            $tiposDeActivo[$activo->tipo_de_activo] = Activo::where('tipo_de_activo', $activo->tipo_de_activo)->count();
         }
         return $tiposDeActivo;
     }

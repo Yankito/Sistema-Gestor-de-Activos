@@ -33,8 +33,8 @@ class AuthController extends Controller
             $request->validate([
                 'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/'],
                 'nombres' => 'required|string|max:255',
-                'primerApellido' => 'required|string|max:255',
-                'segundoApellido' => 'nullable|string|max:255',
+                'primer_apellido' => 'required|string|max:255',
+                'segundo_apellido' => 'nullable|string|max:255',
                 'contrasena' => 'required|min:6',
             ], [
                 'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
@@ -47,10 +47,10 @@ class AuthController extends Controller
             $validator = Validator::make($request->all(), [
                 'correo' => 'required|email|unique:usuarios',
                 'nombres' => 'required|string',
-                'primerApellido' => 'required|string',
-                'segundoApellido' => 'nullable|string',
+                'primer_apellido' => 'required|string',
+                'segundo_apellido' => 'nullable|string',
                 'contrasena' => 'required|string|min:6',
-                'esAdministrador' => 'boolean',
+                'es_administrador' => 'boolean',
             ]);
 
             // si la validacion falla, retornamos un error
@@ -62,10 +62,10 @@ class AuthController extends Controller
             $usuario = Usuario::create([
                 'correo' => $request->correo,
                 'nombres' => $request->nombres,
-                'primerApellido' => $request->primerApellido,
-                'segundoApellido' => $request->segundoApellido,
+                'primer_apellido' => $request->primer_apellido,
+                'segundo_apellido' => $request->segundo_apellido,
                 'contrasena' => Hash::make($request->contrasena),
-                'esAdministrador' => $request->esAdministrador ?? false,
+                'es_administrador' => $request->es_administrador ?? false,
             ]);
 
             // Redirigimos al administrador a la página de usuarios registrados

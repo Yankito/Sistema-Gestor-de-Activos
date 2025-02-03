@@ -31,7 +31,7 @@ Route::get('/register', function () {
 
 // Ruta protegida para el registro
 Route::middleware('auth')->get('/register', function () {
-    if (Auth::check() && Auth::user()->esAdministrador) {
+    if (Auth::check() && Auth::user()->es_administrador) {
         return view('register');
     } else {
         return response()->json(['message' => 'No tienes permisos'], 403);

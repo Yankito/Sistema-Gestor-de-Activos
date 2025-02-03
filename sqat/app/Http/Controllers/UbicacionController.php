@@ -15,14 +15,14 @@ class UbicacionController extends Controller
     public function store(Request $request){
         $request->validate([
             'sitio' => 'required|string|max:255',
-            'soporteTI' => 'required|string|max:255',
+            'soporte_ti' => 'required|string|max:255',
             'latitud' => 'required|numeric',
             'longitud' => 'required|numeric',
         ]);
 
         Ubicacion::create([
             'sitio' => $request->sitio,
-            'soporteTI' => $request->soporteTI,
+            'soporte_ti' => $request->soporteTI,
             'latitud' => $request->latitud,
             'longitud' => $request->longitud,
         ]);

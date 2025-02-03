@@ -37,7 +37,7 @@
                     <div class="icon" style="cursor: pointer;">
                         <i class="ion ion-laptop"></i>
                     </div>
-                    @if($user->esAdministrador)
+                    @if($user->es_administrador)
                         <a href="/registrarActivo" class="small-box-footer">Dar activo de alta <i class="fas fa-arrow-circle-right"></i></a>
                     @else
                         <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
@@ -57,7 +57,7 @@
                     <i class="ion ion-person-add"></i>
                     </div>
                         <!-- si usuario es administrador puede acceder a resigter-->
-                        @if($user->esAdministrador)
+                        @if($user->es_administrador)
                         <a href="/registrarPersona" class="small-box-footer">Asignar activo a persona nueva <i class="fas fa-arrow-circle-right"></i></a>
                         @else
                         <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
