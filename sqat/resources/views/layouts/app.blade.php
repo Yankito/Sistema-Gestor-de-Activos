@@ -156,7 +156,7 @@
                                 <a href="/registrarActivo" class="nav-link">
                                 <i class="nav-icon fas fa-laptop"></i>
                                 <p>
-                                    Registrar Activo
+                                    Dar activo de alta
                                 </p>
                                 </a>
                             </li>
@@ -166,7 +166,7 @@
                                 <a href="/registrarPersona" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
                                 <p>
-                                    Registrar Persona
+                                    Asignar activo a persona nueva
                                 </p>
                                 </a>
                             </li>
@@ -276,6 +276,9 @@
 
         <script src="https://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
+
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 
         <script>
             $(function () {

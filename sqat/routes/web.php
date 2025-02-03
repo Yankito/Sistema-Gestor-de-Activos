@@ -15,6 +15,7 @@ use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
 use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\SubDashboardController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -48,12 +49,14 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
+    Route::get('/subdashboard', [SubDashboardController::class, 'index']);
 });
 
 
 Route::get('/desplegable', function () {
     return view('desplegable');
 });
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
