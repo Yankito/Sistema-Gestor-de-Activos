@@ -15,10 +15,10 @@ class Usuario extends Authenticatable
     protected $fillable = [
         'correo',
         'nombres',
-        'primerApellido',
-        'segundoApellido',
+        'primer_apellido',
+        'segundo_apellido',
         'contrasena',
-        'esAdministrador',
+        'es_administrador',
     ];
 
     protected $hidden = [

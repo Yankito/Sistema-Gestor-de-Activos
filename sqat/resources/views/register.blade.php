@@ -63,14 +63,14 @@
                                 <div class = "row">
                                     <div class = "col-md-6">
                                         <div data-mdb-input-init class="form-outline mb-4">
-                                            <label class="form-label" for="primerApellido">Primer apellido:</label>
-                                            <input type="text" name="primerApellido" id="primerApellido" required class="form-control"><br><br>
+                                            <label class="form-label" for="primer_apellido">Primer apellido:</label>
+                                            <input type="text" name="primer_apellido" id="primer_apellido" required class="form-control"><br><br>
                                         </div>
                                     </div>
                                     <div class = "col-md-6">
                                         <div data-mdb-input-init class="form-outline mb-4">
-                                            <label class="form-label" for="segundoApellido">Segundo apellido (opcional):</label>
-                                            <input type="text" name="segundoApellido" id="segundoApellido" class="form-control"><br><br>
+                                            <label class="form-label" for="segundo_apellido">Segundo apellido (opcional):</label>
+                                            <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control"><br><br>
                                         </div>
                                     </div>
                                 </div>
@@ -83,8 +83,8 @@
                                     </div>
                                     <div class = "col-md-6">
                                         <div data-mdb-input-init class="form-outline mb-4">
-                                            <label class="form-label" for="esAdministrador">¿Es administrador?</label>
-                                            <input type="checkbox" name="esAdministrador" id="esAdministrador" value="1"><br><br>
+                                            <label class="form-label" for="es_administrador">¿Es administrador?</label>
+                                            <input type="checkbox" name="es_administrador" id="es_administrador" value="1"><br><br>
                                         </div>
                                     </div>
                                 </div>

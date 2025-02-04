@@ -11,26 +11,6 @@
     <!-- JS de AdminLTE -->
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/summernote/summernote-bs4.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.2/proj4.js"></script> <!-- Incluir la librería proj4js -->
 
@@ -47,7 +27,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6" style="cursor: pointer;">
+                <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/subdashboard';">
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner">
@@ -57,8 +37,8 @@
                     <div class="icon" style="cursor: pointer;">
                         <i class="ion ion-laptop"></i>
                     </div>
-                    @if($user->esAdministrador)
-                        <a href="/registrarActivo" class="small-box-footer">Agregar activo <i class="fas fa-arrow-circle-right"></i></a>
+                    @if($user->es_administrador)
+                        <a href="/registrarActivo" class="small-box-footer">Dar activo de alta <i class="fas fa-arrow-circle-right"></i></a>
                     @else
                         <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
                     @endif
@@ -77,14 +57,45 @@
                     <i class="ion ion-person-add"></i>
                     </div>
                         <!-- si usuario es administrador puede acceder a resigter-->
-                        @if($user->esAdministrador)
-                        <a href="/registrarPersona" class="small-box-footer">Agregar persona <i class="fas fa-arrow-circle-right"></i></a>
+                        @if($user->es_administrador)
+                        <a href="/registrarPersona" class="small-box-footer">Asignar activo a persona nueva <i class="fas fa-arrow-circle-right"></i></a>
                         @else
                         <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
                         @endif
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
+        </div>
+
+        <div class="card bg-gradient-info">
+            <div class="card-header border-0">
+            <h3 class="card-title">
+                <i class="fas fa-th mr-1"></i>
+                Cantidad de activos por estado
+            </h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+            </div>
+            </div>
+
+            <!-- /.card-body -->
+            <div class="card-footer bg-transparent">
+            <div class="row">
+                @foreach($cantidadPorEstados as $estado => $cantidad)
+                    <div class="col-2 text-center">
+                        <input type="text" class="knob" data-readonly="true" value="{{  round(($cantidad/$cantidadActivos)*100) }}" data-width="60" data-height="60"
+                            data-fgColor="#39CCCC">
+                        <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
+                    </div>
+                @endforeach
+
+            </div>
+            <!-- /.row -->
+            </div>
+            <!-- /.card-footer -->
         </div>
 
         <div class="container-fluid">

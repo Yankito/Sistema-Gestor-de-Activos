@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('correo')->unique();
             $table->string('nombres');
-            $table->string('primerApellido');
-            $table->string('segundoApellido')->nullable(); // Opcional
+            $table->string('primer_apellido');
+            $table->string('segundo_apellido')->nullable(); // Opcional
             $table->string('contrasena');
-            $table->boolean('esAdministrador'); // Para saber si es admin
+            $table->boolean('es_administrador'); // Para saber si es admin
             $table->timestamps();
         });
     }

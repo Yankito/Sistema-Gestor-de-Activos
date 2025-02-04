@@ -113,7 +113,7 @@
                                     <a href="/dashboard" class="nav-link">Inicio</a>
                             </ul>
 
-                            @if($user->esAdministrador)
+                            @if($user->es_administrador)
                                 <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="/register" class="nav-link">Registrar Admin</a>
@@ -151,12 +151,12 @@
                         </li>
 
                         <!-- registrar persona -->
-                        @if($user->esAdministrador)
+                        @if($user->es_administrador)
                             <li class="nav-item">
                                 <a href="/registrarActivo" class="nav-link">
-                                <i class="nav-icon fas fa-laptop"></i>
+                                <i class="nav-icon fas fa-laptop-medical"></i>
                                 <p>
-                                    Registrar Activo
+                                    Dar activo de alta
                                 </p>
                                 </a>
                             </li>
@@ -166,7 +166,7 @@
                                 <a href="/registrarPersona" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
                                 <p>
-                                    Registrar Persona
+                                    Asignar activo a persona nueva
                                 </p>
                                 </a>
                             </li>
@@ -277,6 +277,9 @@
         <script src="https://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
 
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
+
         <script>
             $(function () {
                 //Initialize Select2 Elements
@@ -294,40 +297,7 @@
             }
         </style>
 
-    <!-- script para exportar a excel, pdf, etc -->
-    <script>
-    $(function () {
-        $("#example1").DataTable({
-        "responsive": false, "lengthChange": false, "autoWidth": false, "scrollX": true,
-        "buttons": [
-            {
-                extend:"copy",
-                title: 'Iansa - Tabla de activos',
-                text: "Copiar",
-            },
-            {
-                extend:"csv",
-                title: 'Iansa - Tabla de activos',
-                text:"CSV",
-            },
-            {
-                extend:"excel",
-                title: 'Iansa - Tabla de activos',
-                text:"Excel",
-            },
-            {
-                extend:"print",
-                title: 'Iansa - Tabla de activos',
-                text: "Imprimir",
-            },
-            {
-                extend: "colvis",
-                text: "Visibilidad de columnas", // Cambiar "Column visibility" por "Visibilidad de columnas"
-            }
-            ]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-    </script>
+
 
 
 </body>

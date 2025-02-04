@@ -12,7 +12,7 @@ class Ubicacion extends Model
     // Definir los campos asignables masivamente
     protected $fillable = [
         'sitio',
-        'soporteTI',
+        'soporte_ti',
         'latitud',
         'longitud'
     ];

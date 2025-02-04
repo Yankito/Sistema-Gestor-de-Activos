@@ -11,6 +11,6 @@ class TablaPersonasController extends Controller
     public function index()
     {
         $personas = Persona::all();
-        return view('tablaPersonas', compact('personas'));
+        return view('personas.tablaPersonas', compact('personas'));
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Activo extends Model
 {
@@ -12,34 +13,34 @@ class Activo extends Model
 
     // Definir los campos que pueden ser asignados masivamente
     protected $fillable = [
-        'nroSerie',
+        'nro_serie',
         'marca',
         'modelo',
         'estado',
-        'usuarioDeActivo',
-        'responsableDeActivo',
+        'usuario_de_activo',
+        'responsable_de_activo',
         'precio',
         'ubicacion',
-        'justificacionDobleActivo'
+        'justificacion_doble_activo'
     ];
 
     // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
     public $timestamps = true;
 
     // Relación con la tabla Persona
-    public function usuarioDeActivo()
+    public function usuarioDeActivo(): BelongsTo
     {
-        return $this->belongsTo(Persona::class, 'usuarioDeActivo', 'id');
+        return $this->belongsTo(Persona::class, 'usuario_de_activo');
     }
 
-    public function responsableDeActivo()
+    public function responsableDeActivo(): BelongsTo
     {
-        return $this->belongsTo(Persona::class, 'responsableDeActivo', 'id');
+        return $this->belongsTo(Persona::class, 'responsable_de_activo');
     }
 
-    public function ubicacion()
+    public function ubicacion(): BelongsTo
     {
-        return $this->belongsTo(Ubicacion::class, 'ubicacion', 'id');
+        return $this->belongsTo(Ubicacion::class, 'ubicacion');
     }
 
 }

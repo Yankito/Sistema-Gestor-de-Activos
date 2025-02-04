@@ -41,26 +41,26 @@
                                             <thead>
                                                 <tr>
                                                     <th>rut</th>
-                                                    <th>nombreUsuario</th>
+                                                    <th>nombre_usuario</th>
                                                     <th>nombres</th>
-                                                    <th>primerApellido</th>
-                                                    <th>segundoApellido</th>
+                                                    <th>primer_apellido</th>
+                                                    <th>segundo_apellido</th>
                                                     <th>supervisor</th>
                                                     <th>empresa</th>
-                                                    <th>estadoEmpleado</th>
-                                                    <th>centroCosto</th>
+                                                    <th>estado_empleado</th>
+                                                    <th>centro_costo</th>
                                                     <th>denominacion</th>
-                                                    <th>tituloPuesto</th>
-                                                    <th>fechaInicio</th>
-                                                    <th>usuarioTI</th>
-                                                    <th>nroSerie</th>
+                                                    <th>titulo_puesto</th>
+                                                    <th>fecha_inicio</th>
+                                                    <th>usuario_ti</th>
+                                                    <th>nro_serie</th>
                                                     <th>marca</th>
                                                     <th>modelo</th>
                                                     <th>estado</th>
-                                                    <th>responsableDeActivo</th>
+                                                    <th>responsable_de_activo</th>
                                                     <th>precio</th>
                                                     <th>ubicacion</th>
-                                                    <th>justificacionDobleActivo</th>
+                                                    <th>justificacion_doble_activo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

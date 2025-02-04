@@ -36,8 +36,8 @@
                                         <div class = " col-md-6">
                                             <!-- Nro Serie -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="nroSerie">Nro. Serie</label>
-                                                <input type="text" name="nroSerie" id="nroSerie" required class="form-control" />
+                                                <label class="form-label" for="nro_serie">Nro. Serie</label>
+                                                <input type="text" name="nro_serie" id="nro_serie" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = " col-md-6">
@@ -58,8 +58,8 @@
                                         <div class = " col-md-6">
                                             <!-- Tipo de Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="tipoDeActivo">Tipo de Activo</label>
-                                                <select name="tipoDeActivo" id="tipoDeActivo" class="form-control" required>
+                                                <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
+                                                <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
                                                     <option value="LAPTOP">Laptop</option>
                                                     <option value="DESKTOP">Desktop</option>
                                                     <option value="MONITOR">Monitor</option>
@@ -91,6 +91,23 @@
                                         </div>
 
                                     </div>
+                                    <div class="form-outline mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="asignarResponsable" name="asignarResponsable">
+                                            <label class="form-check-label" for="asignarResponsable">Asignar Responsable</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4" id="responsableSection" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="form-label" for="responsable">Responsable</label>
+                                            <select name="responsable" id="responsable" select class="form-control select2bs4">
+                                                <option value="" disabled selected>Seleccione un responsable</option>
+                                                @foreach($personas as $persona)
+                                                    <option value="{{$persona->id}}">{{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <!-- Botón de Enviar -->
                                     <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
@@ -116,6 +133,32 @@
                 });
             </script>
         @endif
+
+        <script>
+
+            document.getElementById('asignarResponsable').addEventListener('change', function() {
+                var responsableSection = document.getElementById('responsableSection');
+                var responsableSelect = document.getElementById('responsable');
+
+                if (this.checked) {
+                    responsableSection.style.display = 'block';
+                } else {
+                    responsableSection.style.display = 'none';
+                    // Resetea el valor del select antes de enviar el formulario
+                    responsableSelect.value = null;
+                }
+            });
+
+            // Resetea el valor del campo 'responsable' antes de enviar el formulario
+            document.querySelector('form').addEventListener('submit', function() {
+                var asignarResponsable = document.getElementById('asignarResponsable');
+                var responsableSelect = document.getElementById('responsable');
+
+                if (!asignarResponsable.checked) {
+                    responsableSelect.value = null;  // No envía el valor cuando no está marcado
+                }
+            });
+        </script>
     @endsection
     <!-- Estilos -->
     <style>
@@ -125,6 +168,8 @@
             font-family: 'Ubuntu', sans-serif;
         }
     </style>
+
+
 
 
 </html>

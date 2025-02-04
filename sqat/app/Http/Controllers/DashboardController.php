@@ -21,8 +21,11 @@ class DashboardController extends Controller
         $cantidadPorUbicacion = $this->calcularActivosPorUbicacion();
         $ubicaciones = Ubicacion::all();
         $tiposDeActivo = $this->obtenerTiposdeActivo();
+        $cantidadPorEstados = $this->calcularActivosPorEstados();
         // Pasar el usuario a la vista
-        return view('dashboard', compact('cantidadActivos','cantidadPersonas','cantidadUbicaciones','activos','cantidadPorUbicacion','ubicaciones', 'tiposDeActivo'));
+        return view('dashboard', compact('cantidadActivos',
+        'cantidadPersonas','cantidadUbicaciones','activos',
+        'cantidadPorUbicacion','ubicaciones', 'tiposDeActivo', 'cantidadPorEstados'));
     }
 
     public function calcularActivosPorUbicacion(){
@@ -38,9 +41,20 @@ class DashboardController extends Controller
         $activos = Activo::all();
         $tiposDeActivo = [];
         foreach ($activos as $activo) {
-            $activo->tipoDeActivo = strtoupper($activo->tipoDeActivo);
-            $tiposDeActivo[$activo->tipoDeActivo] = Activo::where('tipoDeActivo', $activo->tipoDeActivo)->count();
+            $activo->tipo_de_activo = strtoupper($activo->tipo_de_activo);
+            $tiposDeActivo[$activo->tipo_de_activo] = Activo::where('tipo_de_activo', $activo->tipo_de_activo)->count();
         }
         return $tiposDeActivo;
     }
+
+    public function calcularActivosPorEstados(){
+        $estados = [];
+        $estadosDisponibles = ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO'];
+        foreach ($estadosDisponibles as $estado) {
+            $estados[$estado] = Activo::where('estado', $estado)->count();
+        }
+        return $estados;
+    }
+
+
 }

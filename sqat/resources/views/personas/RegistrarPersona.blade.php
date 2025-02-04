@@ -47,8 +47,8 @@
                                         <div class="col-md-6">
                                         <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombreUsuario">Nombre de Usuario <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="nombreUsuario" id="nombreUsuario" required class="form-control" />
+                                            <label class="form-label" for="nombre_usuario">Nombre de Usuario <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="nombre_usuario" id="nombre_usuario" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -63,8 +63,8 @@
                                         <div class="col-md-6">
                                             <!-- Primer Apellido -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="primerApellido">Primer Apellido <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="primerApellido" id="primerApellido" required class="form-control" />
+                                            <label class="form-label" for="primer_apellido">Primer Apellido <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="primer_apellido" id="primer_apellido" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -72,8 +72,8 @@
                                     <div class = "row">
                                         <div class="col-md-6">
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="segundoApellido">Segundo Apellido</label>
-                                                <input type="text" name="segundoApellido" id="segundoApellido" class="form-control" />
+                                                <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
+                                                <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -95,8 +95,8 @@
                                         <div class = "col-md-6">
                                             <!-- Centro Costo -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="centroCosto">Centro Costo <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="centroCosto" id="centroCosto" required class="form-control" />
+                                                <label class="form-label" for="centro_costo">Centro Costo <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="centro_costo" id="centro_costo" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -111,8 +111,8 @@
                                         <div class = "col-md-6">
                                             <!-- Título Puesto -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="tituloPuesto">Título Puesto <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="tituloPuesto" id="tituloPuesto" required class="form-control" />
+                                                <label class="form-label" for="titulo_puesto">Título Puesto <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="titulo_puesto" id="titulo_puesto" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -120,15 +120,15 @@
                                         <div class = "col-md-6">
                                             <!-- Fecha Inicio -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="fechaInicio">Fecha Inicio</label>
-                                                <input type="date" name="fechaInicio" id="fechaInicio" required class="form-control" />
+                                                <label class="form-label" for="fecha_inicio">Fecha Inicio</label>
+                                                <input type="date" name="fecha_inicio" id="fecha_inicio" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Usuario TI -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="usuarioTI">Usuario TI</label>
-                                                <select name="usuarioTI" id="usuarioTI" class="form-control" required>
+                                                <label class="form-label" for="usuario_ti">Usuario TI</label>
+                                                <select name="usuario_ti" id="usuario_ti" class="form-control" required>
                                                     <option value="1">SI</option>
                                                     <option value="0">NO</option>
                                                 </select>
@@ -143,7 +143,7 @@
                                                 <select name="ubicacion" id="ubicacion" class="form-control" required>
                                                     <!-- Aquí debes cargar las ubicaciones disponibles -->
                                                     @foreach($ubicaciones as $ubicacion)
-                                                        <option value="{{$ubicacion->id}}">{{$ubicacion->sitio}} - {{$ubicacion->soporteTI}}</option>
+                                                        <option value="{{$ubicacion->id}}">{{$ubicacion->sitio}} - {{$ubicacion->soporte_ti}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -156,7 +156,7 @@
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         @foreach($activos as $activo)
                                                             @if ($activo->estado == 'DISPONIBLE')
-                                                                <option value="{{$activo->id}}">{{$activo->nroSerie}}</option>
+                                                                <option value="{{$activo->id}}">{{$activo->nro_serie}}</option>
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -195,7 +195,7 @@
                                                 <select class="select2bs4" multiple="multiple" data-placeholder="Seleccione un activo" style="width: 100%;" name="activosAdicionales[]" id="activosAdicionales">
                                                     @foreach($activos as $activo)
                                                         @if ($activo->estado == 'DISPONIBLE')
-                                                            <option value="{{$activo->id}}">{{$activo->nroSerie}}</option>
+                                                            <option value="{{$activo->id}}">{{$activo->nro_serie}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>
@@ -329,18 +329,13 @@
                 // Limpiar el select de activos adicionales
                 activosAdicionalesSelect.innerHTML = '';
 
-                console.log(activoSeleccionado);
-
                 // Agregar las opciones filtradas (excluyendo el activo seleccionado)
                 var activos = JSON.parse('{!! json_encode($activos) !!}');
                 activos.forEach(function(activo) {
                     if (activo.estado === 'DISPONIBLE' && parseInt(activo.id) !== parseInt(activoSeleccionado)) {
-                        console.log("activo: "+activo.id);
-                        console.log("activoSeleccionado: "+activoSeleccionado);
-                        console.log(activo.id !== activoSeleccionado);
                         var option = document.createElement('option');
                         option.value = activo.id;
-                        option.textContent = activo.nroSerie;
+                        option.textContent = activo.nro_serie;
 
                         // Restaurar selección si estaba previamente seleccionado
                         if (seleccionados.includes(option.value)) {
@@ -403,7 +398,6 @@
                         let response = await fetch('/personas/' + rut);
                         if (response.ok) {
                             let data = await response.json();
-                            console.log(data['exists']);
                             return data['exists'];
                         } else {
                             throw new Error('Error al comprobar el RUT');

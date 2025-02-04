@@ -9,17 +9,17 @@ class TablaDatosController extends Controller
     public function index()
     {
         $datos = DB::table('personas')
-            ->leftJoin('activos', 'personas.id', '=', 'activos.usuarioDeActivo')
-            ->leftJoin('personas as usuario', 'activos.usuarioDeActivo', '=', 'usuario.id')
-            ->leftJoin('personas as responsable', 'activos.responsableDeActivo', '=', 'responsable.id')
+            ->leftJoin('activos', 'personas.id', '=', 'activos.usuario_de_activo')
+            ->leftJoin('personas as usuario', 'activos.usuario_de_activo', '=', 'usuario.id')
+            ->leftJoin('personas as responsable', 'activos.responsable_de_activo', '=', 'responsable.id')
             ->leftJoin('ubicaciones',DB::raw('COALESCE(activos.ubicacion, personas.ubicacion)'), '=', 'ubicaciones.id')
             ->select(
                 'personas.*',
                 'activos.*',
-                'usuario.rut as rutUsuario',
-                'responsable.rut as rutResponsable',
+                'usuario.rut as rut_usuario',
+                'responsable.rut as rut_responsable',
                 'ubicaciones.sitio',
-                'ubicaciones.soporteTI'
+                'ubicaciones.soporte_ti'
             )
             ->get();
 

@@ -15,6 +15,7 @@ use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
 use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\SubDashboardController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -30,7 +31,7 @@ Route::get('/register', function () {
 
 // Ruta protegida para el registro
 Route::middleware('auth')->get('/register', function () {
-    if (Auth::check() && Auth::user()->esAdministrador) {
+    if (Auth::check() && Auth::user()->es_administrador) {
         return view('register');
     } else {
         return response()->json(['message' => 'No tienes permisos'], 403);
@@ -48,12 +49,15 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
+    Route::get('/subdashboard', [SubDashboardController::class, 'index']);
+    Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
 });
 
 
 Route::get('/desplegable', function () {
     return view('desplegable');
 });
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -82,3 +86,4 @@ Route::get('/descargarExcel', function () {
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
 Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
+Route::post('/activos/{id}', [ActivoController::class, 'update'])->name('activos.update');
