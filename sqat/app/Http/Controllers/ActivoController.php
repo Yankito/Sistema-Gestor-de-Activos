@@ -68,6 +68,29 @@ class ActivoController extends Controller
         //dd($request->all(), $request->responsable_de_activo);
         $data = $request->all();
         $data['usuario_de_activo'] = $request->responsable_de_activo;
+        //dd($data, $activo);
+        if($activo->responsable_de_activo != $request->responsable_de_activo){
+            $data['estado'] = 'DISPONIBLE';
+
+            if($activo->responsable_de_activo != NULL){
+                $registroAntiguoResponsable = new Registro();
+                $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
+                $registroAntiguoResponsable->activo = $id;
+                $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
+                $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
+                $registroAntiguoResponsable->save();
+            }
+
+            if($request->responsable_de_activo != NULL){
+                $registroNuevoResponsable = new Registro();
+                $registroNuevoResponsable->persona = $request->responsable_de_activo;
+                $registroNuevoResponsable->activo = $activo->id;
+                $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
+                $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
+                $registroNuevoResponsable->save();
+                $data['estado'] = 'ASIGNADO';
+            }
+        }
         $activo->update($data);
         return redirect()->back()->with('success', 'Activo actualizado correctamente.');
     }
@@ -85,7 +108,6 @@ class ActivoController extends Controller
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacion')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();
-
         return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
     }
 }
