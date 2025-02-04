@@ -109,6 +109,8 @@
 
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <script>
 document.querySelectorAll('.toggle-edit').forEach(icon => {
     icon.addEventListener('click', function() {
@@ -144,7 +146,7 @@ document.querySelectorAll('.toggle-edit').forEach(icon => {
 // Eliminar responsable correctamente
 document.getElementById('btnEliminarResponsable').addEventListener('click', function() {
     let responsableSelect = document.getElementById('responsable_de_activo');
-    let responsableHidden = document.getElementById("responsable_hidden");
+    let responsableHidden = document.getElementById("responsable_de_activo_hidden");
 
     if (responsableSelect && responsableHidden) {
         responsableSelect.value = "";

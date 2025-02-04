@@ -71,13 +71,13 @@
                         @foreach($datos as $dato)
                             <tr>
                                 <td class="action-btns">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
-                                onclick="cargarActivo({{ $dato->id }})">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
+                                    onclick="cargarActivo('{{ $dato->id }}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
 
-                                    <button class="btn btn-danger btn-sm" onclick="eliminar({{ $dato->id }})">
-                                    <i class="fas fa-trash"></i> Eliminar
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deshabilitar('{{ $dato->id }}')">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
                                 <td>{{ $dato->nro_serie }}</td>
@@ -133,7 +133,32 @@
             @endif
           </div>
         </div>
-      </div>
+    </div>
+
+    <div class="modal fade" id="modal-cambiarEstado">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cambiar Estado</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-cambiarEstado" method="POST">
+                    @csrf
+                    <label for="estado">Estado</label>
+                    <select name="estado" id="estado" class="form-control">
+                        <option value="ASIGNADO" disabled>Asignado</option>
+                        <option value="DISPONIBLE" disabled>Disponble</option>
+                        <option value="ROBADO">Robado</option>
+                        <option value="PARA BAJA">Para baja</option>
+                        <option value="DONADO">Donado</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>
 
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('success'))
@@ -200,13 +225,26 @@
       },
     });
   }
-
-  function eliminar(id) {
-    // Aquí puedes agregar la lógica para eliminar el elemento
-    if (confirm('¿Estás seguro de que quieres eliminar este activo?')) {
-      alert('Eliminar: ' + id);
+    function deshabilitar(id) {
+        const datos = JSON.parse('{!! json_encode($datos) !!}');
+        $('#estado').val(datos[id].estado);
+        $('#form-cambiarEstado').attr('action', `/activos/deshabilitar/${id}`);
+        $('#modal-cambiarEstado').modal('show');
     }
-  }
+
+    function eliminar2(id) {
+        $.ajax({
+            url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
+            type: 'GET',
+            success: function(data) {
+                $('#modal-cambiarEstado .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
+            },
+            error: function() {
+                alert('Error al cargar los datos del activo.');
+            }
+        });
+    }
+
 </script>
 
 </html>

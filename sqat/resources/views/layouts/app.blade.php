@@ -281,9 +281,6 @@
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 
         <script>
             $(function () {

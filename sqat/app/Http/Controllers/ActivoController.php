@@ -103,11 +103,27 @@ class ActivoController extends Controller
     }
 
     public function editar($id){
-
-
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacion')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();
         return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
+    }
+
+    public function deshabilitar(Request $request, $id){
+        $activo = Activo::findOrFail($id);
+        $activo->estado = $request->estado;
+        if($activo->responsable_de_activo){
+            $registroAntiguoResponsable = new Registro();
+            $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
+            $registroAntiguoResponsable->activo = $id;
+            $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
+            $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
+            $registroAntiguoResponsable->save();
+            $activo->responsable_de_activo = NULL;
+            $activo->usuario_de_activo = NULL;
+        }
+
+        $activo->update();
+        return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
 }
