@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
 
     // Agregar botones a la interfaz
-    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    table.buttons().container().appendTo('#tabla_wrapper .col-md-6:eq(0)');
 
     // Manejador para mostrar/ocultar filtros
     $('.filter-btn').click(function() {

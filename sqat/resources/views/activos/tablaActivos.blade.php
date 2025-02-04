@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
     <style>
         .filter-container {
@@ -54,12 +56,12 @@
                                 <th>
                                 {{ $columna }}
                                 <!-- boton filtro -->
-                                <button class="filter-btn" data-index="{{ $index }}">
+                                <button class="filter-btn" data-index="{{ $index + 1 }}">
                                     <i class="fas fa-filter"></i>
                                 </button>
-                                <div class="filter-container" id="filter-{{ $index }}">
-                                    <input type="text" class="column-search" data-index="{{ $index }}" placeholder="Buscar...">
-                                    <div class="checkbox-filters" data-index="{{ $index }}"></div>
+                                <div class="filter-container" id="filter-{{ $index + 1}}">
+                                    <input type="text" class="column-search" data-index="{{ $index + 1}}" placeholder="Buscar...">
+                                    <div class="checkbox-filters" data-index="{{ $index + 1}}"></div>
                                 </div>
                                 </th>
                             @endforeach
@@ -133,10 +135,24 @@
         </div>
       </div>
 
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @if(session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: "{{session('title')}}",
+                    text: "{{ session('success') }}",
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
+        @endif
     @endsection
 
 
-
+<!-- jQuery -->
+<script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -154,7 +170,6 @@
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- Page specific script -->
-
 <script src="{{ asset('js/tablas.js') }}"></script>
 
 <script>

@@ -65,8 +65,10 @@ class ActivoController extends Controller
     public function update(Request $request, $id)
     {
         $activo = Activo::findOrFail($id);
-        dd($request->all());
-        $activo->update($request->all());
+        //dd($request->all(), $request->responsable_de_activo);
+        $data = $request->all();
+        $data['usuario_de_activo'] = $request->responsable_de_activo;
+        $activo->update($data);
         return redirect()->back()->with('success', 'Activo actualizado correctamente.');
     }
 

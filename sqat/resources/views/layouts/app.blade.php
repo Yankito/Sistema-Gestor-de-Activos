@@ -113,7 +113,7 @@
                                     <a href="/dashboard" class="nav-link">Inicio</a>
                             </ul>
 
-                            @if($user->esAdministrador)
+                            @if($user->es_administrador)
                                 <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="/register" class="nav-link">Registrar Admin</a>
@@ -151,7 +151,7 @@
                         </li>
 
                         <!-- registrar persona -->
-                        @if($user->esAdministrador)
+                        @if($user->es_administrador)
                             <li class="nav-item">
                                 <a href="/registrarActivo" class="nav-link">
                                 <i class="nav-icon fas fa-laptop-medical"></i>

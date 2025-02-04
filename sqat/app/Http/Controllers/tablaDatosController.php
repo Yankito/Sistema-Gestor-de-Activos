@@ -19,7 +19,7 @@ class TablaDatosController extends Controller
                 'usuario.rut as rut_usuario',
                 'responsable.rut as rut_responsable',
                 'ubicaciones.sitio',
-                'ubicaciones.soporteTI'
+                'ubicaciones.soporte_ti'
             )
             ->get();
 
