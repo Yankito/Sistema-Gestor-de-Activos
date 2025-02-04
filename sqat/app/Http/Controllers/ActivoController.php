@@ -126,4 +126,11 @@ class ActivoController extends Controller
         $activo->update();
         return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
+
+    public function reactivar(Request $request, $id){
+        $activo = Activo::findOrFail($id);
+        $activo->estado = 'DISPONIBLE';
+        $activo->update();
+        return redirect()->back()->with('success','Activo reactivado correctamente.');
+    }
 }

@@ -71,11 +71,16 @@
                         @foreach($datos as $dato)
                             <tr>
                                 <td class="action-btns">
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
-                                    onclick="cargarActivo('{{ $dato->id }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-
+                                    @if ($dato->estado === 'DISPONIBLE' || $dato->estado === 'ASIGNADO')
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
+                                            onclick="cargarActivo('{{ $dato->id }}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-success btn-sm" onclick="reactivarActivo('{{ $dato->id }}')">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                    @endif
                                     <button type="button" class="btn btn-danger btn-sm" onclick="deshabilitar('{{ $dato->id }}')">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -232,18 +237,32 @@
         $('#modal-cambiarEstado').modal('show');
     }
 
-    function eliminar2(id) {
-        $.ajax({
-            url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
-            type: 'GET',
-            success: function(data) {
-                $('#modal-cambiarEstado .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
-            },
-            error: function() {
-                alert('Error al cargar los datos del activo.');
+    function reactivarActivo(id) {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Este activo será reactivado.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, reactivar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/activos/reactivar/${id}`,
+                    type: 'POST',
+                    data: { _token: "{{ csrf_token() }}" },
+                    success: function(response) {
+                        Swal.fire("Reactivado", "El activo ha sido reactivado.", "success")
+                            .then(() => location.reload());
+                    },
+                    error: function() {
+                        Swal.fire("Error", "No se pudo reactivar el activo.", "error");
+                    }
+                });
             }
         });
     }
+
 
 </script>
 
