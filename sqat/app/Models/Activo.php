@@ -16,6 +16,7 @@ class Activo extends Model
         'nro_serie',
         'marca',
         'modelo',
+        'tipo_de_activo',
         'estado',
         'usuario_de_activo',
         'responsable_de_activo',

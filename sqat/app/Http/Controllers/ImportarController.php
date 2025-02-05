@@ -75,8 +75,8 @@ class ImportarController extends Controller
                     'modelo' => $fila['Q'],
                     'tipo_de_activo' => $fila['R'],
                     'estado' => $fila['S'],
-                    'usuario_de_activo' => $fila['B'] ?? null,
-                    'responsable_de_activo' => $fila['B'] ?? null,
+                    'usuario_de_activo' => $persona -> id ?? null,
+                    'responsable_de_activo' => $persona -> id ?? null,
                     'precio' => $fila['V'],
                     'ubicacion' => $fila['N'], // La misma ubicación de la persona
                     'justificacion_doble_activo' => $fila['W'] ?? null,
