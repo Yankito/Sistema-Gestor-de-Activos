@@ -118,7 +118,7 @@
                                 <td>{{ $dato->nro_serie }}</td>
                                 <td>{{ $dato->marca }}</td>
                                 <td>{{ $dato->modelo }}</td>
-                                <td>{{ $dato->precio }}</td>
+                                <td>{{ number_format($dato->precio, 0, ',', '.') }}</td>
                                 <td>{{ $dato->tipo_de_activo }}</td>
                                 <td>
                                     <span class="estado-badge
