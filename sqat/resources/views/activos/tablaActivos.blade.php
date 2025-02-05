@@ -126,7 +126,11 @@
                                         {{ $dato->estado === 'ASIGNADO' ? 'estado-asignado' : '' }}
                                         {{ $dato->estado === 'ROBADO' ? 'estado-robado' : '' }}
                                         {{ $dato->estado === 'PARA BAJA' ? 'estado-paraBaja' : '' }}
-                                        {{ $dato->estado === 'DONADO' ? 'estado-donado' : '' }}">
+                                        {{ $dato->estado === 'DONADO' ? 'estado-donado' : '' }}
+                                        {{ $dato->estado === 'RECIBIDO' ? 'estado-recibido' : '' }}
+                                        {{ $dato->estado === 'DEVUELTO' ? 'estado-devuelto' : '' }}
+                                        {{ $dato->estado === 'VENDIDO' ? 'estado-vendido' : '' }}
+                                        {{ $dato->estado === 'PERDIDO' ? 'estado-perdido' : '' }}">
                                         {{ $dato->estado }}
                                         @if($dato->estado === 'ROBADO')
                                             <i class="fas fa-skull-crossbones"></i>
@@ -199,6 +203,10 @@
                         <option value="ROBADO">Robado</option>
                         <option value="PARA BAJA">Para baja</option>
                         <option value="DONADO">Donado</option>
+                        <option value="RECIBIDO">Recibido</option>
+                        <option value="DEVUELTO">Devuelto</option>
+                        <option value="VENDIDO">Vendido</option>
+                        <option value="PERDIDO">Perdido</option>
                     </select>
                     <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
                 </form>
