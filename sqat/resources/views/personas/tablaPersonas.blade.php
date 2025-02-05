@@ -138,7 +138,5 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<!-- AdminLTE for demo purposes -->
-<script src="vendor/adminlte/dist/js/demo.js"></script>
 <script src="{{ asset('js/tablas.js') }}"></script>
 </html>
