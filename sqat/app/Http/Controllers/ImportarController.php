@@ -36,6 +36,19 @@ class ImportarController extends Controller
         return null; // En caso de formato inválido
     }
 
+    public function previewExcel(Request $request)
+    {
+        $request->validate([
+            'archivo_excel' => 'required|mimes:xlsx,xls'
+        ]);
+
+        $archivo = $request->file('archivo_excel');
+        $spreadsheet = IOFactory::load($archivo->getPathname());
+        $hoja = $spreadsheet->getActiveSheet();
+        $datos = $hoja->toArray(null, true, true, true);
+
+        return view('importar', compact('datos'));
+    }
     public function importExcel(Request $request)
     {
         $request->validate([
