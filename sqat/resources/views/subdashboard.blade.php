@@ -71,7 +71,7 @@
                             {{ ucfirst(strtolower($estado)) }}
                             <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
                             <div class="progress progress-sm">
-                                <div class="progress-bar bg-primary" style="width: {{ ($cantidad/$cantidadActivos)*100 }}%"></div>
+                                <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
                             </div>
                         </div>
                     @endforeach
