@@ -46,7 +46,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div style = "overflow-x:auto;">
-                                <table id="tabla" class="table">
+                                <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                                     <thead>
                                     <tr>
                                         @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer apellido", "Segundo apellido", "Supervisor", "Empresa", "Estado empleado", "Centro de costo", "Denominación", "Título de puesto", "Fecha de inicio", "Usuario TI", "Sitio", "Soporte TI", "Número de serie", "Marca", "Modelo", "Estado", "Rut usuario", "Rut responsable", "Precio", "Justificación doble activo"] as $index => $columna)

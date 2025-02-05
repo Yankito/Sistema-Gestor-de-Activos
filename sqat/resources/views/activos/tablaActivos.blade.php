@@ -48,7 +48,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div style = "overflow-x:auto;">
-                  <table id="tabla" class="table">
+                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                     <thead>
                         <tr>
                             <th>Acciones</th>
