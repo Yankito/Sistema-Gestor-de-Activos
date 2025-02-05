@@ -51,6 +51,17 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="direccion">Dirección</label>
+                                            <input type="text" id="direccion" class="form-control" placeholder="Ingrese la dirección" />
+
+                                            <label class="form-label mt-2" for="ciudad">Ciudad</label>
+                                            <input type="text" id="ciudad" class="form-control" placeholder="Ingrese la ciudad" />
+
+                                            <button type="button" id="buscarDireccion" class="btn btn-info mt-2">Buscar Ubicación</button>
+                                        </div>
+
+
                                         <!-- Map Container -->
                                         <div class="col-md-12">
                                             <label class="form-label">Seleccione la Ubicación</label>
@@ -99,12 +110,38 @@
                 // Initialize with marker's default location
                 updateMarkerInputs(-35.4198601, -71.6739799);
 
-                console.log('Mapa inicializado');
-                //latitud y longitud obtenidos del marker
-                var latitud = document.getElementById('latitud').value;
-                var longitud = document.getElementById('longitud').value;
-                console.log(latitud);
-                console.log(longitud);
+                document.getElementById('buscarDireccion').addEventListener('click', function () {
+                    var direccion = document.getElementById('direccion').value;
+                    var ciudad = document.getElementById('ciudad').value;
+
+                    if (!direccion || !ciudad) {
+                        Swal.fire('Error', 'Ingrese una dirección y ciudad válidas', 'warning');
+                        return;
+                    }
+
+                    var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion + ', ' + ciudad)}`;
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                var lat = parseFloat(data[0].lat);
+                                var lng = parseFloat(data[0].lon);
+
+                                marker.setLatLng([lat, lng]);
+                                map.setView([lat, lng], 14);
+                                updateMarkerInputs(lat, lng);
+
+                                Swal.fire('Ubicación encontrada', `Latitud: ${lat}, Longitud: ${lng}`, 'success');
+                            } else {
+                                Swal.fire('Error', 'No se encontró la ubicación', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error en la búsqueda:', error);
+                            Swal.fire('Error', 'No se pudo conectar con el servicio', 'error');
+                        });
+                });
             });
         </script>
         <!-- Estilos -->
