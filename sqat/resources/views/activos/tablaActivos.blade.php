@@ -17,6 +17,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
+
     <style>
         .filter-container {
         display: none;
@@ -32,6 +33,35 @@
         color: #007bff;
         cursor: pointer;
         font-size: 10px;
+        }
+        .estado-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .estado-disponible {
+            background-color: green;
+        }
+
+        .estado-asignado {
+            background-color: red;
+        }
+
+        .estado-robado {
+            background-color: black;
+        }
+
+        .estado-paraBaja {
+            background-color: orange;
+        }
+
+        .estado-donado {
+            background-color: blue;
         }
 
     </style>
@@ -88,9 +118,21 @@
                                 <td>{{ $dato->nro_serie }}</td>
                                 <td>{{ $dato->marca }}</td>
                                 <td>{{ $dato->modelo }}</td>
-                                <td>{{ $dato->precio }}</td>
+                                <td>{{ number_format($dato->precio, 0, ',', '.') }}</td>
                                 <td>{{ $dato->tipo_de_activo }}</td>
-                                <td>{{ $dato->estado }}</td>
+                                <td>
+                                    <span class="estado-badge
+                                        {{ $dato->estado === 'DISPONIBLE' ? 'estado-disponible' : '' }}
+                                        {{ $dato->estado === 'ASIGNADO' ? 'estado-asignado' : '' }}
+                                        {{ $dato->estado === 'ROBADO' ? 'estado-robado' : '' }}
+                                        {{ $dato->estado === 'PARA BAJA' ? 'estado-paraBaja' : '' }}
+                                        {{ $dato->estado === 'DONADO' ? 'estado-donado' : '' }}">
+                                        {{ $dato->estado }}
+                                        @if($dato->estado === 'ROBADO')
+                                            <i class="fas fa-skull-crossbones"></i>
+                                        @endif
+                                    </span>
+                                </td>
                                 <td>{{ $dato->rut_usuario}}</td>
                                 <td>{{ $dato->rut_responsable}}</td>
                                 <td>{{ $dato->sitio }}</td>
@@ -197,8 +239,6 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<!-- AdminLTE for demo purposes -->
-<script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script src="{{ asset('js/tablas.js') }}"></script>
 

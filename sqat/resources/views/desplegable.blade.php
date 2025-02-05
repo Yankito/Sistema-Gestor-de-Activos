@@ -1499,8 +1499,6 @@
 <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 </body>

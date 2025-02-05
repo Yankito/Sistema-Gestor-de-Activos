@@ -28,7 +28,7 @@
                                         style="width: 300px;" alt="logo">
                                 </div>
 
-                                <h2>Registrar nuevo activo</h2>
+                                <h2>Dar activo de alta</h2>
 
                                 <form action="/activos" method="POST">
                                     @csrf
@@ -146,6 +146,19 @@
                     responsableSection.style.display = 'none';
                     // Resetea el valor del select antes de enviar el formulario
                     responsableSelect.value = null;
+                }
+            });
+
+            document.getElementById('responsableSection').addEventListener('click', function() {
+                var responsableSection = document.getElementById('responsableSection');
+                var responsable = document.getElementById('responsable');
+
+                // Asegura que el select es visible y luego desplázate hacia él
+                if (responsableSection.style.display !== 'none') {
+                    setTimeout(() => {
+                        responsable.focus(); // Enfocar el select
+                        responsable.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Desplazar suavemente hacia el select
+                    }, 200);
                 }
             });
 
