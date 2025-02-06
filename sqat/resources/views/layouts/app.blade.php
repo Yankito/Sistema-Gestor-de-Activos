@@ -60,6 +60,7 @@
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
+
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -191,12 +192,11 @@
                                 </a>
                             </li>
                         @endif
-                        <ul class="nav-item d-none d-sm-inline-block">
+                        
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='inherit';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
+                                <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
                             </form>
-                        </ul>
                     </li>
                     </ul>
                 </nav>

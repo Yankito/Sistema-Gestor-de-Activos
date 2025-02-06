@@ -23,6 +23,11 @@
     </head>
 
     @section('content')
+
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
+    </div>
+
     <section class="content">
 
         <div class="content-header">
@@ -71,7 +76,7 @@
                             {{ ucfirst(strtolower($estado)) }}
                             <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
                             <div class="progress progress-sm">
-                                <div class="progress-bar bg-primary" style="width: {{ ($cantidad/$cantidadActivos)*100 }}%"></div>
+                                <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
                             </div>
                         </div>
                     @endforeach

@@ -46,7 +46,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div style = "overflow-x:auto">
-                  <table id="tabla" class="table">
+                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                     <thead>
                     <tr>
                         @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer Apellido", "Segundo Apellido", "Supervisor", "Empresa", "Estado empleado", "Centro Costo", "Denominacion", "Titulo Puesto", "Fecha Inicio", "Usuario TI", "Ubicacion"] as $index => $columna)
@@ -138,7 +138,5 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<!-- AdminLTE for demo purposes -->
-<script src="vendor/adminlte/dist/js/demo.js"></script>
 <script src="{{ asset('js/tablas.js') }}"></script>
 </html>

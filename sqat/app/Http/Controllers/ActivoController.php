@@ -9,7 +9,7 @@ use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class ActivoController extends Controller
+class   ActivoController extends Controller
 {
     // Obtener todos los activos
     public function registro()
@@ -28,7 +28,7 @@ class ActivoController extends Controller
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
-            $activo->estado = 'DISPONIBLE';
+            $activo->estado = 1;
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
@@ -69,28 +69,16 @@ class ActivoController extends Controller
         $data = $request->all();
         $data['usuario_de_activo'] = $request->responsable_de_activo;
         //dd($data, $activo);
-        if($activo->responsable_de_activo != $request->responsable_de_activo){
-            $data['estado'] = 'DISPONIBLE';
 
-            if($activo->responsable_de_activo != NULL){
-                $registroAntiguoResponsable = new Registro();
-                $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
-                $registroAntiguoResponsable->activo = $id;
-                $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
-                $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
-                $registroAntiguoResponsable->save();
-            }
+        $registroNuevoResponsable = new Registro();
+        $registroNuevoResponsable->persona = $request->responsable_de_activo;
+        $registroNuevoResponsable->activo = $activo->id;
+        $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
+        $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
+        $registroNuevoResponsable->save();
+        $data['estado'] = 4;
 
-            if($request->responsable_de_activo != NULL){
-                $registroNuevoResponsable = new Registro();
-                $registroNuevoResponsable->persona = $request->responsable_de_activo;
-                $registroNuevoResponsable->activo = $activo->id;
-                $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
-                $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
-                $registroNuevoResponsable->save();
-                $data['estado'] = 'ASIGNADO';
-            }
-        }
+
         $activo->update($data);
         return redirect()->back()->with('success', 'Activo actualizado correctamente.');
     }
@@ -103,7 +91,7 @@ class ActivoController extends Controller
     }
 
     public function editar($id){
-        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacion')->findOrFail($id);
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();
         return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
@@ -127,10 +115,27 @@ class ActivoController extends Controller
         return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
 
-    public function reactivar(Request $request, $id){
-        $activo = Activo::findOrFail($id);
-        $activo->estado = 'DISPONIBLE';
+    public function cambiarEstado(Request $request){
+        $activo = Activo::findOrFail($request->activo_id);
+        if( $activo->estado == 7){
+            $activo->usuario_de_activo = NULL;
+            $activo->responsable_de_activo = NULL;
+        }
+        if( $activo->nuevo_estado == 7){
+            $registroAntiguoResponsable = new Registro();
+            $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
+            $registroAntiguoResponsable->activo = $request->activo_id;
+            $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
+            $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
+            $registroAntiguoResponsable->save();
+            $activo->responsable_de_activo = NULL;
+            $activo->usuario_de_activo = NULL;
+        }
+        $activo->estado = $request->nuevo_estado;
+
+
+
         $activo->update();
-        return redirect()->back()->with('success','Activo reactivado correctamente.');
+        return redirect()->back()->with('success', 'Estado cambiado a ' . $activo->estadoRelation->nombre_estado);
     }
 }

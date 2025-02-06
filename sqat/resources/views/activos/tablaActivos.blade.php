@@ -17,6 +17,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
+
     <style>
         .filter-container {
         display: none;
@@ -33,6 +34,54 @@
         cursor: pointer;
         font-size: 10px;
         }
+        .estado-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .estado-adquirido {
+            background-color: purple;
+        }
+
+        .estado-preparacion {
+            background-color: yellow;
+        }
+        .estado-disponible {
+            background-color: green;
+        }
+
+        .estado-asignado {
+            background-color: red;
+        }
+
+        .estado-perdido {
+            background-color: gray;
+        }
+
+        .estado-robado {
+            background-color: black;
+        }
+
+        .estado-devuelto {
+            background-color: pink;
+        }
+
+        .estado-paraBaja {
+            background-color: orange;
+        }
+
+        .estado-donado {
+            background-color: blue;
+        }
+
+        .estado-vendido {
+            background-color: brown;
+        }
 
     </style>
 </head>
@@ -48,7 +97,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div style = "overflow-x:auto;">
-                  <table id="tabla" class="table">
+                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                     <thead>
                         <tr>
                             <th>Acciones</th>
@@ -68,33 +117,67 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($datos as $dato)
+                        @foreach($activos as $dato)
                             <tr>
                                 <td class="action-btns">
-                                    @if ($dato->estado === 'DISPONIBLE' || $dato->estado === 'ASIGNADO')
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"
-                                            onclick="cargarActivo('{{ $dato->id }}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn btn-success btn-sm" onclick="reactivarActivo('{{ $dato->id }}')">
-                                            <i class="fas fa-undo"></i>
-                                        </button>
-                                    @endif
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="deshabilitar('{{ $dato->id }}')">
-                                        <i class="fas fa-trash"></i>
+                                @if ($dato->estado === 1) {{-- ADQUIRIDO --}}
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 2)">
+                                        <i class="fas fa-arrow-right"></i> <!-- Pasar a PREPARACIÓN -->
                                     </button>
+                                @elseif ($dato->estado === 2) {{-- PREPARACIÓN --}}
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 3)">
+                                        <i class="fas fa-arrow-right"></i> <!-- Pasar a DISPONIBLE -->
+                                    </button>
+                                @elseif ($dato->estado === 3 || $dato->estado === 4) {{-- DISPONIBLE --}}
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
+                                        <i class="fas fa-edit"></i> <!-- Editar -->
+                                    </button>
+
+                                @elseif ($dato->estado === 5 || $dato->estado === 6) {{-- PERDIDO o ROBADO --}}
+                                    <button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 7)">
+                                        <i class="fas fa-undo"></i> <!-- Volver a DEVUELTO -->
+                                    </button>
+                                @elseif ($dato->estado === 7) {{-- DEVUELTO --}}
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
+                                        <i class="fas fa-edit"></i> <!-- Editar -->
+                                    </button>
+                                @elseif ($dato->estado === 8 || $dato->estado === 9 || $dato->estado === 10) {{-- Estados finales --}}
+                                    <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                        <i class="fas fa-check-circle"></i> <!-- Estado finalizado -->
+                                    </button>
+                                @endif
+
+
                                 </td>
                                 <td>{{ $dato->nro_serie }}</td>
                                 <td>{{ $dato->marca }}</td>
                                 <td>{{ $dato->modelo }}</td>
-                                <td>{{ $dato->precio }}</td>
+                                <td>{{ number_format($dato->precio, 0, ',', '.') }}</td>
                                 <td>{{ $dato->tipo_de_activo }}</td>
-                                <td>{{ $dato->estado }}</td>
-                                <td>{{ $dato->rut_usuario}}</td>
-                                <td>{{ $dato->rut_responsable}}</td>
-                                <td>{{ $dato->sitio }}</td>
-                                <td>{{ $dato->soporte_ti }}</td>
+                                <td>
+                                    <span class="estado-badge
+                                        {{ $dato->estado === 1 ? 'estado-adquirido' : '' }}
+                                        {{ $dato->estado === 2 ? 'estado-preparacion' : '' }}
+                                        {{ $dato->estado === 3 ? 'estado-disponible' : '' }}
+                                        {{ $dato->estado === 4 ? 'estado-asignado' : '' }}
+                                        {{ $dato->estado === 5 ? 'estado-perdido' : '' }}
+                                        {{ $dato->estado === 6 ? 'estado-robado' : '' }}
+                                        {{ $dato->estado === 7 ? 'estado-devuelto' : '' }}
+                                        {{ $dato->estado === 8 ? 'estado-paraBaja' : '' }}
+                                        {{ $dato->estado === 9 ? 'estado-donado' : '' }}
+                                        {{ $dato->estado == 10 ? 'estado-vendido' : '' }}">
+                                        {{ $dato->estadoRelation->nombre_estado }}
+                                        @if($dato->estado === 6)
+                                            <i class="fas fa-skull-crossbones"></i>
+                                        @elseif($dato->estado == 10)
+                                            🤑
+                                        @endif
+                                    </span>
+                                </td>
+                                <td>{{ $dato->usuarioDeActivo->rut ?? '' }}</td>
+                                <td>{{ $dato->responsableDeActivo->rut ?? '' }}</td>
+                                <td>{{ $dato->ubicacionRelation->sitio }}</td>
+                                <td>{{ $dato->ubicacionRelation->soporte_ti }}</td>
                                 <td>{{ $dato->justificacion_doble_activo }}</td>
                             </tr>
                         @endforeach
@@ -139,32 +222,6 @@
           </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modal-cambiarEstado">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Cambiar Estado</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="form-cambiarEstado" method="POST">
-                    @csrf
-                    <label for="estado">Estado</label>
-                    <select name="estado" id="estado" class="form-control">
-                        <option value="ASIGNADO" disabled>Asignado</option>
-                        <option value="DISPONIBLE" disabled>Disponble</option>
-                        <option value="ROBADO">Robado</option>
-                        <option value="PARA BAJA">Para baja</option>
-                        <option value="DONADO">Donado</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
-                </form>
-            </div>
-          </div>
-        </div>
-    </div>
-
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('success'))
             <script>
@@ -176,6 +233,12 @@
                 });
             </script>
         @endif
+
+        <form id="cambiarEstadoForm" action="/activos/cambiarEstado" method="POST">
+            @csrf
+            <input type="hidden" name="activo_id" id="activo_id">
+            <input type="hidden" name="nuevo_estado" id="nuevo_estado">
+        </form>
     @endsection
 
 
@@ -197,8 +260,6 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-<!-- AdminLTE for demo purposes -->
-<script src="vendor/adminlte/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script src="{{ asset('js/tablas.js') }}"></script>
 
@@ -216,49 +277,28 @@
         });
     }
 
-
-  function editar(id) {
-    $.ajax({
-      url: 'editarActivo/' + id,
-      type: 'GET',
-      success: function (data) {
-        $("#editarContenido").html(data); // Carga la vista en el modal
-        $("#editarModal").modal("show"); // Muestra el modal
-      },
-      error: function () {
-        alert("Error al cargar la vista de edición.");
-      },
-    });
-  }
     function deshabilitar(id) {
-        const datos = JSON.parse('{!! json_encode($datos) !!}');
-        $('#estado').val(datos[id].estado);
+        const datos = JSON.parse('{!! json_encode($activos) !!}');
+        $('#estado').val(activos[id].estado);
         $('#form-cambiarEstado').attr('action', `/activos/deshabilitar/${id}`);
         $('#modal-cambiarEstado').modal('show');
     }
 
-    function reactivarActivo(id) {
+    function cambiarEstado(activoId, nuevoEstado) {
+        console.log(activoId, nuevoEstado);
+        const datos = JSON.parse('{!! json_encode($estados) !!}');
         Swal.fire({
             title: "¿Estás seguro?",
-            text: "Este activo será reactivado.",
+            text: `El estado del activo cambiará a ${datos.find(estado => estado.id === nuevoEstado).nombre_estado}.`,
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Sí, reactivar",
+            confirmButtonText: "Sí",
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    url: `/activos/reactivar/${id}`,
-                    type: 'POST',
-                    data: { _token: "{{ csrf_token() }}" },
-                    success: function(response) {
-                        Swal.fire("Reactivado", "El activo ha sido reactivado.", "success")
-                            .then(() => location.reload());
-                    },
-                    error: function() {
-                        Swal.fire("Error", "No se pudo reactivar el activo.", "error");
-                    }
-                });
+                document.getElementById('activo_id').value = activoId;
+                document.getElementById('nuevo_estado').value = nuevoEstado;
+                document.getElementById('cambiarEstadoForm').submit();
             }
         });
     }

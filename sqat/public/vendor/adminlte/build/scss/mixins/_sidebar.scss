@@ -5,14 +5,14 @@
 // Sidebar Color
 @mixin sidebar-color($color) {
   .nav-sidebar > .nav-item {
-    & > .nav-link.active {
+    > .nav-link.active {
       background-color: $color;
       color: color-yiq($color);
     }
   }
 
   .nav-sidebar.nav-legacy > .nav-item {
-    & > .nav-link.active {
+    > .nav-link.active {
       border-color: $color;
     }
   }
@@ -25,7 +25,6 @@
   .nav-sidebar > .nav-header,
   .nav-sidebar .nav-link {
     white-space: nowrap;
-    overflow: hidden;
   }
 
   // When the sidebar is collapsed...
@@ -46,26 +45,33 @@
       display: none;
     }
 
-    .nav-sidebar .nav-link p {
+    .sidebar .nav-sidebar .nav-link p {
       width: 0;
+      white-space: nowrap;
     }
 
     .sidebar .user-panel > .info,
-    .nav-sidebar .nav-link p,
+    .sidebar .nav-sidebar .nav-link p,
     .brand-text {
       margin-left: -10px;
-      opacity: 0;
+      animation-name: fadeOut;
+      animation-duration: $transition-speed;
+      animation-fill-mode: both;
       visibility: hidden;
     }
 
     .logo-xl {
-      opacity: 0;
+      animation-name: fadeOut;
+      animation-duration: $transition-speed;
+      animation-fill-mode: both;
       visibility: hidden;
     }
 
     .logo-xs {
       display: inline-block;
-      opacity: 1;
+      animation-name: fadeIn;
+      animation-duration: $transition-speed;
+      animation-fill-mode: both;
       visibility: visible;
     }
 
@@ -86,67 +92,57 @@
         }
       }
 
-      &:hover,
-      &.sidebar-focused {
-        width: $sidebar-width;
-
-        .nav-sidebar.nav-child-indent .nav-treeview {
-          padding-left: 1rem;
-        }
-
-        .brand-link {
+      &:not(.sidebar-no-expand) {
+        &:hover,
+        &.sidebar-focused {
           width: $sidebar-width;
-        }
 
-        .user-panel {
-          text-align: left;
-
-          .image {
-            float: left;
-          }
-        }
-
-        .user-panel > .info,
-        .nav-sidebar .nav-link p,
-        .brand-text,
-        .logo-xl {
-          display: inline-block;
-          margin-left: 0;
-          opacity: 1;
-          visibility: visible;
-        }
-
-        .nav-flat {
-          .nav-icon {
-            margin-left: 0;
+          .brand-link {
+            width: $sidebar-width;
           }
 
-          .nav-treeview {
-            .nav-icon {
-              margin-left: -.2rem;
+          .user-panel {
+            text-align: left;
+
+            .image {
+              float: left;
             }
           }
-        }
 
-        .logo-xs {
-          opacity: 0;
-          visibility: hidden;
-        }
+          .user-panel > .info,
+          .sidebar .nav-sidebar .nav-link p,
+          .brand-text,
+          .logo-xl {
+            display: inline-block;
+            margin-left: 0;
+            animation-name: fadeIn;
+            animation-duration: $transition-speed;
+            animation-fill-mode: both;
+            visibility: visible;
+          }
 
-        .brand-image {
-          margin-right: .5rem;
-        }
+          .logo-xs {
+            animation-name: fadeOut;
+            animation-duration: $transition-speed;
+            animation-fill-mode: both;
+            visibility: hidden;
+          }
 
-        // Make the sidebar links, menus, labels, badges
-        // and angle icons disappear
-        .sidebar-form,
-        .user-panel > .info {
-          display: block !important;
-          -webkit-transform: translateZ(0);
-        }
+          .brand-image {
+            margin-right: .5rem;
+          }
 
-        .nav-sidebar > .nav-item > .nav-link > span {
-          display: inline-block !important;
+          // Make the sidebar links, menus, labels, badges
+          // and angle icons disappear
+          .sidebar-form,
+          .user-panel > .info {
+            display: block !important;
+            transform: translateZ(0);
+          }
+
+          .nav-sidebar > .nav-item > .nav-link > span {
+            display: inline-block !important;
+          }
         }
       }
     }
