@@ -13,7 +13,9 @@
                         <select name="responsable_de_activo" id="responsable_de_activo" class="form-control select2bs4">
                             <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                             @foreach($personas as $persona)
-                                <option value="{{$persona->id}}" {{ $persona->id == $activo->responsable_de_activo ? 'selected' : '' }}>
+                                <option value="{{$persona->id}}"
+                                    data-ubicacion="{{$persona->ubicacion ? $persona->ubicacion->id : ''}}"
+                                    {{ $persona->id == $activo->responsable_de_activo ? 'selected' : '' }}>
                                     {{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}
                                 </option>
                             @endforeach
@@ -110,4 +112,20 @@ document.getElementById('btnEliminarResponsable').addEventListener('click', func
         responsableHidden.value = "";
     }
 });
+
+document.getElementById('responsable_de_activo').addEventListener('change', function() {
+    let selectedPersona = this.options[this.selectedIndex];
+    let ubicacionId = selectedPersona.getAttribute('data-ubicacion');
+
+    // Actualizar el select de ubicación con la nueva ubicación
+    let ubicacionSelect = document.getElementById('ubicacion');
+    ubicacionSelect.value = ubicacionId;
+
+    // Actualizar el input hidden
+    let ubicacionHidden = document.getElementById("ubicacion_hidden");
+    if (ubicacionHidden) {
+        ubicacionHidden.value = ubicacionId;
+    }
+});
+
 </script>

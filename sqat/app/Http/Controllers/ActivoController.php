@@ -9,7 +9,7 @@ use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class ActivoController extends Controller
+class   ActivoController extends Controller
 {
     // Obtener todos los activos
     public function registro()
@@ -103,6 +103,7 @@ class ActivoController extends Controller
     }
 
     public function editar($id){
+        dd("hola");
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();

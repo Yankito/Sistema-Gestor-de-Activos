@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Tabla Activos</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -294,20 +293,6 @@
         });
     }
 
-
-  function editar(id) {
-    $.ajax({
-      url: 'editarActivo/' + id,
-      type: 'GET',
-      success: function (data) {
-        $("#editarContenido").html(data); // Carga la vista en el modal
-        $("#editarModal").modal("show"); // Muestra el modal
-      },
-      error: function () {
-        alert("Error al cargar la vista de edición.");
-      },
-    });
-  }
     function deshabilitar(id) {
         const datos = JSON.parse('{!! json_encode($activos) !!}');
         $('#estado').val(activos[id].estado);

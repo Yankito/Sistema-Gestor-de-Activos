@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
     Route::get('/subdashboard', [SubDashboardController::class, 'index']);
-    Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
+    Route::get('/activos/{id}/editar', [ActivoController::class, 'editar']);
 });
 
 
