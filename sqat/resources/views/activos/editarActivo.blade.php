@@ -7,11 +7,10 @@
 
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
                     <div class="d-flex">
-                        <select name="responsable_de_activo" id="responsable_de_activo" class="form-control select2bs4" disabled>
+                        <select name="responsable_de_activo" id="responsable_de_activo" class="form-control select2bs4">
                             <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                             @foreach($personas as $persona)
                                 <option value="{{$persona->id}}" {{ $persona->id == $activo->responsable_de_activo ? 'selected' : '' }}>
@@ -28,11 +27,10 @@
             </div>
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="ubicacion">Ubicación</label>
                     <div class="d-flex">
-                        <select name="ubicacion" id="ubicacion" class="form-control" disabled>
+                        <select name="ubicacion" id="ubicacion" class="form-control">
                             <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
                             @foreach($ubicaciones as $ubicacion)
                                 <option value="{{$ubicacion->id}}" {{$ubicacion->id == $activo->ubicacion ? 'selected' : ''}}>
@@ -46,10 +44,9 @@
             </div>
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="estado"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="estado">Deshabilitar activo</label>
-                    <select name="estado" id="estado" class="form-control" disabled>
+                    <select name="estado" id="estado" class="form-control">
                         <option value="{{$activo->estado}}" {{ $activo->estado ? 'selected' : '' }} disabled>{{$activo->estado}}</option>
                         <option value="ROBADO" {{ $activo->estado == 'ROBADO' ? 'selected' : '' }}>Robado</option>
                         <option value="PARA BAJA" {{ $activo->estado == 'PARA BAJA' ? 'selected' : '' }}>Para baja</option>
@@ -63,7 +60,7 @@
 
 
         <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
     </form>
