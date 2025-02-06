@@ -36,6 +36,14 @@ class ImportarController extends Controller
         return null; // En caso de formato inválido
     }
 
+    private function eliminarTildesYMayusculas($cadena)
+    {
+        $cadena = strtoupper($cadena);
+        $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
+        $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
+        return str_replace($buscar, $reemplazar, $cadena);
+    }
+
     public function importExcel(Request $request)
     {
         $request->validate([
@@ -57,6 +65,16 @@ class ImportarController extends Controller
                 if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I']) && empty($fila['J']) && empty($fila['K']) && empty($fila['L']) && empty($fila['M']) && empty($fila['N']) && empty($fila['O']) && empty($fila['P']) && empty($fila['Q']) && empty($fila['R']) && empty($fila['S']) && empty($fila['V'])) {
                     continue;
                 }
+                // Convertir la ubicación a mayúsculas y eliminar tildes
+                $ubicacion = $this->eliminarTildesYMayusculas($fila['N']);
+                $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
+
+                if (!$ubicacionExistente) {
+                    throw new \Exception("La ubicación '{$ubicacion}' no existe en la base de datos.");
+                }
+
+                // Obtener el ID de la ubicación
+                $ubicacionId = $ubicacionExistente->id;
 
                 $persona = Persona::create([
                     'rut' => $fila['A'],
@@ -72,8 +90,12 @@ class ImportarController extends Controller
                     'titulo_puesto' => $fila['K'],
                     'fecha_inicio' => $this->convertirFecha($fila['L']),
                     'usuario_ti' => filter_var($fila['M'], FILTER_VALIDATE_BOOLEAN),
-                    'ubicacion' => $fila['N']
+                    'ubicacion' => $ubicacionId,
                 ]);
+                //comentao de momento
+                //$nombreUsuario = $persona->nombre_usuario;
+
+
 
                 $activo = Activo::create([
                     'nro_serie' => $fila['O'],
@@ -81,10 +103,10 @@ class ImportarController extends Controller
                     'modelo' => $fila['Q'],
                     'tipo_de_activo' => $fila['R'],
                     'estado' => $fila['S'],
-                    'usuario_de_activo' => $persona -> id ?? null,
+                    'usuario_de_activo' => $persona-> id ?? null,
                     'responsable_de_activo' => $persona -> id ?? null,
                     'precio' => $fila['V'],
-                    'ubicacion' => $fila['N'], // La misma ubicación de la persona
+                    'ubicacion' => $ubicacionId, // La misma ubicación de la persona
                     'justificacion_doble_activo' => $fila['W'] ?? null,
                 ]);
                 $personas[] = $persona;
