@@ -92,10 +92,6 @@ class ImportarController extends Controller
                     'usuario_ti' => filter_var($fila['M'], FILTER_VALIDATE_BOOLEAN),
                     'ubicacion' => $ubicacionId,
                 ]);
-                //comentao de momento
-                //$nombreUsuario = $persona->nombre_usuario;
-
-
 
                 $activo = Activo::create([
                     'nro_serie' => $fila['O'],

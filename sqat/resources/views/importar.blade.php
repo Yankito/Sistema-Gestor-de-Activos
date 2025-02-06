@@ -18,14 +18,23 @@
                             @endif
 
                             <!-- Formulario para cargar archivo Excel -->
-                            <form action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
+                            <form id="importForm" action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <input type="file" name="archivo_excel" class="form-control" required>
                                 </div>
                                 <button type="submit" class="btn btn-success">Importar Datos</button>
                             </form>
-
+                            <!-- pantalla de carga mientras se exporta el archivo -->
+                            <div id = "preloader" class="preloader flex-column justify-content-center align-items-center" style="display: none;">
+                                <img class="animation__shake animation__wobble" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="500" width="1500" style="animation: spin 0.00001s linear infinite;">
+                                <style>
+                                    @keyframes spin {
+                                        0% { transform: rotate(0deg); }
+                                        100% { transform: rotate(360deg); }
+                                    }
+                                </style>
+                            </div>
                             <!-- Mostrar datos importados antes de confirmar -->
                             @if (isset($datos) && count($datos) > 0)
                                 <hr>
@@ -114,6 +123,10 @@
                 scrollX: true,
                 buttons: ["copy", "csv", "excel", "print"]
             }).buttons().container().appendTo('#tablaDatos_wrapper .col-md-6:eq(0)');
+        });
+        // Mostrar pantalla de carga al enviar el formulario
+        $('#importForm').submit(function() {
+            $('#preloader').show();
         });
     </script>
 @endsection
