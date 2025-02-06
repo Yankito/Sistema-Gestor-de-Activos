@@ -13,13 +13,15 @@ class TablaDatosController extends Controller
             ->leftJoin('personas as usuario', 'activos.usuario_de_activo', '=', 'usuario.id')
             ->leftJoin('personas as responsable', 'activos.responsable_de_activo', '=', 'responsable.id')
             ->leftJoin('ubicaciones',DB::raw('COALESCE(activos.ubicacion, personas.ubicacion)'), '=', 'ubicaciones.id')
+            ->leftJoin('estados','activos.estado', '=', 'estados.id')
             ->select(
                 'personas.*',
                 'activos.*',
                 'usuario.rut as rut_usuario',
                 'responsable.rut as rut_responsable',
                 'ubicaciones.sitio',
-                'ubicaciones.soporte_ti'
+                'ubicaciones.soporte_ti',
+                'estados.nombre_estado',
             )
             ->get();
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
+use App\Models\Estado;
+
 
 class SubDashboardController extends Controller
 {
@@ -31,9 +33,9 @@ class SubDashboardController extends Controller
 
     public function calcularActivosPorEstados($ubicacion){
         $estados = [];
-        $estadosDisponibles = ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO'];
+        $estadosDisponibles = Estado::all();
         foreach ($estadosDisponibles as $estado) {
-            $estados[$estado] = Activo::where('estado', $estado)
+            $estados[$estado->nombre_estado] = Activo::where('estado', $estado->id)
                                         ->where('ubicacion', $ubicacion)
                                         ->count();
         }

@@ -28,7 +28,7 @@ class ActivoController extends Controller
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
-            $activo->estado = 'DISPONIBLE';
+            $activo->estado = 1;
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
@@ -70,7 +70,7 @@ class ActivoController extends Controller
         $data['usuario_de_activo'] = $request->responsable_de_activo;
         //dd($data, $activo);
         if($activo->responsable_de_activo != $request->responsable_de_activo){
-            $data['estado'] = 'DISPONIBLE';
+            $data['estado'] = 2;
 
             if($activo->responsable_de_activo != NULL){
                 $registroAntiguoResponsable = new Registro();
@@ -88,7 +88,7 @@ class ActivoController extends Controller
                 $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
                 $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
                 $registroNuevoResponsable->save();
-                $data['estado'] = 'ASIGNADO';
+                $data['estado'] = 4;
             }
         }
         $activo->update($data);
@@ -103,7 +103,7 @@ class ActivoController extends Controller
     }
 
     public function editar($id){
-        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacion')->findOrFail($id);
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $ubicaciones = Ubicacion::all();
         $personas = Persona::all();
         return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
@@ -127,10 +127,10 @@ class ActivoController extends Controller
         return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
 
-    public function reactivar(Request $request, $id){
-        $activo = Activo::findOrFail($id);
-        $activo->estado = 'DISPONIBLE';
+    public function cambiarEstado(Request $request){
+        $activo = Activo::findOrFail($request->activo_id);
+        $activo->estado = $request->nuevo_estado;
         $activo->update();
-        return redirect()->back()->with('success','Activo reactivado correctamente.');
+        return redirect()->back()->with('success', 'Estado cambiado a ' . $activo->estadoRelation->nombre_estado);
     }
 }

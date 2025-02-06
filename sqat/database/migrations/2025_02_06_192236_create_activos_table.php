@@ -14,7 +14,7 @@ class CreateActivosTable extends Migration
             $table->string('marca', 50);
             $table->string('modelo', 50);
             $table->string('tipo_de_activo', 50);
-            $table->enum('estado', ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO']);
+            $table->unsignedBigInteger('estado');
             $table->unsignedBigInteger('usuario_de_activo')->nullable();
             $table->unsignedBigInteger('responsable_de_activo')->nullable();
             $table->integer('precio');
@@ -25,6 +25,7 @@ class CreateActivosTable extends Migration
             $table->foreign('usuario_de_activo')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('responsable_de_activo')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('ubicacion')->references('id')->on('ubicaciones')->onDelete('set null');
+            $table->foreign('estado')->references('id')->on('estados')->onDelete('cascade');
 
             $table->timestamps(); // Añadir campos created_at y updated_at
         });

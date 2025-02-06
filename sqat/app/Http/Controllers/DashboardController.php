@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Activo;
+use App\Models\Estado;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 
@@ -49,9 +50,9 @@ class DashboardController extends Controller
 
     public function calcularActivosPorEstados(){
         $estados = [];
-        $estadosDisponibles = ['ASIGNADO', 'DISPONIBLE', 'ROBADO', 'PARA BAJA', 'DONADO'];
+        $estadosDisponibles = Estado::all();
         foreach ($estadosDisponibles as $estado) {
-            $estados[$estado] = Activo::where('estado', $estado)->count();
+            $estados[$estado->nombre_estado] = Activo::where('estado', $estado->id)->count();
         }
         return $estados;
     }

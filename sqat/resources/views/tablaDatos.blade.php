@@ -85,7 +85,7 @@
                                         <td>{{ $dato->nro_serie }}</td>
                                         <td>{{ $dato->marca }}</td>
                                         <td>{{ $dato->modelo }}</td>
-                                        <td>{{ $dato->estado}}</td>
+                                        <td>{{ $dato->nombre_estado}}</td>
                                         <td>{{ $dato->rut_usuario }}</td>
                                         <td>{{ $dato->rut_responsable }}</td>
                                         <td>{{ $dato->precio }}</td>

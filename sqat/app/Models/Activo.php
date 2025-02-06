@@ -39,9 +39,14 @@ class Activo extends Model
         return $this->belongsTo(Persona::class, 'responsable_de_activo');
     }
 
-    public function ubicacion(): BelongsTo
+    public function ubicacionRelation(): BelongsTo
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion');
+    }
+
+    public function estadoRelation(): BelongsTo
+    {
+        return $this->belongsTo(Estado::class, 'estado');
     }
 
 }
