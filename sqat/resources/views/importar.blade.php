@@ -25,9 +25,9 @@
                                 </div>
                                 <button type="submit" class="btn btn-success">Importar Datos</button>
                             </form>
-
+                            
                             <!-- Mostrar datos importados antes de confirmar -->
-                            @if (isset($data) && count($data) > 0)
+                            @if (isset($datos) && count($datos) > 0)
                                 <hr>
                                 <h4>Datos Importados</h4>
                                 <form action="{{ route('confirmar.importacion') }}" method="POST">
@@ -59,7 +59,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $row)
+                                            @foreach ($datos as $row)
                                                 <tr>
                                                     @foreach ($row as $cell)
                                                         <td>{{ $cell }}</td>
