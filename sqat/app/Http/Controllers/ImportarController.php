@@ -47,6 +47,7 @@ class ImportarController extends Controller
         $hoja = $spreadsheet->getActiveSheet();
         $datos = $hoja->toArray(null, true, true, true);
 
+        dd($datos);
         return view('importar', compact('datos'));
     }
     public function importExcel(Request $request)
@@ -101,5 +102,10 @@ class ImportarController extends Controller
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
         }
+    }
+
+    public function confirmarImportacion()
+    {
+        return view('confirmar-importacion');
     }
 }
