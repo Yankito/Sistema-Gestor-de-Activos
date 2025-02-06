@@ -88,4 +88,6 @@ Route::post('/importar', [ImportarController::class, 'importExcel'])->name('impo
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
 Route::post('/activos/editar/{id}', [ActivoController::class, 'update'])->name('activos.update');
 Route::post('/activos/deshabilitar/{id}', [ActivoController::class, 'deshabilitar'])->name('activos.deshabilitar');
-Route::post('/activos/reactivar/{id}', [ActivoController::class, 'reactivar'])->name('activos.reactivar');
+Route::post('/activos/cambiarEstado', [ActivoController::class, 'cambiarEstado'])->name('activos.cambiarEstado');
+//ruta para confirmar importacion
+Route::get('/confirmarImportacion', [ImportarController::class, 'confirmarImportacion'])->name('confirmar.importacion');

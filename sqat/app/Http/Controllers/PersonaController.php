@@ -68,7 +68,7 @@ class PersonaController extends Controller
 
             $idPersona = Persona::where('rut', $request->rut)->first()->id;
             $activo->usuario_de_activo = $idPersona;
-            $activo->estado = 'ASIGNADO';
+            $activo->estado = 4;
             $activo->ubicacion = $request->ubicacion;
 
             // Asignar responsable a activo de tal numero de serie
@@ -87,7 +87,7 @@ class PersonaController extends Controller
                     $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
                         $activoAdicional->usuario_de_activo = $idPersona;
-                        $activoAdicional->estado = 'ASIGNADO';
+                        $activoAdicional->estado = 4;
                         $activoAdicional->responsable_de_activo = $request->has('responsable') ? $request->responsable : $idPersona;
                         $activoAdicional->justificacion_doble_activo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();

@@ -30,7 +30,7 @@ class Persona extends Model
     public $timestamps = true;
 
     // Relación con la tabla Ubicacion (cada Persona pertenece a una Ubicacion)
-    public function ubicacion()
+    public function ubicacionRelation()
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion', 'id');
     }

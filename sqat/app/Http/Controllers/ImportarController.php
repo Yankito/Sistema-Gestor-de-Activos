@@ -115,4 +115,9 @@ class ImportarController extends Controller
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
         }
     }
+
+    public function confirmarImportacion()
+    {
+        return view('confirmar-importacion');
+    }
 }
