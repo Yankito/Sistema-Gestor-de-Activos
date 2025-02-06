@@ -36,19 +36,6 @@ class ImportarController extends Controller
         return null; // En caso de formato inválido
     }
 
-    public function previewExcel(Request $request)
-    {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls'
-        ]);
-
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
-
-        return view('importar', compact('datos'));
-    }
     public function importExcel(Request $request)
     {
         $request->validate([
@@ -62,8 +49,14 @@ class ImportarController extends Controller
 
         DB::beginTransaction();
         try {
+            $personas = [];
+            $activos = [];
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
+                //verificar si la fila esta vacia
+                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I']) && empty($fila['J']) && empty($fila['K']) && empty($fila['L']) && empty($fila['M']) && empty($fila['N']) && empty($fila['O']) && empty($fila['P']) && empty($fila['Q']) && empty($fila['R']) && empty($fila['S']) && empty($fila['V'])) {
+                    continue;
+                }
 
                 $persona = Persona::create([
                     'rut' => $fila['A'],
@@ -82,7 +75,7 @@ class ImportarController extends Controller
                     'ubicacion' => $fila['N']
                 ]);
 
-                Activo::create([
+                $activo = Activo::create([
                     'nro_serie' => $fila['O'],
                     'marca' => $fila['P'],
                     'modelo' => $fila['Q'],
@@ -94,9 +87,11 @@ class ImportarController extends Controller
                     'ubicacion' => $fila['N'], // La misma ubicación de la persona
                     'justificacion_doble_activo' => $fila['W'] ?? null,
                 ]);
+                $personas[] = $persona;
+                $activos[] = $activo;
             }
             DB::commit();
-            return back()->with('success', 'Datos importados correctamente.');
+            return view('importar', compact('datos', 'personas', 'activos'))->with('success', 'Datos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());

@@ -84,7 +84,7 @@ Route::get('/descargarExcel', function () {
 })->name('descargar.excel');
 
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
-Route::post('/preview', [ImportarController::class, 'previewExcel'])->name('preview.excel');
+
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
 Route::post('/activos/editar/{id}', [ActivoController::class, 'update'])->name('activos.update');
 Route::post('/activos/deshabilitar/{id}', [ActivoController::class, 'deshabilitar'])->name('activos.deshabilitar');

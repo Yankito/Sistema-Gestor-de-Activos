@@ -9,7 +9,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Importar Archivo Excel</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="overflow-x: auto;">
                             <!-- Mensaje de éxito -->
                             @if(session('success'))
                                 <div class="alert alert-success">
@@ -27,10 +27,9 @@
                             </form>
 
                             <!-- Mostrar datos importados antes de confirmar -->
-                            @if (isset($data) && count($data) > 0)
+                            @if (isset($datos) && count($datos) > 0)
                                 <hr>
                                 <h4>Datos Importados</h4>
-                                <form action="{{ route('confirmar.importacion') }}" method="POST">
                                     @csrf
                                     <table id="tablaDatos" class="table table-bordered table-striped">
                                         <thead>
@@ -59,7 +58,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $row)
+                                            @foreach ($datos as $row)
                                                 <tr>
                                                     @foreach ($row as $cell)
                                                         <td>{{ $cell }}</td>
@@ -68,10 +67,6 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <button id="importButton" class="btn btn-primary mt-3" type="submit">
-                                        Confirmar Importación
-                                    </button>
-                                </form>
                             @endif
 
                             <!-- Botón para descargar el archivo de muestra -->
