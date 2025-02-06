@@ -106,14 +106,7 @@
                                             onclick="cargarActivo('{{ $dato->id }}')">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                    @else
-                                        <button type="button" class="btn btn-success btn-sm" onclick="reactivarActivo('{{ $dato->id }}')">
-                                            <i class="fas fa-undo"></i>
-                                        </button>
                                     @endif
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="deshabilitar('{{ $dato->id }}')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
                                 </td>
                                 <td>{{ $dato->nro_serie }}</td>
                                 <td>{{ $dato->marca }}</td>
@@ -185,36 +178,6 @@
           </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modal-cambiarEstado">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Cambiar Estado</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="form-cambiarEstado" method="POST">
-                    @csrf
-                    <label for="estado">Estado</label>
-                    <select name="estado" id="estado" class="form-control">
-                        <option value="ASIGNADO" disabled>Asignado</option>
-                        <option value="DISPONIBLE" disabled>Disponble</option>
-                        <option value="ROBADO">Robado</option>
-                        <option value="PARA BAJA">Para baja</option>
-                        <option value="DONADO">Donado</option>
-                        <option value="RECIBIDO">Recibido</option>
-                        <option value="DEVUELTO">Devuelto</option>
-                        <option value="VENDIDO">Vendido</option>
-                        <option value="PERDIDO">Perdido</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
-                </form>
-            </div>
-          </div>
-        </div>
-    </div>
-
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('success'))
             <script>

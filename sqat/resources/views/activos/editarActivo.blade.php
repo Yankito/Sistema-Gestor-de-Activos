@@ -5,78 +5,6 @@
 
         <div class = "row">
 
-            <div class="col-md-6 d-flex align-items-center">
-                    <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="nro_serie">Nro. Serie</label>
-                    <input type="text" name="nro_serie" id="nro_serie" required class="form-control" value="{{ $activo->nro_serie }}" readonly />
-                </div>
-            </div>
-
-
-             <!-- Marca -->
-             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="marca"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="marca">Marca</label>
-                    <input type="text" name="marca" id="marca" required class="form-control" value="{{ $activo->marca }}" readonly />
-                </div>
-            </div>
-
-            <!-- Modelo -->
-            <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="modelo"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="modelo">Modelo</label>
-                    <input type="text" name="modelo" id="modelo" required class="form-control" value="{{ $activo->modelo }}" readonly />
-                </div>
-            </div>
-
-
-            <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="tipo_de_activo"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
-                    <div class="d-flex">
-                        <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required disabled>
-                            <option value="LAPTOP">Laptop</option>
-                            <option value="DESKTOP">Desktop</option>
-                            <option value="MONITOR">Monitor</option>
-                            <option value="IMPRESORA">Impresora</option>
-                            <option value="CELULAR">Celular</option>
-                            <option value="OTRO">Otro</option>
-                        </select>
-                        <input type="hidden" name="tipo_de_activo" id="tipo_de_activo_hidden" value="{{ $activo->tipo_de_activo }}">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Precio -->
-            <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="precio"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="precio">Precio</label>
-                    <input type="number" name="precio" id="precio" required class="form-control" value="{{ $activo->precio }}" readonly />
-                </div>
-            </div>
-
-
-            <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
-                <div class="form-outline mb-4 flex-grow-1">
-                    <label class="form-label" for="ubicacion">Ubicación</label>
-                    <div class="d-flex">
-                        <select name="ubicacion" id="ubicacion" class="form-control" disabled>
-                            @foreach($ubicaciones as $ubicacion)
-                                <option value="{{$ubicacion->id}}">{{$ubicacion->sitio}}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="ubicacion" id="ubicacion_hidden" value="{{ $activo->ubicacion }}">
-                    </div>
-                </div>
-            </div>
-
-
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
@@ -93,11 +21,44 @@
                         </select>
                         <input type="hidden" name="responsable_de_activo" id="responsable_de_activo_hidden" value="{{ $activo->responsable_de_activo }}">
                         <button type="button" id="btnEliminarResponsable" class="btn btn-danger ml-2">
-                            <i class="fas fa-x fa-bounce"></i>
+                            <i class="fas fa-x"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6 d-flex align-items-center">
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
+                <div class="form-outline mb-4 flex-grow-1">
+                    <label class="form-label" for="ubicacion">Ubicación</label>
+                    <div class="d-flex">
+                        <select name="ubicacion" id="ubicacion" class="form-control" disabled>
+                            <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
+                            @foreach($ubicaciones as $ubicacion)
+                                <option value="{{$ubicacion->id}}" {{$ubicacion->id == $activo->ubicacion ? 'selected' : ''}}>
+                                    {{$ubicacion->sitio}}
+                                </option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="ubicacion" id="ubicacion_hidden" value="{{ $activo->ubicacion }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center">
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="estado"></i>
+                <div class="form-outline mb-4 flex-grow-1">
+                    <label class="form-label" for="estado">Deshabilitar activo</label>
+                    <select name="estado" id="estado" class="form-control" disabled>
+                        <option value="{{$activo->estado}}" {{ $activo->estado ? 'selected' : '' }} disabled>{{$activo->estado}}</option>
+                        <option value="ROBADO" {{ $activo->estado == 'ROBADO' ? 'selected' : '' }}>Robado</option>
+                        <option value="PARA BAJA" {{ $activo->estado == 'PARA BAJA' ? 'selected' : '' }}>Para baja</option>
+                        <option value="DONADO" {{ $activo->estado == 'DONADO' ? 'selected' : '' }}>Donado</option>
+                    </select>
+                    <input type="hidden" name="estado" id="estado_hidden" value="{{ $activo->estado }}">
+                </div>
+            </div>
+
         </div>
 
 
@@ -116,7 +77,6 @@ document.querySelectorAll('.toggle-edit').forEach(icon => {
     icon.addEventListener('click', function() {
         let inputId = this.getAttribute('data-target');
         let inputField = document.getElementById(inputId);
-
         if (inputField.tagName === "SELECT") {
             inputField.disabled = !inputField.disabled;
 
