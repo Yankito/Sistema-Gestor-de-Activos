@@ -23,7 +23,7 @@
     <!-- /.content-header -->
     <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
+            <img class="animation__wobble" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
         </div>
     <!-- Main content -->
     <section class="content">

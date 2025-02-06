@@ -128,36 +128,18 @@
                                     <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 3)">
                                         <i class="fas fa-arrow-right"></i> <!-- Pasar a DISPONIBLE -->
                                     </button>
-                                @elseif ($dato->estado === 3) {{-- DISPONIBLE --}}
+                                @elseif ($dato->estado === 3 || $dato->estado === 4) {{-- DISPONIBLE --}}
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
                                         <i class="fas fa-edit"></i> <!-- Editar -->
                                     </button>
-                                @elseif ($dato->estado === 4) {{-- ASIGNADO --}}
-                                    <button type="button" class="btn btn-warning btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 7)">
-                                        <i class="fas fa-exchange-alt"></i> <!-- Pasar a DEVUELTO -->
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 5)">
-                                        <i class="fas fa-times-circle"></i> <!-- Pasar a PERDIDO -->
-                                    </button>
-                                    <button type="button" class="btn btn-dark btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 6)">
-                                        <i class="fas fa-user-secret"></i> <!-- Pasar a ROBADO -->
-                                    </button>
+
                                 @elseif ($dato->estado === 5 || $dato->estado === 6) {{-- PERDIDO o ROBADO --}}
                                     <button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 7)">
                                         <i class="fas fa-undo"></i> <!-- Volver a DEVUELTO -->
                                     </button>
                                 @elseif ($dato->estado === 7) {{-- DEVUELTO --}}
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 8)">
-                                        <i class="fas fa-arrow-down"></i> <!-- Pasar a PARA BAJA -->
-                                    </button>
-                                    <button type="button" class="btn btn-info btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 9)">
-                                        <i class="fas fa-hand-holding-heart"></i> <!-- Pasar a DONADO -->
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 10)">
-                                        <i class="fas fa-dollar-sign"></i> <!-- Pasar a VENDIDO -->
-                                    </button>
-                                    <button type="button" class="btn btn-secondary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 2)">
-                                        <i class="fas fa-undo"></i> <!-- Volver a PREPARACIÓN -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
+                                        <i class="fas fa-edit"></i> <!-- Editar -->
                                     </button>
                                 @elseif ($dato->estado === 8 || $dato->estado === 9 || $dato->estado === 10) {{-- Estados finales --}}
                                     <button type="button" class="btn btn-secondary btn-sm" disabled>
@@ -187,6 +169,8 @@
                                         {{ $dato->estadoRelation->nombre_estado }}
                                         @if($dato->estado === 6)
                                             <i class="fas fa-skull-crossbones"></i>
+                                        @elseif($dato->estado == 10)
+                                            🤑
                                         @endif
                                     </span>
                                 </td>
