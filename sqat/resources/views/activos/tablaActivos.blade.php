@@ -182,22 +182,6 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                    <tr>
-                      <th>Acciones</th> <!-- Nueva columna para los botones -->
-                      <th>Número de serie</th>
-                      <th>Marca</th>
-                      <th>Modelo</th>
-                      <th>Precio</th>
-                      <th>Tipo</th>
-                      <th>Estado</th>
-                      <th>Usuario</th>
-                      <th>responsable</th>
-                      <th>Sitio</th>
-                      <th>Soporte TI</th>
-                      <th>Justificación</th>
-                    </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>

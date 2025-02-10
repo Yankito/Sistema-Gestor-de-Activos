@@ -15,7 +15,7 @@ use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
 use Illuminate\Support\Facades\Response;
-use App\Http\Controllers\SubDashboardController;
+use App\Http\Controllers\DashboardUbicacionController;
 use App\Http\Controllers\DashboardTipoController;
 
 Route :: get ('/login' , function () {
@@ -50,8 +50,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
-    Route::get('/subdashboard', [SubDashboardController::class, 'index']);
-    Route::get('/dashboardTipo/{tipoDeActivo}', [DashboardTipoController::class, 'index']);
+    Route::get('/dashboardUbicacion', [DashboardUbicacionController::class, 'index']);
+    Route::get('/dashboardTipo', [DashboardTipoController::class, 'index'])->name('dashboard.tipo');
     Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
 });
 
@@ -93,4 +93,5 @@ Route::post('/activos/deshabilitar/{id}', [ActivoController::class, 'deshabilita
 Route::post('/activos/cambiarEstado', [ActivoController::class, 'cambiarEstado'])->name('activos.cambiarEstado');
 //ruta para confirmar importacion
 Route::get('/confirmarImportacion', [ImportarController::class, 'confirmarImportacion'])->name('confirmar.importacion');
-Route::post('/actualizarSubDashboard', [SubDashboardController::class, 'actualizarUbicacion'])->name('actualizar.dashboard');
+Route::post('/actualizarDashboardUbicacion', [DashboardUbicacionController::class, 'actualizarUbicacion'])->name('actualizar.dashboardUbicacion');
+Route::post('/actualizarDashboardTipo', [DashboardTipoController::class, 'actualizarTipo'])->name('actualizar.dashboardTipo');

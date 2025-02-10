@@ -84,24 +84,6 @@
                           </tr>
                       @endforeach
                     </tbody>
-                    <tfoot>
-                    <tr>
-                      <th>rut</th>
-                      <th>nombre_usuario</th>
-                      <th>nombres</th>
-                      <th>primer_apellido</th>
-                      <th>segundo_apellido</th>
-                      <th>supervisor</th>
-                      <th>empresa</th>
-                      <th>estado_empleado</th>
-                      <th>centro_costo</th>
-                      <th>denominacion</th>
-                      <th>titulo_puesto</th>
-                      <th>fecha_inicio</th>
-                      <th>usuario_ti</th>
-                      <th>ubicacion</tr>
-                    </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>

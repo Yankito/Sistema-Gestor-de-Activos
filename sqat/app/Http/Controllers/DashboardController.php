@@ -24,7 +24,7 @@ class DashboardController extends Controller
         $tiposDeActivo = $this->obtenerTiposdeActivo();
         $cantidadPorEstados = $this->calcularActivosPorEstados();
         // Pasar el usuario a la vista
-        return view('dashboard', compact('cantidadActivos',
+        return view('dashboards.dashboard', compact('cantidadActivos',
         'cantidadPersonas','cantidadUbicaciones','activos',
         'cantidadPorUbicacion','ubicaciones', 'tiposDeActivo', 'cantidadPorEstados'));
     }

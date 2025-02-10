@@ -9,7 +9,7 @@ use App\Models\Ubicacion;
 use App\Models\Estado;
 
 
-class SubDashboardController extends Controller
+class DashboardUbicacionController extends Controller
 {
     public function index(){
         $ubicacion = Ubicacion::where("id","=","1")->first();
@@ -17,7 +17,7 @@ class SubDashboardController extends Controller
         $tiposDeActivo = $this->obtenerTiposdeActivo($ubicacion->id);
         $cantidadPorEstados = $this->calcularActivosPorEstados($ubicacion->id);
         $ubicaciones = Ubicacion::all();
-        return view('subdashboard', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
+        return view('dashboards.dashboardUbicacion', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
     }
 
     public function obtenerTiposdeActivo($ubicacion){
@@ -49,6 +49,6 @@ class SubDashboardController extends Controller
         $tiposDeActivo = $this->obtenerTiposdeActivo($ubicacion->id);
         $cantidadPorEstados = $this->calcularActivosPorEstados($ubicacion->id);
         $ubicaciones = Ubicacion::all();
-        return view('subdashboard', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
+        return view('dashboards.dashboardUbicacion', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
     }
 }

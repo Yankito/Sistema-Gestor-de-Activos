@@ -30,7 +30,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/subdashboard';">
+                <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardUbicacion';">
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner">
@@ -86,7 +86,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?{{ urlencode($tipoDeActivo) }}';">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?tipo={{ ucfirst($tipoDeActivo) }}';">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">

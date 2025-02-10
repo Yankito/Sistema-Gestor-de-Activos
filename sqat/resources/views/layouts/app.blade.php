@@ -133,7 +133,7 @@
                                 <li class = "nav-item">
                                     <a href = "/tablaDatos" class = "nav-link">
                                     <i class="nav-icon fas fa-table"></i>
-                                    <p>Datos</p>
+                                    <p>Activos asignados</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -192,7 +192,7 @@
                                 </a>
                             </li>
                         @endif
-                        
+
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>

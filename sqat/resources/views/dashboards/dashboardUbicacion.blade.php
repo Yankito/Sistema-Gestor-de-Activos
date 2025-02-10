@@ -55,7 +55,7 @@
                                     {{$data->sitio}}
                                 </a>
                             @endforeach
-                            <form id="update-ubicacion-form" action="{{ route('actualizar.dashboard') }}" method="POST" style="display: none;">
+                            <form id="update-ubicacion-form" action="{{ route('actualizar.dashboardUbicacion') }}" method="POST" style="display: none;">
                                 @csrf
                                 <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
                             </form>
@@ -133,7 +133,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?tipo={{ ucfirst($tipoDeActivo) }}';">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
