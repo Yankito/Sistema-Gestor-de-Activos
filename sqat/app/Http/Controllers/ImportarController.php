@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\DB;
 
 class ImportarController extends Controller
 {
+    private function convertirEstadoEmpleado($valor)
+    {   
+        $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
+
+        if ($valor === 'ACTIVO') {
+            return 1;
+        }
+        if ($valor === 'TERMINADO') {
+            return 0;
+        }
+
+        return null; // Devuelve null si el valor no es válido
+    }
+
     public function index()
     {
         return view('importar');
@@ -43,6 +57,18 @@ class ImportarController extends Controller
         $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
         return str_replace($buscar, $reemplazar, $cadena);
     }
+    //funcion que recibe si, Si,SI, no, No,NO y devuelve 1 o 0
+    private function convertirBoolean($valor)
+    {
+        $valor = strtoupper($valor);
+        if ($valor == 'SI' || $valor == 'SÍ') {
+            return 1;
+        }
+        if ($valor == 'NO') {
+            return 0;
+        }
+        return null;
+    }
 
     public function importExcel(Request $request)
     {
@@ -75,6 +101,16 @@ class ImportarController extends Controller
 
                 // Obtener el ID de la ubicación
                 $ubicacionId = $ubicacionExistente->id;
+                // <obtener el ID del estado
+                $estadoNombre = $this->eliminarTildesYMayusculas($fila['S']);
+                $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
+
+                if (!$estado) {
+                    throw new \Exception("El estado '{$estadoNombre}' no existe en la base de datos.");
+                }
+
+                $estadoId = $estado->id;
+
 
                 $persona = Persona::create([
                     'rut' => $fila['A'],
@@ -84,12 +120,12 @@ class ImportarController extends Controller
                     'segundo_apellido' => $fila['E'] ?? null,
                     'supervisor' => $fila['F'],
                     'empresa' => $fila['G'],
-                    'estado_empleado' => filter_var($fila['H'], FILTER_VALIDATE_BOOLEAN),
+                    'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['H']), FILTER_VALIDATE_BOOLEAN),
                     'centro_costo' => $fila['I'],
                     'denominacion' => $fila['J'],
                     'titulo_puesto' => $fila['K'],
                     'fecha_inicio' => $this->convertirFecha($fila['L']),
-                    'usuario_ti' => filter_var($fila['M'], FILTER_VALIDATE_BOOLEAN),
+                    'usuario_ti' => filter_var($this->convertirBoolean($fila['M']), FILTER_VALIDATE_BOOLEAN),
                     'ubicacion' => $ubicacionId,
                 ]);
 
@@ -98,7 +134,7 @@ class ImportarController extends Controller
                     'marca' => $fila['P'],
                     'modelo' => $fila['Q'],
                     'tipo_de_activo' => $fila['R'],
-                    'estado' => $fila['S'],
+                    'estado' => $estadoId,
                     'usuario_de_activo' => $persona-> id ?? null,
                     'responsable_de_activo' => $persona -> id ?? null,
                     'precio' => $fila['V'],
