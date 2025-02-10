@@ -52,11 +52,11 @@
             background-color: yellow;
         }
         .estado-disponible {
-            background-color: green;
+            background-color: #0aa40d;
         }
 
         .estado-asignado {
-            background-color: red;
+            background-color: #0a5964;
         }
 
         .estado-perdido {
@@ -72,7 +72,7 @@
         }
 
         .estado-paraBaja {
-            background-color: orange;
+            background-color: red;
         }
 
         .estado-donado {
@@ -80,7 +80,7 @@
         }
 
         .estado-vendido {
-            background-color: brown;
+            background-color: green;
         }
 
     </style>
@@ -167,11 +167,6 @@
                                         {{ $dato->estado === 9 ? 'estado-donado' : '' }}
                                         {{ $dato->estado == 10 ? 'estado-vendido' : '' }}">
                                         {{ $dato->estadoRelation->nombre_estado }}
-                                        @if($dato->estado === 6)
-                                            <i class="fas fa-skull-crossbones"></i>
-                                        @elseif($dato->estado == 10)
-                                            🤑
-                                        @endif
                                     </span>
                                 </td>
                                 <td>{{ $dato->usuarioDeActivo->rut ?? '' }}</td>
@@ -226,10 +221,7 @@
     @endsection
 
 
-<!-- jQuery -->
-<script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @section('scripts')
 <!-- DataTables  & Plugins -->
 <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -289,5 +281,5 @@
 
 
 </script>
-
+@endsection
 </html>
