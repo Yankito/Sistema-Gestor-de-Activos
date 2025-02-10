@@ -31,26 +31,55 @@
     <section class="content">
 
         <div class="content-header">
-            <div class="container-fluid">
+            <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard de {{$ubicacion->sitio}}</h1>
-                </div><!-- /.col -->
+                    <h1 class="m-0 text-dark">Dashboard de {{$ubicacion->sitio}}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <div class="breadcrumb float-sm-right">
+                        <a class="nav-link me-2" data-toggle="dropdown" href="#">
+                            <i class="fas fa-th mr-1"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">15 Notifications</span>
+                            <div class="dropdown-divider"></div>
+                            @foreach ($ubicaciones as $data)
+                                <a href="#" class="dropdown-item" onclick="updateUbicacion('{{ $data->id }}')">
+                                    {{$data->sitio}}
+                                </a>
+                            @endforeach
+                            <form id="update-ubicacion-form" action="{{ route('actualizar.dashboard') }}" method="POST" style="display: none;">
+                                @csrf
+                                <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
+                            </form>
+                            <script>
+                                function updateUbicacion(id) {
+                                    document.getElementById('ubicacion_id').value = id;
+                                    document.getElementById('update-ubicacion-form').submit();
+                                }
+                            </script>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        </div><!-- /.col -->
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center">
+
+
             </div><!-- /.container-fluid -->
         </div>
 
         <div class="card bg-gradient-info">
             <div class="card-header border-0">
             <h3 class="card-title">
-                <i class="fas fa-th mr-1"></i>
                 Cantidad de activos por estado
             </h3>
 
             <div class="card-tools">
                 <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
-                <i class="fas fa-times"></i>
                 </button>
             </div>
             </div>
@@ -60,30 +89,35 @@
             <div class="row">
                 @foreach($cantidadPorEstados as $estado => $cantidad)
                     <div class="col-2 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="{{ round(($cantidad/$cantidadActivos)*100) }}" data-width="60" data-height="60"
+                        <input type="text" class="knob" data-readonly="true" value="{{ $cantidadActivos != 0 ? round(($cantidad/$cantidadActivos)*100) : 0 }}" data-width="60" data-height="60"
                             data-fgColor="#39CCCC" data-displayInput="true">
                         <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
                     </div>
                 @endforeach
+            </div>
 
-                <div class="col-md-4">
-                    <p class="text-center">
-                      <strong>Goal Completion</strong>
-                    </p>
+            <div class="col-md-6">
+                <p class="text-center">
+                    <strong>Cantidad por estados</strong>
+                </p>
 
+                <div class="row">
                     @foreach($cantidadPorEstados as $estado => $cantidad)
-                        <div class="progress-group">
-                            {{ ucfirst(strtolower($estado)) }}
-                            <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+                        <div class="col-md-6">
+                            <div class="progress-group">
+                                {{ ucfirst(strtolower($estado)) }}
+                                <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+                                </div>
                             </div>
                         </div>
                     @endforeach
-
                 </div>
 
+
             </div>
+
             <!-- /.row -->
             </div>
             <!-- /.card-footer -->

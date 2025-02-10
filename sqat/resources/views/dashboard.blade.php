@@ -48,25 +48,6 @@
                     </div>
                 </div>
 
-                <!-- ./col -->
-                <div class="col-lg-3 col-6" style = "cursor: pointer;">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{ $cantidadPersonas }}</h3>
-                        <p>Personas</p>
-                    </div>
-                    <div class="icon" style="cursor: pointer;">
-                    <i class="ion ion-person-add"></i>
-                    </div>
-                        <!-- si usuario es administrador puede acceder a resigter-->
-                        @if($user->es_administrador)
-                        <a href="/registrarPersona" class="small-box-footer">Asignar activo a persona nueva <i class="fas fa-arrow-circle-right"></i></a>
-                        @else
-                        <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
-                        @endif
-                    </div>
-                </div>
             </div><!-- /.container-fluid -->
         </div>
 

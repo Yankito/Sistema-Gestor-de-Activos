@@ -91,3 +91,4 @@ Route::post('/activos/deshabilitar/{id}', [ActivoController::class, 'deshabilita
 Route::post('/activos/cambiarEstado', [ActivoController::class, 'cambiarEstado'])->name('activos.cambiarEstado');
 //ruta para confirmar importacion
 Route::get('/confirmarImportacion', [ImportarController::class, 'confirmarImportacion'])->name('confirmar.importacion');
+Route::post('/actualizarSubDashboard', [SubDashboardController::class, 'actualizarUbicacion'])->name('actualizar.dashboard');

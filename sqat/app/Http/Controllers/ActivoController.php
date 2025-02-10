@@ -65,19 +65,27 @@ class   ActivoController extends Controller
     public function update(Request $request, $id)
     {
         $activo = Activo::findOrFail($id);
-        //dd($request->all(), $request->responsable_de_activo);
+        //dd($request->all());
         $data = $request->all();
         $data['usuario_de_activo'] = $request->responsable_de_activo;
         //dd($data, $activo);
 
-        $registroNuevoResponsable = new Registro();
-        $registroNuevoResponsable->persona = $request->responsable_de_activo;
-        $registroNuevoResponsable->activo = $activo->id;
-        $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
-        $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
-        $registroNuevoResponsable->save();
-        $data['estado'] = 4;
+        if($activo->respons_de_activo != $request->responsable_de_activo){
+            $registroNuevoResponsable = new Registro();
+            $registroNuevoResponsable->persona = $request->responsable_de_activo;
+            $registroNuevoResponsable->activo = $activo->id;
+            $registroNuevoResponsable->tipo_cambio = 'ASIGNACION';
+            $registroNuevoResponsable->encargado_cambio = Auth::user()->id;
+            $registroNuevoResponsable->save();
+            $data['estado'] = 4;
+        }
 
+        if($activo->ubicacion != $request->ubicacion){
+            $data['ubicacion'] = $request->ubicacion;
+            $persona = Persona::findOrFail($request->responsable_de_activo);
+            $persona->ubicacion = $request->ubicacion;
+            $persona->update();
+        }
 
         $activo->update($data);
         return redirect()->back()->with('success', 'Activo actualizado correctamente.');

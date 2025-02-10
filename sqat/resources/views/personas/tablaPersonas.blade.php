@@ -80,7 +80,7 @@
                               <td>{{ $persona->titulo_puesto }}</td>
                               <td>{{ $persona->fecha_inicio }}</td>
                               <td>{{ $persona->usuario_ti }}</td>
-                              <td>{{ $persona->ubicacion }}</td>
+                              <td>{{ $persona->ubicacionRelation->sitio }}</td>
                           </tr>
                       @endforeach
                     </tbody>
