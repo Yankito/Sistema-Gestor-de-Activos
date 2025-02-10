@@ -71,7 +71,7 @@
                 @foreach($cantidadPorEstados as $estado => $cantidad)
                     <div class="col-2 text-center">
                         <input type="text" class="knob" data-readonly="true" value="{{  round(($cantidad/$cantidadActivos)*100) }}" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC">
+                            data-fgColor="#39CCCC" disabled>
                         <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
                     </div>
                 @endforeach
@@ -86,7 +86,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?{{ urlencode($tipoDeActivo) }}';">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">

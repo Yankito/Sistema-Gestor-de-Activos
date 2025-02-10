@@ -41,7 +41,7 @@
         <div class="content-header">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Dashboard de {{$ubicacion->sitio}}</h1>
+                    <h1 class="m-0 text-dark">Dashboard de {{$tipoDeActivo}}</h1>
                 </div>
                 <div class="col-sm-6">
                     <div class="breadcrumb float-sm-right">

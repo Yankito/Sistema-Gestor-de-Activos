@@ -16,6 +16,7 @@ use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\SubDashboardController;
+use App\Http\Controllers\DashboardTipoController;
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -50,6 +51,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
     Route::get('/subdashboard', [SubDashboardController::class, 'index']);
+    Route::get('/dashboardTipo/{tipoDeActivo}', [DashboardTipoController::class, 'index']);
     Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
 });
 
