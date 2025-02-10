@@ -125,18 +125,8 @@ document.querySelectorAll('.toggle-edit').forEach(icon => {
     });
 });
 
-// Eliminar responsable correctamente
-document.getElementById('btnEliminarResponsable').addEventListener('click', function() {
-    let responsableSelect = document.getElementById('responsable_de_activo');
-    let responsableHidden = document.getElementById("responsable_de_activo_hidden");
-
-    if (responsableSelect && responsableHidden) {
-        responsableSelect.value = "";
-        responsableHidden.value = "";
-    }
-});
-
 document.getElementById('responsable_de_activo').addEventListener('change', function() {
+    console.log(this.options[this.selectedIndex]);
     let selectedPersona = this.options[this.selectedIndex];
     let ubicacionId = selectedPersona.getAttribute('data-ubicacion');
 
@@ -149,6 +139,7 @@ document.getElementById('responsable_de_activo').addEventListener('change', func
     if (ubicacionHidden) {
         ubicacionHidden.value = ubicacionId;
     }
+    console.log(ubicacionHidden.value);
 });
 
 document.getElementById('ubicacion').addEventListener('change', function() {

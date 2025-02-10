@@ -129,7 +129,7 @@ class   ActivoController extends Controller
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
         }
-        if( $activo->nuevo_estado == 7){
+        if( $request->nuevo_estado == 7){
             $registroAntiguoResponsable = new Registro();
             $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
             $registroAntiguoResponsable->activo = $request->activo_id;
