@@ -9,7 +9,7 @@ use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class   ActivoController extends Controller
+class ActivoController extends Controller
 {
     // Obtener todos los activos
     public function registro()
