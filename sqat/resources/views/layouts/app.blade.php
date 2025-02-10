@@ -191,6 +191,16 @@
                                 </p>
                                 </a>
                             </li>
+
+                            <!--importar Excell-->
+                            <li class="nav-item">
+                                <a href="/reportes" class="nav-link">
+                                <i class = "nav-icon fas fa-file-export"></i>
+                                <p>
+                                    Reportes
+                                </p>
+                                </a>
+                            </li>
                         @endif
                         
                             <form action="/logout" method="POST" class= "d-inline">
