@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.1/css/fixedHeader.bootstrap4.min.css">
+  
   <style>
     .filter-container {
       display: none;
@@ -24,6 +26,7 @@
       padding: 10 px;
       border: 1px solid #d2d6de;
       z-index: 10;
+      width: 200px;
     }
     .filter-btn {
       background: none;
@@ -32,6 +35,15 @@
       cursor: pointer;
       font-size: 10px;
     }
+    .dataTables_wrapper .dataTables_fixedHeader {
+        overflow: hidden;
+        z-index: 1;
+    }
+    .dataTables_wrapper .dataTables_scrollBody {
+        position: relative; /* Asegura que el contenedor de la tabla tenga un z-index menor */
+        z-index: 1;
+    }
+
   </style>
 </head>
     @section('content')
@@ -120,6 +132,8 @@
     <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
     <script src="{{ asset('js/tablas.js') }}"></script>
+
 @endsection
 </html>
