@@ -138,7 +138,7 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(strtolower($tipoDeActivo))}}</p>
+                                <p>{{ ucfirst(mb_strtolower($tipoDeActivo, 'UTF-8')) }}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>

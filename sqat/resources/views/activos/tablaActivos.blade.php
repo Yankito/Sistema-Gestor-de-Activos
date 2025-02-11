@@ -96,89 +96,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div style = "overflow-x:auto;">
-                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
-                    <thead>
-                        <tr>
-                            <th>Acciones</th>
-                            @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
-                                <th>
-                                {{ $columna }}
-                                <!-- boton filtro -->
-                                <button class="filter-btn" data-index="{{ $index + 1 }}">
-                                    <i class="fas fa-filter"></i>
-                                </button>
-                                <div class="filter-container" id="filter-{{ $index + 1}}">
-                                    <input type="text" class="column-search" data-index="{{ $index + 1}}" placeholder="Buscar...">
-                                    <div class="checkbox-filters" data-index="{{ $index + 1}}"></div>
-                                </div>
-                                </th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($activos as $dato)
-                            <tr>
-                                <td class="action-btns">
-                                @if ($dato->estado === 1) {{-- ADQUIRIDO --}}
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 2)">
-                                        <i class="fas fa-arrow-right"></i> <!-- Pasar a PREPARACIÓN -->
-                                    </button>
-                                @elseif ($dato->estado === 2) {{-- PREPARACIÓN --}}
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 3)">
-                                        <i class="fas fa-arrow-right"></i> <!-- Pasar a DISPONIBLE -->
-                                    </button>
-                                @elseif ($dato->estado === 3 || $dato->estado === 4) {{-- DISPONIBLE --}}
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
-                                        <i class="fas fa-edit"></i> <!-- Editar -->
-                                    </button>
-
-                                @elseif ($dato->estado === 5 || $dato->estado === 6) {{-- PERDIDO o ROBADO --}}
-                                    <button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 7)">
-                                        <i class="fas fa-undo"></i> <!-- Volver a DEVUELTO -->
-                                    </button>
-                                @elseif ($dato->estado === 7) {{-- DEVUELTO --}}
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
-                                        <i class="fas fa-edit"></i> <!-- Editar -->
-                                    </button>
-                                @elseif ($dato->estado === 8 || $dato->estado === 9 || $dato->estado === 10) {{-- Estados finales --}}
-                                    <button type="button" class="btn btn-secondary btn-sm" disabled>
-                                        <i class="fas fa-check-circle"></i> <!-- Estado finalizado -->
-                                    </button>
-                                @endif
-
-
-                                </td>
-                                <td>{{ $dato->nro_serie }}</td>
-                                <td>{{ $dato->marca }}</td>
-                                <td>{{ $dato->modelo }}</td>
-                                <td>{{ number_format($dato->precio, 0, ',', '.') }}</td>
-                                <td>{{ $dato->tipo_de_activo }}</td>
-                                <td>
-                                    <span class="estado-badge
-                                        {{ $dato->estado === 1 ? 'estado-adquirido' : '' }}
-                                        {{ $dato->estado === 2 ? 'estado-preparacion' : '' }}
-                                        {{ $dato->estado === 3 ? 'estado-disponible' : '' }}
-                                        {{ $dato->estado === 4 ? 'estado-asignado' : '' }}
-                                        {{ $dato->estado === 5 ? 'estado-perdido' : '' }}
-                                        {{ $dato->estado === 6 ? 'estado-robado' : '' }}
-                                        {{ $dato->estado === 7 ? 'estado-devuelto' : '' }}
-                                        {{ $dato->estado === 8 ? 'estado-paraBaja' : '' }}
-                                        {{ $dato->estado === 9 ? 'estado-donado' : '' }}
-                                        {{ $dato->estado == 10 ? 'estado-vendido' : '' }}">
-                                        {{ $dato->estadoRelation->nombre_estado }}
-                                    </span>
-                                </td>
-                                <td>{{ $dato->usuarioDeActivo->rut ?? '' }}</td>
-                                <td>{{ $dato->responsableDeActivo->rut ?? '' }}</td>
-                                <td>{{ $dato->ubicacionRelation->sitio }}</td>
-                                <td>{{ $dato->ubicacionRelation->soporte_ti }}</td>
-                                <td>{{ $dato->justificacion_doble_activo }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                  </table>
-                </div>
+                @livewire('tabla-activos')
               </div>
               <!-- /.card-body -->
             </div>
@@ -260,25 +178,99 @@
         $('#modal-cambiarEstado').modal('show');
     }
 
+
     function cambiarEstado(activoId, nuevoEstado) {
-        console.log(activoId, nuevoEstado);
-        const datos = JSON.parse('{!! json_encode($estados) !!}');
-        Swal.fire({
-            title: "¿Estás seguro?",
-            text: `El estado del activo cambiará a ${datos.find(estado => estado.id === nuevoEstado).nombre_estado}.`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sí",
-            cancelButtonText: "Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('activo_id').value = activoId;
-                document.getElementById('nuevo_estado').value = nuevoEstado;
-                document.getElementById('cambiarEstadoForm').submit();
+        $.ajax({
+            url: "/activos/cambiarEstado",
+            type: "POST",
+            data: {
+                _token: '{{ csrf_token() }}',
+                activo_id: activoId,
+                nuevo_estado: nuevoEstado
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Actualizar la fila correspondiente
+                    const fila = $('tr[data-id="' + activoId + '"]');
+                    console.log(response);
+                    fila.find('td').each(function(index) {
+                        console.log(index);
+                        switch(index) {
+                            case 0:
+                                if (response.activoModificado.estado === 1) {
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 2)"><i class="fas fa-arrow-right"></i></button>');
+                                } else if (response.activoModificado.estado === 2) {
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
+                                } else if (response.activoModificado.estado === 3 || response.activoModificado.estado === 4) {
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
+                                } else if (response.activoModificado.estado === 5 || response.activoModificado.estado === 6) {
+                                    $(this).html('<button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 7)"><i class="fas fa-undo"></i></button>');
+                                } else if (response.activoModificado.estado === 7) {
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
+                                } else if (response.activoModificado.estado === 8 || response.activoModificado.estado === 9 || response.activoModificado.estado === 10) {
+                                    $(this).html('<button type="button" class="btn btn-secondary btn-sm" disabled><i class="fas fa-check-circle"></i></button>');
+                                }
+                            case 1:
+                                $(this).html(response.activoModificado.numero_serie);
+                                break;
+                            case 2:
+                                $(this).html(response.activoModificado.marca);
+                                break;
+                            case 3:
+                                $(this).html(response.activoModificado.modelo);
+                                break;
+                            case 4:
+                                $(this).html(response.activoModificado.precio);
+                                break;
+                            case 5:
+                                $(this).html(response.activoModificado.tipo);
+                                break;
+                            case 6:
+                                $(this).html('<span class="estado-badge ' + obtenerClaseEstado(nuevoEstado) + '">' + response.activoModificado.estado_relation.nombre_estado + '</span>');
+                                break;
+                            case 7:
+                                $(this).html(response.activoModificado.usuario);
+                                break;
+                            case 8:
+                                $(this).html(response.activoModificado.responsable);
+                                break;
+                            case 9:
+                                $(this).html(response.activoModificado.sitio);
+                                break;
+                            case 10:
+                                $(this).html(response.activoModificado.soporte_ti);
+                                break;
+                            case 11:
+                                $(this).html(response.activoModificado.justificacion);
+                                break;
+                        }
+                    });
+                    Swal.fire("Éxito", "Estado cambiado correctamente", "success");
+                } else {
+                    Swal.fire("Error", "No se pudo cambiar el estado", "error");
+                }
+            },
+            error: function() {
+                Swal.fire("Error", "Error de conexión con el servidor", "error");
             }
         });
     }
 
+    function obtenerClaseEstado(estado) {
+        switch(estado) {
+            case 1: return 'estado-adquirido';
+            case 2: return 'estado-preparacion';
+            case 3: return 'estado-disponible';
+            case 4: return 'estado-asignado';
+            case 5: return 'estado-perdido';
+            case 6: return 'estado-robado';
+            case 7: return 'estado-devuelto';
+            case 8: return 'estado-paraBaja';
+            case 9: return 'estado-donado';
+            case 10: return 'estado-vendido';
+            default: return '';
+        }
+    }
 
 </script>
 @endsection
