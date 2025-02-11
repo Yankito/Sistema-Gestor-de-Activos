@@ -151,6 +151,37 @@
                             </ul>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-file-import"></i>
+                            <p>
+                                Importar Datos
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class = "nav-item">
+                                    <a href = "/importar" class = "nav-link">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>Importar Activos Asignados</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/importarActivos" class="nav-link">
+                                    <i class="nav-icon fas fa-laptop"></i>
+                                    <p>Importar Activos</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/importarPersonas" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>Importar Personas</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
                         <!-- registrar persona -->
                         @if($user->es_administrador)
                             <li class="nav-item">
@@ -181,17 +212,7 @@
                                 </p>
                                 </a>
                             </li>
-
-                            <!--importar Excell-->
-                            <li class="nav-item">
-                                <a href="/importar" class="nav-link">
-                                <i class="nav-icon fas fa-file-import"></i>
-                                <p>
-                                    Importar Datos
-                                </p>
-                                </a>
-                            </li>
-
+                            
                             <!--importar Excell-->
                             <li class="nav-item">
                                 <a href="/reportes" class="nav-link">

@@ -1,5 +1,12 @@
 $(document).ready(function () {
-    let table = $("#tabla").DataTable({
+    // Destruir la tabla si ya está inicializada
+    if ($.fn.DataTable.isDataTable("#tabla")) {
+        $("#tabla").DataTable().destroy();
+    }
+
+    // Inicializar la tabla de datos
+    var table = $('#tabla').DataTable({
+        "fixedHeader": true,
         "responsive": false,
         "lengthChange": false,
         "autoWidth": true,
@@ -36,23 +43,35 @@ $(document).ready(function () {
     table.buttons().container().appendTo('#tabla_wrapper .col-md-6:eq(0)');
 
     // Manejador para mostrar/ocultar filtros
-    $('.filter-btn').click(function() {
+    $('.filter-btn').click(function (event) {
+        event.stopPropagation(); // Detiene que se active la ordenación
         let index = $(this).data('index');
-        $(`#filter-${index}`).toggle();
+        $(`#filter-${index}`).toggle(); // Muestra u oculta el filtro
+    });
+
+    // Evitar que el título active la ordenación si no es el ícono de ordenación
+    $('#tabla thead th').on('click', function (event) {
+        let target = $(event.target);
+
+        // Si se hace clic en el botón de filtro o en el contenedor del filtro, no ordenar
+        if (target.hasClass('filter-btn') || target.closest('.filter-container').length > 0) {
+            event.stopPropagation();
+            return false;
+        }
     });
 
     // Filtrado por texto en columnas
-    $('.column-search').on('keyup', function() {
+    $('.column-search').on('keyup', function () {
         let index = $(this).data('index');
         table.column(index).search(this.value).draw();
     });
 
     // Filtrado por checkboxes en columnas
-    table.columns().every(function(index) {
+    table.columns().every(function (index) {
         let column = this;
         let uniqueValues = new Set();
 
-        column.data().each(function(value) {
+        column.data().each(function (value) {
             uniqueValues.add(value);
         });
 
@@ -63,9 +82,9 @@ $(document).ready(function () {
             );
         });
 
-        checkboxContainer.on('change', 'input', function() {
+        checkboxContainer.on('change', 'input', function () {
             let checkedValues = checkboxContainer.find('input:checked')
-                .map(function() {
+                .map(function () {
                     return $.fn.dataTable.util.escapeRegex($(this).val());
                 }).get().join('|');
 
@@ -73,4 +92,3 @@ $(document).ready(function () {
         });
     });
 });
-
