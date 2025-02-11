@@ -1,10 +1,10 @@
     <td class="action-btns">
         @if ($dato->estado === 1)
-            <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 2)">
+            <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $dato->id }}', 2)">
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($dato->estado === 2)
-            <button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 3)">
+            <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $dato->id }}', 3)">
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($dato->estado === 3 || $dato->estado === 4)
@@ -12,7 +12,7 @@
                 <i class="fas fa-edit"></i>
             </button>
         @elseif ($dato->estado === 5 || $dato->estado === 6)
-            <button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado('{{ $dato->id }}', 7)">
+            <button type="button" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $dato->id }}', 7)">
                 <i class="fas fa-undo"></i>
             </button>
         @elseif ($dato->estado === 7)

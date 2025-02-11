@@ -57,6 +57,9 @@
                 <!-- favicon -->
         <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
 
+        @livewireStyles
+        @livewireScripts
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">

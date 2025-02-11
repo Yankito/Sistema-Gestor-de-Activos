@@ -17,7 +17,6 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
-
     <style>
         .filter-container {
         display: none;
@@ -159,6 +158,7 @@
 
 <script>
     function cargarActivo(id) {
+        console.log("hoal");
         $.ajax({
             url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
             type: 'GET',
@@ -179,7 +179,7 @@
     }
 
 
-    function cambiarEstado(activoId, nuevoEstado) {
+    function cambiarEstado2(activoId, nuevoEstado) {
         $.ajax({
             url: "/activos/cambiarEstado",
             type: "POST",
@@ -198,13 +198,13 @@
                         switch(index) {
                             case 0:
                                 if (response.activoModificado.estado === 1) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 2)"><i class="fas fa-arrow-right"></i></button>');
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 2)"><i class="fas fa-arrow-right"></i></button>');
                                 } else if (response.activoModificado.estado === 2) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
                                 } else if (response.activoModificado.estado === 3 || response.activoModificado.estado === 4) {
                                     $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
                                 } else if (response.activoModificado.estado === 5 || response.activoModificado.estado === 6) {
-                                    $(this).html('<button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado(\'' + activoId + '\', 7)"><i class="fas fa-undo"></i></button>');
+                                    $(this).html('<button type="button" class="btn btn-success btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 7)"><i class="fas fa-undo"></i></button>');
                                 } else if (response.activoModificado.estado === 7) {
                                     $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
                                 } else if (response.activoModificado.estado === 8 || response.activoModificado.estado === 9 || response.activoModificado.estado === 10) {

@@ -6,7 +6,6 @@ use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class   ActivoController extends Controller
