@@ -9,14 +9,15 @@ use App\Models\Ubicacion;
 use App\Models\Estado;
 
 
-class SubDashboardController extends Controller
+class DashboardUbicacionController extends Controller
 {
     public function index(){
         $ubicacion = Ubicacion::where("id","=","1")->first();
         $cantidadActivos = Activo::where('ubicacion', $ubicacion->id)->count();
         $tiposDeActivo = $this->obtenerTiposdeActivo($ubicacion->id);
         $cantidadPorEstados = $this->calcularActivosPorEstados($ubicacion->id);
-        return view('subdashboard', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados'));
+        $ubicaciones = Ubicacion::all();
+        return view('dashboards.dashboardUbicacion', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
     }
 
     public function obtenerTiposdeActivo($ubicacion){
@@ -40,5 +41,14 @@ class SubDashboardController extends Controller
                                         ->count();
         }
         return $estados;
+    }
+
+    public function actualizarUbicacion(Request $request){
+        $ubicacion = Ubicacion::where('id', $request->ubicacion_id)->first();
+        $cantidadActivos = Activo::where('ubicacion', $ubicacion->id)->count();
+        $tiposDeActivo = $this->obtenerTiposdeActivo($ubicacion->id);
+        $cantidadPorEstados = $this->calcularActivosPorEstados($ubicacion->id);
+        $ubicaciones = Ubicacion::all();
+        return view('dashboards.dashboardUbicacion', compact('cantidadActivos', 'ubicacion', 'tiposDeActivo', 'cantidadPorEstados', 'cantidadPorEstados', 'ubicaciones'));
     }
 }

@@ -10,7 +10,7 @@
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
                         <div class="d-flex">
-                            <select name="responsable_de_activo" id="responsable_de_activo" class="form-control select2bs4">
+                            <select name="responsable_de_activo" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}"
@@ -20,9 +20,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <button type="button" id="btnEliminarResponsable" class="btn btn-danger ml-2">
-                                <i class="fas fa-x"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +81,7 @@
             @endif
 
 
-        </>
+        </div>
 
 
         <div class="modal-footer justify-content-between">
@@ -128,18 +125,8 @@ document.querySelectorAll('.toggle-edit').forEach(icon => {
     });
 });
 
-// Eliminar responsable correctamente
-document.getElementById('btnEliminarResponsable').addEventListener('click', function() {
-    let responsableSelect = document.getElementById('responsable_de_activo');
-    let responsableHidden = document.getElementById("responsable_de_activo_hidden");
-
-    if (responsableSelect && responsableHidden) {
-        responsableSelect.value = "";
-        responsableHidden.value = "";
-    }
-});
-
 document.getElementById('responsable_de_activo').addEventListener('change', function() {
+    console.log(this.options[this.selectedIndex]);
     let selectedPersona = this.options[this.selectedIndex];
     let ubicacionId = selectedPersona.getAttribute('data-ubicacion');
 
@@ -152,6 +139,15 @@ document.getElementById('responsable_de_activo').addEventListener('change', func
     if (ubicacionHidden) {
         ubicacionHidden.value = ubicacionId;
     }
+    console.log(ubicacionHidden.value);
+});
+
+document.getElementById('ubicacion').addEventListener('change', function() {
+    let ubicacionHidden = document.getElementById("ubicacion_hidden");
+
+    ubicacionHidden.value = this.value;
+
+    console.log(ubicacionHidden.value);
 });
 
 

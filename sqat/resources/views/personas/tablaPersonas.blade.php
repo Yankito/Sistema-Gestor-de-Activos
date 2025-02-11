@@ -80,28 +80,10 @@
                               <td>{{ $persona->titulo_puesto }}</td>
                               <td>{{ $persona->fecha_inicio }}</td>
                               <td>{{ $persona->usuario_ti }}</td>
-                              <td>{{ $persona->ubicacion }}</td>
+                              <td>{{ $persona->ubicacionRelation->sitio }}</td>
                           </tr>
                       @endforeach
                     </tbody>
-                    <tfoot>
-                    <tr>
-                      <th>rut</th>
-                      <th>nombre_usuario</th>
-                      <th>nombres</th>
-                      <th>primer_apellido</th>
-                      <th>segundo_apellido</th>
-                      <th>supervisor</th>
-                      <th>empresa</th>
-                      <th>estado_empleado</th>
-                      <th>centro_costo</th>
-                      <th>denominacion</th>
-                      <th>titulo_puesto</th>
-                      <th>fecha_inicio</th>
-                      <th>usuario_ti</th>
-                      <th>ubicacion</tr>
-                    </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -120,23 +102,22 @@
 
 
 
-<!-- jQuery -->
-<script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-<script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="vendor/adminlte/plugins/jszip/jszip.min.js"></script>
-<script src="vendor/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="vendor/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+@section('scripts')
 
-<script src="{{ asset('js/tablas.js') }}"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="vendor/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="vendor/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="vendor/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script src="{{ asset('js/tablas.js') }}"></script>
+@endsection
 </html>

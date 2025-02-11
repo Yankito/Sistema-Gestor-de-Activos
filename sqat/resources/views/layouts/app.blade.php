@@ -133,7 +133,7 @@
                                 <li class = "nav-item">
                                     <a href = "/tablaDatos" class = "nav-link">
                                     <i class="nav-icon fas fa-table"></i>
-                                    <p>Datos</p>
+                                    <p>Activos asignados</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -202,7 +202,7 @@
                                 </a>
                             </li>
                         @endif
-                        
+
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
@@ -267,19 +267,7 @@
         <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
 
 
-        <!-- DataTables  & Plugins -->
-        <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-        <script src="vendor/adminlte/plugins/jszip/jszip.min.js"></script>
-        <script src="vendor/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
-        <script src="vendor/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-        <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        @yield('scripts')
 
         <!-- Select2 -->
         <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>

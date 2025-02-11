@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Activo;
+use App\Models\Persona;
+use App\Models\Ubicacion;
+use App\Models\Estado;
+
+class DashboardTipoController extends Controller
+{
+    public function index()
+    {
+        $tipoDeActivo = request()->query('tipo');
+        $cantidadActivos = $tipoDeActivo ? Activo::where('tipo_de_activo', $tipoDeActivo)->count() : Activo::count();
+        $cantidadPersonas = Persona::count();
+        $cantidadUbicaciones = Ubicacion::count();
+
+        $activos = Activo::all();
+        $cantidadPorUbicacion = $this->calcularActivosPorUbicacion($tipoDeActivo);
+        $ubicaciones = Ubicacion::all();
+        $tiposDeActivo = $this->obtenerTiposdeActivo();
+        $cantidadPorEstados = $this->calcularActivosPorEstados($tipoDeActivo);
+        // Pasar el usuario a la vista
+        return view('dashboards.dashboardTipo', compact('cantidadActivos',
+        'cantidadPersonas','cantidadUbicaciones','activos',
+        'cantidadPorUbicacion','ubicaciones', 'tiposDeActivo', 'cantidadPorEstados','tipoDeActivo'));
+    }
+
+    public function calcularActivosPorUbicacion($tipoDeActivo){
+        $ubicaciones = Ubicacion::all();
+        $cantidadPorUbicacion = [];
+        foreach ($ubicaciones as $ubicacion) {
+            $query = Activo::where('ubicacion', $ubicacion->id);
+            if ($tipoDeActivo) {
+                $query->where('tipo_de_activo', $tipoDeActivo);
+            }
+            $cantidadPorUbicacion[$ubicacion->sitio] = $query->count();
+        }
+        return $cantidadPorUbicacion;
+    }
+
+    public function obtenerTiposdeActivo(){
+        $activos = Activo::all();
+        $tiposDeActivo = [];
+        foreach ($activos as $activo) {
+            $activo->tipo_de_activo = strtoupper($activo->tipo_de_activo);
+            $tiposDeActivo[$activo->tipo_de_activo] = Activo::where('tipo_de_activo', $activo->tipo_de_activo)->count();
+        }
+        return $tiposDeActivo;
+    }
+
+    public function calcularActivosPorEstados($tipoDeActivo){
+        $estados = [];
+        $estadosDisponibles = Estado::all();
+        foreach ($estadosDisponibles as $estado) {
+            $query = Activo::where('estado', $estado->id);
+            if ($tipoDeActivo) {
+            $query->where('tipo_de_activo', $tipoDeActivo);
+            }
+            $estados[$estado->nombre_estado] = $query->count();
+        }
+        return $estados;
+    }
+
+    public function actualizarTipo(Request $request){
+        $tipoDeActivo = $request->tipoDeActivo_id;
+        $cantidadActivos = $tipoDeActivo ? Activo::where('tipo_de_activo', $tipoDeActivo)->count() : Activo::count();
+        $cantidadPersonas = Persona::count();
+        $cantidadUbicaciones = Ubicacion::count();
+
+        $activos = Activo::all();
+        $cantidadPorUbicacion = $this->calcularActivosPorUbicacion($tipoDeActivo);
+        $ubicaciones = Ubicacion::all();
+        $tiposDeActivo = $this->obtenerTiposdeActivo();
+        $cantidadPorEstados = $this->calcularActivosPorEstados($tipoDeActivo);
+        // Pasar el usuario a la vista
+        return view('dashboards.dashboardTipo', compact('cantidadActivos',
+        'cantidadPersonas','cantidadUbicaciones','activos',
+        'cantidadPorUbicacion','ubicaciones', 'tiposDeActivo', 'cantidadPorEstados','tipoDeActivo'));
+    }
+}
