@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\DashboardUbicacionController;
 use App\Http\Controllers\DashboardTipoController;
 use App\Http\Controllers\ReportesController;
+use App\Http\Controllers\ImportarActivosController;
 
 Route :: get ('/login' , function () {
     return view ('login');

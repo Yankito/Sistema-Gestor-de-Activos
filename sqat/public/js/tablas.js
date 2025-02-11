@@ -42,9 +42,30 @@ $(document).ready(function () {
     table.buttons().container().appendTo('#tabla_wrapper .col-md-6:eq(0)');
 
     // Manejador para mostrar/ocultar filtros
-    $('.filter-btn').click(function() {
+    $('.filter-btn').click(function(event) {
         let index = $(this).data('index');
+        let filterContainer = $(`#filter-${index}`);
+
+        $('.filter-container').not(filterContainer).hide();
+
         $(`#filter-${index}`).toggle();
+
+            // Obtener posición del botón y ajustar la posición del filtro
+            let btnOffset = $(this).offset();
+            filterContainer.css({
+                "top": btnOffset.top + $(this).outerHeight() + "px", // Justo debajo del botón
+                "left": btnOffset.left + "px",
+                "position": "absolute",
+                "z-index": "1000",
+                "display": "block"
+            });
+        event.stopPropagation();
+    });
+
+    $(document).click(function(event) {
+        if (!$(event.target).closest('.filter-container').length) {
+            $('.filter-container').hide();
+        }
     });
 
     // Filtrado por texto en columnas

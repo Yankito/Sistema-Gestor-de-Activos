@@ -20,14 +20,19 @@
   
   <style>
     .filter-container {
-      display: none;
-      position: absolute;
-      background:white;
-      padding: 10 px;
-      border: 1px solid #d2d6de;
-      z-index: 10;
-      width: 200px;
-    }
+    display: none;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 1000;
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
     .filter-btn {
       background: none;
       border: none;
