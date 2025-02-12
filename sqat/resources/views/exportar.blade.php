@@ -16,7 +16,7 @@
         </div>
         <div class="option" data-value="activos_personas">
             <i class="fas fa-users fa-2x"></i>
-            <div>Activos + Personas</div>
+            <div>Activos Asignados</div>
         </div>
     </div>
 
@@ -30,27 +30,36 @@
 @section('scripts')
 <script>
     $(document).ready(function () {
+        let selectedTable = null;
+
         $('.option').click(function () {
             $('.option').removeClass('selected');
             $(this).addClass('selected');
+            selectedTable = $(this).data('value');
+            $('#btnExcel, #btnCSV').prop('disabled', false); // Habilitar botones
         });
 
-        $('#btnExcel').click(function () {
-            exportarTabla('excel');
-        });
-
-        $('#btnCSV').click(function () {
-            exportarTabla('csv');
-        });
-
-        function exportarTabla(formato) {
-            let tabla = $('.option.selected').data('value');
-            if (!tabla) {
+        $('#btnExcel, #btnCSV').click(function () {
+            if (!selectedTable) {
                 alert('Por favor, selecciona una tabla para exportar.');
                 return;
             }
 
-            window.location.href = `/exportar/${tabla}/${formato}`;
+            const formato = $(this).attr('id') === 'btnExcel' ? 'excel' : 'csv';
+            exportarTabla(selectedTable, formato);
+        });
+
+        function exportarTabla(tabla, formato) {
+            // Mostrar ícono de carga
+            $('#btnExcel, #btnCSV').html('<i class="fas fa-spinner fa-spin"></i> Exportando...').prop('disabled', true);
+
+            // Simular una solicitud al servidor
+            setTimeout(() => {
+                window.location.href = `/exportar/${tabla}/${formato}`;
+                // Restaurar botones después de la exportación
+                $('#btnExcel').html('Exportar a Excel').prop('disabled', false);
+                $('#btnCSV').html('Exportar a CSV').prop('disabled', false);
+            }, 1000); // Simula un retraso de 1 segundo
         }
     });
 </script>
@@ -58,27 +67,33 @@
 <style>
     .option {
         cursor: pointer;
-        padding: 10px; /* Reduce el padding */
+        padding: 15px;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        margin: 5px; /* Reduce el margen */
+        border-radius: 10px;
+        margin: 5px;
         text-align: center;
         width: 150px;
-        transition: background-color 0.3s, color 0.3s;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .option:hover {
-        background-color: #555; /* Oscurece el cuadro al pasar el cursor */
+        background-color: #007bff;
         color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .option.selected {
-        background-color: #007bff;
+        background-color: #0056b3;
         color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .option i {
-        margin-bottom: 5px; /* Reduce el margen inferior del icono */
+        margin-bottom: 10px;
+        font-size: 24px;
     }
 
     .option div {
@@ -87,7 +102,10 @@
     }
 
     #tablasSeleccionadas {
-        gap: 10px; /* Ajusta el espacio entre las opciones */
+        gap: 15px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 </style>
 @endsection
