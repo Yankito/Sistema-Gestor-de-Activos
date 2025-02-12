@@ -19,6 +19,7 @@ use App\Http\Controllers\DashboardUbicacionController;
 use App\Http\Controllers\DashboardTipoController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ImportarActivosController;
+use App\Http\Controllers\ImportarPersonasController;
 
 Route :: get ('/login' , function () {
     return view ('login');

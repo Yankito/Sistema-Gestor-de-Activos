@@ -21,19 +21,19 @@
 
     <style>
         .filter-container {
-        display: none;
-        position: absolute;
-        background:white;
-        padding: 10 px;
-        border: 1px solid #d2d6de;
-        z-index: 10;
+            display: none;
+            position: absolute;
+            background:white;
+            padding: 10 px;
+            border: 1px solid #d2d6de;
+            z-index: 10;
         }
         .filter-btn {
-        background: none;
-        border: none;
-        color: #007bff;
-        cursor: pointer;
-        font-size: 10px;
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 10px;
         }
         .estado-badge {
             display: inline-block;
