@@ -112,9 +112,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
           <div class="modal-content">
-            @if (isset($activo))
-              @include('activos.editarActivo')
-            @endif
+              @livewire('editar-activo')
           </div>
         </div>
     </div>
@@ -157,6 +155,14 @@
 <script src="{{ asset('js/tablas.js') }}"></script>
 
 <script>
+    document.addEventListener('livewire:navigated', function() {
+        Livewire.on('cargarModal', function(data) {
+            let id = data[0].id;
+            Livewire.dispatch(`editar-activo`, 'refreshModal',  id);
+        });
+    });
+
+
     function cargarActivo(id) {
         console.log("hoal");
         $.ajax({

@@ -31,11 +31,10 @@
 
 document.addEventListener('livewire:navigated', function() {
     Livewire.on('actualizarFila', function(activoActualizado) {
-        let activo = activoActualizado[0]; // Obtener el activo actualizado
-        console.log("Refrescando fila:", activo.id);
+        let activo = activoActualizado; // Obtener el activo actualizado
 
         // Use Livewire.emitTo to refresh the specific row component
-        Livewire.dispatch(`fila-activo`, 'refreshFila', activo.id);
+        Livewire.dispatch('refreshRow', activo);
     });
 });
 
