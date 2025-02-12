@@ -1,6 +1,6 @@
 <div class="modal-body">
     <h2>Editar activo</h2>
-    <form action="{{ route('activos.update', $activo->id) }}" method="POST">
+    <form id="formulario-editar" action="{{ route('activos.update', $activo->id) }}" method="POST">
         @csrf
 
         <div class = "row">
@@ -93,6 +93,114 @@
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<script>
+    document.getElementById('formulario-editar').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+    const formData = new FormData(this); // Recoge los datos del formulario
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest' // Para indicar que la solicitud es AJAX
+        }
+    })
+    .then(response => response.json()) // Maneja la respuesta JSON
+    .then(response => {
+        if (response.success) {
+            // Actualiza la fila correspondiente
+            const fila = $('tr[data-id="' + JSON.parse('{!! json_encode($activo->id) !!}') + '"]');
+            //mostrar si la fila fue cargada correctamente
+            if (fila.length) {
+                console.log("Fila cargada correctamente");
+            } else {
+                console.log("Error al cargar la fila");
+            }
+            console.log(JSON.parse('{!! json_encode($activo->id) !!}') );
+            console.log(response);
+            fila.find('td').each(function(index) {
+                console.log(index);
+                switch(index) {
+                    case 0:
+                        if (response.activoModificado.estado === 1) {
+                            $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + response.activoModificado.id + '\', 2)"><i class="fas fa-arrow-right"></i></button>');
+                        } else if (response.activoModificado.estado === 2) {
+                            $(this).html('<button type="button" class="btn btn-primary btn-sm" onclick="cambiarEstado(\'' + response.activoModificado.id + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
+                        } else if (response.activoModificado.estado === 3 || response.activoModificado.estado === 4) {
+                            $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + response.activoModificado.id + '\')"><i class="fas fa-edit"></i></button>');
+                        } else if (response.activoModificado.estado === 5 || response.activoModificado.estado === 6) {
+                            $(this).html('<button type="button" class="btn btn-success btn-sm" onclick="cambiarEstado(\'' + response.activoModificado.id + '\', 7)"><i class="fas fa-undo"></i></button>');
+                        } else if (response.activoModificado.estado === 7) {
+                            $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + response.activoModificado.id + '\')"><i class="fas fa-edit"></i></button>');
+                        } else if (response.activoModificado.estado === 8 || response.activoModificado.estado === 9 || response.activoModificado.estado === 10) {
+                            $(this).html('<button type="button" class="btn btn-secondary btn-sm" disabled><i class="fas fa-check-circle"></i></button>');
+                        }
+                        break;
+                    case 1:
+                        $(this).html(response.activoModificado.numero_serie);
+                        break;
+                    case 2:
+                        $(this).html(response.activoModificado.marca);
+                        break;
+                    case 3:
+                        $(this).html(response.activoModificado.modelo);
+                        break;
+                    case 4:
+                        $(this).html(response.activoModificado.precio);
+                        break;
+                    case 5:
+                        $(this).html(response.activoModificado.tipo);
+                        break;
+                    case 6:
+                        $(this).html('<span class="estado-badge ' + obtenerClaseEstado(nuevoEstado) + '">' + response.activoModificado.estado_relation.nombre_estado + '</span>');
+                        break;
+                    case 7:
+                        $(this).html(response.activoModificado.usuario);
+                        break;
+                    case 8:
+                        $(this).html(response.activoModificado.responsable);
+                        break;
+                    case 9:
+                        $(this).html(response.activoModificado.sitio);
+                        break;
+                    case 10:
+                        $(this).html(response.activoModificado.soporte_ti);
+                        break;
+                    case 11:
+                        $(this).html(response.activoModificado.justificacion);
+                        break;
+                }
+            });
+
+            Swal.fire("Éxito", "Estado cambiado correctamente", "success");
+        } else {
+            Swal.fire("Error", "No se pudo cambiar el estado", "error");
+        }
+    })
+    .catch(error => {
+        Swal.fire("Error", "Error de conexión con el servidor", "error");
+    });
+});
+
+function obtenerClaseEstado(estado) {
+        switch(estado) {
+            case 1: return 'estado-adquirido';
+            case 2: return 'estado-preparacion';
+            case 3: return 'estado-disponible';
+            case 4: return 'estado-asignado';
+            case 5: return 'estado-perdido';
+            case 6: return 'estado-robado';
+            case 7: return 'estado-devuelto';
+            case 8: return 'estado-paraBaja';
+            case 9: return 'estado-donado';
+            case 10: return 'estado-vendido';
+            default: return '';
+        }
+    }
+</script>
+
 
 <script>
 document.querySelectorAll('.toggle-edit').forEach(icon => {

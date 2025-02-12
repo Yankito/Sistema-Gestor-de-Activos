@@ -6,7 +6,6 @@ use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ActivoController extends Controller
@@ -64,7 +63,7 @@ class ActivoController extends Controller
     // Actualizar un activo existente
     public function update(Request $request, $id)
     {
-        $activo = Activo::findOrFail($id);
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         //dd($request->all());
         $data = $request->all();
         $data['usuario_de_activo'] = $request->responsable_de_activo;
@@ -88,7 +87,13 @@ class ActivoController extends Controller
         }
 
         $activo->update($data);
-        return redirect()->back()->with('success', 'Activo actualizado correctamente.');
+        $activoActualizado = Activo::with('estadoRelation')->findOrFail($id);
+
+        $activo->update();
+        return response()->json([
+            'success' => true,
+            'activoModificado'=> $activoActualizado
+        ]);
     }
 
     // Eliminar un activo
@@ -123,27 +128,5 @@ class ActivoController extends Controller
         return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
 
-    public function cambiarEstado(Request $request){
-        $activo = Activo::findOrFail($request->activo_id);
-        if( $activo->estado == 7){
-            $activo->usuario_de_activo = NULL;
-            $activo->responsable_de_activo = NULL;
-        }
-        if( $request->nuevo_estado == 7){
-            $registroAntiguoResponsable = new Registro();
-            $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
-            $registroAntiguoResponsable->activo = $request->activo_id;
-            $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
-            $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
-            $registroAntiguoResponsable->save();
-            $activo->responsable_de_activo = NULL;
-            $activo->usuario_de_activo = NULL;
-        }
-        $activo->estado = $request->nuevo_estado;
 
-
-
-        $activo->update();
-        return redirect()->back()->with('success', 'Estado cambiado a ' . $activo->estadoRelation->nombre_estado);
-    }
 }
