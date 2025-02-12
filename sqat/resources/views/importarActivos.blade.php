@@ -7,7 +7,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Importar Activos</h3>
+                            <h3 class="card-title">Importar Datos de Activos</h3>
                         </div>
                         <div class="card-body" style="overflow-x: auto;">
                             <!-- Mensaje de éxito -->
@@ -16,14 +16,14 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
-                            <!--pantalla de carga -->
+                            <!-- Pantalla de carga -->
                             <div class="overlay" id="loadingOverlay" style="display: none;">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
                                 <div class="text-bold pt-2">Cargando...</div>
                             </div>
 
                             <!-- Formulario para cargar archivo Excel -->
-                            <form id="importForm" action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
+                            <form id="importForm" action="{{ route('importar.excel.activos') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <input type="file" name="archivo_excel" class="form-control" required>
@@ -36,36 +36,35 @@
                             @if (isset($datos) && count($datos) > 0)
                                 <hr>
                                 <h4>Datos Importados</h4>
-                                    @csrf
-                                    <table id="tablaDatos" class="table table-bordered table-striped">
-                                        <thead>
+                                <table id="tablaDatos" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro Serie</th>
+                                            <th>Marca</th>
+                                            <th>Modelo</th>
+                                            <th>Tipo de Activo</th>
+                                            <th>Estado</th>
+                                            <th>Usuario de Activo</th>
+                                            <th>Responsable de Activo</th>
+                                            <th>Precio</th>
+                                            <th>Ubicación</th>
+                                            <th>Justificación Doble Activo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($datos as $row)
                                             <tr>
-                                                <th>Número de serie</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
-                                                <th>Tipo de activo</th>
-                                                <th>Estado</th>
-                                                <th>Ususario de activo</th>
-                                                <th>Responsable de activo</th>
-                                                <th>Precio</th>
-                                                <th>Ubicacion</th>
-                                                <th>Justificacion doble activo</th>
+                                                @foreach ($row as $cell)
+                                                    <td>{{ $cell }}</td>
+                                                @endforeach
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($datos as $row)
-                                                <tr>
-                                                    @foreach ($row as $cell)
-                                                        <td>{{ $cell }}</td>
-                                                    @endforeach
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             @endif
 
                             <!-- Botón para descargar el archivo de muestra -->
-                            <a href="{{ route('descargar.excel') }}" class="btn btn-secondary mt-3">
+                            <a href="{{ route('descargarActivos.excel')}}" class="btn btn-secondary mt-3">
                                 <i class="fas fa-file-excel"></i> Descargar plantilla excel
                             </a>
                         </div>
@@ -110,11 +109,7 @@
                 buttons: ["copy", "csv", "excel", "print"]
             }).buttons().container().appendTo('#tablaDatos_wrapper .col-md-6:eq(0)');
         });
-        // Mostrar pantalla de carga al enviar el formulario
-        $('#importForm').submit(function() {
-            $('#preloader').show();
-        });
-
+        
         // Mostrar pantalla de carga al enviar el formulario
         $('#importForm').submit(function() {
             $('#loadingOverlay').show();

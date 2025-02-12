@@ -218,7 +218,7 @@
                             
                             <!--importar Excell-->
                             <li class="nav-item">
-                                <a href="/reportes" class="nav-link">
+                                <a href="/exportar" class="nav-link">
                                 <i class = "nav-icon fas fa-file-export"></i>
                                 <p>
                                     Reportes
