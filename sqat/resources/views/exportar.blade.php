@@ -5,29 +5,24 @@
     <h3>Exportar Datos</h3>
 
     <label for="tablasSeleccionadas">Selecciona la tabla a exportar:</label>
-    <div id="tablasSeleccionadas" class="form-check">
+    <div id="tablasSeleccionadas" class="d-flex justify-content-center mt-3">
         <div class="option" data-value="activos">
-            <i class="fas fa-laptop"></i>
-            Tabla de Activos
+            <i class="fas fa-laptop fa-2x"></i>
+            <div>Tabla de Activos</div>
         </div>
-    </div>
-    <div class="form-check">
         <div class="option" data-value="personas">
-            <i class="fas fa-user"></i>
-            Tabla de Personas
+            <i class="fas fa-user fa-2x"></i>
+            <div>Tabla de Personas</div>
         </div>
-    </div>
-    <div class="form-check">
         <div class="option" data-value="activos_personas">
-            <i class="fas fa-users"></i>
-            Activos + Personas
+            <i class="fas fa-users fa-2x"></i>
+            <div>Activos + Personas</div>
         </div>
     </div>
 
-    <div class="mt-3">
-        <button id="btnExcel" class="btn btn-success">Exportar a Excel</button>
-        <button id="btnCSV" class="btn btn-primary">Exportar a CSV</button>
-
+    <div class="mt-4 text-center">
+        <button id="btnExcel" class="btn btn-success mx-2">Exportar a Excel</button>
+        <button id="btnCSV" class="btn btn-primary mx-2">Exportar a CSV</button>
     </div>
 </div>
 @endsection
@@ -63,11 +58,18 @@
 <style>
     .option {
         cursor: pointer;
-        padding: 10px;
+        padding: 10px; /* Reduce el padding */
         border: 1px solid #ccc;
         border-radius: 5px;
-        margin-bottom: 10px;
-        display: inline-block;
+        margin: 5px; /* Reduce el margen */
+        text-align: center;
+        width: 150px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .option:hover {
+        background-color: #555; /* Oscurece el cuadro al pasar el cursor */
+        color: white;
     }
 
     .option.selected {
@@ -76,7 +78,16 @@
     }
 
     .option i {
-        margin-right: 10px;
+        margin-bottom: 5px; /* Reduce el margen inferior del icono */
+    }
+
+    .option div {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #tablasSeleccionadas {
+        gap: 10px; /* Ajusta el espacio entre las opciones */
     }
 </style>
 @endsection
