@@ -8,7 +8,7 @@
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($dato->estado === 3 || $dato->estado === 4)
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" wire:click="editarActivo('{{ $dato->id }}')">
                 <i class="fas fa-edit"></i>
             </button>
         @elseif ($dato->estado === 5 || $dato->estado === 6)
@@ -16,7 +16,7 @@
                 <i class="fas fa-undo"></i>
             </button>
         @elseif ($dato->estado === 7)
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo('{{ $dato->id }}')">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" wire:click="editarActivo('{{ $dato->id }}')">
                 <i class="fas fa-edit"></i>
             </button>
         @elseif ($dato->estado === 8 || $dato->estado === 9 || $dato->estado === 10)
