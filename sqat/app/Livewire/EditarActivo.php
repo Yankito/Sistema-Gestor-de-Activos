@@ -17,7 +17,7 @@ class EditarActivo extends Component
     public $responsable_de_activo;
     public $ubicacion;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo'];
+    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion'];
 
     public function mount()
     {
@@ -36,7 +36,9 @@ class EditarActivo extends Component
 
     public function refreshModal($activo)
     {
-        $this->activo = Activo::find($activo['id']);
+        $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
+        $this->responsable_de_activo = $this->activo->responsable_de_activo;
+        $this->ubicacion = $this->activo->ubicacion;
         $this->dispatch('$refresh');
     }
 
@@ -67,6 +69,8 @@ class EditarActivo extends Component
 
     // Actualizar un activo existente
     public function updateActivo(){
+        //dd($this->activo, $this->   responsable_de_activo, $this->ubicacion);
+
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
             ->findOrFail($this->activo->id);
 
@@ -95,11 +99,22 @@ class EditarActivo extends Component
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->update();
         $this->dispatch('actualizarFila', $activo->id);
+        $this->dispatch('cerrar-modal');
+        $this->dispatch('$refresh');
     }
 
-    public function actualizarUbicacion($ubicacionId)
+    public function actualizarUbicacion($responsableId)
     {
-        $this->ubicacion = $ubicacionId;
+        // Buscar la persona seleccionada
+        $persona = Persona::with('ubicacionRelation')->find($responsableId);
+        //dd($persona);
+        // Si la persona tiene ubicación, actualizar la propiedad de Livewire
+        if ($persona && $persona->ubicacion) {
+            $this->ubicacion = $persona->ubicacionRelation->id;
+        } else {
+            $this->ubicacion = null;
+        }
+        $this->dispatch('$refresh');
     }
 
 }

@@ -60,6 +60,9 @@
         @livewireStyles
         @livewireScripts
 
+        <!-- Toastr -->
+        <link rel="stylesheet" href="vendor/adminlte/plugins/toastr/toastr.min.css">
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -272,8 +275,18 @@
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 
+        <!-- Toastr -->
+        <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
 
         <script>
+            $(function() {
+                var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+                });
+            });
             $(function () {
                 //Initialize Select2 Elements
                 $('.select2bs4').select2({

@@ -19,8 +19,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($activos as $dato)
-            @livewire('fila-activo', ['activo' => $dato], key($dato->id))
+        @foreach($activos as $activo)
+            @livewire('fila-activo', ['activo' => $activo], key($activo->id))
         @endforeach
     </tbody>
     </table>
@@ -32,9 +32,9 @@
 document.addEventListener('livewire:navigated', function() {
     Livewire.on('actualizarFila', function(activoActualizado) {
         let activo = activoActualizado; // Obtener el activo actualizado
-
         // Use Livewire.emitTo to refresh the specific row component
         Livewire.dispatch('refreshRow', activo);
+        toastr.success('Estado cambiado correctamente.');
     });
 });
 
