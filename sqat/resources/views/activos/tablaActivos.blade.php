@@ -109,10 +109,10 @@
     </section>
 
 
-    <div class="modal fade" id="modal-default">
+    <div class="modal fade" id="modal-editar-activos-estados">
         <div class="modal-dialog">
           <div class="modal-content">
-              @livewire('editar-activo')
+              @livewire('editar-estados-activo')
           </div>
         </div>
     </div>
@@ -169,7 +169,7 @@
             url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
             type: 'GET',
             success: function(data) {
-                $('#modal-default .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
+                $('#modal-editar-activos-estados .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
             },
             error: function() {
                 alert('Error al cargar los datos del activo.');
@@ -208,11 +208,11 @@
                                 } else if (response.activoModificado.estado === 2) {
                                     $(this).html('<button type="button" class="btn btn-primary btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
                                 } else if (response.activoModificado.estado === 3 || response.activoModificado.estado === 4) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-activos-estados" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
                                 } else if (response.activoModificado.estado === 5 || response.activoModificado.estado === 6) {
                                     $(this).html('<button type="button" class="btn btn-success btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 7)"><i class="fas fa-undo"></i></button>');
                                 } else if (response.activoModificado.estado === 7) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
+                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-activos-estados" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
                                 } else if (response.activoModificado.estado === 8 || response.activoModificado.estado === 9 || response.activoModificado.estado === 10) {
                                     $(this).html('<button type="button" class="btn btn-secondary btn-sm" disabled><i class="fas fa-check-circle"></i></button>');
                                 }

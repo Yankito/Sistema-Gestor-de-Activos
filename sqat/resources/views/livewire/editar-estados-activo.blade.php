@@ -90,6 +90,12 @@
 
 <script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#modal-editar-activos-estados').on('hidden.bs.modal', function () {
+            Livewire.dispatch('cerrarModal'); // Emite el evento a Livewire
+        });
+    });
+
     document.addEventListener('livewire:navigated', function() {
         Livewire.on('cerrar-modal', () => {
             $('#formulario-editar').closest('.modal').modal('hide');

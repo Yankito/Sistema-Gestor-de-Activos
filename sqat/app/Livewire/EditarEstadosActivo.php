@@ -9,7 +9,7 @@ use App\Models\Persona;
 use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Auth;
 
-class EditarActivo extends Component
+class EditarEstadosActivo extends Component
 {
     public $activo;
     public $personas;
@@ -17,7 +17,7 @@ class EditarActivo extends Component
     public $responsable_de_activo;
     public $ubicacion;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion'];
+    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal'];
 
     public function mount()
     {
@@ -31,7 +31,7 @@ class EditarActivo extends Component
     }
     public function render()
     {
-        return view('livewire.editar-activo');
+        return view('livewire.editar-estados-activo');
     }
 
     public function refreshModal($activo)
@@ -64,6 +64,8 @@ class EditarActivo extends Component
         $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
         $this->dispatch('actualizarFila', $activoActualizado);
+        //$this->limpiarDatos();
+        //$this->dispatch('$refresh');
 
     }
 
@@ -100,6 +102,7 @@ class EditarActivo extends Component
         $activo->update();
         $this->dispatch('actualizarFila', $activo->id);
         $this->dispatch('cerrar-modal');
+        //$this->limpiarDatos();
         $this->dispatch('$refresh');
     }
 
@@ -117,4 +120,8 @@ class EditarActivo extends Component
         $this->dispatch('$refresh');
     }
 
+    public function resetearModal()
+    {
+        $this->reset(['activo', 'responsable_de_activo', 'ubicacion']);
+    }
 }
