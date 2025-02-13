@@ -63,7 +63,8 @@ class EditarEstadosActivo extends Component
 
         $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
-        $this->dispatch('actualizarFila', $activoActualizado);
+        $this->dispatch('refreshRow', $activoActualizado);
+        $this->dispatch('actualizarFila');
         //$this->limpiarDatos();
         //$this->dispatch('$refresh');
 
@@ -100,10 +101,9 @@ class EditarEstadosActivo extends Component
         $activo->usuario_de_activo = $this->responsable_de_activo;
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->update();
-        $this->dispatch('actualizarFila', $activo->id);
+        $this->dispatch('refreshRow', $activo->id);
         $this->dispatch('cerrar-modal');
         //$this->limpiarDatos();
-        $this->dispatch('$refresh');
     }
 
     public function actualizarUbicacion($responsableId)

@@ -42,7 +42,7 @@ class FilaActivo extends Component
 
     public function editarActivo($id){
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
-        $this->dispatch('cargarModal', $activo);
+        $this->dispatch('refreshModal', $activo);
     }
     public function cambiarEstado($activo_id, $nuevo_estado){
         $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
@@ -64,9 +64,17 @@ class FilaActivo extends Component
         $activo->update();
 
         $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
+        $this->activo = $activoActualizado;
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
-        $this->dispatch('actualizarFila', $activoActualizado);
+        $this->dispatch('actualizarFila');
+        $this->dispatch('$refresh');
 
+
+    }
+
+    public function editarDatos($id){
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
+        $this->dispatch('cargarModal', $activo);
     }
 
 

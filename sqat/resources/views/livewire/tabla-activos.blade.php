@@ -30,10 +30,7 @@
 <script>
 
     document.addEventListener('livewire:navigated', function() {
-        Livewire.on('actualizarFila', function(activoActualizado) {
-            let activo = activoActualizado; // Obtener el activo actualizado
-            // Use Livewire.emitTo to refresh the specific row component
-            Livewire.dispatch('refreshRow', activo);
+        Livewire.on('actualizarFila', function() {
             toastr.success('Estado cambiado correctamente.');
         });
     });
@@ -53,12 +50,4 @@
             default: return '';
         }
     }
-
-    Livewire.on('estadoCambiado', (activoActualizado) => {
-        Swal.fire({
-            icon: 'success',
-            title: "Estado actualizado correctamente",
-            confirmButtonText: 'Aceptar'
-        });
-    });
 </script>

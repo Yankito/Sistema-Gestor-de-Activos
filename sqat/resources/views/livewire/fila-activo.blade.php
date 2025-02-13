@@ -57,16 +57,3 @@
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>
 </tr>
-
-<script>
-    document.addEventListener('livewire:navigated', function() {
-        Livewire.on('cargarModal', function(data) {
-            const idFila = JSON.parse('{!! json_encode($activo->id) !!}');
-            let id = data[0].id;
-            if(id == idFila) {
-                console.log("ID:", id);
-                Livewire.dispatch('refreshModal',  data);
-            }
-        });
-    });
-</script>

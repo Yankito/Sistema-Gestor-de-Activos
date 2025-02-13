@@ -99,7 +99,7 @@
     document.addEventListener('livewire:navigated', function() {
         Livewire.on('cerrar-modal', () => {
             $('#formulario-editar').closest('.modal').modal('hide');
-            document.getElementById('formulario-editar').reset();
+            console.log('cerrar modal');
             toastr.success('Los cambios se han guardado correctamente.');
         });
     });

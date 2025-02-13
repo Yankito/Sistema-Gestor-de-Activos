@@ -116,6 +116,14 @@
           </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-editar-activos-valores">
+        <div class="modal-dialog">
+          <div class="modal-content">
+              @livewire('editar-estados-activo')
+          </div>
+        </div>
+    </div>
+
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('success'))
             <script>
@@ -155,112 +163,7 @@
 <script src="{{ asset('js/tablas.js') }}"></script>
 
 <script>
-    document.addEventListener('livewire:navigated', function() {
-        Livewire.on('cargarModal', function(data) {
-            let id = data[0].id;
-            Livewire.dispatch(`editar-activo`, 'refreshModal',  id);
-        });
-    });
 
-
-    function cargarActivo(id) {
-        console.log("hoal");
-        $.ajax({
-            url: `/activos/${id}/editar`, // Ruta para obtener el activo por ID
-            type: 'GET',
-            success: function(data) {
-                $('#modal-editar-activos-estados .modal-content').html(data); // Carga el contenido del modal con la vista `editarActivo`
-            },
-            error: function() {
-                alert('Error al cargar los datos del activo.');
-            }
-        });
-    }
-
-    function deshabilitar(id) {
-        const datos = JSON.parse('{!! json_encode($activos) !!}');
-        $('#estado').val(activos[id].estado);
-        $('#form-cambiarEstado').attr('action', `/activos/deshabilitar/${id}`);
-        $('#modal-cambiarEstado').modal('show');
-    }
-
-
-    function cambiarEstado2(activoId, nuevoEstado) {
-        $.ajax({
-            url: "/activos/cambiarEstado",
-            type: "POST",
-            data: {
-                _token: '{{ csrf_token() }}',
-                activo_id: activoId,
-                nuevo_estado: nuevoEstado
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Actualizar la fila correspondiente
-                    const fila = $('tr[data-id="' + activoId + '"]');
-                    console.log(response);
-                    fila.find('td').each(function(index) {
-                        console.log(index);
-                        switch(index) {
-                            case 0:
-                                if (response.activoModificado.estado === 1) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 2)"><i class="fas fa-arrow-right"></i></button>');
-                                } else if (response.activoModificado.estado === 2) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 3)"><i class="fas fa-arrow-right"></i></button>');
-                                } else if (response.activoModificado.estado === 3 || response.activoModificado.estado === 4) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-activos-estados" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
-                                } else if (response.activoModificado.estado === 5 || response.activoModificado.estado === 6) {
-                                    $(this).html('<button type="button" class="btn btn-success btn-sm" wire:click=="cambiarEstado(\'' + activoId + '\', 7)"><i class="fas fa-undo"></i></button>');
-                                } else if (response.activoModificado.estado === 7) {
-                                    $(this).html('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-activos-estados" onclick="cargarActivo(\'' + activoId + '\')"><i class="fas fa-edit"></i></button>');
-                                } else if (response.activoModificado.estado === 8 || response.activoModificado.estado === 9 || response.activoModificado.estado === 10) {
-                                    $(this).html('<button type="button" class="btn btn-secondary btn-sm" disabled><i class="fas fa-check-circle"></i></button>');
-                                }
-                            case 1:
-                                $(this).html(response.activoModificado.numero_serie);
-                                break;
-                            case 2:
-                                $(this).html(response.activoModificado.marca);
-                                break;
-                            case 3:
-                                $(this).html(response.activoModificado.modelo);
-                                break;
-                            case 4:
-                                $(this).html(response.activoModificado.precio);
-                                break;
-                            case 5:
-                                $(this).html(response.activoModificado.tipo);
-                                break;
-                            case 6:
-                                $(this).html('<span class="estado-badge ' + obtenerClaseEstado(nuevoEstado) + '">' + response.activoModificado.estado_relation.nombre_estado + '</span>');
-                                break;
-                            case 7:
-                                $(this).html(response.activoModificado.usuario);
-                                break;
-                            case 8:
-                                $(this).html(response.activoModificado.responsable);
-                                break;
-                            case 9:
-                                $(this).html(response.activoModificado.sitio);
-                                break;
-                            case 10:
-                                $(this).html(response.activoModificado.soporte_ti);
-                                break;
-                            case 11:
-                                $(this).html(response.activoModificado.justificacion);
-                                break;
-                        }
-                    });
-                    Swal.fire("Éxito", "Estado cambiado correctamente", "success");
-                } else {
-                    Swal.fire("Error", "No se pudo cambiar el estado", "error");
-                }
-            },
-            error: function() {
-                Swal.fire("Error", "Error de conexión con el servidor", "error");
-            }
-        });
-    }
 
     function obtenerClaseEstado(estado) {
         switch(estado) {
