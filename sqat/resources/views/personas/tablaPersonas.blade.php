@@ -20,12 +20,18 @@
   <style>
     .filter-container {
       display: none;
-      position: absolute;
-      background:white;
-      padding: 10 px;
-      border: 1px solid #d2d6de;
-      z-index: 10;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      z-index: 1000;
+      min-width: 200px;
+      max-height: 300px;
+      overflow-y: auto;
     }
+
     .filter-btn {
       background: none;
       border: none;
@@ -33,6 +39,15 @@
       cursor: pointer;
       font-size: 10px;
     }
+    .dataTables_wrapper .dataTables_fixedHeader {
+        overflow: hidden;
+        z-index: 1;
+    }
+    .dataTables_wrapper .dataTables_scrollBody {
+        position: relative; /* Asegura que el contenedor de la tabla tenga un z-index menor */
+        z-index: 1;
+    }
+
   </style>
 </head>
 @section('content')
@@ -43,6 +58,10 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Tabla de personas</h3>
+                <!-- Add a "Clear Filters" button -->
+                <button id="clear-filters" class="btn btn-danger btn-sm float-right">
+                    <i class="fas fa-filter"></i> Limpiar Filtros
+                </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
