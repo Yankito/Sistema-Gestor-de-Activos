@@ -45,60 +45,48 @@ $(document).ready(function () {
         table.buttons().container().appendTo('#tabla_wrapper .col-md-6:eq(0)');
     }
 
+    // Store original positions of filter containers
+    let filterPositions = {};
+
     // Show/hide filters on button click (toggle functionality)
     $('.filter-btn').click(function(event) {
         let index = $(this).data('index');
         let filterContainer = $(`#filter-${index}`);
 
+        // Store the original position if not already stored
+        if (!filterPositions[index]) {
+            filterPositions[index] = {
+                top: filterContainer.css('top'),
+                left: filterContainer.css('left')
+            };
+        }
+
         // If the scroll position is not at the top, scroll to the top first
         if ($(window).scrollTop() !== 0) {
             $('html, body').animate({ scrollTop: 0 }, 'fast', function() {
                 // After scrolling to the top, show the filter container
-                toggleFilterContainer(filterContainer, event);
+                toggleFilterContainer(filterContainer, event, index);
             });
         } else {
             // If already at the top, just toggle the filter container
-            toggleFilterContainer(filterContainer, event);
+            toggleFilterContainer(filterContainer, event, index);
         }
 
         event.stopPropagation();
     });
 
     // Function to toggle the filter container
-    function toggleFilterContainer(filterContainer, event) {
+    function toggleFilterContainer(filterContainer, event, index) {
         if (filterContainer.is(':visible')) {
             filterContainer.hide(); // Hide if already visible
         } else {
             // Hide other filters
             $('.filter-container').not(filterContainer).hide();
 
-            // Get button position
-            const btnRect = event.target.getBoundingClientRect();
-            let filterHeight = filterContainer.outerHeight();
-            let filterWidth = filterContainer.outerWidth();
-            let windowHeight = $(window).height();
-            let windowWidth = $(window).width();
-            let scrollY = window.scrollY;
-            let scrollX = window.scrollX;
-
-            // Calculate top position
-            let topPosition = btnRect.bottom + scrollY;
-            if (topPosition + filterHeight > scrollY + windowHeight) {
-                topPosition = btnRect.top + scrollY - filterHeight;
-            }
-            topPosition = Math.max(scrollY, Math.min(topPosition, scrollY + windowHeight - filterHeight));
-
-            // Calculate left position
-            let leftPosition = btnRect.left + scrollX;
-            if (leftPosition + filterWidth > scrollX + windowWidth) {
-                leftPosition = btnRect.right + scrollX - filterWidth;
-            }
-            leftPosition = Math.max(scrollX, Math.min(leftPosition, scrollX + windowWidth - filterWidth));
-
-            // Apply the position
+            // Apply the original position
             filterContainer.css({
-                "top": `${topPosition}px`,
-                "left": `${leftPosition}px`
+                "top": filterPositions[index].top,
+                "left": filterPositions[index].left
             }).show(); // Show the filter container
         }
     }
@@ -140,14 +128,14 @@ $(document).ready(function () {
     });
 
     // Select/Deselect all checkboxes
-    $('.checkbox-filters').on('change', '.select-all', function() {
+    $(document).on('change', '.select-all', function() {
         let index = $(this).data('index');
         let isChecked = $(this).is(':checked');
         $(`.filter-checkbox[data-index="${index}"]`).prop('checked', isChecked).trigger('change');
     });
 
     // Search inside checkboxes (but NOT the table)
-    $('.column-search').on('input', function() {
+    $(document).on('input', '.column-search', function() {
         let searchText = $(this).val().toLowerCase();
         let index = $(this).data('index');
 
@@ -158,7 +146,10 @@ $(document).ready(function () {
     });
 
     // Filter table based on selected checkboxes
-    $('.filter-checkbox').on('change', function() {
+    $(document).on('change', '.filter-checkbox', function(event) {
+        // Stop event propagation to prevent triggering the scroll event
+        event.stopPropagation();
+
         let index = $(this).data('index');
         let selectedValues = $(`.filter-checkbox[data-index="${index}"]:checked`).map(function() {
             return $(this).val().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -170,6 +161,13 @@ $(document).ready(function () {
             // If no checkboxes are selected, hide all rows
             table.column(index).search('^$', true, false, false).draw();
         }
+
+        // Reopen the filter container at the original position
+        let filterContainer = $(`#filter-${index}`);
+        filterContainer.css({
+            "top": filterPositions[index].top,
+            "left": filterPositions[index].left
+        }).show();
     });
 
     // Clear all filters when the "Clear Filters" button is clicked
@@ -190,6 +188,6 @@ $(document).ready(function () {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
             $('.filter-container').hide();
-        }, 1); // Adjust the delay as needed
+        }, 100); // Adjust the delay as needed
     });
 });

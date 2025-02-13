@@ -47,7 +47,14 @@
         position: relative; /* Asegura que el contenedor de la tabla tenga un z-index menor */
         z-index: 1;
     }
-
+    .filter-container {
+        position: fixed;
+        z-index: 9999; /* Asegúrate de que esté por encima de otros elementos */
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: auto; /* Oculto por defecto */
+    }
   </style>
 </head>
 @section('content')
