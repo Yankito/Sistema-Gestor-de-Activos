@@ -3,107 +3,128 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Importar Datos de Activos</h3>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Importar Datos de Activos</h3>
                         </div>
-                        <div class="card-body" style="overflow-x: auto;">
-                            <!-- Mensaje de éxito -->
+                        <div class="card-body">
+                            <!-- Success Message -->
                             @if(session('success'))
-                                <div class="alert alert-success">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ session('success') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             @endif
-                            <!-- Pantalla de carga -->
-                            <div class="overlay" id="loadingOverlay" style="display: none;">
-                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                <div class="text-bold pt-2">Cargando...</div>
-                            </div>
 
-                            <!-- Formulario para cargar archivo Excel -->
+                            <!-- Error Message -->
+                            @if(session('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+
+                            <!-- Excel Import Form -->
                             <form id="importForm" action="{{ route('importar.excel.activos') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="file" name="archivo_excel" class="form-control" required>
+                                    <label for="archivo_excel">Seleccione un archivo Excel:</label>
+                                    <div class="custom-file">
+                                        <input type="file" name="archivo_excel" class="custom-file-input" id="archivo_excel" required>
+                                        <label class="custom-file-label" for="archivo_excel">Elegir archivo...</label>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-file-import"></i> Importar Datos
+                                <button type="submit" class="btn btn-success btn-block">
+                                    <i class="fas fa-file-import mr-2"></i> Importar Datos
                                 </button>
                             </form>
-                            <!-- Mostrar datos importados antes de confirmar -->
-                            @if (isset($datos) && count($datos) > 0)
-                                <hr>
-                                <h4>Datos Importados</h4>
-                                <table id="tablaDatos" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($datos as $index => $row)
-                                            @if ($index == 0) {{-- Ignora la primera fila (encabezados) --}}
-                                                $index++;
-                                                @continue
-                                            @endif
-                                            @php
-                                                $row = array_filter($row); // Elimina columnas vacías
-                                            @endphp
 
-                                            @if (!empty($row)) {{-- Solo imprime filas que tengan al menos una columna con contenido --}}
-                                                <tr>
-                                                    @foreach ($row as $cell)
-                                                        <td>{{ $cell ?? '-' }}</td> {{-- Evita celdas vacías --}}
-                                                    @endforeach
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @endif
-
-                            @if (isset($errores) && count($errores) > 0)
-                                <h4>❌ Errores en la Importación</h4>
-                                <table id="tablaErrores" class="table table-bordered table-danger">
-                                    <thead>
-                                        <tr>
-                                            <th>Nro Serie</th>
-                                            <th>Marca</th>
-                                            <th>Modelo</th>
-                                            <th>Tipo de Activo</th>
-                                            <th>Precio</th>
-                                            <th>Ubicación</th>
-                                            <th>Motivo del Error</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($errores as $error)
+                            <!-- Imported Data Table -->
+                            @if (isset($activos) && count($activos) > 0)
+                                <hr class="my-4">
+                                <h4 class="mb-3">Datos Importados</h4>
+                                <div class="table-responsive">
+                                    <table id="tablaDatos" class="table table-bordered table-striped table-hover">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                @foreach ($error['fila'] as $cell)
-                                                    <td>{{ $cell ?? '-' }}</td>
-                                                @endforeach
-                                                <td>{{ $error['motivo'] }}</td>
+                                                <th>Nro Serie</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Tipo de Activo</th>
+                                                <th>Estado</th>
+                                                <th>Precio</th>
+                                                <th>Ubicación</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($activos as $activo)
+                                                @if (!empty(array_filter($activo)))
+                                                    <tr>
+                                                        <td>{{ $activo['nro_serie'] }}</td>
+                                                        <td>{{ $activo['marca'] }}</td>
+                                                        <td>{{ $activo['modelo'] }}</td>
+                                                        <td>{{ $activo['tipo_de_activo'] }}</td>
+                                                        <td>{{ $activo['estado'] }}</td>
+                                                        <td>{{ $activo['precio'] }}</td>
+                                                        <td>{{ $activo['ubicacion'] }}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             @endif
 
-                            <!-- Botón para descargar el archivo de muestra -->
-                            <a href="{{ route('descargarActivos.excel')}}" class="btn btn-secondary mt-3">
-                                <i class="fas fa-file-excel"></i> Descargar plantilla excel
-                            </a>
+                            <!-- Errors Table -->
+                            @if (isset($errores) && count($errores) > 0)
+                                <hr class="my-4">
+                                <h4 class="mb-3 text-danger">❌ Errores en la Importación</h4>
+                                <div class="table-responsive">
+                                    <table id="tablaErrores" class="table table-bordered table-danger table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nro Serie</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Tipo de Activo</th>
+                                                <th>Precio</th>
+                                                <th>Ubicación</th>
+                                                <th>Motivo del Error</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($errores as $error)
+                                                @if (!empty(array_filter($error['fila'])))
+                                                    <tr>
+                                                        @foreach ($error['fila'] as $cell)
+                                                            <td>{{ $cell ?? '-' }}</td>
+                                                        @endforeach
+                                                        <td>{{ $error['motivo'] }}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+
+                            <!-- Download Template Button -->
+                            <div class="text-center mt-4">
+                                <a href="{{ route('descargarActivos.excel') }}" class="btn btn-secondary">
+                                    <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-        @endif
     </section>
 @endsection
 
@@ -120,26 +141,23 @@
     <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/plugins/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-    <!-- Inicializar DataTables -->
+    <!-- Custom Scripts -->
     <script>
-        $(document).ready(function () {
-            $("#tablaDatos").DataTable({
+        $(document).ready(function() {
+            // Initialize DataTables
+            $('#tablaDatos, #tablaErrores').DataTable({
                 responsive: true,
-                lengthChange: false,
-                autoWidth: false,
-                scrollX: true,
-                buttons: ["copy", "csv", "excel", "print"]
-            }).buttons().container().appendTo('#tablaDatos_wrapper .col-md-6:eq(0)');
-        });
-        
-        // Mostrar pantalla de carga al enviar el formulario
-        $('#importForm').submit(function() {
-            $('#loadingOverlay').show();
+               : {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+
+            // Custom file input
+            $('.custom-file-input').on('change', function() {
+                let fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
         });
     </script>
 @endsection

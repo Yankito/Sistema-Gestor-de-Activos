@@ -27,29 +27,29 @@ class ImportarActivosController extends Controller
         $request->validate([
             'archivo_excel' => 'required|mimes:xlsx,xls'
         ]);
-
+    
         $archivo = $request->file('archivo_excel');
         $spreadsheet = IOFactory::load($archivo->getPathname());
         $hoja = $spreadsheet->getActiveSheet();
         $datos = $hoja->toArray(null, true, true, true);
-
+    
         DB::beginTransaction();
         try {
             $activos = [];
             $errores = [];
-
+    
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
-
+    
                 // Verificar si la fila está vacía
                 if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H'])) {
                     continue;
                 }
-
+    
                 // Convertir la ubicación a mayúsculas y eliminar tildes
                 $ubicacion = $this->eliminarTildesYMayusculas($fila['F']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
-
+    
                 if (!$ubicacionExistente) {
                     $errores[] = [
                         'fila' => $fila,
@@ -57,9 +57,9 @@ class ImportarActivosController extends Controller
                     ];
                     continue;
                 }
-
+    
                 $ubicacionId = $ubicacionExistente->id;
-
+    
                 // Obtener el ID del estado
                 $estadoNombre = 'Adquirido'; // Estado predefinido como 'Adquirido'
                 $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
@@ -72,7 +72,7 @@ class ImportarActivosController extends Controller
                     ];
                     continue;
                 }
-
+    
                 // Crear el activo
                 Activo::create([
                     'nro_serie' => $fila['A'],
@@ -86,7 +86,7 @@ class ImportarActivosController extends Controller
                     'ubicacion' => $ubicacionId,
                     'justificacion_doble_activo' => null
                 ]);
-
+    
                 $activos[] = [
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
@@ -100,7 +100,7 @@ class ImportarActivosController extends Controller
                     'justificacion_doble_activo' => null
                 ];
             }
-
+    
             DB::commit();
             return view('importarActivos', compact('datos', 'activos', 'errores'))->with('success', 'Activos importados correctamente.');
         } catch (\Exception $e) {
