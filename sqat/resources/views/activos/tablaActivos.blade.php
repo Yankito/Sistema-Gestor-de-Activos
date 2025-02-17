@@ -59,23 +59,23 @@
         }
 
         .estado-perdido {
-            background-color: gray;
+            background-color: #808080;
         }
 
         .estado-robado {
-            background-color: black;
+            background-color: #000000;
         }
 
         .estado-devuelto {
-            background-color: pink;
+            background-color: #0a5964;
         }
 
         .estado-paraBaja {
-            background-color: red;
+            background-color: #ff4d4d;
         }
 
         .estado-donado {
-            background-color: blue;
+            background-color: #007bff;
         }
 
         .estado-vendido {
@@ -109,17 +109,17 @@
     </section>
 
 
-    <div class="modal fade" id="modal-editar-activos-estados">
+    <div class="modal fade" id="modal-editar-estados-activos">
         <div class="modal-dialog">
           <div class="modal-content">
               @livewire('editar-estados-activo')
           </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-editar-activos-valores">
+    <div class="modal fade" id="modal-editar-valores-activos">
         <div class="modal-dialog">
           <div class="modal-content">
-              @livewire('editar-estados-activo')
+              @livewire('editar-valores-activo')
           </div>
         </div>
     </div>

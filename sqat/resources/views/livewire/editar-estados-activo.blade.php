@@ -91,7 +91,7 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        $('#modal-editar-activos-estados').on('hidden.bs.modal', function () {
+        $('#modal-editar-estados-activos').on('hidden.bs.modal', function () {
             Livewire.dispatch('cerrarModal'); // Emite el evento a Livewire
         });
     });
