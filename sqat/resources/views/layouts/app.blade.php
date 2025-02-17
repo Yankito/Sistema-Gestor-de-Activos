@@ -186,7 +186,15 @@
                                 </li>
                             </ul>
                         </li>
-
+                        <!--importar Excell-->
+                        <li class="nav-item">
+                            <a href="/exportar" class="nav-link">
+                            <i class = "nav-icon fas fa-file-export"></i>
+                            <p>
+                                Reportes
+                            </p>
+                            </a>
+                        </li>
 
                         <!-- registrar persona -->
                         @if($user->es_administrador)
@@ -215,16 +223,6 @@
                                 <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p>
                                     Registrar Ubicación
-                                </p>
-                                </a>
-                            </li>
-                            
-                            <!--importar Excell-->
-                            <li class="nav-item">
-                                <a href="/exportar" class="nav-link">
-                                <i class = "nav-icon fas fa-file-export"></i>
-                                <p>
-                                    Reportes
                                 </p>
                                 </a>
                             </li>

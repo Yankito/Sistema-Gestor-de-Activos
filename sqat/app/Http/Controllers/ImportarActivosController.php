@@ -36,6 +36,7 @@ class ImportarActivosController extends Controller
         DB::beginTransaction();
         try {
             $activos = [];
+            $errores = [];
 
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
@@ -50,38 +51,58 @@ class ImportarActivosController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    throw new \Exception("La ubicación '{$ubicacion}' no existe en la base de datos.");
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
+                    ];
+                    continue;
                 }
 
                 $ubicacionId = $ubicacionExistente->id;
 
                 // Obtener el ID del estado
-                $estadoNombre = $this->eliminarTildesYMayusculas($fila['E']);
+                $estadoNombre = 'Adquirido'; // Estado predefinido como 'Adquirido'
                 $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
-
-                if (!$estado) {
-                    throw new \Exception("El estado '{$estadoNombre}' no existe en la base de datos.");
+                $estadoId = $estado->id;
+                
+                if(Activo::where('nro_serie', $fila['A'])->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."
+                    ];
+                    continue;
                 }
 
-                $estadoId = $estado->id;
-
                 // Crear el activo
-                $activo = Activo::create([
+                Activo::create([
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
                     'tipo_de_activo' => $fila['D'],
                     'estado' => $estadoId,
+                    'usuario_de_activo' => null,
+                    'responsable_de_activo' => null,
+                    'precio' => $fila['E'],
                     'ubicacion' => $ubicacionId,
-                    'precio' => $fila['G'],
-                    'justificacion_doble_activo' => $fila['H'] ?? null,
+                    'justificacion_doble_activo' => null
                 ]);
 
-                $activos[] = $activo;
+                $activos[] = [
+                    'nro_serie' => $fila['A'],
+                    'marca' => $fila['B'],
+                    'modelo' => $fila['C'],
+                    'tipo_de_activo' => $fila['D'],
+                    'estado' => $estadoId,
+                    'usuario_de_activo' => null,
+                    'responsable_de_activo' => null,
+                    'precio' => $fila['E'],
+                    'ubicacion' => $ubicacionId,
+                    'justificacion_doble_activo' => null
+                ];
             }
 
             DB::commit();
-            return view('importar-activos', compact('datos', 'activos'))->with('success', 'Activos importados correctamente.');
+            return view('importarActivos', compact('datos', 'activos', 'errores'))->with('success', 'Activos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());

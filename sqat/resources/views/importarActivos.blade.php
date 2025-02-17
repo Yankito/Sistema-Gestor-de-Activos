@@ -39,24 +39,51 @@
                                 <table id="tablaDatos" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($datos as $index => $row)
+                                            @if ($index == 0) {{-- Ignora la primera fila (encabezados) --}}
+                                                $index++;
+                                                @continue
+                                            @endif
+                                            @php
+                                                $row = array_filter($row); // Elimina columnas vacías
+                                            @endphp
+
+                                            @if (!empty($row)) {{-- Solo imprime filas que tengan al menos una columna con contenido --}}
+                                                <tr>
+                                                    @foreach ($row as $cell)
+                                                        <td>{{ $cell ?? '-' }}</td> {{-- Evita celdas vacías --}}
+                                                    @endforeach
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
+
+                            @if (isset($errores) && count($errores) > 0)
+                                <h4>❌ Errores en la Importación</h4>
+                                <table id="tablaErrores" class="table table-bordered table-danger">
+                                    <thead>
+                                        <tr>
                                             <th>Nro Serie</th>
                                             <th>Marca</th>
                                             <th>Modelo</th>
                                             <th>Tipo de Activo</th>
-                                            <th>Estado</th>
-                                            <th>Usuario de Activo</th>
-                                            <th>Responsable de Activo</th>
                                             <th>Precio</th>
                                             <th>Ubicación</th>
-                                            <th>Justificación Doble Activo</th>
+                                            <th>Motivo del Error</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($datos as $row)
+                                        @foreach ($errores as $error)
                                             <tr>
-                                                @foreach ($row as $cell)
-                                                    <td>{{ $cell }}</td>
+                                                @foreach ($error['fila'] as $cell)
+                                                    <td>{{ $cell ?? '-' }}</td>
                                                 @endforeach
+                                                <td>{{ $error['motivo'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
