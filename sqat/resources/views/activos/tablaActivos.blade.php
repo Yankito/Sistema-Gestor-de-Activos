@@ -14,9 +14,6 @@
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="vendor/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
-
     <style>
         .filter-container {
         display: none;
@@ -144,7 +141,7 @@
     @endsection
 
 
-    @section('scripts')
+@section('scripts')
 <!-- DataTables  & Plugins -->
 <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

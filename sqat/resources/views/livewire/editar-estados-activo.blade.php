@@ -11,8 +11,8 @@
                 <div class="col-md-6 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
-                        <div class="d-flex">
-                        <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
+                        <div wire:ignore class="d-flex" id="for-picker">
+                        <select wire:model="responsable_de_activo" data-container="#for-picker" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" select class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}">
@@ -101,6 +101,13 @@
             $('#formulario-editar').closest('.modal').modal('hide');
             console.log('cerrar modal');
             toastr.success('Los cambios se han guardado correctamente.');
+        });
+
+        Livewire.on('modal-cargado', () => {
+            console.log('modal cargado');
+            $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+            })
         });
     });
 

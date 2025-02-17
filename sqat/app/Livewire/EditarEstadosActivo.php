@@ -40,6 +40,7 @@ class EditarEstadosActivo extends Component
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
         $this->dispatch('$refresh');
+        $this->dispatch('modal-cargado');
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
