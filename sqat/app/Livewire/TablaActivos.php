@@ -20,11 +20,6 @@ class TablaActivos extends Component
         $this->activos = Activo::with('estadoRelation')->get();
     }
 
-    public function refreshFila($id)
-    {
-        // Emitir solo a la fila específica
-        $this->dispatch('fila-activo', 'refreshRow', $id);
-    }
 
     public function render()
     {

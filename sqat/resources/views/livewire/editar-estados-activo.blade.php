@@ -12,12 +12,10 @@
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
                         <div class="d-flex">
-                            <select wire:model="responsable_de_activo" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
+                        <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
-                                    <option value="{{$persona->id}}"
-                                        data-ubicacion="{{$persona->ubicacion ? $persona->ubicacionRelation->id : ''}}"
-                                        {{ $persona->id == $activo->responsable_de_activo ? 'selected' : '' }}>
+                                    <option value="{{$persona->id}}">
                                         {{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}
                                     </option>
                                 @endforeach
@@ -33,12 +31,11 @@
                             <select wire:model="ubicacion" id="ubicacion_select" class="form-control">
                                 <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
                                 @foreach($ubicaciones as $ubicacion)
-                                    <option value="{{$ubicacion->id}}" {{$ubicacion->id == $activo->ubicacion ? 'selected' : ''}}>
+                                    <option value="{{$ubicacion->id}}" >
                                         {{$ubicacion->sitio}}
                                     </option>
                                 @endforeach
                             </select>
-                            <input type="hidden" wire:model="ubicacion" id="ubicacion_hidden" value="{{ $activo->ubicacion }}">
                         </div>
                     </div>
                 </div>
@@ -62,33 +59,29 @@
                 </div>
             @elseif ($activo->estado == 7)
                 <div class="action-btn">
-                <button type="button" class="btn btn-danger btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 8)">
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 8)">
                     <i class="fas fa-arrow-down"></i> <!-- Pasar a PARA BAJA -->
                     Dar de baja
                 </button>
-                <button type="button" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 9)">
+                <button type="button" data-dismiss="modal" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 9)">
                     <i class="fas fa-hand-holding-heart"></i> <!-- Pasar a DONADO -->
                     Donar
                 </button>
-                <button type="button" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 10)">
+                <button type="button" data-dismiss="modal" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 10)">
                     <i class="fas fa-dollar-sign"></i> <!-- Pasar a VENDIDO -->
                     Vender
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
+                <button type="button" data-dismiss="modal" class="btn btn-secondary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
                     <i class="fas fa-undo"></i> <!-- Volver a PREPARACIÓN -->
                     Volver a preparación
                 </button>
                 </div>
 
             @endif
-
-
         </div>
-
-
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary" >Guardar Cambios</button>
         </div>
     </form>
 @endif
@@ -97,8 +90,21 @@
 
 <script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#modal-editar-activos-estados').on('hidden.bs.modal', function () {
+            Livewire.dispatch('cerrarModal'); // Emite el evento a Livewire
+        });
+    });
 
-function obtenerClaseEstado(estado) {
+    document.addEventListener('livewire:navigated', function() {
+        Livewire.on('cerrar-modal', () => {
+            $('#formulario-editar').closest('.modal').modal('hide');
+            console.log('cerrar modal');
+            toastr.success('Los cambios se han guardado correctamente.');
+        });
+    });
+
+    function obtenerClaseEstado(estado) {
         switch(estado) {
             case 1: return 'estado-adquirido';
             case 2: return 'estado-preparacion';
@@ -114,52 +120,35 @@ function obtenerClaseEstado(estado) {
         }
     }
 
-document.querySelectorAll('.toggle-edit').forEach(icon => {
-    icon.addEventListener('click', function() {
-        let inputId = this.getAttribute('data-target');
-        let inputField = document.getElementById(inputId);
-        if (inputField.tagName === "SELECT") {
-            inputField.disabled = !inputField.disabled;
+    document.querySelectorAll('.toggle-edit').forEach(icon => {
+        icon.addEventListener('click', function() {
+            let inputId = this.getAttribute('data-target');
+            let inputField = document.getElementById(inputId);
+            if (inputField.tagName === "SELECT") {
+                inputField.disabled = !inputField.disabled;
 
-            // Buscar el input hidden relacionado y actualizar su valor
-            let hiddenInput = document.getElementById(inputId + "_hidden");
-            if (hiddenInput) {
-                hiddenInput.value = inputField.value;
-            }
-
-            // Escuchar cambios en el select para actualizar el input hidden
-            inputField.addEventListener("change", function() {
+                // Buscar el input hidden relacionado y actualizar su valor
+                let hiddenInput = document.getElementById(inputId + "_hidden");
                 if (hiddenInput) {
                     hiddenInput.value = inputField.value;
                 }
-            });
-        } else {
-            inputField.readOnly = !inputField.readOnly;
-        }
 
-        this.classList.toggle('fa-pencil-alt');
-        this.classList.toggle('fa-check');
-        this.classList.toggle('text-primary');
-        this.classList.toggle('text-success');
+                // Escuchar cambios en el select para actualizar el input hidden
+                inputField.addEventListener("change", function() {
+                    if (hiddenInput) {
+                        hiddenInput.value = inputField.value;
+                    }
+                });
+            } else {
+                inputField.readOnly = !inputField.readOnly;
+            }
+
+            this.classList.toggle('fa-pencil-alt');
+            this.classList.toggle('fa-check');
+            this.classList.toggle('text-primary');
+            this.classList.toggle('text-success');
+        });
     });
-});
-
-document.getElementById('responsable_de_activo_select').addEventListener('change', function() {
-    let selectedPersona = this.options[this.selectedIndex];
-    let ubicacionId = selectedPersona.getAttribute('data-ubicacion');
-    console.log(ubicacionId);
-    // Emitir evento a Livewire para actualizar la ubicación
-    Livewire.dispatch('actualizarUbicacion', ubicacionId);
-});
-
-document.getElementById('ubicacion_select').addEventListener('change', function() {
-    console.log(this.value);
-    let ubicacionHidden = document.getElementById("ubicacion_hidden");
-
-    ubicacionHidden.value = this.value;
-
-    console.log(ubicacionHidden.value);
-});
 
 
 
