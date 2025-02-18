@@ -67,14 +67,22 @@
 
             <!-- /.card-body -->
             <div class="card-footer bg-transparent">
-            <div class="row">
-                @foreach($cantidadPorEstados as $estado => $cantidad)
-                    <div class="col-2 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="{{  round(($cantidad/$cantidadActivos)*100) }}" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC" disabled>
-                        <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
-                    </div>
-                @endforeach
+            <div class="col-md-6">
+
+                <div class="row">
+                    @foreach($cantidadPorEstados as $estado => $cantidad)
+                        <div class="col-md-6">
+                            <div class="progress-group">
+                                {{ ucfirst(strtolower($estado)) }}
+                                <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
 
             </div>
             <!-- /.row -->

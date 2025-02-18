@@ -17,7 +17,7 @@ class EditarEstadosActivo extends Component
     public $responsable_de_activo;
     public $ubicacion;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal'];
+    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal',  'setResponsable' => 'actualizarResponsable'];
 
     public function mount()
     {
@@ -31,7 +31,13 @@ class EditarEstadosActivo extends Component
     }
     public function render()
     {
-        return view('livewire.editar-estados-activo');
+        if(isset($this->activo)) {
+            $this->dispatch('modal-cargado');
+            return view('livewire.editar-estados-activo');
+        } else {
+            return view('livewire.editar-estados-activo');
+        }
+
     }
 
     public function refreshModal($activo)
@@ -40,7 +46,6 @@ class EditarEstadosActivo extends Component
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
         $this->dispatch('$refresh');
-        $this->dispatch('modal-cargado');
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
@@ -73,7 +78,7 @@ class EditarEstadosActivo extends Component
 
     // Actualizar un activo existente
     public function updateActivo(){
-        //dd($this->activo, $this->   responsable_de_activo, $this->ubicacion);
+        //dd($this->activo, $this->responsable_de_activo, $this->ubicacion);
 
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
             ->findOrFail($this->activo->id);
@@ -124,5 +129,12 @@ class EditarEstadosActivo extends Component
     public function resetearModal()
     {
         $this->reset(['activo', 'responsable_de_activo', 'ubicacion']);
+    }
+
+    public function actualizarResponsable($data)
+    {
+        $this->responsable_de_activo = $data[0];
+        $this->dispatch('actualizarUbicacion', $data[0]);
+
     }
 }

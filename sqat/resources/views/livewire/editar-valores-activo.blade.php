@@ -1,3 +1,4 @@
+<div>
 <div class="modal-body">
 @if (isset($activo))
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -8,7 +9,7 @@
         <div class = "row">
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie" onclick="toggleEditField.call(this, 'data-target')"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="nro_serie">Nro. Serie</label>
                     <input type="text" name="nro_serie" id="nro_serie" required class="form-control" value="{{ $activo->nro_serie }}" readonly />
@@ -106,6 +107,7 @@
 
 <script>
 
+
     document.addEventListener('DOMContentLoaded', function () {
         $('#modal-editar-valores-activos').on('hidden.bs.modal', function () {
             Livewire.dispatch('cerrarModalValores'); // Emite el evento a Livewire
@@ -113,10 +115,48 @@
     });
 
     document.addEventListener('livewire:navigated', function() {
+        function toggleEditField ($dataTarget) {
+            console.log('toggleEditField');
+            let inputId = this.getAttribute($dataTarget);
+            let inputField = document.getElementById(inputId);
+
+            if (!inputField) return;
+
+            if (inputField.tagName === "SELECT") {
+                inputField.disabled = !inputField.disabled;
+            } else {
+                inputField.readOnly = !inputField.readOnly;
+            }
+
+            // Cambiar icono de lápiz a check
+            this.classList.toggle('fa-pencil-alt');
+            this.classList.toggle('fa-check');
+            this.classList.toggle('text-primary');
+            this.classList.toggle('text-success');
+        }
+
+        // Para asegurarse de que funcione después de una actualización de Livewire
+        Livewire.on('modal-valores-cargado', () => {
+            toggleEditField();
+        });
+    });
+
+    document.addEventListener('livewire:navigated', function() {
+
         Livewire.on('cerrar-modal-valores', () => {
             $('#formulario-editar-valores').closest('.modal').modal('hide');
             console.log('cerrar modal');
             toastr.success('Los cambios se han guardado correctamente.');
+        });
+
+        Livewire.on('modal-valores-cargado', () => {
+            console.log('modal valores cargado');
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+            $('#modal-editar-valores-activos').modal('show');
+
+            Livewire.dispatch('editar-campo');
         });
     });
 
@@ -136,36 +176,7 @@
         }
     }
 
-    document.querySelectorAll('.toggle-edit').forEach(icon => {
-        icon.addEventListener('click', function() {
-            let inputId = this.getAttribute('data-target');
-            let inputField = document.getElementById(inputId);
-            if (inputField.tagName === "SELECT") {
-                inputField.disabled = !inputField.disabled;
-
-                // Buscar el input hidden relacionado y actualizar su valor
-                let hiddenInput = document.getElementById(inputId + "_hidden");
-                if (hiddenInput) {
-                    hiddenInput.value = inputField.value;
-                }
-
-                // Escuchar cambios en el select para actualizar el input hidden
-                inputField.addEventListener("change", function() {
-                    if (hiddenInput) {
-                        hiddenInput.value = inputField.value;
-                    }
-                });
-            } else {
-                inputField.readOnly = !inputField.readOnly;
-            }
-
-            this.classList.toggle('fa-pencil-alt');
-            this.classList.toggle('fa-check');
-            this.classList.toggle('text-primary');
-            this.classList.toggle('text-success');
-        });
-    });
-
 
 
 </script>
+</div>

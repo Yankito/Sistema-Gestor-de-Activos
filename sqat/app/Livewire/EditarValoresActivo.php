@@ -16,7 +16,7 @@ class EditarValoresActivo extends Component
     public $responsable_de_activo;
     public $ubicacion;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'cerrarModalValores' => 'resetearModal'];
+    protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal'];
 
     public function mount()
     {
@@ -30,10 +30,15 @@ class EditarValoresActivo extends Component
     }
     public function render()
     {
-        return view('livewire.editar-valores-activo');
+        if(isset($this->activo)) {
+            $this->dispatch('modal-valores-cargado');
+            return view('livewire.editar-valores-activo');
+        } else {
+            return view('livewire.editar-valores-activo');
+        }
     }
 
-    public function refreshModal($activo)
+    public function refreshModalValores($activo)
     {
         $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
         $this->responsable_de_activo = $this->activo->responsable_de_activo;

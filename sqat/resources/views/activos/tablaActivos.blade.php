@@ -45,7 +45,7 @@
         }
 
         .estado-preparacion {
-            background-color: yellow;
+            background-color: gray;
         }
         .estado-disponible {
             background-color: #0aa40d;

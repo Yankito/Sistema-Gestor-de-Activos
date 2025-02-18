@@ -44,6 +44,10 @@ class FilaActivo extends Component
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $this->dispatch('refreshModal', $activo);
     }
+    public function editarActivoValores($id){
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
+        $this->dispatch('refreshModalValores', $activo);
+    }
     public function cambiarEstado($activo_id, $nuevo_estado){
         $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){

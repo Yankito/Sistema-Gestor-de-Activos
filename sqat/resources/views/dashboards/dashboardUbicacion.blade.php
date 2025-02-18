@@ -92,21 +92,8 @@
 
             <!-- /.card-body -->
             <div class="card-footer bg-transparent">
-            <div class="row">
-                @foreach($cantidadPorEstados as $estado => $cantidad)
-                    <div class="col-2 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="{{ $cantidadActivos != 0 ? round(($cantidad/$cantidadActivos)*100) : 0 }}" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC" data-displayInput="true">
-                        <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
-                    </div>
-                @endforeach
-            </div>
 
             <div class="col-md-6">
-                <p class="text-center">
-                    <strong>Cantidad por estados</strong>
-                </p>
-
                 <div class="row">
                     @foreach($cantidadPorEstados as $estado => $cantidad)
                         <div class="col-md-6">
