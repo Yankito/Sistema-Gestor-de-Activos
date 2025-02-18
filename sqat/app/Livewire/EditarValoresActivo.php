@@ -15,6 +15,11 @@ class EditarValoresActivo extends Component
     public $ubicaciones;
     public $responsable_de_activo;
     public $ubicacion;
+    public $nro_serie;
+    public $marca;
+    public $modelo;
+    public $precio;
+    public $tipo_de_activo;
 
     protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal'];
 
@@ -26,6 +31,11 @@ class EditarValoresActivo extends Component
         if($this->activo != NULL) {
             $this->responsable_de_activo = $this->activo->responsable_de_activo;
             $this->ubicacion = $this->activo->responsable_de_activo->ubicacion;
+            $this->nro_serie = $this->activo->nro_serie;
+            $this->marca = $this->activo->marca;
+            $this->modelo = $this->activo->modelo;
+            $this->precio = $this->activo->precio;
+            $this->tipo_de_activo = $this->activo->tipo_de_activo;
         }
     }
     public function render()
@@ -43,6 +53,11 @@ class EditarValoresActivo extends Component
         $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
+        $this->nro_serie = $this->activo->nro_serie;
+        $this->marca = $this->activo->marca;
+        $this->modelo = $this->activo->modelo;
+        $this->precio = $this->activo->precio;
+        $this->tipo_de_activo = $this->activo->tipo_de_activo;
         $this->dispatch('$refresh');
     }
 
@@ -59,9 +74,18 @@ class EditarValoresActivo extends Component
                 $persona->save();
             }
         }
-        $activo->update();
-        $this->dispatch('refreshRow', $activo->id);
-        $this->dispatch('cerrar-modal-valores');
+        $activo->nro_serie = $this->nro_serie;
+        $activo->marca = $this->marca;
+        $activo->modelo = $this->modelo;
+        $activo->precio = $this->precio;
+        $activo->tipo_de_activo = $this->tipo_de_activo;
+        try {
+            $activo->update();
+            $this->dispatch('refreshRow', $activo->id);
+            $this->dispatch('cerrar-modal-valores', ['success' => true, 'mensaje' => 'Los cambios se han guardado correctamente.']);
+        } catch (\Exception $e) {
+            $this->dispatch('cerrar-modal-valores', ['success' => false, 'mensaje' => 'El número de serie ya se encuentra registrado.']);
+        }
 
     }
 

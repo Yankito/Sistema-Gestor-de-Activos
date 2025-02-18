@@ -9,10 +9,10 @@
         <div class = "row">
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie" onclick="toggleEditField.call(this, 'data-target')"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie" ></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="nro_serie">Nro. Serie</label>
-                    <input type="text" name="nro_serie" id="nro_serie" required class="form-control" value="{{ $activo->nro_serie }}" readonly />
+                    <input wire:model="nro_serie" type="text" id="nro_serie" required class="form-control" value="{{ $activo->nro_serie }}" readonly />
                 </div>
             </div>
 
@@ -21,7 +21,7 @@
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="marca"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="marca">Marca</label>
-                    <input type="text" name="marca" id="marca" required class="form-control" value="{{ $activo->marca }}" readonly />
+                    <input wire:model="marca" type="text" id="marca" required class="form-control" value="{{ $activo->marca }}" readonly />
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="modelo"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="modelo">Modelo</label>
-                    <input type="text" name="modelo" id="modelo" required class="form-control" value="{{ $activo->modelo }}" readonly />
+                    <input wire:model="modelo" type="text" id="modelo" required class="form-control" value="{{ $activo->modelo }}" readonly />
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="precio"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="precio">Precio</label>
-                    <input type="number" name="precio" id="precio" required class="form-control" value="{{ $activo->precio }}" readonly />
+                    <input wire:model="precio" type="number" id="precio" required class="form-control" value="{{ $activo->precio }}" readonly />
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="ubicacion">Ubicación</label>
                     <div class="d-flex">
-                        <select wire:model="ubicacion" id="ubicacion_select" class="form-control" disabled>
+                        <select wire:model="ubicacion" id="ubicacion" class="form-control" disabled>
                             <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
                             @foreach($ubicaciones as $ubicacion)
                                 <option value="{{$ubicacion->id}}" >
@@ -115,48 +115,48 @@
     });
 
     document.addEventListener('livewire:navigated', function() {
-        function toggleEditField ($dataTarget) {
-            console.log('toggleEditField');
-            let inputId = this.getAttribute($dataTarget);
-            let inputField = document.getElementById(inputId);
 
-            if (!inputField) return;
-
-            if (inputField.tagName === "SELECT") {
-                inputField.disabled = !inputField.disabled;
-            } else {
-                inputField.readOnly = !inputField.readOnly;
-            }
-
-            // Cambiar icono de lápiz a check
-            this.classList.toggle('fa-pencil-alt');
-            this.classList.toggle('fa-check');
-            this.classList.toggle('text-primary');
-            this.classList.toggle('text-success');
-        }
-
-        // Para asegurarse de que funcione después de una actualización de Livewire
-        Livewire.on('modal-valores-cargado', () => {
-            toggleEditField();
-        });
-    });
-
-    document.addEventListener('livewire:navigated', function() {
-
-        Livewire.on('cerrar-modal-valores', () => {
+        Livewire.on('cerrar-modal-valores', (data) => {
             $('#formulario-editar-valores').closest('.modal').modal('hide');
             console.log('cerrar modal');
-            toastr.success('Los cambios se han guardado correctamente.');
+            console.log(data);
+            if(data[0]['success']===true)
+                toastr.success(data[0]['mensaje']);
+            else
+                toastr.error(data[0]['mensaje']);
         });
 
         Livewire.on('modal-valores-cargado', () => {
             console.log('modal valores cargado');
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
-            })
+            $(function () {
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+            });
             $('#modal-editar-valores-activos').modal('show');
 
-            Livewire.dispatch('editar-campo');
+            $(function () {
+                $('.toggle-edit').on('click',function toggleEditField (event) {
+                    console.log('toggleEditField');
+                    let dataTarget = event.target.getAttribute('data-target')
+                    let inputField = document.getElementById(dataTarget);
+
+                    if (!inputField) return;
+
+                    if (inputField.tagName === "SELECT") {
+                        inputField.disabled = !inputField.disabled;
+                    } else {
+                        inputField.readOnly = !inputField.readOnly;
+                    }
+
+                    // Cambiar icono de lápiz a check
+                    this.classList.toggle('fa-pencil-alt');
+                    this.classList.toggle('fa-check');
+                    this.classList.toggle('text-primary');
+                    this.classList.toggle('text-success');
+                });
+            });
+
         });
     });
 
