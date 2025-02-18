@@ -71,7 +71,7 @@ class EditarEstadosActivo extends Component
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
         $this->dispatch('refreshRow', $activoActualizado);
         $this->dispatch('actualizarFila');
-        //$this->limpiarDatos();
+        $this->resetearModal();
         //$this->dispatch('$refresh');
 
     }
