@@ -11,7 +11,13 @@
     <td>{{ $persona->segundo_apellido }}</td>
     <td>{{ $persona->supervisor }}</td>
     <td>{{ $persona->empresa }}</td>
-    <td>{{ $persona->estado_empleado }}</td>
+    <td>
+        <span class="estado-badge
+            {{ $persona->estado_empleado === 1 ? 'estado-activo' : '' }}
+            {{ $persona->estado_empleado === 0 ? 'estado-inactivo' : '' }}">
+            {{ $persona->estado_empleado === 1    ? 'Activo' : 'Inactivo' }}
+        </span>
+    </td>
     <td>{{ $persona->centro_costo }}</td>
     <td>{{ $persona->denominacion }}</td>
     <td>{{ $persona->titulo_puesto }}</td>

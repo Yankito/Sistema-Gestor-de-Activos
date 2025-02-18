@@ -32,7 +32,23 @@
       cursor: pointer;
       font-size: 10px;
     }
-  </style>
+    .estado-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        min-width: 80px;
+    }
+    .estado-activo {
+        background-color: #0aa40d;
+    }
+
+    .estado-inactivo {
+        background-color: #808080;
+    }
+</style>
 </head>
 @section('content')
     <section class = "content">
@@ -57,6 +73,13 @@
       </div>
         <!-- /.container-fluid -->
       </section>
+        <div class="modal fade" id="modal-editar-valores-persona">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                @livewire('personas.editar-valores-persona')
+            </div>
+            </div>
+        </div>
 
     @endsection
 

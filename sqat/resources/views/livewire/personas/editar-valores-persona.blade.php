@@ -95,6 +95,22 @@
                 <input wire:model="titulo_puesto" type="text" id="titulo_puesto" required class="form-control" value="{{ $persona->titulo_puesto }}" readonly />
             </div>
         </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
+            <div class="form-outline mb-4 flex-grow-1">
+                <label class="form-label" for="ubicacion">Ubicación</label>
+                <div class="d-flex">
+                    <select wire:model="ubicacion" id="ubicacion" class="form-control" disabled>
+                        <option value="" {{ is_null($persona->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
+                        @foreach($ubicaciones as $ubicacion)
+                            <option value="{{$ubicacion->id}}" >
+                                {{$ubicacion->sitio}}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
 
         </div>
         <div class="modal-footer justify-content-between">
@@ -110,7 +126,7 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-        $('#modal-editar-valores-activos').on('hidden.bs.modal', function () {
+        $('#modal-editar-valores-persona').on('hidden.bs.modal', function () {
             Livewire.dispatch('cerrarModalValores'); // Emite el evento a Livewire
         });
     });
@@ -134,11 +150,10 @@
                     theme: 'bootstrap4'
                 })
             });
-            $('#modal-editar-valores-activos').modal('show');
+            $('#modal-editar-valores-persona').modal('show');
 
             $(function () {
                 $('.toggle-edit').on('click',function toggleEditField (event) {
-                    console.log('toggleEditField');
                     let dataTarget = event.target.getAttribute('data-target')
                     let inputField = document.getElementById(dataTarget);
 

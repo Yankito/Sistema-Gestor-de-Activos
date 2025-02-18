@@ -25,3 +25,11 @@
     </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener('livewire:navigated', function() {
+        Livewire.on('actualizarFila', function() {
+            toastr.success('Estado cambiado correctamente.');
+        });
+    });
+</script>
