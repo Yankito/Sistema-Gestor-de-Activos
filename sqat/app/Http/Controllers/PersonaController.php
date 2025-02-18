@@ -36,19 +36,14 @@ class PersonaController extends Controller
             // Validar la solicitud
         $request->validate([
             'rut' => 'required|string|max:15|unique:personas,rut|regex:/^\d{7,8}-[\dkK]$/',
-            'nombre_usuario' => 'required|string|max:50',
-            'nombres' => 'required|string|max:50',
-            'primer_apellido' => 'required|string|max:25',
-            'segundo_apellido' => 'nullable|string|max:25',
-            'supervisor' => 'nullable|string|max:60',
-            'empresa' => 'required|string|max:60',
-            'estado_empleado' => 'nullable|boolean',
-            'centro_costo' => 'required|string|max:50',
-            'denominacion' => 'required|string|max:60',
-            'titulo_puesto' => 'required|string|max:60',
-            'fecha_inicio' => 'required|date',
-            'usuario_ti' => 'required|boolean',
+            'nombre_completo' => 'required|string|max:100',
+            'nombre_empresa' => 'required|string|max:100',
+            'estado_empleado' => 'required|boolean',
+            'fecha_ing' => 'required|date',
+            'fecha_ter' =>'required|date',
+            'cargo' => 'required|string|max:100',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
+            'correo' => 'required|string|max:100'
         ],[
             'rut.rexex' => 'El campo rut debe ser un rut válido',
         ]);
@@ -131,19 +126,14 @@ class PersonaController extends Controller
     {
         $request->validate([
             'rut' => 'required|string|max:15|unique:personas,rut,' . $id . '|regex:/^\d{7,8}-[\dkK]$/',
-            'nombre_usuario' => 'required|string|max:50',
-            'nombres' => 'required|string|max:50',
-            'primer_apellido' => 'required|string|max:25',
-            'segundo_apellido' => 'nullable|string|max:25',
-            'supervisor' => 'nullable|string|max:60',
-            'empresa' => 'required|string|max:60',
-            'estado_empleado' => 'nullable|boolean',
-            'centro_costo' => 'required|string|max:50',
-            'denominacion' => 'required|string|max:60',
-            'titulo_puesto' => 'required|string|max:60',
-            'fecha_inicio' => 'required|date',
-            'usuario_ti' => 'required|boolean',
+            'nombre_completo' => 'required|string|max:100',
+            'nombre_empresa' => 'required|string|max:100',
+            'estado_empleado' => 'required|boolean',
+            'fecha_ing' => 'required|date',
+            'fecha_ter' =>'required|date',
+            'cargo' => 'required|string|max:100',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
+            'correo' => 'required|string|max:100'
         ],[
             'rut.rexex' => 'El campo rut debe ser un rut válido',
         ]);

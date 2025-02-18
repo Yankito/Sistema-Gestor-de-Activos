@@ -16,7 +16,7 @@
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}">
-                                        {{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}
+                                        {{$persona->rut}}: {{$persona->nombre_completo}}
                                     </option>
                                 @endforeach
                             </select>

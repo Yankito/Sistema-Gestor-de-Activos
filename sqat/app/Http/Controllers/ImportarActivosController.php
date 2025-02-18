@@ -42,12 +42,12 @@ class ImportarActivosController extends Controller
                 if ($index == 1) continue; // Saltar encabezados
     
                 // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H'])) {
+                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
                     continue;
                 }
     
                 // Convertir la ubicación a mayúsculas y eliminar tildes
-                $ubicacion = $this->eliminarTildesYMayusculas($fila['F']);
+                $ubicacion = $this->eliminarTildesYMayusculas($fila['E']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
     
                 if (!$ubicacionExistente) {
@@ -82,7 +82,7 @@ class ImportarActivosController extends Controller
                     'estado' => $estadoId,
                     'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
-                    'precio' => $fila['E'],
+                    'precio' => null,
                     'ubicacion' => $ubicacionId,
                     'justificacion_doble_activo' => null
                 ]);
@@ -95,7 +95,7 @@ class ImportarActivosController extends Controller
                     'estado' => $estadoId,
                     'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
-                    'precio' => $fila['E'],
+                    'precio' => null,
                     'ubicacion' => $ubicacionId,
                     'justificacion_doble_activo' => null
                 ];

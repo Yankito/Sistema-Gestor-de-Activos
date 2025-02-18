@@ -39,16 +39,15 @@
                                 <table id="tablaDatos" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Nro Serie</th>
-                                            <th>Marca</th>
-                                            <th>Modelo</th>
-                                            <th>Tipo de Activo</th>
+                                            <th>Rut</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Nombre Empresa</th>
                                             <th>Estado</th>
-                                            <th>Usuario de Activo</th>
-                                            <th>Responsable de Activo</th>
-                                            <th>Precio</th>
+                                            <th>Fecha Ingreso</th>
+                                            <th>Fecha Término</th>
+                                            <th>Cargo</th>
                                             <th>Ubicación</th>
-                                            <th>Justificación Doble Activo</th>
+                                            <th>Correo</th>
                                         </tr>
                                     </thead>
                                     <tbody>

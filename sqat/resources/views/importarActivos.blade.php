@@ -54,7 +54,6 @@
                                                 <th>Modelo</th>
                                                 <th>Tipo de Activo</th>
                                                 <th>Estado</th>
-                                                <th>Precio</th>
                                                 <th>Ubicación</th>
                                             </tr>
                                         </thead>
@@ -67,7 +66,6 @@
                                                         <td>{{ $activo['modelo'] }}</td>
                                                         <td>{{ $activo['tipo_de_activo'] }}</td>
                                                         <td>{{ $activo['estado'] }}</td>
-                                                        <td>{{ $activo['precio'] }}</td>
                                                         <td>{{ $activo['ubicacion'] }}</td>
                                                     </tr>
                                                 @endif
@@ -89,7 +87,6 @@
                                                 <th>Marca</th>
                                                 <th>Modelo</th>
                                                 <th>Tipo de Activo</th>
-                                                <th>Precio</th>
                                                 <th>Ubicación</th>
                                                 <th>Motivo del Error</th>
                                             </tr>

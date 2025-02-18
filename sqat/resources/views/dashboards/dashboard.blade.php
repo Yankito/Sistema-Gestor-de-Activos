@@ -70,12 +70,11 @@
             <div class="row">
                 @foreach($cantidadPorEstados as $estado => $cantidad)
                     <div class="col-2 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="{{  round(($cantidad/$cantidadActivos)*100) }}" data-width="60" data-height="60"
+                        <input type="text" class="knob" data-readonly="true" value="{{ round(($cantidad / max($cantidadActivos, 1)) * 100) }}" data-width="60" data-height="60"
                             data-fgColor="#39CCCC" disabled>
                         <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
                     </div>
                 @endforeach
-
             </div>
             <!-- /.row -->
             </div>

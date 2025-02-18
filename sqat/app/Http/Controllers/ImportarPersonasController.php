@@ -28,27 +28,30 @@ class ImportarPersonasController extends Controller
     {
         return view('importarPersonas');
     }
+
     private function convertirFecha($fecha)
     {
         if (!$fecha) {
             return null; // Si la fecha está vacía, devolver NULL
         }
-
+    
         $fecha = trim($fecha);
-        
-        // Si el formato es con barras (1/12/2025)
-        if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $fecha)) {
-            $partes = explode('/', $fecha);
-            return "{$partes[2]}-{$partes[1]}-{$partes[0]}"; // Convertir a YYYY-MM-DD
+    
+        // ✅ Caso 1: Excel almacena la fecha como un número
+        if (is_numeric($fecha)) {
+            return date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($fecha));
         }
-
-        // Si el formato es con guiones (ya en formato esperado)
-        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
-            return $fecha;
+    
+        // ✅ Caso 2: Fecha en formato DD/MM/YYYY o D/M/YYYY
+        if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $fecha, $matches)) {
+            return sprintf('%04d-%02d-%02d', $matches[3], $matches[2], $matches[1]); // Convertir a YYYY-MM-DD
         }
-
-        return null; // En caso de formato inválido
+    
+        throw new \Exception("Formato de fecha no reconocido: '{$fecha}'");
     }
+    
+
+
 
     private function eliminarTildesYMayusculas($cadena)
     {
@@ -56,18 +59,6 @@ class ImportarPersonasController extends Controller
         $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
         $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
         return str_replace($buscar, $reemplazar, $cadena);
-    }
-    //funcion que recibe si, Si,SI, no, No,NO y devuelve 1 o 0
-    private function convertirBoolean($valor)
-    {
-        $valor = strtoupper($valor);
-        if ($valor == 'SI' || $valor == 'SÍ') {
-            return 1;
-        }
-        if ($valor == 'NO') {
-            return 0;
-        }
-        return null;
     }
 
     public function importExcel(Request $request)
@@ -87,11 +78,11 @@ class ImportarPersonasController extends Controller
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
                 //verificar si la fila esta vacia
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I']) && empty($fila['J']) && empty($fila['K']) && empty($fila['L']) && empty($fila['M']) && empty($fila['N']) && empty($fila['O']) && empty($fila['P']) && empty($fila['Q']) && empty($fila['R']) && empty($fila['S']) && empty($fila['V'])) {
+                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I'])) {
                     continue;
                 }
                 // Convertir la ubicación a mayúsculas y eliminar tildes
-                $ubicacion = $this->eliminarTildesYMayusculas($fila['N']);
+                $ubicacion = $this->eliminarTildesYMayusculas($fila['H']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
@@ -103,20 +94,16 @@ class ImportarPersonasController extends Controller
 
                 $persona = Persona::create([
                     'rut' => $fila['A'],
-                    'nombre_usuario' => $fila['B'],
-                    'nombres' => $fila['C'],
-                    'primer_apellido' => $fila['D'],
-                    'segundo_apellido' => $fila['E'] ?? null,
-                    'supervisor' => $fila['F'],
-                    'empresa' => $fila['G'],
-                    'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['H']), FILTER_VALIDATE_BOOLEAN),
-                    'centro_costo' => $fila['I'],
-                    'denominacion' => $fila['J'],
-                    'titulo_puesto' => $fila['K'],
-                    'fecha_inicio' => $this->convertirFecha($fila['L']),
-                    'usuario_ti' => filter_var($this->convertirBoolean($fila['M']), FILTER_VALIDATE_BOOLEAN),
+                    'nombre_completo' => $fila['B'],
+                    'nombre_empresa' => $fila['C'],
+                    'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['D']), FILTER_VALIDATE_BOOLEAN),
+                    'fecha_ing' => date('Y-m-d', strtotime($this->convertirFecha($fila['E']))),
+                    'fecha_ter' => $fila['F'] ? date('Y-m-d', strtotime($this->convertirFecha($fila['F']))) : null,
+                    'cargo' => $fila['G'],
                     'ubicacion' => $ubicacionId,
+                    'correo' => $fila['I']
                 ]);
+                
 
                 $personas[] = $persona;
             }
