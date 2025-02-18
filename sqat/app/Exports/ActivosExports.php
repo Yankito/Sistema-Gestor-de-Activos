@@ -22,9 +22,8 @@ class ActivosExports
 
         // Encabezados
         $headers = [
-            'ID', 'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 
-            'Estado', 'Usuario de Activo', 'Responsable', 'Precio', 
-            'Ubicación', 'Justificación Doble Activo'
+            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 
+            'Ubicación'
         ];
 
         $column = 'A';
@@ -56,13 +55,12 @@ class ActivosExports
         // Datos
         $row = 2;
         foreach ($activos as $activo) {
-            $sheet->setCellValue('A' . $row, $activo->id)
-                  ->setCellValue('B' . $row, $activo->nro_serie)
-                  ->setCellValue('C' . $row, $activo->marca)
-                  ->setCellValue('D' . $row, $activo->modelo)
-                  ->setCellValue('E' . $row, $activo->tipo_de_activo)
-                  ->setCellValue('F' . $row, $activo->estado)
-                  ->setCellValue('G' . $row, $activo->usuario_de_activo)
+            $sheet->setCellValue('A' . $row, $activo->nro_serie)
+                  ->setCellValue('B' . $row, $activo->marca)
+                  ->setCellValue('C' . $row, $activo->modelo)
+                  ->setCellValue('D' . $row, $activo->tipo_de_activo)
+                  ->setCellValue('E' . $row, $activo->estado)
+                  ->setCellValue('F' . $row, $activo->usuario_de_activo)
                   ->setCellValue('H' . $row, $activo->responsable_de_activo)
                   ->setCellValue('I' . $row, $activo->precio)
                   ->setCellValue('J' . $row, $activo->ubicacion)

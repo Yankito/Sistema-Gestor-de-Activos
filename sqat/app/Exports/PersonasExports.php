@@ -20,10 +20,9 @@ class PersonasExports
 
         // Encabezados
         $headers = [
-            'ID', 'Nombre de Usuario', 'Nombres', 'Primer Apellido', 
-            'Segundo Apellido', 'Supervisor', 'Empresa', 'Estado Empleado', 
-            'Centro Costo', 'Denominación', 'Título de Puesto', 
-            'Fecha Inicio', 'Usuario TI'
+            'Rut', 'Nombre Completo', 'Nombre Empresa', 
+            'Estado', 'Fecha de Inicio', 'Fecha Término', 'Cargo', 
+            'Ubicación', 'Correo'
         ];
 
         $column = 'A';
@@ -55,20 +54,15 @@ class PersonasExports
         // Datos
         $row = 2;
         foreach ($personas as $persona) {
-            $sheet->setCellValue('A' . $row, $persona->id)
-                  ->setCellValue('B' . $row, $persona->nombre_usuario)
-                  ->setCellValue('C' . $row, $persona->nombres)
-                  ->setCellValue('D' . $row, $persona->primer_apellido)
-                  ->setCellValue('E' . $row, $persona->segundo_apellido)
-                  ->setCellValue('F' . $row, $persona->supervisor)
-                  ->setCellValue('G' . $row, $persona->empresa)
-                  ->setCellValue('H' . $row, $persona->estado_empleado)
-                  ->setCellValue('I' . $row, $persona->centro_costo)
-                  ->setCellValue('J' . $row, $persona->denominacion)
-                  ->setCellValue('K' . $row, $persona->titulo_puesto)
-                  ->setCellValue('L' . $row, $persona->fecha_inicio)
-                  ->setCellValue('M' . $row, $persona->usuario_ti);
-
+            $sheet->setCellValue('A' . $row, $persona->rut)
+                  ->setCellValue('B' . $row, $persona->nombre_completo)
+                  ->setCellValue('C' . $row, $persona->nombre_empresa)
+                  ->setCellValue('D' . $row, $persona->estado_empleado)
+                  ->setCellValue('E' . $row, $persona->fecha_ing)
+                  ->setCellValue('F' . $row, $persona->fecha_ter)
+                  ->setCellValue('G' . $row, $persona->cargo)
+                  ->setCellValue('H' . $row, $persona->ubicacion)
+                  ->setCellValue('I' . $row, $persona->correo);
             // Aplicar bordes a las celdas de datos
             $sheet->getStyle('A' . $row . ':M' . $row)->applyFromArray([
                 'borders' => [
