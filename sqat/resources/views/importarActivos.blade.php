@@ -34,14 +34,10 @@
                             <form id="importForm" action="{{ route('importar.excel.activos') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="archivo_excel">Seleccione un archivo Excel:</label>
-                                    <div class="custom-file">
-                                        <input type="file" name="archivo_excel" class="custom-file-input" id="archivo_excel" required>
-                                        <label class="custom-file-label" for="archivo_excel">Elegir archivo...</label>
-                                    </div>
+                                    <input type="file" name="archivo_excel" class="form-control" required>
                                 </div>
                                 <button type="submit" class="btn btn-success btn-block">
-                                    <i class="fas fa-file-import mr-2"></i> Importar Datos
+                                    <i class="fas fa-file-import"></i> Importar Datos
                                 </button>
                             </form>
 
