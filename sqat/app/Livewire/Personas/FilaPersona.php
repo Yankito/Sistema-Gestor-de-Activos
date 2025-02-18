@@ -3,6 +3,7 @@
 namespace App\Livewire\Personas;
 
 use Livewire\Component;
+use App\Models\Persona;
 
 class FilaPersona extends Component
 {
@@ -21,5 +22,10 @@ class FilaPersona extends Component
         if ($this->persona->id == $id) {
             $this->dispatch('$refresh');
         }
+    }
+
+    public function editarPersona($id){
+        $persona = Persona::with('ubicacionRelation')->findOrFail($id);
+        $this->dispatch('refreshModalValores', $persona);
     }
 }
