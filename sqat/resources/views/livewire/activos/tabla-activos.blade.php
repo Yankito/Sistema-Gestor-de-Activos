@@ -20,7 +20,7 @@
     </thead>
     <tbody>
         @foreach($activos as $activo)
-            @livewire('fila-activo', ['activo' => $activo], key($activo->id))
+            @livewire('activos.fila-activo', ['activo' => $activo], key($activo->id))
         @endforeach
     </tbody>
     </table>

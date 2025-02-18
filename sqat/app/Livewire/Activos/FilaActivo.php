@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Activos;
 
 use Livewire\Component;
 use App\Models\Activo;
@@ -30,7 +30,7 @@ class FilaActivo extends Component
 
     public function render()
     {
-        return view('livewire.fila-activo');
+        return view('livewire.activos.fila-activo');
     }
 
     public function refreshRow($id)

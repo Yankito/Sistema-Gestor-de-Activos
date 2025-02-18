@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Activos;
 
 use Livewire\Component;
 use App\Models\Activo;
@@ -33,9 +33,9 @@ class EditarEstadosActivo extends Component
     {
         if(isset($this->activo)) {
             $this->dispatch('modal-cargado');
-            return view('livewire.editar-estados-activo');
+            return view('livewire.activos.editar-estados-activo');
         } else {
-            return view('livewire.editar-estados-activo');
+            return view('livewire.activos.editar-estados-activo');
         }
 
     }
