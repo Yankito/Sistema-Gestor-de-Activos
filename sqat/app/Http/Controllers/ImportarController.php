@@ -69,26 +69,30 @@ class ImportarController extends Controller
                 }
             }
 
-            $activo->responsable_de_activo = $responsable ? $responsable->id : null;
-            $activo->usuario_de_activo = $usuario ? $usuario->id : null;
-            $activo->estado = $estado->id;
-            $activo->justificacion_doble_activo = trim($fila[4]) ?: null;
+            if ($activo) {
+                $activo->responsable_de_activo = $responsable ? $responsable->id : null;
+                $activo->usuario_de_activo = $usuario ? $usuario->id : null;
+                $activo->estado = $estado->id;
+                $activo->justificacion_doble_activo = trim($fila[4]) ?: null;
 
-            // Actualizar la ubicación del activo a la ubicación del responsable
-            if ($responsable) {
-                $activo->ubicacion = $responsable->ubicacion;
+                // Actualizar la ubicación del activo a la ubicación del responsable
+                if ($responsable) {
+                    $activo->ubicacion = $responsable->ubicacion;
+                }
+
+                $activo->save();
+
+                $asignaciones[] = [
+                    'responsable' => $responsable ? $responsable->user : null,
+                    'usuario_activo' => $usuario ? $usuario->user : null,
+                    'numero_serie' => $activo->nro_serie,
+                    'estado' => $estado->nombre_estado,
+                    'justificacion' => $activo->justificacion_doble_activo,
+                    'ubicacion' => $activo->ubicacion,
+                ];
+            } else {
+                $errores[] = "Fila $key: Activo con número de serie '{$fila[2]}' no encontrado.";
             }
-
-            $activo->save();
-            
-            $asignaciones[] = [
-                'responsable' => $responsable ? $responsable->user : null,
-                'usuario_activo' => $usuario ? $usuario->user : null,
-                'numero_serie' => $activo->nro_serie,
-                'estado' => $estado->nombre_estado,
-                'justificacion' => $activo->justificacion_doble_activo,
-                'ubicacion' => $activo->ubicacion,
-            ];
         }
 
         return redirect()->back()->with(['errores' => $errores, 'asignaciones' => $asignaciones]);
