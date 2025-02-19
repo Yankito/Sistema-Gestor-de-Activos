@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\DashboardUbicacionController;
 use App\Http\Controllers\DashboardTipoController;
 use App\Http\Controllers\ReportesController;
+use App\Http\Controllers\ImportarActivosController;
+use App\Http\Controllers\ImportarPersonasController;
+use App\Http\Controllers\ExportarController;
+
 
 Route :: get ('/login' , function () {
     return view ('login');
@@ -54,6 +58,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboardUbicacion', [DashboardUbicacionController::class, 'index']);
     Route::get('/dashboardTipo', [DashboardTipoController::class, 'index'])->name('dashboard.tipo');
     Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
+    Route::get('/importarActivos', [ImportarActivosController::class, 'index']);
+    Route::get('/importarPersonas', [ImportarPersonasController::class, 'index']);
+    Route::get('/exportar', [ExportarController::class, 'index']);
+    Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
 });
 
 
@@ -86,7 +94,19 @@ Route::get('/descargarExcel', function () {
     return Response::download($filePath, 'ImportarDatos.xlsx');
 })->name('descargar.excel');
 
+Route::get('/descargarActivosExcel', function () {
+    $filePath = public_path('excel/PlantillaActivos.xlsx');
+    return Response::download($filePath, 'PlantillaActivos.xlsx');
+})->name('descargarActivos.excel');
+
+Route::get('/descargarPersonasExcel', function () {
+    $filePath = public_path('excel/PlantillaPersonas.xlsx');
+    return Response::download($filePath, 'PlantillaPersonas.xlsx');
+})->name('descargarPersonas.excel');
+
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
+Route::post('/importarActivos', [ImportarActivosController::class, 'importExcel'])->name('importar.excel.activos');
+Route::post('/importarPersonas', [ImportarPersonasController::class, 'importExcel'])->name('importar.excel.personas');
 
 Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
 Route::post('/activos/editar/{id}', [ActivoController::class, 'update'])->name('activos.update');

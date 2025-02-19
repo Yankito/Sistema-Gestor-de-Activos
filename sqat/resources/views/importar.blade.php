@@ -7,7 +7,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Importar Archivo Excel</h3>
+                            <h3 class="card-title">Importar Datos de Activos</h3>
                         </div>
                         <div class="card-body" style="overflow-x: auto;">
                             <!-- Mensaje de éxito -->
@@ -16,6 +16,11 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
+                            <!--pantalla de carga -->
+                            <div class="overlay" id="loadingOverlay" style="display: none;">
+                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                <div class="text-bold pt-2">Cargando...</div>
+                            </div>
 
                             <!-- Formulario para cargar archivo Excel -->
                             <form id="importForm" action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
@@ -23,18 +28,10 @@
                                 <div class="form-group">
                                     <input type="file" name="archivo_excel" class="form-control" required>
                                 </div>
-                                <button type="submit" class="btn btn-success">Importar Datos</button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-file-import"></i> Importar Datos
+                                </button>
                             </form>
-                            <!-- pantalla de carga mientras se exporta el archivo -->
-                            <div id = "preloader" class="preloader flex-column justify-content-center align-items-center" style="display: none;">
-                                <img class="animation__shake animation__wobble" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="500" width="1500" style="animation: spin 0.00001s linear infinite;">
-                                <style>
-                                    @keyframes spin {
-                                        0% { transform: rotate(0deg); }
-                                        100% { transform: rotate(360deg); }
-                                    }
-                                </style>
-                            </div>
                             <!-- Mostrar datos importados antes de confirmar -->
                             @if (isset($datos) && count($datos) > 0)
                                 <hr>
@@ -80,7 +77,7 @@
 
                             <!-- Botón para descargar el archivo de muestra -->
                             <a href="{{ route('descargar.excel') }}" class="btn btn-secondary mt-3">
-                                Descargar Excel de Muestra
+                                <i class="fas fa-file-excel"></i> Descargar plantilla excel
                             </a>
                         </div>
                     </div>
@@ -127,6 +124,11 @@
         // Mostrar pantalla de carga al enviar el formulario
         $('#importForm').submit(function() {
             $('#preloader').show();
+        });
+
+        // Mostrar pantalla de carga al enviar el formulario
+        $('#importForm').submit(function() {
+            $('#loadingOverlay').show();
         });
     </script>
 @endsection

@@ -10,20 +10,16 @@ class Persona extends Model
     protected $table = 'personas';
     // Campos que se pueden asignar masivamente
     protected $fillable = [
+        'user',
         'rut',
-        'nombre_usuario',
-        'nombres',
-        'primer_apellido',
-        'segundo_apellido',
-        'supervisor',
-        'empresa',
+        'nombre_completo',
+        'nombre_empresa',
         'estado_empleado',
-        'centro_costo',
-        'denominacion',
-        'titulo_puesto',
-        'fecha_inicio',
-        'usuario_ti',
+        'fecha_ing',
+        'fecha_ter',
+        'cargo',
         'ubicacion',
+        'correo'
     ];
 
     // Activar timestamps si se están usando las columnas created_at y updated_at
@@ -34,13 +30,6 @@ class Persona extends Model
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion', 'id');
     }
-
-    // Método para obtener el nombre completo de una persona
-    public function getNombreCompletoAttribute()
-    {
-        return "{$this->nombres} {$this->primer_apellido} {$this->segundo_apellido}";
-    }
-
     // Scope para buscar personas activas
     public function scopeActivas($query)
     {

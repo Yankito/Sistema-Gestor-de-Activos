@@ -10,14 +10,14 @@ class CreateActivosTable extends Migration
     {
         Schema::create('activos', function (Blueprint $table) {
             $table->id();
-            $table->string('nro_serie', 50)->unique(); // Define el campo nroSerie como clave primaria
-            $table->string('marca', 50);
-            $table->string('modelo', 50);
-            $table->string('tipo_de_activo', 50);
+            $table->string('nro_serie', 100)->unique(); // Define el campo nroSerie como clave primaria
+            $table->string('marca', 100);
+            $table->string('modelo', 100);
+            $table->string('tipo_de_activo', 100);
             $table->unsignedBigInteger('estado');
             $table->unsignedBigInteger('usuario_de_activo')->nullable();
             $table->unsignedBigInteger('responsable_de_activo')->nullable();
-            $table->integer('precio');
+            $table->integer('precio')->nullable();
             $table->unsignedBigInteger('ubicacion')->nullable();
             $table->text('justificacion_doble_activo')->nullable();
 

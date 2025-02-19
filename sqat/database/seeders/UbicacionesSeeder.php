@@ -22,6 +22,8 @@ class UbicacionesSeeder extends Seeder
             ['sitio' => 'RAPACO', 'soporte_ti' => 'ESTEBAN ITURRA', 'latitud' => -40.250542, 'longitud' => -73.012832],
             ['sitio' => 'ROSARIO NORTE', 'soporte_ti' => 'CRISTIAN URBINA', 'latitud' => -33.404088, 'longitud' => -70.572684],
             ['sitio' => 'SAN FERNANDO', 'soporte_ti' => 'PATRICIO GONZALEZ', 'latitud' => -34.570463, 'longitud' => -70.972826],
+            ['sitio' => 'CONCEPCION', 'soporte_ti' => 'ESTEBAN ITURRA', 'latitud' => -36.77141, 'longitud' => -73.01976],
+            ['sitio' => 'NOVICIADO', 'soporte_ti' => 'CRISTIAN URBINA', 'latitud' => -33.41313, 'longitud' => -70.84082],   
         ]);
     }
 }
