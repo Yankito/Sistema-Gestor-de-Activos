@@ -39,7 +39,39 @@
       cursor: pointer;
       font-size: 10px;
     }
-  </style>
+    .estado-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        min-width: 80px;
+    }
+    .estado-activo {
+        background-color: #0aa40d;
+    }
+
+    .estado-inactivo {
+        background-color: #808080;
+    }
+    .dataTables_wrapper .dataTables_fixedHeader {
+        overflow: hidden;
+        z-index: 1;
+    }
+    .dataTables_wrapper .dataTables_scrollBody {
+        position: relative; /* Asegura que el contenedor de la tabla tenga un z-index menor */
+        z-index: 1;
+    }
+    .filter-container {
+        position: fixed;
+        z-index: 9999; /* Asegúrate de que esté por encima de otros elementos */
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: auto; /* Oculto por defecto */
+    }
+</style>
 </head>
 @section('content')
     <section class = "content">
@@ -56,47 +88,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div style = "overflow-x:auto">
-                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
-                    <thead>
-                    <tr>
-                        @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer Apellido", "Segundo Apellido", "Supervisor", "Empresa", "Estado empleado", "Centro Costo", "Denominacion", "Titulo Puesto", "Fecha Inicio", "Usuario TI", "Ubicacion"] as $index => $columna)
-                          <th>
-                            {{ $columna }}
-                            <!-- boton filtro -->
-                            <button class="filter-btn" data-index="{{ $index }}">
-                              <i class="fas fa-filter"></i>
-                            </button>
-                            <div class="filter-container" id="filter-{{ $index }}">
-                              <input type="text" class="column-search" data-index="{{ $index }}" placeholder="Buscar...">
-                              <div class="checkbox-filters" data-index="{{ $index }}"></div>
-                            </div>
-                          </th>
-                        @endforeach
-                      </tr>
-                      </thead>
-                    <tbody>
-                      @foreach($personas as $persona)
-                          <tr>
-                              <td>{{ $persona->rut }}</td>
-                              <td>{{ $persona->nombre_usuario }}</td>
-                              <td>{{ $persona->nombres }}</td>
-                              <td>{{ $persona->primer_apellido }}</td>
-                              <td>{{ $persona->segundo_apellido }}</td>
-                              <td>{{ $persona->supervisor }}</td>
-                              <td>{{ $persona->empresa }}</td>
-                              <td>{{ $persona->estado_empleado }}</td>
-                              <td>{{ $persona->centro_costo }}</td>
-                              <td>{{ $persona->denominacion }}</td>
-                              <td>{{ $persona->titulo_puesto }}</td>
-                              <td>{{ $persona->fecha_inicio }}</td>
-                              <td>{{ $persona->usuario_ti }}</td>
-                              <td>{{ $persona->ubicacionRelation->sitio }}</td>
-                          </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
+                @livewire('personas.tabla-personas')
               </div>
               <!-- /.card-body -->
             </div>
