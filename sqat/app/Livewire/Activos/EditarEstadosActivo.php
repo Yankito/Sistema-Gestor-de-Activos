@@ -133,8 +133,8 @@ class EditarEstadosActivo extends Component
 
     public function actualizarResponsable($data)
     {
-        $this->responsable_de_activo = $data[0];
-        $this->dispatch('actualizarUbicacion', $data[0]);
-
+        $this->responsable_de_activo = $data;
+        $this->dispatch('actualizarUbicacion', $data);
+        $this->dispatch('$refresh');
     }
 }

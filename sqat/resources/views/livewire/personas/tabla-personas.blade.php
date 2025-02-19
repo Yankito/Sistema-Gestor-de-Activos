@@ -3,8 +3,8 @@
     <thead>
     <tr>
         <th>Acciones</th>
-        @foreach(["Rut", "Nombre de usuario", "Nombres", "Primer Apellido", "Segundo Apellido", "Supervisor", "Empresa", "Estado empleado", "Centro Costo", "Denominacion", "Titulo Puesto", "Fecha Inicio", "Usuario TI", "Ubicacion"] as $index => $columna)
-            <th>
+        @foreach(["User","Rut", "Nombre Completo", "Nombre Empresa", "Estado", "Fecha Ingreso Compañia", "Fecha Término Compañia", "Cargo", "Ubicación", "Correo"] as $index => $columna)
+        <th>
             {{ $columna }}
             <!-- boton filtro -->
             <button class="filter-btn" data-index="{{ $index + 1}}">
