@@ -42,20 +42,6 @@ class ImportarController extends Controller
             $usuario = Persona::where('user', $usuarioUser)->first();
             $activo = Activo::where('nro_serie', strtoupper(trim($fila[2])))->first();
 
-            if (!$responsable) {
-                $errores[] = "Fila $key: Responsable '$responsableUser' no encontrado.";
-            }
-            if (!$usuario) {
-                $errores[] = "Fila $key: Usuario '$usuarioUser' no encontrado.";
-            }
-            if (!$activo) {
-                $errores[] = "Fila $key: Activo con número de serie '{$fila[2]}' no encontrado.";
-            }
-
-            if (!$responsable || !$usuario || !$activo) {
-                continue;
-            }
-
             $estadoExcel = strtoupper(trim($fila[3]));
             $estadoExcel = str_replace(
                 ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'],
@@ -69,18 +55,39 @@ class ImportarController extends Controller
                 continue;
             }
 
-            $activo->responsable_de_activo = $responsable->id;
-            $activo->usuario_de_activo = $usuario->id;
+            // Verificar si el estado requiere responsable y usuario
+            $estadosSinResponsableUsuario = ['ADQUIRIDO', 'PREPARACION', 'DISPONIBLE', 'PERDIDO', 'ROBADO', 'PARA BAJA', 'DONADO', 'VENDIDO'];
+            if (!in_array($estadoExcel, $estadosSinResponsableUsuario)) {
+                if (!$responsable) {
+                    $errores[] = "Fila $key: Responsable '$responsableUser' no encontrado.";
+                }
+                if (!$usuario) {
+                    $errores[] = "Fila $key: Usuario '$usuarioUser' no encontrado.";
+                }
+                if (!$responsable || !$usuario) {
+                    continue;
+                }
+            }
+
+            $activo->responsable_de_activo = $responsable ? $responsable->id : null;
+            $activo->usuario_de_activo = $usuario ? $usuario->id : null;
             $activo->estado = $estado->id;
             $activo->justificacion_doble_activo = trim($fila[4]) ?: null;
+
+            // Actualizar la ubicación del activo a la ubicación del responsable
+            if ($responsable) {
+                $activo->ubicacion = $responsable->ubicacion;
+            }
+
             $activo->save();
             
             $asignaciones[] = [
-                'responsable' => $responsable->user,
-                'usuario_activo' => $usuario->user,
+                'responsable' => $responsable ? $responsable->user : null,
+                'usuario_activo' => $usuario ? $usuario->user : null,
                 'numero_serie' => $activo->nro_serie,
                 'estado' => $estado->nombre_estado,
                 'justificacion' => $activo->justificacion_doble_activo,
+                'ubicacion' => $activo->ubicacion,
             ];
         }
 
