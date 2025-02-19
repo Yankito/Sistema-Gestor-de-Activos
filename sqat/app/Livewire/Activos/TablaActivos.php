@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Activos;
 
 use Livewire\Component;
 use App\Models\Activo;
@@ -23,7 +23,7 @@ class TablaActivos extends Component
 
     public function render()
     {
-        return view('livewire.tabla-activos', [
+        return view('livewire.activos.tabla-activos', [
             'activos' => $this->activos,
         ]);
     }

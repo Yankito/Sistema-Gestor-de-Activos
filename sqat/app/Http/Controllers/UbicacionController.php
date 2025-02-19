@@ -22,7 +22,7 @@ class UbicacionController extends Controller
 
         Ubicacion::create([
             'sitio' => $request->sitio,
-            'soporte_ti' => $request->soporteTI,
+            'soporte_ti' => $request->soporte_ti,
             'latitud' => $request->latitud,
             'longitud' => $request->longitud,
         ]);

@@ -1,3 +1,28 @@
+<div>
+            <!-- CSS de AdminLTE -->
+            <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
+
+<!-- JS de AdminLTE -->
+<script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="vendor/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="vendor/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="vendor/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="vendor/adminlte/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
 <div class="modal-body">
 @if (isset($activo))
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,8 +36,8 @@
                 <div class="col-md-6 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
-                        <div wire:ignore class="d-flex" id="for-picker">
-                        <select wire:model="responsable_de_activo" data-container="#for-picker" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" select class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
+                        <div wire:ignore class="d-flex" id="for-bootstrap-select">
+                            <select wire:model="responsable_de_activo"  wire:change="actualizarUbicacion($event.target.value)" data-container="#for-bootstrap-select" id="responsable_de_activo_select" select class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}">
@@ -86,8 +111,32 @@
     </form>
 @endif
 </div>
-
-
+    @if(isset($activo))
+               <!-- jQuery -->
+       <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="vendor/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+        $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
+        <!-- Sparkline -->
+        <script src="vendor/adminlte/plugins/sparklines/sparkline.js"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="vendor/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
+        <!-- Select2 -->
+        <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
+    @endif
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -105,9 +154,20 @@
 
         Livewire.on('modal-cargado', () => {
             console.log('modal cargado');
-            $('.select2bs4').select2({
+            $('#modal-editar-estados-activos').modal('show');
+            $(function () {
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
                     theme: 'bootstrap4'
-            })
+                })
+            });
+            $(function () {
+            $('#responsable_de_activo_select').on('change', function () {
+                console.log('cambio: ' + $(this).val());
+                Livewire.dispatch('setResponsable', [$(this).val() ]);
+            });
+        });
+
         });
     });
 
@@ -127,36 +187,7 @@
         }
     }
 
-    document.querySelectorAll('.toggle-edit').forEach(icon => {
-        icon.addEventListener('click', function() {
-            let inputId = this.getAttribute('data-target');
-            let inputField = document.getElementById(inputId);
-            if (inputField.tagName === "SELECT") {
-                inputField.disabled = !inputField.disabled;
-
-                // Buscar el input hidden relacionado y actualizar su valor
-                let hiddenInput = document.getElementById(inputId + "_hidden");
-                if (hiddenInput) {
-                    hiddenInput.value = inputField.value;
-                }
-
-                // Escuchar cambios en el select para actualizar el input hidden
-                inputField.addEventListener("change", function() {
-                    if (hiddenInput) {
-                        hiddenInput.value = inputField.value;
-                    }
-                });
-            } else {
-                inputField.readOnly = !inputField.readOnly;
-            }
-
-            this.classList.toggle('fa-pencil-alt');
-            this.classList.toggle('fa-check');
-            this.classList.toggle('text-primary');
-            this.classList.toggle('text-success');
-        });
-    });
-
 
 
 </script>
+</div>

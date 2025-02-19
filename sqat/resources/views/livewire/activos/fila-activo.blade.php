@@ -1,4 +1,4 @@
-<tr wire:key="activo-{{ $activo->id }}" >
+<tr wire:key="activo-{{ $activo->id }}" wire:poll>
     <td class="action-btns">
         @if ($activo->estado === 1)
             <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
@@ -9,11 +9,11 @@
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($activo->estado === 3)
-            <button type="button" style="background-color: #0aa40d;" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-editar-estados-activos" wire:click="editarActivo('{{ $activo->id }}')">
+            <button type="button" style="background-color: #0aa40d;" class="btn btn-success btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
                 <i class="fas fa-user-plus" ></i>
             </button>
         @elseif ($activo->estado === 4)
-            <button type="button" style="background-color: #0a5964; border: #0a5964" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-valores-activos" wire:click="editarActivo('{{ $activo->id }}')">
+            <button type="button" style="background-color: #0a5964; border: #0a5964" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
             <i class="fas fa-user-minus"></i>
             </button>
         @elseif ($activo->estado === 5 || $activo->estado === 6)
@@ -21,7 +21,7 @@
                 <i class="fas fa-undo"></i>
             </button>
         @elseif ($activo->estado === 7)
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-editar-estados-activos" wire:click="editarActivo('{{ $activo->id }}')">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
                 <i class="fas fa-cogs"></i>
             </button>
         @elseif ($activo->estado === 8 || $activo->estado === 9 || $activo->estado === 10)
@@ -29,7 +29,9 @@
                 <i class="fas fa-check-circle"></i>
             </button>
         @endif
-
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivoValores('{{ $activo->id }}')">
+            <i class="fas fa-edit"></i>
+        </button>
     </td>
     <td>{{ $activo->nro_serie }}</td>
     <td>{{ $activo->marca }}</td>

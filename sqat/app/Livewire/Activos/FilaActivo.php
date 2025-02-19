@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Activos;
 
 use Livewire\Component;
 use App\Models\Activo;
@@ -30,7 +30,7 @@ class FilaActivo extends Component
 
     public function render()
     {
-        return view('livewire.fila-activo');
+        return view('livewire.activos.fila-activo');
     }
 
     public function refreshRow($id)
@@ -43,6 +43,10 @@ class FilaActivo extends Component
     public function editarActivo($id){
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $this->dispatch('refreshModal', $activo);
+    }
+    public function editarActivoValores($id){
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
+        $this->dispatch('refreshModalValores', $activo);
     }
     public function cambiarEstado($activo_id, $nuevo_estado){
         $activo = Activo::with('estadoRelation')->findOrFail($activo_id);

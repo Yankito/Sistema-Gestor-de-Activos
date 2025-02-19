@@ -39,6 +39,22 @@
       cursor: pointer;
       font-size: 10px;
     }
+    .estado-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        min-width: 80px;
+    }
+    .estado-activo {
+        background-color: #0aa40d;
+    }
+
+    .estado-inactivo {
+        background-color: #808080;
+    }
     .dataTables_wrapper .dataTables_fixedHeader {
         overflow: hidden;
         z-index: 1;
@@ -55,7 +71,7 @@
         padding: 10px;
         display: auto; /* Oculto por defecto */
     }
-  </style>
+</style>
 </head>
 @section('content')
     <section class = "content">
@@ -72,44 +88,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div style = "overflow-x:auto">
-                  <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
-                    <thead>
-                      <tr>
-                        @foreach(["User","Rut", "Nombre Completo", "Nombre Empresa", "Estado", "Fecha Ingreso Compañia", "Fecha Término Compañia", "Cargo", "Ubicación", "Correo"] as $index => $columna)
-
-                          <th>
-                            {{ $columna }}
-                            <!-- boton filtro -->
-                            <button class="filter-btn" data-index="{{ $index }}">
-                              <i class="fas fa-filter"></i>
-                            </button>
-                            <div class="filter-container" id="filter-{{ $index }}">
-                              <input type="text" class="column-search" data-index="{{ $index }}" placeholder="Buscar...">
-                              <div class="checkbox-filters" data-index="{{ $index }}"></div>
-                            </div>
-                          </th>
-                        @endforeach
-                      </tr>
-                      </thead>
-                    <tbody>
-                      @foreach($personas as $persona)
-                          <tr>
-                              <td>{{ $persona->user }}</td>
-                              <td>{{ $persona->rut }}</td>
-                              <td>{{ $persona->nombre_completo }}</td>
-                              <td>{{ $persona->nombre_empresa }}</td>
-                              <td>{{ $persona->estado_empleado }}</td>
-                              <td>{{ $persona->fecha_ing}}</td>
-                              <td>{{ $persona->fecha_ter}}</td>
-                              <td>{{ $persona->cargo }}</td>
-                              <td>{{ $persona->ubicacion }}</td>
-                              <td>{{ $persona->correo }}</td>
-                          </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
+                @livewire('personas.tabla-personas')
               </div>
               <!-- /.card-body -->
             </div>
@@ -121,6 +100,13 @@
       </div>
         <!-- /.container-fluid -->
       </section>
+        <div class="modal fade" id="modal-editar-valores-persona">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                @livewire('personas.editar-valores-persona')
+            </div>
+            </div>
+        </div>
 
     @endsection
 

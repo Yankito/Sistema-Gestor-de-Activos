@@ -49,7 +49,7 @@
         }
 
         .estado-preparacion {
-            background-color: yellow;
+            background-color: gray;
         }
         .estado-disponible {
             background-color: #0aa40d;
@@ -96,7 +96,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                @livewire('tabla-activos')
+                @livewire('activos.tabla-activos')
               </div>
               <!-- /.card-body -->
             </div>
@@ -113,14 +113,14 @@
     <div class="modal fade" id="modal-editar-estados-activos">
         <div class="modal-dialog">
           <div class="modal-content">
-              @livewire('editar-estados-activo')
+              @livewire('activos.editar-estados-activo')
           </div>
         </div>
     </div>
     <div class="modal fade" id="modal-editar-valores-activos">
         <div class="modal-dialog">
           <div class="modal-content">
-              @livewire('editar-valores-activo')
+              @livewire('activos.editar-valores-activo')
           </div>
         </div>
     </div>

@@ -36,7 +36,7 @@ class DashboardTipoController extends Controller
             if ($tipoDeActivo) {
                 $query->where('tipo_de_activo', $tipoDeActivo);
             }
-            $cantidadPorUbicacion[$ubicacion->sitio] = $query->count();
+            $cantidadPorUbicacion[$ubicacion->id] = $query->count();
         }
         return $cantidadPorUbicacion;
     }

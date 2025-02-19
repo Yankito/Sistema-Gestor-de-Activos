@@ -30,6 +30,7 @@
 
         // Transformar datos para Highcharts
         const puntosUbicaciones = ubicaciones.map(ubicacion => ({
+            id: ubicacion.id,
             name: ubicacion.sitio,
             lat: parseFloat(ubicacion.latitud),
             lon: parseFloat(ubicacion.longitud),
@@ -52,13 +53,17 @@
         const chart = Highcharts.mapChart('chile-map', {
             chart: {
                 map: 'countries/cl/cl-all', // Mapa de Chile
+                backgroundColor: '#228dff',
                 panning: {
                     enabled: true
                 },
                 panKey: 'shift' // Habilitar arrastre con Shift
             },
             title: {
-                text: 'Mapa de Chile'
+                text: 'Mapa de Chile',
+                style: {
+                    color: '#ffffff' // Opcional: Cambia el color del título si el fondo es oscuro
+                }
             },
             mapNavigation: {
                 enabled: true,
@@ -114,6 +119,13 @@
                         color: '#FFFFFF',
                         style: {
                             textOutline: '1px contrast'
+                        }
+                    },
+                    point: {
+                        events: {
+                            click: function () {
+                                updateUbicacion(this.id); // Pasa el nombre de la ubicación a la función
+                            }
                         }
                     }
                 }

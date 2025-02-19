@@ -17,7 +17,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
   <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.1/css/fixedHeader.bootstrap4.min.css">
-  
+
   <style>
     .filter-container {
       display: none;
@@ -124,10 +124,6 @@
 
 
 @section('scripts')
-    <!-- jQuery -->
-    <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables  & Plugins -->
     <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

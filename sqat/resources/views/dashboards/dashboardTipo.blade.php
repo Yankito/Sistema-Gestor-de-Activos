@@ -59,12 +59,6 @@
                                 @csrf
                                 <input type="hidden" name="tipoDeActivo_id" id="tipoDeActivo_id" value="">
                             </form>
-                            <script>
-                                function updateTipoDeActivo(id) {
-                                    document.getElementById('tipoDeActivo_id').value = id;
-                                    document.getElementById('update-tipoDeActivo-form').submit();
-                                }
-                            </script>
                             <a href="/dashboard" class="dropdown-item dropdown-footer">Dashboard General</a>
                         </div><!-- /.col -->
                     </div>
@@ -92,20 +86,9 @@
 
             <!-- /.card-body -->
             <div class="card-footer bg-transparent">
-            <div class="row">
-                @foreach($cantidadPorEstados as $estado => $cantidad)
-                    <div class="col-2 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="{{ $cantidadActivos != 0 ? round(($cantidad/$cantidadActivos)*100) : 0 }}" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC" data-displayInput="true">
-                        <div class="text-white">{{ ucfirst(strtolower($estado)) }}</div>
-                    </div>
-                @endforeach
-            </div>
+
 
             <div class="col-md-6">
-                <p class="text-center">
-                    <strong>Cantidad por estados</strong>
-                </p>
 
                 <div class="row">
                     @foreach($cantidadPorEstados as $estado => $cantidad)
@@ -133,12 +116,12 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($cantidadPorUbicacion as $ubicacion => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="updateUbicacion('{{ $ubicacion }}')">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(strtolower($ubicacion))}}</p>
+                                <p>{{ ucfirst(strtolower(collect($ubicaciones)->firstWhere('id', $ubicacion)['sitio'])) }}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
@@ -146,8 +129,23 @@
                         </div>
                     </div>
                 @endforeach
+                <form id="update-ubicacion-form" action="{{ route('actualizar.dashboardUbicacion') }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
+                </form>
             </div>
         </div>
     </section>
     @endsection
 </html>
+
+<script>
+    function updateTipoDeActivo(id) {
+        document.getElementById('tipoDeActivo_id').value = id;
+        document.getElementById('update-tipoDeActivo-form').submit();
+    }
+    function updateUbicacion(id) {
+        document.getElementById('ubicacion_id').value = id;
+        document.getElementById('update-ubicacion-form').submit();
+    }
+</script>
