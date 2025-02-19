@@ -55,6 +55,7 @@
                                     <table id="tablaDatos" class="table table-bordered table-striped table-hover">
                                         <thead class="thead-dark">
                                             <tr>
+                                                <th>User<th>
                                                 <th>Rut</th>
                                                 <th>Nombre Completo</th>
                                                 <th>Nombre Empresa</th>

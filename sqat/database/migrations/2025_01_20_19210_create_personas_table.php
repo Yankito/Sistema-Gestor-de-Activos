@@ -16,6 +16,7 @@ class CreatePersonasTable extends Migration
         Schema::create('personas', function (Blueprint $table) {
             // Definir la estructura de la tabla
             $table->id();
+            $table->string('user', 20)->unique();
             $table->string('rut', 15)->unique();  
             $table->string('nombre_completo', 100); 
             $table->string('nombre_empresa', 100);         

@@ -76,7 +76,7 @@
                   <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                     <thead>
                       <tr>
-                        @foreach(["Rut", "Nombre Completo", "Nombre Empresa", "Estado", "Fecha Ingreso Compañia", "Fecha Término Compañia", "Cargo", "Ubicación", "Correo"] as $index => $columna)
+                        @foreach(["User","Rut", "Nombre Completo", "Nombre Empresa", "Estado", "Fecha Ingreso Compañia", "Fecha Término Compañia", "Cargo", "Ubicación", "Correo"] as $index => $columna)
 
                           <th>
                             {{ $columna }}
@@ -95,6 +95,7 @@
                     <tbody>
                       @foreach($personas as $persona)
                           <tr>
+                              <td>{{ $persona->user }}</td>
                               <td>{{ $persona->rut }}</td>
                               <td>{{ $persona->nombre_completo }}</td>
                               <td>{{ $persona->nombre_empresa }}</td>

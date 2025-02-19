@@ -10,6 +10,7 @@ class Persona extends Model
     protected $table = 'personas';
     // Campos que se pueden asignar masivamente
     protected $fillable = [
+        'user',
         'rut',
         'nombre_completo',
         'nombre_empresa',

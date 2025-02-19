@@ -20,7 +20,7 @@ class PersonasExports
 
         // Encabezados
         $headers = [
-            'Rut', 'Nombre Completo', 'Nombre Empresa', 
+            'User','Rut', 'Nombre Completo', 'Nombre Empresa', 
             'Estado', 'Fecha de Inicio', 'Fecha Término', 'Cargo', 
             'Ubicación', 'Correo'
         ];
@@ -54,15 +54,16 @@ class PersonasExports
         // Datos
         $row = 2;
         foreach ($personas as $persona) {
-            $sheet->setCellValue('A' . $row, $persona->rut)
-                  ->setCellValue('B' . $row, $persona->nombre_completo)
-                  ->setCellValue('C' . $row, $persona->nombre_empresa)
-                  ->setCellValue('D' . $row, $persona->estado_empleado)
-                  ->setCellValue('E' . $row, $persona->fecha_ing)
-                  ->setCellValue('F' . $row, $persona->fecha_ter)
-                  ->setCellValue('G' . $row, $persona->cargo)
-                  ->setCellValue('H' . $row, $persona->ubicacion)
-                  ->setCellValue('I' . $row, $persona->correo);
+            $sheet->setCellValue('A' . $row, $persona->user)
+                  ->setCellValue('B' . $row, $persona->rut)
+                  ->setCellValue('C' . $row, $persona->nombre_completo)
+                  ->setCellValue('D' . $row, $persona->nombre_empresa)
+                  ->setCellValue('E' . $row, $persona->estado_empleado)
+                  ->setCellValue('F' . $row, $persona->fecha_ing)
+                  ->setCellValue('G' . $row, $persona->fecha_ter)
+                  ->setCellValue('H' . $row, $persona->cargo)
+                  ->setCellValue('I' . $row, $persona->ubicacion)
+                  ->setCellValue('J' . $row, $persona->correo);
             // Aplicar bordes a las celdas de datos
             $sheet->getStyle('A' . $row . ':M' . $row)->applyFromArray([
                 'borders' => [
