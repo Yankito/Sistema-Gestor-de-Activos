@@ -37,7 +37,7 @@
 
         <div class="row">
             <div class="col-lg-5 connectedSortable ui-sortable">
-                <div style="cursor: pointer;" onclick="window.location.href='/dashboardUbicacion';">
+                <div style="cursor: pointer;" >
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner text-center">
@@ -47,12 +47,13 @@
                     <div class="icon" style="cursor: pointer;">
                         <i class="ion ion-laptop"></i>
                     </div>
-                    @if($user->es_administrador)
-                        <a href="/registrarActivo" class="small-box-footer">Dar activo de alta <i class="fas fa-arrow-circle-right"></i></a>
-                    @else
-                        <a href="#" class="small-box-footer">       <i class="fas fa-arrow-circle-right"></i></a>
-                    @endif
+                    <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
+
+                    <form id="update-ubicacion-form" action="{{ route('actualizar.dashboardUbicacion') }}" method="POST" style="display: none;">
+                        @csrf
+                        <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
+                    </form>
                 </div>
                 <div class="card bg-gradient-info">
                     <div class="card-header border-0">
@@ -107,7 +108,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?tipo={{ ucfirst($tipoDeActivo) }}';">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="updateTipoDeActivo('{{ ucfirst($tipoDeActivo)}}')">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
@@ -120,6 +121,10 @@
                         </div>
                     </div>
                 @endforeach
+                <form id="update-tipoDeActivo-form" action="{{ route('actualizar.dashboardTipo') }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="tipoDeActivo_id" id="tipoDeActivo_id" value="">
+                </form>
             </div>
         </div>
 
@@ -137,6 +142,18 @@
             });
         </script>
     @endif
+
+    <script>
+        function updateUbicacion(id) {
+            document.getElementById('ubicacion_id').value = id;
+            document.getElementById('update-ubicacion-form').submit();
+        }
+
+        function updateTipoDeActivo(id) {
+            document.getElementById('tipoDeActivo_id').value = id;
+            document.getElementById('update-tipoDeActivo-form').submit();
+        }
+    </script>
 @endsection
 
 

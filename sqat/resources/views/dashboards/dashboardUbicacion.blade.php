@@ -59,12 +59,6 @@
                                 @csrf
                                 <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
                             </form>
-                            <script>
-                                function updateUbicacion(id) {
-                                    document.getElementById('ubicacion_id').value = id;
-                                    document.getElementById('update-ubicacion-form').submit();
-                                }
-                            </script>
                             <a href="/dashboard" class="dropdown-item dropdown-footer">Dashboard General</a>
                         </div><!-- /.col -->
                     </div>
@@ -120,7 +114,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
-                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardTipo?tipo={{ ucfirst($tipoDeActivo) }}';">
+                    <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="updateTipoDeActivo('{{ ucfirst($tipoDeActivo)}}')">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
@@ -133,8 +127,24 @@
                         </div>
                     </div>
                 @endforeach
+                <form id="update-tipoDeActivo-form" action="{{ route('actualizar.dashboardTipo') }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="tipoDeActivo_id" id="tipoDeActivo_id" value="">
+                </form>
             </div>
         </div>
     </section>
     @endsection
 </html>
+
+<script>
+    function updateUbicacion(id) {
+        document.getElementById('ubicacion_id').value = id;
+        document.getElementById('update-ubicacion-form').submit();
+    }
+
+    function updateTipoDeActivo(id) {
+        document.getElementById('tipoDeActivo_id').value = id;
+        document.getElementById('update-tipoDeActivo-form').submit();
+    }
+</script>
