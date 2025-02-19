@@ -30,10 +30,17 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="window.location.href='/dashboardUbicacion';">
+
+
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5 connectedSortable ui-sortable">
+                <div style="cursor: pointer;" onclick="window.location.href='/dashboardUbicacion';">
                     <!-- small box -->
                     <div class="small-box bg-info">
-                    <div class="inner">
+                    <div class="inner text-center">
                         <h3>{{$cantidadActivos}}</h3>
                         <p>Activos</p>
                     </div>
@@ -47,48 +54,54 @@
                     @endif
                     </div>
                 </div>
+                <div class="card bg-gradient-info">
+                    <div class="card-header border-0">
+                        <h3 class="card-title">
+                            <i class="fas fa-th mr-1"></i>
+                            Cantidad de activos por estado
+                        </h3>
 
-            </div><!-- /.container-fluid -->
-        </div>
-
-        <div class="card bg-gradient-info">
-            <div class="card-header border-0">
-            <h3 class="card-title">
-                <i class="fas fa-th mr-1"></i>
-                Cantidad de activos por estado
-            </h3>
-
-            <div class="card-tools">
-                <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-                </button>
-            </div>
-            </div>
-
-            <!-- /.card-body -->
-            <div class="card-footer bg-transparent">
-            <div class="col-md-6">
-
-                <div class="row">
-                    @foreach($cantidadPorEstados as $estado => $cantidad)
-                        <div class="col-md-6">
-                            <div class="progress-group">
-                                {{ ucfirst(strtolower($estado)) }}
-                                <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
-                                </div>
-                            </div>
+                        <div class="card-tools">
+                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                            </button>
                         </div>
-                    @endforeach
+                    </div>
+
+                    <!-- /.card-body -->
+                    <div class="card-footer bg-transparent">
+
+                        <div class="row">
+                            @foreach($cantidadPorEstados as $estado => $cantidad)
+                                <div class="col-md-6">
+                                    <div class="progress-group">
+                                        {{ ucfirst(strtolower($estado)) }}
+                                        <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+
+                    <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
+            </div>
 
 
+            <div class="col-lg-7 connectedSortable ui-sortable">
+
+                <!-- Aquí se incluye el mapa -->
+                @include('mapa')
             </div>
-            <!-- /.row -->
-            </div>
-            <!-- /.card-footer -->
+
         </div>
+
+
 
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
@@ -109,11 +122,6 @@
                 @endforeach
             </div>
         </div>
-
-            <div class="container-fluid">
-                <!-- Aquí se incluye el mapa -->
-                @include('mapa')
-            </div>
 
     </section>
     <!-- /.content -->

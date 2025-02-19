@@ -125,13 +125,11 @@
 <script>
 
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('livewire:navigated', function() {
+
         $('#modal-editar-valores-persona').on('hidden.bs.modal', function () {
             Livewire.dispatch('cerrarModalValores'); // Emite el evento a Livewire
         });
-    });
-
-    document.addEventListener('livewire:navigated', function() {
 
         Livewire.on('cerrar-modal-valores', (data) => {
             $('#formulario-editar-valores').closest('.modal').modal('hide');

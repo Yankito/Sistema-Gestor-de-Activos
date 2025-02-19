@@ -77,11 +77,11 @@ class EditarValoresPersona extends Component
         $persona->nombres = $this->nombres;
         $persona->primer_apellido = $this->primer_apellido;
         $persona->segundo_apellido = $this->segundo_apellido;
-        $this->supervisor = $this->persona->supervisor;
-        $this->empresa = $this->persona->empresa;
-        $this->centro_costo = $this->persona->centro_costo;
-        $this->denominacion = $this->persona->denominacion;
-        $this->titulo_puesto = $this->persona->titulo_puesto;
+        $persona->supervisor = $this->supervisor;
+        $persona->empresa = $this->empresa;
+        $persona->centro_costo = $this->centro_costo;
+        $persona->denominacion = $this->denominacion;
+        $persona->titulo_puesto = $this->titulo_puesto;
 
         if ($persona->ubicacion != $this->ubicacion) {
             $persona->ubicacion = $this->ubicacion;
