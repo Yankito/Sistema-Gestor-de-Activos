@@ -3,132 +3,118 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Importar Datos de Activos</h3>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Importar Asignación de Activos</h3>
                         </div>
-                        <div class="card-body" style="overflow-x: auto;">
-                            <!-- Mensaje de éxito -->
+                        <div class="card-body">
+                            <!-- Success Message -->
                             @if(session('success'))
-                                <div class="alert alert-success">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ session('success') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </div>
+                            @endif
+
+                            <!-- Error Message -->
+                            @if(session('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             @endif
-                            <!--pantalla de carga -->
-                            <div class="overlay" id="loadingOverlay" style="display: none;">
-                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                <div class="text-bold pt-2">Cargando...</div>
-                            </div>
 
-                            <!-- Formulario para cargar archivo Excel -->
+                            <!-- Excel Import Form -->
                             <form id="importForm" action="{{ route('importar.excel') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <input type="file" name="archivo_excel" class="form-control" required>
                                 </div>
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-success btn-block">
                                     <i class="fas fa-file-import"></i> Importar Datos
                                 </button>
                             </form>
-                            <!-- Mostrar datos importados antes de confirmar -->
-                            @if (isset($datos) && count($datos) > 0)
-                                <hr>
-                                <h4>Datos Importados</h4>
-                                    @csrf
-                                    <table id="tablaDatos" class="table table-bordered table-striped">
-                                        <thead>
+
+                            <!-- Imported Data Table -->
+                            @if (session('asignaciones') && count(session('asignaciones')) > 0)
+                                <hr class="my-4">
+                                <h4 class="mb-3">Datos Importados</h4>
+                                <div class="table-responsive">
+                                    <table id="tablaDatos" class="table table-bordered table-striped table-hover">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                <th>RUT</th>
-                                                <th>Nombre Usuario</th>
-                                                <th>Nombres</th>
-                                                <th>Primer Apellido</th>
-                                                <th>Segundo Apellido</th>
-                                                <th>Supervisor</th>
-                                                <th>Empresa</th>
-                                                <th>Estado Empleado</th>
-                                                <th>Centro Costo</th>
-                                                <th>Denominación</th>
-                                                <th>Título Puesto</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Usuario TI</th>
-                                                <th>Nro Serie</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
+                                                <th>Responsable</th>
+                                                <th>Usuario Activo</th>
+                                                <th>Número de Serie</th>
                                                 <th>Estado</th>
-                                                <th>Responsable Activo</th>
-                                                <th>Precio</th>
-                                                <th>Ubicación</th>
                                                 <th>Justificación Doble Activo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($datos as $row)
+                                            @foreach (session('asignaciones') as $asignacion)
                                                 <tr>
-                                                    @foreach ($row as $cell)
-                                                        <td>{{ $cell }}</td>
-                                                    @endforeach
+                                                    <td>{{ $asignacion['responsable'] }}</td>
+                                                    <td>{{ $asignacion['usuario_activo'] }}</td>
+                                                    <td>{{ $asignacion['numero_serie'] }}</td>
+                                                    <td>{{ $asignacion['estado'] }}</td>
+                                                    <td>{{ $asignacion['justificacion'] }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
+                                </div>
                             @endif
 
-                            <!-- Botón para descargar el archivo de muestra -->
-                            <a href="{{ route('descargar.excel') }}" class="btn btn-secondary mt-3">
-                                <i class="fas fa-file-excel"></i> Descargar plantilla excel
-                            </a>
+                            <!-- Errors Table -->
+                            @if (session('errores') && count(session('errores')) > 0)
+                                <hr class="my-4">
+                                <h4 class="mb-3 text-danger">❌ Errores en la Importación</h4>
+                                <div class="table-responsive">
+                                    <table id="tablaErrores" class="table table-bordered table-danger table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Motivo del Error</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (session('errores') as $error)
+                                                <tr>
+                                                    <td>{{ $error }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+
+                            <!-- Download Template Button -->
+                            <div class="text-center mt-4">
+                                <a href="{{ route('descargar.excel') }}" class="btn btn-secondary">
+                                    <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-        @endif
     </section>
 @endsection
 
 @section('scripts')
-    <!-- jQuery -->
-    <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- DataTables -->
-    <script src="{{ asset('vendor/adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-    <!-- Inicializar DataTables -->
     <script>
-        $(document).ready(function () {
-            $("#tablaDatos").DataTable({
+        $(document).ready(function() {
+            $('#tablaDatos, #tablaErrores').DataTable({
                 responsive: true,
-                lengthChange: false,
-                autoWidth: false,
-                scrollX: true,
-                buttons: ["copy", "csv", "excel", "print"]
-            }).buttons().container().appendTo('#tablaDatos_wrapper .col-md-6:eq(0)');
-        });
-        // Mostrar pantalla de carga al enviar el formulario
-        $('#importForm').submit(function() {
-            $('#preloader').show();
-        });
-
-        // Mostrar pantalla de carga al enviar el formulario
-        $('#importForm').submit(function() {
-            $('#loadingOverlay').show();
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
         });
     </script>
 @endsection
