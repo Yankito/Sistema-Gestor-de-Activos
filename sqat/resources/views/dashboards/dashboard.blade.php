@@ -39,8 +39,8 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner text-center">
+                        <p>Activos Totales</p>
                         <h3>{{$cantidadActivos}}</h3>
-                        <p>Activos</p>
                     </div>
                     <div class="icon" style="cursor: pointer;">
                         <i class="ion ion-laptop"></i>

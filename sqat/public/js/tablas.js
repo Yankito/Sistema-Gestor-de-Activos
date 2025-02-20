@@ -5,7 +5,6 @@ $(document).ready(function () {
     // Initialize DataTable
     if (!$.fn.DataTable.isDataTable('#tabla')) {
         table = $("#tabla").DataTable({
-            ordering: false,
             fixedHeader: true,
             scrollX: true,
             responsive: false,
@@ -13,9 +12,15 @@ $(document).ready(function () {
             autoWidth: true,
             searching: true,
             pageLength: $('#tabla').data('page-length'),
-            order: $('#tabla').data('order'),
+            order: [[1,'asc ']],
             destroy: true,  // Permite reinicializar la tabla sin errores
             retrieve: true, // Recupera la instancia existente en lugar de crear una nueva
+            columnDefs: [
+                {
+                    targets: 0,
+                    orderable: false,
+                }
+            ],
             buttons: [
                 {
                     extend: "copy",
@@ -195,17 +200,4 @@ $(document).ready(function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    Livewire.hook('message.processed', (message, component) => {
-        if ($.fn.DataTable.isDataTable('#tabla')) {
-            $('#tabla').DataTable().destroy();
-        }
-        $('#tabla').DataTable({
-            fixedHeader: true,
-            scrollX: true,
-            responsive: false,
-            autoWidth: true,
-            retrieve: true
-        });
-    });
-});
+

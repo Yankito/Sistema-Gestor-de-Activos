@@ -45,7 +45,7 @@
         }
 
         .estado-adquirido {
-            background-color: purple;
+            background-color: blue;
         }
 
         .estado-preparacion {
@@ -161,7 +161,8 @@
 <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
 
-
+<!-- Page specific script -->
+<script src="{{ asset('js/tablas.js') }}"></script>
 
 <script>
 

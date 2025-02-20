@@ -3,19 +3,17 @@
         <thead>
             <tr>
                 <th>Acciones</th>
-                @foreach(["nro_serie" => "Número de serie", "marca" => "Marca", "modelo" => "Modelo", "precio" => "Precio", "tipo_de_activo" => "Tipo", "estado" => "Estado", "usuario_de_activo" => "Usuario", "responsable_de_activo" => "Responsable", "ubicacionRelation.sitio" => "Sitio", "ubicacionRelation.soporte_ti" => "Soporte TI", "justificacion_doble_activo" => "Justificación"] as $columna => $nombre)
-
-                    <th wire:click="ordenarPor('{{ $columna }}')" style="cursor: pointer;">
-                        {{ $nombre }}
-                        @if($sortColumn === $columna)
-                            @if($sortDirection === 'asc')
-                                <i class="fas fa-sort-up"></i>
-                            @else
-                                <i class="fas fa-sort-down"></i>
-                            @endif
-                        @else
-                            <i class="fas fa-sort"></i>
-                        @endif
+                @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
+                    <th>
+                        {{ $columna }}
+                        <!-- boton filtro -->
+                        <button class="filter-btn" data-index="{{ $index + 1 }}">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <div class="filter-container" id="filter-{{ $index + 1}}">
+                            <input type="text" class="column-search" data-index="{{ $index + 1}}" placeholder="Buscar...">
+                            <div class="checkbox-filters" data-index="{{ $index + 1}}"></div>
+                        </div>
                     </th>
                 @endforeach
             </tr>
