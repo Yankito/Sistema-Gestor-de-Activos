@@ -224,7 +224,7 @@
 
                             <form action="/logout" method="POST" class= "d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-link nav-link" style="color: inherit;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
+                                <button type="submit" class="btn btn-link nav-link" style="color: #c2c7d0;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
                             </form>
                     </li>
                     </ul>
