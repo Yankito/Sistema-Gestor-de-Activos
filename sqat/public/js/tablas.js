@@ -5,6 +5,7 @@ $(document).ready(function () {
     // Initialize DataTable
     if (!$.fn.DataTable.isDataTable('#tabla')) {
         table = $("#tabla").DataTable({
+            ordering: false,
             fixedHeader: true,
             scrollX: true,
             responsive: false,
@@ -13,6 +14,8 @@ $(document).ready(function () {
             searching: true,
             pageLength: $('#tabla').data('page-length'),
             order: $('#tabla').data('order'),
+            destroy: true,  // Permite reinicializar la tabla sin errores
+            retrieve: true, // Recupera la instancia existente en lugar de crear una nueva
             buttons: [
                 {
                     extend: "copy",
@@ -189,5 +192,20 @@ $(document).ready(function () {
         scrollTimeout = setTimeout(function() {
             $('.filter-container').hide();
         }, 100); // Adjust the delay as needed
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    Livewire.hook('message.processed', (message, component) => {
+        if ($.fn.DataTable.isDataTable('#tabla')) {
+            $('#tabla').DataTable().destroy();
+        }
+        $('#tabla').DataTable({
+            fixedHeader: true,
+            scrollX: true,
+            responsive: false,
+            autoWidth: true,
+            retrieve: true
+        });
     });
 });

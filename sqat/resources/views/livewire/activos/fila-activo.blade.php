@@ -1,4 +1,4 @@
-<tr wire:key="activo-{{ $activo->id }}" wire:poll>
+<tr>
     <td class="action-btns">
         @if ($activo->estado === 1)
             <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">

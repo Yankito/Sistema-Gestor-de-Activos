@@ -36,6 +36,7 @@ class FilaActivo extends Component
     public function refreshRow($id)
     {
         if ($this->activo->id == $id) {
+            $this->activo = Activo::with('estadoRelation', 'usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation')->findOrFail($id);
             $this->dispatch('$refresh');
         }
     }
@@ -67,12 +68,9 @@ class FilaActivo extends Component
         $activo->estado = $nuevo_estado;
         $activo->update();
 
-        $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
-        $this->activo = $activoActualizado;
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
         $this->dispatch('actualizarFila');
-        $this->dispatch('$refresh');
-
+        $this->dispatch('refreshRow', $activo_id);
 
     }
 
