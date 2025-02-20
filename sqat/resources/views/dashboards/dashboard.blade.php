@@ -8,8 +8,6 @@
     <!-- CSS de AdminLTE -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
 
-    <!-- JS de AdminLTE -->
-    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.2/proj4.js"></script> <!-- Incluir la librería proj4js -->
@@ -37,7 +35,7 @@
 
         <div class="row">
             <div class="col-lg-5 connectedSortable ui-sortable">
-                <div style="cursor: pointer;" >
+                <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'">
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner text-center">
@@ -131,7 +129,6 @@
     </section>
     <!-- /.content -->
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if(session('success'))
         <script>
             Swal.fire({

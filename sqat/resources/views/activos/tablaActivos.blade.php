@@ -23,7 +23,7 @@
             display: none;
             position: absolute;
             background:white;
-            padding: 10 px;
+            padding: 10px;
             border: 1px solid #d2d6de;
             z-index: 10;
         }

@@ -3,12 +3,6 @@
     <head>
         <link rel="icon" href="{{ asset('pictures/iconoIansa.png') }}" type="image/x-icon">
 
-        <!-- CSS de AdminLTE -->
-        <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
-
-        <!-- JS de AdminLTE -->
-        <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
@@ -275,8 +269,6 @@
         <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- ChartJS -->
         <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
-        <!-- Sparkline -->
-        <script src="vendor/adminlte/plugins/sparklines/sparkline.js"></script>
         <!-- jQuery Knob Chart -->
         <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
         <!-- daterangepicker -->
@@ -291,18 +283,13 @@
         <!-- AdminLTE App -->
         <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         @yield('scripts')
 
         <!-- Select2 -->
         <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
-
-        <!-- Highcharts -->
-        <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-        <script src="https://code.highcharts.com/mapdata/countries/cl/cl-all.js"></script>
-
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 
         <!-- Toastr -->
         <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
