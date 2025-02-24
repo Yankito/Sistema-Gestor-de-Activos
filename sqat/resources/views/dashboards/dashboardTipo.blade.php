@@ -94,7 +94,7 @@
                     @foreach($cantidadPorEstados as $estado => $cantidad)
                         <div class="col-md-6">
                             <div class="progress-group">
-                                {{ ucfirst(strtolower($estado)) }}
+                                {{ $estado }}
                                 <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
@@ -121,7 +121,7 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(strtolower(collect($ubicaciones)->firstWhere('id', $ubicacion)['sitio'])) }}</p>
+                                <p>{{collect($ubicaciones)->firstWhere('id', $ubicacion)['sitio'] }}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
