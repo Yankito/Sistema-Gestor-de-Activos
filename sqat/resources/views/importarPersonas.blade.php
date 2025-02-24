@@ -19,7 +19,7 @@
                                     </button>
                                 </div>
                             @endif
-                            
+
                             <!-- Error Message -->
                             @if(session('error'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -29,13 +29,7 @@
                                     </button>
                                 </div>
                             @endif
-                            
-                            <!-- Loading Overlay -->
-                            <div class="overlay" id="loadingOverlay" style="display: none;">
-                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                <div class="text-bold pt-2">Cargando...</div>
-                            </div>
-                            
+
                             <!-- Excel Import Form -->
                             <form id="importForm" action="{{ route('importar.excel.personas') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -46,40 +40,114 @@
                                     <i class="fas fa-file-import"></i> Importar Datos
                                 </button>
                             </form>
-                            
-                            <!-- Imported Data Table -->
-                            @if (isset($datos) && count($datos) > 0)
+
+                            <!-- Tabs for Imported Data and Errors -->
+                            @if ((isset($personas) && count($personas) > 0) || (isset($errores) && count($errores) > 0))
                                 <hr class="my-4">
-                                <h4 class="mb-3">Datos Importados</h4>
-                                <div class="table-responsive">
-                                    <table id="tablaDatos" class="table table-bordered table-striped table-hover">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th>User<th>
-                                                <th>Rut</th>
-                                                <th>Nombre Completo</th>
-                                                <th>Nombre Empresa</th>
-                                                <th>Estado</th>
-                                                <th>Fecha Ingreso</th>
-                                                <th>Fecha Término</th>
-                                                <th>Cargo</th>
-                                                <th>Ubicación</th>
-                                                <th>Correo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($datos as $row)
-                                                <tr>
-                                                    @foreach ($row as $cell)
-                                                        <td>{{ $cell }}</td>
-                                                    @endforeach
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <ul class="nav nav-tabs" id="importTabs" role="tablist">
+                                    @if (isset($personas) && count($personas) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="success-tab" data-toggle="tab" href="#success" role="tab" aria-controls="success" aria-selected="true">
+                                                <i class="fas fa-check-circle text-success"></i> Datos Importados ({{ count($personas) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="errors-tab" data-toggle="tab" href="#errors" role="tab" aria-controls="errors" aria-selected="false">
+                                                <i class="fas fa-exclamation-circle text-danger"></i> Errores ({{ count($errores) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+
+                                <div class="tab-content" id="importTabsContent">
+                                    <!-- Success Tab -->
+                                    @if (isset($personas) && count($personas) > 0)
+                                        <div class="tab-pane fade show active" id="success" role="tabpanel" aria-labelledby="success-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaDatos" class="table table-bordered table-striped table-hover">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th>User</th>
+                                                            <th>Rut</th>
+                                                            <th>Nombre Completo</th>
+                                                            <th>Nombre Empresa</th>
+                                                            <th>Estado</th>
+                                                            <th>Fecha Ingreso</th>
+                                                            <th>Fecha Término</th>
+                                                            <th>Cargo</th>
+                                                            <th>Ubicación</th>
+                                                            <th>Correo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($personas as $persona)
+                                                            @if (!empty(array_filter($persona)))
+                                                                <tr>
+                                                                    <td>{{ $persona['user'] }}</td>
+                                                                    <td>{{ $persona['rut'] }}</td>
+                                                                    <td>{{ $persona['nombre_completo'] }}</td>
+                                                                    <td>{{ $persona['nombre_empresa'] }}</td>
+                                                                    <td>{{ $persona['estado_empleado'] }}</td>
+                                                                    <td>{{ $persona['fecha_ing'] }}</td>
+                                                                    <td>{{ $persona['fecha_ter'] }}</td>
+                                                                    <td>{{ $persona['cargo'] }}</td>
+                                                                    <td>{{ $persona['ubicacion'] }}</td>
+                                                                    <td>{{ $persona['correo'] }}</td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Errors Tab -->
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <div class="tab-pane fade" id="errors" role="tabpanel" aria-labelledby="errors-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaErrores" class="table table-bordered table-danger table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>User</th>
+                                                            <th>Rut</th>
+                                                            <th>Nombre Completo</th>
+                                                            <th>Nombre Empresa</th>
+                                                            <th>Estado</th>
+                                                            <th>Fecha Ingreso</th>
+                                                            <th>Fecha Término</th>
+                                                            <th>Cargo</th>
+                                                            <th>Ubicación</th>
+                                                            <th>Correo</th>
+                                                            <th>Motivo del Error</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($errores as $error)
+                                                            <tr>
+                                                                <td>{{ $error['fila']['A'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['B'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['C'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['D'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['E'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['F'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['G'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['H'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['I'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['J'] ?? '-' }}</td>
+                                                                <td>{{ $error['motivo'] }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
-                            
+
                             <!-- Download Template Button -->
                             <div class="text-center mt-4">
                                 <a href="{{ route('descargarPersonas.excel') }}" class="btn btn-secondary">
@@ -112,8 +180,8 @@
     <script>
         $(document).ready(function() {
             // Initialize DataTables
-            $('#tablaDatos').DataTable({
-                responsive: true,
+            $('#tablaDatos, #tablaErrores').DataTable({
+                responsive: false,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

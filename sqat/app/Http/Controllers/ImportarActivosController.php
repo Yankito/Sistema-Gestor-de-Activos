@@ -86,17 +86,19 @@ class ImportarActivosController extends Controller
                     'ubicacion' => $ubicacionId,
                     'justificacion_doble_activo' => null
                 ]);
+                $ubicacionNombre = $ubicacionExistente->sitio;
+                $estadoNombre = $estado->nombre_estado;
     
                 $activos[] = [
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
                     'tipo_de_activo' => $fila['D'],
-                    'estado' => $estadoId,
+                    'estado' => $estadoNombre,
                     'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
                     'precio' => null,
-                    'ubicacion' => $ubicacionId,
+                    'ubicacion' => $ubicacionNombre,
                     'justificacion_doble_activo' => null
                 ];
             }

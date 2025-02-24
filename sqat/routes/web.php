@@ -90,8 +90,8 @@ Route::get('/register/{correo}', [AuthController::class, 'checkCorreo']);
 
 
 Route::get('/descargarExcel', function () {
-    $filePath = public_path('excel/ImportarDatos.xlsx');
-    return Response::download($filePath, 'ImportarDatos.xlsx');
+    $filePath = public_path('excel/PlantillaAsignacion.xlsx');
+    return Response::download($filePath, 'PlantillaAsignacion.xlsx');
 })->name('descargar.excel');
 
 Route::get('/descargarActivosExcel', function () {

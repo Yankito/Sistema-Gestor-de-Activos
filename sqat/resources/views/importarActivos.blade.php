@@ -41,69 +41,92 @@
                                 </button>
                             </form>
 
-                            <!-- Imported Data Table -->
-                            @if (isset($activos) && count($activos) > 0)
+                            <!-- Tabs for Imported Data and Errors -->
+                            @if ((isset($activos) && count($activos) > 0) || (isset($errores) && count($errores) > 0))
                                 <hr class="my-4">
-                                <h4 class="mb-3">Datos Importados</h4>
-                                <div class="table-responsive">
-                                    <table id="tablaDatos" class="table table-bordered table-striped table-hover">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th>Nro Serie</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
-                                                <th>Tipo de Activo</th>
-                                                <th>Estado</th>
-                                                <th>Ubicación</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($activos as $activo)
-                                                @if (!empty(array_filter($activo)))
-                                                    <tr>
-                                                        <td>{{ $activo['nro_serie'] }}</td>
-                                                        <td>{{ $activo['marca'] }}</td>
-                                                        <td>{{ $activo['modelo'] }}</td>
-                                                        <td>{{ $activo['tipo_de_activo'] }}</td>
-                                                        <td>{{ $activo['estado'] }}</td>
-                                                        <td>{{ $activo['ubicacion'] }}</td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endif
+                                <ul class="nav nav-tabs" id="importTabs" role="tablist">
+                                    @if (isset($activos) && count($activos) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="success-tab" data-toggle="tab" href="#success" role="tab" aria-controls="success" aria-selected="true">
+                                                <i class="fas fa-check-circle text-success"></i> Datos Importados ({{ count($activos) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="errors-tab" data-toggle="tab" href="#errors" role="tab" aria-controls="errors" aria-selected="false">
+                                                <i class="fas fa-exclamation-circle text-danger"></i> Errores ({{ count($errores) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
 
-                            <!-- Errors Table -->
-                            @if (isset($errores) && count($errores) > 0)
-                                <hr class="my-4">
-                                <h4 class="mb-3 text-danger">❌ Errores en la Importación</h4>
-                                <div class="table-responsive">
-                                    <table id="tablaErrores" class="table table-bordered table-danger table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Nro Serie</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
-                                                <th>Tipo de Activo</th>
-                                                <th>Ubicación</th>
-                                                <th>Motivo del Error</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($errores as $error)
-                                                @if (!empty(array_filter($error['fila'])))
-                                                    <tr>
-                                                        @foreach ($error['fila'] as $cell)
-                                                            <td>{{ $cell ?? '-' }}</td>
+                                <div class="tab-content" id="importTabsContent">
+                                    <!-- Success Tab -->
+                                    @if (isset($activos) && count($activos) > 0)
+                                        <div class="tab-pane fade show active" id="success" role="tabpanel" aria-labelledby="success-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaDatos" class="table table-bordered table-striped table-hover">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th>Nro Serie</th>
+                                                            <th>Marca</th>
+                                                            <th>Modelo</th>
+                                                            <th>Tipo de Activo</th>
+                                                            <th>Estado</th>
+                                                            <th>Ubicación</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($activos as $activo)
+                                                            @if (!empty(array_filter($activo)))
+                                                                <tr>
+                                                                    <td>{{ $activo['nro_serie'] }}</td>
+                                                                    <td>{{ $activo['marca'] }}</td>
+                                                                    <td>{{ $activo['modelo'] }}</td>
+                                                                    <td>{{ $activo['tipo_de_activo'] }}</td>
+                                                                    <td>{{ $activo['estado'] }}</td>
+                                                                    <td>{{ $activo['ubicacion'] }}</td>
+                                                                </tr>
+                                                            @endif
                                                         @endforeach
-                                                        <td>{{ $error['motivo'] }}</td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Errors Tab -->
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <div class="tab-pane fade" id="errors" role="tabpanel" aria-labelledby="errors-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaErrores" class="table table-bordered table-danger table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nro Serie</th>
+                                                            <th>Marca</th>
+                                                            <th>Modelo</th>
+                                                            <th>Tipo de Activo</th>
+                                                            <th>Ubicación</th>
+                                                            <th>Motivo del Error</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($errores as $error)
+                                                            @if (!empty(array_filter($error['fila'])))
+                                                                <tr>
+                                                                    @foreach ($error['fila'] as $cell)
+                                                                        <td>{{ $cell ?? '-' }}</td>
+                                                                    @endforeach
+                                                                    <td>{{ $error['motivo'] }}</td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
 
@@ -140,7 +163,7 @@
         $(document).ready(function() {
             // Initialize DataTables
             $('#tablaDatos, #tablaErrores').DataTable({
-                responsive: true,
+                responsive: false,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
