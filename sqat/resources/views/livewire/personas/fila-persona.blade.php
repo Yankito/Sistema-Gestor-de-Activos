@@ -1,4 +1,4 @@
-<tr wire:key="persona-{{ $persona->id }}" wire:poll>
+<tr>
     <td class="action-btns">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
             <i class="fas fa-edit"></i>
