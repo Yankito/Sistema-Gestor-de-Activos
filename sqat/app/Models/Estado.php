@@ -12,6 +12,7 @@ class Estado extends Model
     // Definir los campos que pueden ser asignados masivamente
     protected $fillable = [
         'nombre_estado',
+        'descripcion'
     ];
 
 }

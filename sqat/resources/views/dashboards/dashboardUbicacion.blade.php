@@ -89,13 +89,16 @@
 
             <div class="col-md-6">
                 <div class="row">
-                    @foreach($cantidadPorEstados as $estado => $cantidad)
+                    @foreach($cantidadPorEstados as $nombre => $estado)
                         <div class="col-md-6">
                             <div class="progress-group">
-                                {{$estado}}
-                                <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
+                                {{ $nombre }}
+                                <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                    data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}">
+                                </i>
+                                <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
                                 </div>
                             </div>
                         </div>
@@ -147,4 +150,8 @@
         document.getElementById('tipoDeActivo_id').value = id;
         document.getElementById('update-tipoDeActivo-form').submit();
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        $('[data-toggle="tooltip"]').tooltip(); // Inicializa los tooltips de Bootstrap
+    });
 </script>
