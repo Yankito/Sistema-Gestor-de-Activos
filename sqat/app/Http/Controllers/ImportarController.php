@@ -1,159 +1,100 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Persona;
 use App\Models\Activo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ImportarController extends Controller
 {
-    private function convertirEstadoEmpleado($valor)
-    {   
-        $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
-
-        if ($valor === 'ACTIVO') {
-            return 1;
-        }
-        if ($valor === 'TERMINADO') {
-            return 0;
-        }
-
-        return null; // Devuelve null si el valor no es válido
-    }
-
     public function index()
     {
-        return view('importar');
-    }
-    private function convertirFecha($fecha)
-    {
-        if (!$fecha) {
-            return null; // Si la fecha está vacía, devolver NULL
-        }
-
-        $fecha = trim($fecha);
-        
-        // Si el formato es con barras (1/12/2025)
-        if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $fecha)) {
-            $partes = explode('/', $fecha);
-            return "{$partes[2]}-{$partes[1]}-{$partes[0]}"; // Convertir a YYYY-MM-DD
-        }
-
-        // Si el formato es con guiones (ya en formato esperado)
-        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
-            return $fecha;
-        }
-
-        return null; // En caso de formato inválido
-    }
-
-    private function eliminarTildesYMayusculas($cadena)
-    {
-        $cadena = strtoupper($cadena);
-        $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
-        $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
-        return str_replace($buscar, $reemplazar, $cadena);
-    }
-    //funcion que recibe si, Si,SI, no, No,NO y devuelve 1 o 0
-    private function convertirBoolean($valor)
-    {
-        $valor = strtoupper($valor);
-        if ($valor == 'SI' || $valor == 'SÍ') {
-            return 1;
-        }
-        if ($valor == 'NO') {
-            return 0;
-        }
-        return null;
+        return view('/importar');
     }
 
     public function importExcel(Request $request)
     {
         $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls'
+            'archivo_excel' => 'required|mimes:xlsx,csv'
         ]);
 
         $archivo = $request->file('archivo_excel');
         $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
+        $datos = $spreadsheet->getActiveSheet()->toArray();
+        $errores = [];
+        $asignaciones = [];
 
-        DB::beginTransaction();
-        try {
-            $personas = [];
-            $activos = [];
-            foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
-                //verificar si la fila esta vacia
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I']) && empty($fila['J']) && empty($fila['K']) && empty($fila['L']) && empty($fila['M']) && empty($fila['N']) && empty($fila['O']) && empty($fila['P']) && empty($fila['Q']) && empty($fila['R']) && empty($fila['S']) && empty($fila['V'])) {
+        foreach ($datos as $key => $fila) {
+            if ($key === 0) continue; // Saltar encabezado
+
+            // Verificar si la fila está en blanco
+            if (empty(array_filter($fila))) {
+                break; // Detener la importación si se encuentra una línea en blanco
+            }
+
+            $responsableUser = strtoupper(trim($fila[0]));
+            $usuarioUser = strtoupper(trim($fila[1]));
+
+            $responsable = Persona::where('user', $responsableUser)->first();
+            $usuario = Persona::where('user', $usuarioUser)->first();
+            $activo = Activo::where('nro_serie', strtoupper(trim($fila[2])))->first();
+
+            $estadoExcel = strtoupper(trim($fila[3]));
+            $estadoExcel = str_replace(
+                ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'],
+                ['A', 'E', 'I', 'O', 'U', 'N'],
+                $estadoExcel
+            );
+
+            $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
+            if (!$estado) {
+                $errores[] = "Fila $key: Estado '$estadoExcel' no encontrado en la base de datos.";
+                continue;
+            }
+
+            // Verificar si el estado requiere responsable y usuario
+            $estadosSinResponsableUsuario = ['ADQUIRIDO', 'PREPARACION', 'DISPONIBLE', 'PERDIDO', 'ROBADO', 'PARA BAJA', 'DONADO', 'VENDIDO'];
+            if (!in_array($estadoExcel, $estadosSinResponsableUsuario)) {
+                if (!$responsable) {
+                    $errores[] = "Fila $key: Responsable '$responsableUser' no encontrado.";
+                }
+                if (!$usuario) {
+                    $errores[] = "Fila $key: Usuario '$usuarioUser' no encontrado.";
+                }
+                if (!$responsable || !$usuario) {
                     continue;
                 }
-                // Convertir la ubicación a mayúsculas y eliminar tildes
-                $ubicacion = $this->eliminarTildesYMayusculas($fila['N']);
-                $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
-
-                if (!$ubicacionExistente) {
-                    throw new \Exception("La ubicación '{$ubicacion}' no existe en la base de datos.");
-                }
-
-                // Obtener el ID de la ubicación
-                $ubicacionId = $ubicacionExistente->id;
-                // <obtener el ID del estado
-                $estadoNombre = $this->eliminarTildesYMayusculas($fila['S']);
-                $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
-
-                if (!$estado) {
-                    throw new \Exception("El estado '{$estadoNombre}' no existe en la base de datos.");
-                }
-
-                $estadoId = $estado->id;
-
-
-                $persona = Persona::create([
-                    'rut' => $fila['A'],
-                    'nombre_usuario' => $fila['B'],
-                    'nombres' => $fila['C'],
-                    'primer_apellido' => $fila['D'],
-                    'segundo_apellido' => $fila['E'] ?? null,
-                    'supervisor' => $fila['F'],
-                    'empresa' => $fila['G'],
-                    'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['H']), FILTER_VALIDATE_BOOLEAN),
-                    'centro_costo' => $fila['I'],
-                    'denominacion' => $fila['J'],
-                    'titulo_puesto' => $fila['K'],
-                    'fecha_inicio' => $this->convertirFecha($fila['L']),
-                    'usuario_ti' => filter_var($this->convertirBoolean($fila['M']), FILTER_VALIDATE_BOOLEAN),
-                    'ubicacion' => $ubicacionId,
-                ]);
-
-                $activo = Activo::create([
-                    'nro_serie' => $fila['O'],
-                    'marca' => $fila['P'],
-                    'modelo' => $fila['Q'],
-                    'tipo_de_activo' => $fila['R'],
-                    'estado' => $estadoId,
-                    'usuario_de_activo' => $persona-> id ?? null,
-                    'responsable_de_activo' => $persona -> id ?? null,
-                    'precio' => $fila['V'],
-                    'ubicacion' => $ubicacionId, // La misma ubicación de la persona
-                    'justificacion_doble_activo' => $fila['W'] ?? null,
-                ]);
-                $personas[] = $persona;
-                $activos[] = $activo;
             }
-            DB::commit();
-            return view('importar', compact('datos', 'personas', 'activos'))->with('success', 'Datos importados correctamente.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
-        }
-    }
 
-    public function confirmarImportacion()
-    {
-        return view('confirmar-importacion');
+            if ($activo) {
+                $activo->responsable_de_activo = $responsable ? $responsable->id : null;
+                $activo->usuario_de_activo = $usuario ? $usuario->id : null;
+                $activo->estado = $estado->id;
+                $activo->justificacion_doble_activo = trim($fila[4]) ?: null;
+
+                // Actualizar la ubicación del activo a la ubicación del responsable
+                if ($responsable) {
+                    $activo->ubicacion = $responsable->ubicacion;
+                }
+
+                $activo->save();
+
+                $asignaciones[] = [
+                    'responsable' => $responsable ? $responsable->user : null,
+                    'usuario_activo' => $usuario ? $usuario->user : null,
+                    'numero_serie' => $activo->nro_serie,
+                    'estado' => $estado->nombre_estado,
+                    'justificacion' => $activo->justificacion_doble_activo,
+                    'ubicacion' => $activo->ubicacion,
+                ];
+            } else {
+                $errores[] = "Fila $key: Activo con número de serie '{$fila[2]}' no encontrado.";
+            }
+        }
+
+        return redirect()->back()->with(['errores' => $errores, 'asignaciones' => $asignaciones]);
     }
 }
