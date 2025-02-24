@@ -39,15 +39,13 @@
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                     <div class="d-flex">
-                        <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required disabled>
-                            <option value="LAPTOP">Laptop</option>
-                            <option value="DESKTOP">Desktop</option>
-                            <option value="MONITOR">Monitor</option>
-                            <option value="IMPRESORA">Impresora</option>
-                            <option value="CELULAR">Celular</option>
-                            <option value="OTRO">Otro</option>
+                        <select wire:model="tipo_de_activo" id="tipo_de_activo" class="form-control" required disabled>
+                            <option value="LAPTOP">LAPTOP</option>
+                            <option value="DESKTOP">DESKTOP</option>
+                            <option value="MONITOR">MONITOR</option>
+                            <option value="IMPRESORA">IMPRESORA</option>
+                            <option value="CELULAR">CELULAR</option>
                         </select>
-                        <input type="hidden" name="tipo_de_activo" id="tipo_de_activo_hidden" value="{{ $activo->tipo_de_activo }}">
                     </div>
                 </div>
             </div>

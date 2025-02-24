@@ -36,9 +36,12 @@ class DashboardUbicacionController extends Controller
         $estados = [];
         $estadosDisponibles = Estado::all();
         foreach ($estadosDisponibles as $estado) {
-            $estados[$estado->nombre_estado] = Activo::where('estado', $estado->id)
-                                        ->where('ubicacion', $ubicacion)
-                                        ->count();
+            $estados[$estado->nombre_estado] = [
+                'cantidad' => Activo::where('estado', $estado->id)
+                                    ->where('ubicacion', $ubicacion)
+                                    ->count(),
+                'descripcion' => $estado->descripcion
+            ];
         }
         return $estados;
     }

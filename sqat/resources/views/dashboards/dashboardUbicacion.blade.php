@@ -33,7 +33,7 @@
     @section('content')
 
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
+        <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
     </div>
 
     <section class="content">
@@ -47,6 +47,7 @@
                     <div class="breadcrumb float-sm-right">
                         <a class="nav-link me-2" data-toggle="dropdown" href="#">
                             <i class="fas fa-th mr-1"></i>
+                            Cambiar ubicación
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -71,6 +72,17 @@
             </div><!-- /.container-fluid -->
         </div>
 
+        <!-- small box -->
+        <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
+            <div class="inner text-center">
+                <p>Activos Totales</p>
+                <h3>{{$cantidadActivos}}</h3>
+            </div>
+            <div class="icon" style="cursor: pointer;">
+                <i class="ion ion-laptop"></i>
+            </div>
+            <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
         <div class="card bg-gradient-info">
             <div class="card-header border-0">
             <h3 class="card-title">
@@ -85,27 +97,29 @@
             </div>
 
             <!-- /.card-body -->
-            <div class="card-footer bg-transparent">
-
-            <div class="col-md-6">
-                <div class="row">
-                    @foreach($cantidadPorEstados as $estado => $cantidad)
-                        <div class="col-md-6">
-                            <div class="progress-group">
-                                {{ ucfirst(strtolower($estado)) }}
-                                <span class="float-right"><b>{{ $cantidad }}</b>/{{ $cantidadActivos }}</span>
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($cantidad / $cantidadActivos) * 100 : 0 }}%"></div>
+            <div class="card-footer bg-transparent" style="background-color: #50ACB8 !important;">
+                <div class="col-md-6">
+                    <div class="row">
+                        @foreach($cantidadPorEstados as $nombre => $estado)
+                            <div class="col-md-6">
+                                <div class="progress-group">
+                                    {{ $nombre }}
+                                    <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                        data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}">
+                                    </i>
+                                    <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
+
                 </div>
 
-
-            </div>
-
-            <!-- /.row -->
+                <!-- /.row -->
             </div>
             <!-- /.card-footer -->
         </div>
@@ -119,7 +133,7 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
-                                <p>{{ ucfirst(mb_strtolower($tipoDeActivo, 'UTF-8')) }}</p>
+                                <p>{{ $tipoDeActivo }}</p>
                             </div>
                             <div class="icon" style="cursor: pointer;">
                                 <i class="ion ion-stats-bars"></i>
@@ -147,4 +161,8 @@
         document.getElementById('tipoDeActivo_id').value = id;
         document.getElementById('update-tipoDeActivo-form').submit();
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        $('[data-toggle="tooltip"]').tooltip(); // Inicializa los tooltips de Bootstrap
+    });
 </script>

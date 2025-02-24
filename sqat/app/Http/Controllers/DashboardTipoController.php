@@ -59,7 +59,10 @@ class DashboardTipoController extends Controller
             if ($tipoDeActivo) {
             $query->where('tipo_de_activo', $tipoDeActivo);
             }
-            $estados[$estado->nombre_estado] = $query->count();
+            $estados[$estado->nombre_estado] = [
+                'cantidad' => $query->count(),
+                'descripcion' => $estado->descripcion
+            ];
         }
         return $estados;
     }

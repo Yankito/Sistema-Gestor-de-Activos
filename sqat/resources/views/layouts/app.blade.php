@@ -38,17 +38,13 @@
             rel="stylesheet"
         />
 
-
-
         <!-- Leaflet JavaScript -->
         <script
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             crossorigin="anonymous"
         ></script>
 
-
-        <!--<link rel="stylesheet" href="vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css"> -->
-                <!-- favicon -->
+        <!-- favicon -->
         <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
 
         @livewireStyles
@@ -57,6 +53,7 @@
         <!-- Toastr -->
         <link rel="stylesheet" href="vendor/adminlte/plugins/toastr/toastr.min.css">
 
+        <link rel="stylesheet" href="{{ asset('assets/colores.css') }}">
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -102,12 +99,12 @@
                     <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" style="background-color: #0a5964;">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Menú
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Menú
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
                         </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
@@ -206,7 +203,7 @@
                                 <a href="/registrarPersona" class="nav-link">
                                 <i class="nav-icon fas fa-user-plus"></i>
                                 <p>
-                                    Asignar activo a persona nueva
+                                    Registrar nueva persona
                                 </p>
                                 </a>
                             </li>
@@ -318,9 +315,5 @@
                 color: red;
             }
         </style>
-
-
-
-
-</body>
+    </body>
 </html>

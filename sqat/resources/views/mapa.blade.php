@@ -1,5 +1,5 @@
-<div class="card bg-gradient-primary">
-    <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+<div class="card bg-gradient-info" >
+    <div class="card-header border-0 ui-sortable-handle" style=" background-color: #50ACB8;">
         <h3 class="card-title">
             <i class="fas fa-map-marker-alt mr-1"></i>
             Mapa de activos por ubicación
@@ -11,8 +11,8 @@
         </div>
     </div>
 
-    <div class="card-body">
-        <div id="chile-map" style="height: 450px; width: 100%;"></div>
+    <div class="card-body" style="background-color: #50ACB8;">
+        <div id="chile-map" style="height: 100%; width: 100%;"></div>
     </div>
 
 </div>
@@ -53,7 +53,7 @@
         const chart = Highcharts.mapChart('chile-map', {
             chart: {
                 map: 'countries/cl/cl-all', // Mapa de Chile
-                backgroundColor: '#228dff',
+                backgroundColor: '#50ACB8',
                 panning: {
                     enabled: true
                 },

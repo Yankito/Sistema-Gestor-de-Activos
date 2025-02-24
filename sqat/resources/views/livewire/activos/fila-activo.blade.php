@@ -1,4 +1,9 @@
 <tr>
+    <style>
+        .action-btns {
+            width: 100px;
+        }
+    </style>
     <td class="action-btns">
         @if ($activo->estado === 1)
             <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">

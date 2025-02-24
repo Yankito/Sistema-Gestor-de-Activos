@@ -1,9 +1,10 @@
 <div>
-    <!-- Theme style -->
-    <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
     <!-- Select2 -->
     <link rel="stylesheet" href="vendor/adminlte/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
 <div class="modal-body">
 @if (isset($activo))
