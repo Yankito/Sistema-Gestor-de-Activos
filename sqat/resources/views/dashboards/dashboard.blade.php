@@ -53,7 +53,7 @@
                         <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
                     </form>
                 </div>
-                <div class="card bg-gradient-info" >
+                <div class="card bg-gradient-info" style="margin-top: 2rem !important;">
                     <div class="card-header border-0" style="background-color: #50ACB8 !important;">
                         <h3 class="card-title">
                             <i class="fas fa-th mr-1"></i>
@@ -95,7 +95,6 @@
 
 
             <div class="col-lg-7 connectedSortable ui-sortable" >
-
                 <!-- Aquí se incluye el mapa -->
                 @include('mapa')
             </div>

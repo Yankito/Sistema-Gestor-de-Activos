@@ -1,5 +1,5 @@
-<div class="card bg-gradient-primary" style="border: #50ACB8;">
-    <div class="card-header border-0 ui-sortable-handle" style="cursor: move; background-color: #50ACB8;">
+<div class="card bg-gradient-info" >
+    <div class="card-header border-0 ui-sortable-handle" style=" background-color: #50ACB8;">
         <h3 class="card-title">
             <i class="fas fa-map-marker-alt mr-1"></i>
             Mapa de activos por ubicación
@@ -12,7 +12,7 @@
     </div>
 
     <div class="card-body" style="background-color: #50ACB8;">
-        <div id="chile-map" style="height: 450px; width: 100%;"></div>
+        <div id="chile-map" style="height: 100%; width: 100%;"></div>
     </div>
 
 </div>

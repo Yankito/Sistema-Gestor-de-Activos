@@ -72,6 +72,17 @@
             </div><!-- /.container-fluid -->
         </div>
 
+        <!-- small box -->
+        <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
+            <div class="inner text-center">
+                <p>Activos Totales</p>
+                <h3>{{$cantidadActivos}}</h3>
+            </div>
+            <div class="icon" style="cursor: pointer;">
+                <i class="ion ion-laptop"></i>
+            </div>
+            <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
         <div class="card bg-gradient-info">
             <div class="card-header border-0">
             <h3 class="card-title">
