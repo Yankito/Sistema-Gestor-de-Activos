@@ -33,7 +33,7 @@
     @section('content')
 
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
+        <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
     </div>
 
     <section class="content">
@@ -85,30 +85,29 @@
             </div>
 
             <!-- /.card-body -->
-            <div class="card-footer bg-transparent">
-
-            <div class="col-md-6">
-                <div class="row">
-                    @foreach($cantidadPorEstados as $nombre => $estado)
-                        <div class="col-md-6">
-                            <div class="progress-group">
-                                {{ $nombre }}
-                                <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
-                                    data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}">
-                                </i>
-                                <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
+            <div class="card-footer bg-transparent" style="background-color: #50ACB8 !important;">
+                <div class="col-md-6">
+                    <div class="row">
+                        @foreach($cantidadPorEstados as $nombre => $estado)
+                            <div class="col-md-6">
+                                <div class="progress-group">
+                                    {{ $nombre }}
+                                    <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                        data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}">
+                                    </i>
+                                    <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
+
                 </div>
 
-
-            </div>
-
-            <!-- /.row -->
+                <!-- /.row -->
             </div>
             <!-- /.card-footer -->
         </div>

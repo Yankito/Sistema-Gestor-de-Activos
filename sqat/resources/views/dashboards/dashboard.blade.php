@@ -21,7 +21,7 @@
     <!-- /.content-header -->
     <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__wobble" src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
+            <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="200">
         </div>
     <!-- Main content -->
     <section class="content">
@@ -69,7 +69,6 @@
 
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent" style="background-color: #50ACB8 !important;">
-
                         <div class="row">
                             @foreach($cantidadPorEstados as $nombre => $estado)
                                 <div class="col-md-6">
@@ -111,7 +110,7 @@
                 @foreach($tiposDeActivo as $tipoDeActivo => $cantidad)
                     <div class="col-lg-3 col-6" style="cursor: pointer;" onclick="updateTipoDeActivo('{{ ucfirst($tipoDeActivo)}}')">
                         <!-- small box -->
-                        <div class="small-box bg-success" style="background-color: #0aa40d !important;">
+                        <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $cantidad }}</h3>
                                 <p>{{ $tipoDeActivo}}</p>
