@@ -16,7 +16,8 @@
                                     {{ session('success') }}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
-                                    </div>
+                                    </button>
+                                </div>
                             @endif
 
                             <!-- Error Message -->
@@ -40,55 +41,87 @@
                                 </button>
                             </form>
 
-                            <!-- Imported Data Table -->
-                            @if (session('asignaciones') && count(session('asignaciones')) > 0)
+                            <!-- Tabs for Imported Data and Errors -->
+                            @if ((isset($asignaciones) && count($asignaciones) > 0) || (isset($errores) && count($errores) > 0))
                                 <hr class="my-4">
-                                <h4 class="mb-3">Datos Importados</h4>
-                                <div class="table-responsive">
-                                    <table id="tablaDatos" class="table table-bordered table-striped table-hover">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th>Responsable</th>
-                                                <th>Usuario Activo</th>
-                                                <th>Número de Serie</th>
-                                                <th>Estado</th>
-                                                <th>Justificación Doble Activo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (session('asignaciones') as $asignacion)
-                                                <tr>
-                                                    <td>{{ $asignacion['responsable'] }}</td>
-                                                    <td>{{ $asignacion['usuario_activo'] }}</td>
-                                                    <td>{{ $asignacion['numero_serie'] }}</td>
-                                                    <td>{{ $asignacion['estado'] }}</td>
-                                                    <td>{{ $asignacion['justificacion'] }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endif
+                                <ul class="nav nav-tabs" id="importTabs" role="tablist">
+                                    @if (isset($asignaciones) && count($asignaciones) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="success-tab" data-toggle="tab" href="#success" role="tab" aria-controls="success" aria-selected="true">
+                                                <i class="fas fa-check-circle text-success"></i> Datos Importados ({{ count($asignaciones) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="errors-tab" data-toggle="tab" href="#errors" role="tab" aria-controls="errors" aria-selected="false">
+                                                <i class="fas fa-exclamation-circle text-danger"></i> Errores ({{ count($errores) }})
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
 
-                            <!-- Errors Table -->
-                            @if (session('errores') && count(session('errores')) > 0)
-                                <hr class="my-4">
-                                <h4 class="mb-3 text-danger">❌ Errores en la Importación</h4>
-                                <div class="table-responsive">
-                                    <table id="tablaErrores" class="table table-bordered table-danger table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Motivo del Error</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (session('errores') as $error)
-                                                <tr>
-                                                    <td>{{ $error }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <div class="tab-content" id="importTabsContent">
+                                    <!-- Success Tab -->
+                                    @if (isset($asignaciones) && count($asignaciones) > 0)
+                                        <div class="tab-pane fade show active" id="success" role="tabpanel" aria-labelledby="success-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaDatos" class="table table-bordered table-striped table-hover">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th>Responsable</th>
+                                                            <th>Usuario Activo</th>
+                                                            <th>Número de Serie</th>
+                                                            <th>Estado</th>
+                                                            <th>Justificación Doble Activo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($asignaciones as $asignacion)
+                                                            <tr>
+                                                                <td>{{ $asignacion['responsable'] }}</td>
+                                                                <td>{{ $asignacion['usuario_activo'] }}</td>
+                                                                <td>{{ $asignacion['numero_serie'] }}</td>
+                                                                <td>{{ $asignacion['estado'] }}</td>
+                                                                <td>{{ $asignacion['justificacion'] }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Errors Tab -->
+                                    @if (isset($errores) && count($errores) > 0)
+                                        <div class="tab-pane fade" id="errors" role="tabpanel" aria-labelledby="errors-tab">
+                                            <div class="table-responsive mt-3">
+                                                <table id="tablaErrores" class="table table-bordered table-danger table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Responsable</th>
+                                                            <th>Usuario Activo</th>
+                                                            <th>Número de Serie</th>
+                                                            <th>Estado</th>
+                                                            <th>Justificación Doble Activo</th>
+                                                            <th>Motivo del Error</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($errores as $error)
+                                                            <tr>
+                                                                <td>{{ $error['fila']['A'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['B'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['C'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['D'] ?? '-' }}</td>
+                                                                <td>{{ $error['motivo'] }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
 
@@ -107,10 +140,25 @@
 @endsection
 
 @section('scripts')
+    <!-- jQuery -->
+    <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- DataTables -->
+    <script src="{{ asset('vendor/adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+
+    <!-- Custom Scripts -->
     <script>
         $(document).ready(function() {
+            // Initialize DataTables
             $('#tablaDatos, #tablaErrores').DataTable({
-                responsive: true,
+                responsive: false,
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

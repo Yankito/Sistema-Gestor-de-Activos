@@ -71,6 +71,8 @@ class ImportarPersonasController extends Controller
         DB::beginTransaction();
         try {
             $personas = [];
+            $errores = [];
+
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
 
@@ -84,14 +86,28 @@ class ImportarPersonasController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    throw new \Exception("La ubicación '{$ubicacion}' no existe en la base de datos.");
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
+                    ];
+                    continue;
                 }
 
                 // Obtener el ID de la ubicación
                 $ubicacionId = $ubicacionExistente->id;
 
-                $persona = Persona::create([
-                    'user'=>$fila['A'],
+                // Verificar si el RUT ya existe en la base de datos
+                if (Persona::where('rut', $fila['B'])->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
+                    ];
+                    continue;
+                }
+
+                // Crear la persona
+                Persona::create([
+                    'user' => $fila['A'],
                     'rut' => $fila['B'],
                     'nombre_completo' => $fila['C'],
                     'nombre_empresa' => $fila['D'],
@@ -103,10 +119,27 @@ class ImportarPersonasController extends Controller
                     'correo' => $fila['J']
                 ]);
 
-                $personas[] = $persona;
+                // Transformar el estado y la ubicación para mostrarlos en la vista
+                $estadoEmpleado = $this->convertirEstadoEmpleado($fila['E']);
+                $estadoEmpleadoNombre = $estadoEmpleado === 1 ? 'ACTIVO' : ($estadoEmpleado === 0 ? 'INACTIVO' : 'DESCONOCIDO');
+                $ubicacionNombre = $ubicacionExistente->sitio;
+
+                $personas[] = [
+                    'user' => $fila['A'],
+                    'rut' => $fila['B'],
+                    'nombre_completo' => $fila['C'],
+                    'nombre_empresa' => $fila['D'],
+                    'estado_empleado' => $estadoEmpleadoNombre, // Mostrar el nombre del estado
+                    'fecha_ing' => $this->convertirFecha($fila['F']),
+                    'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
+                    'cargo' => $fila['H'],
+                    'ubicacion' => $ubicacionNombre, // Mostrar el nombre de la ubicación
+                    'correo' => $fila['J']
+                ];
             }
+
             DB::commit();
-            return view('importar', compact('datos', 'personas'))->with('success', 'Datos importados correctamente.');
+            return view('importarPersonas', compact('datos', 'personas', 'errores'))->with('success', 'Datos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
