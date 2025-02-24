@@ -47,6 +47,7 @@
                     <div class="breadcrumb float-sm-right">
                         <a class="nav-link me-2" data-toggle="dropdown" href="#">
                             <i class="fas fa-th mr-1"></i>
+                            Cambiar ubicación
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
