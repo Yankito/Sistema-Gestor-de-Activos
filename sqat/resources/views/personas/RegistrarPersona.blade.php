@@ -176,7 +176,7 @@
                                                 <select name="responsable" id="responsable" select class="form-control select2bs4">
                                                     <option value="" disabled selected>Seleccione un responsable</option>
                                                     @foreach($personas as $persona)
-                                                        <option value="{{$persona->id}}">{{$persona->rut}}: {{$persona->getNombreCompletoAttribute()}}</option>
+                                                        <option value="{{$persona->id}}">{{$persona->rut}}: {{$persona->nombre_completo}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -12,7 +12,15 @@ $(document).ready(function () {
             autoWidth: true,
             searching: true,
             pageLength: $('#tabla').data('page-length'),
-            order: $('#tabla').data('order'),
+            order: [[1,'asc ']],
+            destroy: true,  // Permite reinicializar la tabla sin errores
+            retrieve: true, // Recupera la instancia existente en lugar de crear una nueva
+            columnDefs: [
+                {
+                    targets: 0,
+                    orderable: false,
+                }
+            ],
             buttons: [
                 {
                     extend: "copy",
@@ -191,3 +199,5 @@ $(document).ready(function () {
         }, 100); // Adjust the delay as needed
     });
 });
+
+

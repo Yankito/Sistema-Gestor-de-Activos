@@ -4,22 +4,41 @@ namespace App\Livewire\Activos;
 
 use Livewire\Component;
 use App\Models\Activo;
-use App\Models\Registro;
-use Illuminate\Support\Facades\Auth;
-
 
 class TablaActivos extends Component
 {
+    protected $listeners = ['eventoOrdenar' => 'ordenarPor'];
     public $activos;
-
-    protected $listeners = ['refreshFila'];
+    public $sortColumn = 'nro_serie'; // Columna por defecto
+    public $sortDirection = 'asc'; // Dirección por defecto
 
     public function mount()
     {
-        // Cargar los activos cuando se monte el componente
-        $this->activos = Activo::with('estadoRelation')->get();
+        $this->cargarActivos();
     }
 
+    public function ordenarPor($columna)
+    {
+        //dd($columna);
+        // Si la columna seleccionada es la misma, cambia la dirección
+        if ($this->sortColumn === $columna) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            // Si se cambia de columna, inicia en orden ascendente
+            $this->sortColumn = $columna;
+            $this->sortDirection = 'asc';
+        }
+
+        // Recargar los datos ordenados
+        $this->cargarActivos();
+    }
+
+    private function cargarActivos()
+    {
+        $this->activos = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
+            ->orderBy($this->sortColumn, $this->sortDirection)
+            ->get();
+    }
 
     public function render()
     {
