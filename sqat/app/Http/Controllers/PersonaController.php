@@ -34,23 +34,27 @@ class PersonaController extends Controller
     public function store(Request $request){
         try {
             // Validar la solicitud
-        $request->validate([
-            'rut' => 'required|string|max:15|unique:personas,rut|regex:/^\d{7,8}-[\dkK]$/',
-            'nombre_completo' => 'required|string|max:100',
-            'nombre_empresa' => 'required|string|max:100',
-            'estado_empleado' => 'required|boolean',
-            'fecha_ing' => 'required|date',
-            'fecha_ter' =>'required|date',
-            'cargo' => 'required|string|max:100',
-            'ubicacion' => 'nullable|exists:ubicaciones,id',
-            'correo' => 'required|string|max:100'
-        ],[
-            'rut.rexex' => 'El campo rut debe ser un rut válido',
-        ]);
+            $request->validate([
+                'rut' => 'required|string|max:15|unique:personas,rut|regex:/^\d{7,8}-[\dkK]$/',
+                'user' => 'required|string|max:100',
+                'nombres' => 'required|string|max:100',
+                'primer_apellido' => 'required|string|max:100',
+                'segundo_apellido' => 'nullable|string|max:100',
+                'nombre_empresa' => 'required|string|max:100',
+                'fecha_ing' => 'required|date',
+                'cargo' => 'required|string|max:100',
+                'ubicacion' => 'nullable|exists:ubicaciones,id',
+                'correo' => 'required|string|max:100'
+            ],[
+                'rut.rexex' => 'El campo rut debe ser un rut válido',
+            ]);
 
             // Establecer valor predeterminado para estado_empleado si no se proporciona
+            $nombre_completo = $request->primer_apellido . ' ' . $request->segundo_apellido . ' ' . $request->nombres;
             $data = $request->all();
+            $data['nombre_completo'] = $nombre_completo;
             $data['estado_empleado'] = $data['estado_empleado'] ?? true;
+            //dd($data);
             //dd($request, $data);
             // Crear una nueva persona con los datos validados
             Persona::create($data);
@@ -77,8 +81,11 @@ class PersonaController extends Controller
             $registro->encargado_cambio = Auth::user()->id;
             $registro->save();
 
+
             if (!empty($data['activosAdicionales']) && is_array($data['activosAdicionales'])) {
-                foreach ($data['activosAdicionales'] as $id) {
+                foreach ($data['activosAdicionales'] as $activoAdicional) {
+                    $activoAdicional = json_decode($activoAdicional, true);
+                    $id = $activoAdicional['id'];
                     $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
                         $activoAdicional->usuario_de_activo = $idPersona;
