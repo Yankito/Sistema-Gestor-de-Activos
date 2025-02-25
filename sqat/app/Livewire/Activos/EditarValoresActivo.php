@@ -21,7 +21,7 @@ class EditarValoresActivo extends Component
     public $precio;
     public $tipo_de_activo;
 
-    protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal'];
+    protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal', 'actualizarUbicacion', 'setResponsable' => 'actualizarResponsable'];
 
     public function mount()
     {
@@ -79,6 +79,9 @@ class EditarValoresActivo extends Component
         $activo->modelo = $this->modelo;
         $activo->precio = $this->precio;
         $activo->tipo_de_activo = $this->tipo_de_activo;
+        $activo->responsable_de_activo = $this->responsable_de_activo;
+        $activo->usuario_de_activo = $this->responsable_de_activo;
+        //dd($this->responsable_de_activo);
         try {
             $activo->update();
             $this->dispatch('refreshRow', $activo->id);
@@ -89,9 +92,30 @@ class EditarValoresActivo extends Component
 
     }
 
+    public function actualizarUbicacion($responsableId)
+    {
+        // Buscar la persona seleccionada
+        $persona = Persona::with('ubicacionRelation')->find($responsableId);
+        //dd($persona);
+        // Si la persona tiene ubicación, actualizar la propiedad de Livewire
+        if ($persona && $persona->ubicacion) {
+            $this->ubicacion = $persona->ubicacionRelation->id;
+        } else {
+            $this->ubicacion = null;
+        }
+        $this->dispatch('$refresh');
+    }
+
     public function resetearModal()
     {
         $this->reset(['activo', 'responsable_de_activo', 'ubicacion']);
+    }
+
+    public function actualizarResponsable($data)
+    {
+        $this->responsable_de_activo = $data;
+        $this->dispatch('actualizarUbicacion', $data);
+        $this->dispatch('$refresh');
     }
 
 }
