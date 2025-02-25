@@ -314,6 +314,12 @@
             .required-asterisk {
                 color: red;
             }
+
+            .nav-item a.nav-link:hover {
+                background-color: rgba(0, 0, 0, 0.1) !important; /* Oscurece ligeramente */
+                transition: background-color 0s ease-in-out; /* Suaviza el cambio */
+            }
+
         </style>
     </body>
 </html>
