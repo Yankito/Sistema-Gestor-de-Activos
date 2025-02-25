@@ -1,5 +1,5 @@
-<div class="card bg-gradient-info" >
-    <div class="card-header border-0 ui-sortable-handle" style=" background-color: #50ACB8;">
+<div class="card bg-gradient-primary">
+    <div class="card-header border-0 ui-sortable-handle" style="cursor: move; background-color: #50ACB8;">
         <h3 class="card-title">
             <i class="fas fa-map-marker-alt mr-1"></i>
             Mapa de activos por ubicación
@@ -7,6 +7,9 @@
         <div class="card-tools">
             <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
                 <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" id="center-map-btn" class="btn btn-primary btn-sm" title="Centrar Mapa">
+                <i class="fas fa-crosshairs"></i>
             </button>
         </div>
     </div>
@@ -68,7 +71,7 @@
             mapNavigation: {
                 enabled: true,
                 enableMouseWheelZoom: true, // Permitir zoom con el scroll
-                    buttons: {
+                buttons: {
                     zoomIn: {
                         onclick: function () {
                             this.mapView.zoomBy(1); // Zoom in
@@ -89,8 +92,7 @@
                     x: centerLon,
                     y: centerLat
                 },
-                zoom: -2
-
+                zoom: -2.5
             },
             tooltip: {
                 headerFormat: '<b>{point.key}</b><br>',
@@ -131,7 +133,17 @@
                 }
             ]
         });
-        console.log('Centro calculado:', { centerLat, centerLon });
 
+        // Añadir evento al botón para centrar el mapa
+        document.getElementById('center-map-btn').addEventListener('click', function () {
+            // Convertir latitud y longitud a coordenadas X e Y de Highcharts
+            const projectedCenter = chart.mapView.lonLatToProjectedUnits({ lon: centerLon, lat: centerLat });
+            // Centrar el mapa usando las coordenadas proyectadas
+            chart.mapView.setView([projectedCenter.x, projectedCenter.y], -2.5);
+            console.log('Mapa centrado en:', projectedCenter);
+        });
+
+
+        console.log('Centro calculado:', { centerLat, centerLon });
     });
 </script>

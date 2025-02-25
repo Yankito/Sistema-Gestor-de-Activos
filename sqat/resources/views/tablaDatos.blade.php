@@ -70,7 +70,8 @@
                                 <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
                                     <thead>
                                     <tr>
-                                        @foreach(["User", "Rut", "Nombre Completo", "Nombre Empresa","Cargo", "Ubicación", "Correo"] as $index => $columna)
+                                        @foreach(["User", "Rut", "Nombre Completo", "Nombre Empresa","Estado empleado","Fecha ingreso",
+                                        "Fecha término","Cargo", "Sitio", "Soporte TI", "Correo", "N° Serie", "Marca", "Modelo", "Estado", "Responsable", "Precio", "Justificación doble activo"] as $index => $columna)
                                             <th>
                                                 {{ $columna }}
                                                 <!-- boton filtro -->
@@ -88,26 +89,21 @@
                                     <tbody>
                                         @foreach($datos as $dato)
                                         <tr>
+                                        <td>{{ $dato->user }}</td>
                                         <td>{{ $dato->rut }}</td>
-                                        <td>{{ $dato->nombre_usuario }}</td>
-                                        <td>{{ $dato->nombres }}</td>
-                                        <td>{{ $dato->primer_apellido }}</td>
-                                        <td>{{ $dato->segundo_apellido }}</td>
-                                        <td>{{ $dato->supervisor }}</td>
-                                        <td>{{ $dato->empresa }}</td>
+                                        <td>{{ $dato->nombre_completo }}</td>
+                                        <td>{{ $dato->nombre_empresa }}</td>
                                         <td>{{ $dato->estado_empleado == 1 ? 'Sí' : 'No' }}</td>
-                                        <td>{{ $dato->centro_costo }}</td>
-                                        <td>{{ $dato->denominacion }}</td>
-                                        <td>{{ $dato->titulo_puesto }}</td>
-                                        <td>{{ $dato->fecha_inicio }}</td>
-                                        <td>{{ $dato->usuario_ti  == 1 ? 'Sí' : 'No' }}</td>
+                                        <td>{{ $dato->fecha_ing }}</td>
+                                        <td>{{ $dato->fecha_ter }}</td>
+                                        <td>{{ $dato->cargo }}</td>
                                         <td>{{ $dato->sitio }}</td>
                                         <td>{{ $dato->soporte_ti }}</td>
+                                        <td>{{ $dato->correo }}</td>
                                         <td>{{ $dato->nro_serie }}</td>
                                         <td>{{ $dato->marca }}</td>
                                         <td>{{ $dato->modelo }}</td>
                                         <td>{{ $dato->nombre_estado}}</td>
-                                        <td>{{ $dato->rut_usuario }}</td>
                                         <td>{{ $dato->rut_responsable }}</td>
                                         <td>{{ $dato->precio }}</td>
                                         <td>{{ $dato->justificacion_doble_activo }}</td>

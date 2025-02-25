@@ -78,6 +78,7 @@
 
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo_select"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
                     <div class="d-flex">
