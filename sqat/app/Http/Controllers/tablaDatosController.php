@@ -24,7 +24,6 @@ class TablaDatosController extends Controller
                 'estados.nombre_estado',
             )
             ->get();
-
         return view('tablaDatos',compact('datos'));
     }
 }
