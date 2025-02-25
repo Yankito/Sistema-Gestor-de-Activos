@@ -60,12 +60,11 @@
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                                                 <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
-                                                    <option value="LAPTOP">Laptop</option>
-                                                    <option value="DESKTOP">Desktop</option>
-                                                    <option value="MONITOR">Monitor</option>
-                                                    <option value="IMPRESORA">Impresora</option>
-                                                    <option value="CELULAR">Celular</option>
-                                                    <option value="OTRO">Otro</option>
+                                                    <option value="LAPTOP">LAPTOP</option>
+                                                    <option value="DESKTOP">DESKTOP</option>
+                                                    <option value="MONITOR">MONITOR</option>
+                                                    <option value="IMPRESORA">IMPRESORA</option>
+                                                    <option value="CELULAR">CELULAR</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -103,7 +102,7 @@
                                             <select name="responsable" id="responsable" select class="form-control select2bs4">
                                                 <option value="" disabled selected>Seleccione un responsable</option>
                                                 @foreach($personas as $persona)
-                                                    <option value="{{$persona->id}}">{{$persona->rut}}: {{$persona->nombre_completo}}</option>
+                                                    <option value="{{$persona->id}}" data-ubicacion-id="{{$persona->ubicacion}}">{{$persona->rut}}: {{$persona->nombre_completo}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -122,6 +121,7 @@
         </section>
 
 
+        @section('scripts')
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('error'))
             <script>
@@ -135,7 +135,6 @@
         @endif
 
         <script>
-
             document.getElementById('asignarResponsable').addEventListener('change', function() {
                 var responsableSection = document.getElementById('responsableSection');
                 var responsableSelect = document.getElementById('responsable');
@@ -171,8 +170,24 @@
                     responsableSelect.value = null;  // No envía el valor cuando no está marcado
                 }
             });
+
+            $(document).ready(function () {
+                $('#responsable').select2(); // Inicializa Select2 si no lo está
+
+                $('#responsable').on('select2:select', function (e) {
+                    var selectedOption = e.params.data.element;  // Opción seleccionada
+                    var ubicacionId = $(selectedOption).attr('data-ubicacion-id');  // Obtener ID de ubicación
+
+                    console.log("Ubicación seleccionada:", ubicacionId); // Verificar el valor obtenido
+
+                    if (ubicacionId) {
+                        $('#ubicacion').val(ubicacionId).trigger('change'); // Actualizar select de ubicación
+                    }
+                });
+            });
         </script>
     @endsection
+
     <!-- Estilos -->
     <style>
         form .form-label {

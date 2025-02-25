@@ -7,6 +7,7 @@ use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActivoController extends Controller
 {
@@ -33,12 +34,11 @@ class ActivoController extends Controller
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
             $activo->precio = $request->precio;
-
-            $activo->save();
             if($request->responsable != NULL){
                 $activo->usuario_de_activo = $request->responsable;
                 $activo->responsable_de_activo = $request->responsable;
-
+                $activo->estado = 4;
+                $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
                 $registro = new Registro();
                 $registro->persona = $request->responsable;
                 $registro->activo = $activo->id;
@@ -46,6 +46,7 @@ class ActivoController extends Controller
                 $registro->encargado_cambio = Auth::user()->id;
                 $registro->save();
             }
+            $activo->save();
             // Redirigir con un mensaje de éxito
             return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
         } catch (\Exception $e) {
