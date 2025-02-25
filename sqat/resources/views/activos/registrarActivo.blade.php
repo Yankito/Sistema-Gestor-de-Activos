@@ -119,6 +119,7 @@
                 </div>
             </div>
         </section>
+        @endsection
 
 
         @section('scripts')
@@ -186,7 +187,6 @@
                 });
             });
         </script>
-    @endsection
 
     <!-- Estilos -->
     <style>
@@ -198,6 +198,7 @@
     </style>
 
 
+@endsection
 
 
 </html>

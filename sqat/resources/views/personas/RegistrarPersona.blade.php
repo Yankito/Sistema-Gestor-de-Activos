@@ -338,117 +338,114 @@
                     updateJustifications(selectedActivos);
                 });
             });
-        </script>
 
+            function validarRUT(rut) {
+                // Eliminar puntos y guion
+                rut = rut.replace(/[.\-]/g, '');
 
-            <script>
-                function validarRUT(rut) {
-                    // Eliminar puntos y guion
-                    rut = rut.replace(/[.\-]/g, '');
-
-                    // Validación con expresión regular
-                    const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
-                    if (!rutRegex.test(rut)) {
-                        return false;
-                    }
-
-                    // Verificar el dígito verificador
-                    let rutBody = rut.slice(0, -1);
-                    let dv = rut.slice(-1).toUpperCase();
-
-                    let suma = 0;
-                    let multiplicador = 2;
-
-                    for (let i = rutBody.length - 1; i >= 0; i--) {
-                        suma += parseInt(rutBody.charAt(i)) * multiplicador;
-                        multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
-                    }
-
-                    let dvCalculado = 11 - (suma % 11);
-                    if (dvCalculado === 11) dvCalculado = '0';
-                    if (dvCalculado === 10) dvCalculado = 'K';
-
-                    return dv === dvCalculado.toString();
+                // Validación con expresión regular
+                const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
+                if (!rutRegex.test(rut)) {
+                    return false;
                 }
 
-                async function comprobarRutRepetido(rut) {
-                    // Comprobar si el RUT ya existe en la base de datos
-                    try {
-                        let response = await fetch('/personas/' + rut);
-                        if (response.ok) {
-                            let data = await response.json();
-                            return data['exists'];
-                        } else {
-                            throw new Error('Error al comprobar el RUT');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        return false;
-                    }
+                // Verificar el dígito verificador
+                let rutBody = rut.slice(0, -1);
+                let dv = rut.slice(-1).toUpperCase();
+
+                let suma = 0;
+                let multiplicador = 2;
+
+                for (let i = rutBody.length - 1; i >= 0; i--) {
+                    suma += parseInt(rutBody.charAt(i)) * multiplicador;
+                    multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
                 }
 
-                document.getElementById('rut').addEventListener('blur', async function() {
-                    var rut = this.value;
-                    var errorSpan = document.getElementById('rutError');
-                    var repetidoSpan = document.getElementById('rutRepetido');
+                let dvCalculado = 11 - (suma % 11);
+                if (dvCalculado === 11) dvCalculado = '0';
+                if (dvCalculado === 10) dvCalculado = 'K';
 
-                    if (!validarRUT(rut)) {
-                        errorSpan.style.display = 'block';
-                        this.classList.add('is-invalid');
-                        repetidoSpan.style.display = 'none';
+                return dv === dvCalculado.toString();
+            }
+
+            async function comprobarRutRepetido(rut) {
+                // Comprobar si el RUT ya existe en la base de datos
+                try {
+                    let response = await fetch('/personas/' + rut);
+                    if (response.ok) {
+                        let data = await response.json();
+                        return data['exists'];
                     } else {
-                        errorSpan.style.display = 'none';
-                        this.classList.remove('is-invalid');
-                        if(await comprobarRutRepetido(rut)) {
-                            repetidoSpan.style.display = 'block';
-                            this.classList.add('is-invalid');
-                        } else {
-                            repetidoSpan.style.display = 'none';
-                            this.classList.remove('is-invalid');
-                        }
+                        throw new Error('Error al comprobar el RUT');
                     }
-                });
+                } catch (error) {
+                    console.error('Error:', error);
+                    return false;
+                }
+            }
+
+            document.getElementById('rut').addEventListener('blur', async function() {
+                var rut = this.value;
+                var errorSpan = document.getElementById('rutError');
+                var repetidoSpan = document.getElementById('rutRepetido');
+
+                if (!validarRUT(rut)) {
+                    errorSpan.style.display = 'block';
+                    this.classList.add('is-invalid');
+                    repetidoSpan.style.display = 'none';
+                } else {
+                    errorSpan.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                    if(await comprobarRutRepetido(rut)) {
+                        repetidoSpan.style.display = 'block';
+                        this.classList.add('is-invalid');
+                    } else {
+                        repetidoSpan.style.display = 'none';
+                        this.classList.remove('is-invalid');
+                    }
+                }
+            });
 
 
-                document.getElementById('formPersona').addEventListener('submit', async function(event) {
+            document.getElementById('formPersona').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                var rut = document.getElementById('rut').value;
+                var errorSpan = document.getElementById('rutError');
+                var repetidoSpan = document.getElementById('rutRepetido');
+
+                if (!validarRUT(rut)) {
+                    errorSpan.style.display = 'block';
+                    document.getElementById('rut').classList.add('is-invalid');
+                    document.getElementById('rut').focus();
                     event.preventDefault();
-
-                    var rut = document.getElementById('rut').value;
-                    var errorSpan = document.getElementById('rutError');
-                    var repetidoSpan = document.getElementById('rutRepetido');
-
-                    if (!validarRUT(rut)) {
-                        errorSpan.style.display = 'block';
+                }
+                else{
+                    if(await comprobarRutRepetido(rut)) {
+                        repetidoSpan.style.display = 'block';
                         document.getElementById('rut').classList.add('is-invalid');
                         document.getElementById('rut').focus();
                         event.preventDefault();
                     }
                     else{
-                        if(await comprobarRutRepetido(rut)) {
-                            repetidoSpan.style.display = 'block';
-                            document.getElementById('rut').classList.add('is-invalid');
-                            document.getElementById('rut').focus();
-                            event.preventDefault();
-                        }
-                        else{
-                            this.submit();
-                        }
+                        this.submit();
                     }
-
-                });
-
-            </script>
-
-            <style>
-                .is-invalid {
-                    border: 1px solid red;
-                    background-color: #ffe6e6;
                 }
-                form .form-label {
-                    font-size: 15px;
-                    color: #4b4b4b;
-                }
-            </style>
+
+            });
+
+        </script>
+
+        <style>
+            .is-invalid {
+                border: 1px solid red;
+                background-color: #ffe6e6;
+            }
+            form .form-label {
+                font-size: 15px;
+                color: #4b4b4b;
+            }
+        </style>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('error'))

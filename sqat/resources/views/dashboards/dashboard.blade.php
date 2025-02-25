@@ -96,7 +96,7 @@
 
             <div class="col-lg-7 connectedSortable ui-sortable" >
                 <!-- Aquí se incluye el mapa -->
-                @include('mapa')
+                @include('ubicaciones.mapa')
             </div>
 
         </div>
