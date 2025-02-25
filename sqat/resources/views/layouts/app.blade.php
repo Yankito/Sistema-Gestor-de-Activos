@@ -68,166 +68,179 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="dashboard" class="nav-link">Inicio</a>
             </li>
-
             </ul>
-
-
         </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary">
-                <!-- Brand Logo lleva al dashboard -->
-                <a href="/dashboard" class="brand-link">
+            <!-- Brand Logo lleva al dashboard -->
+            <a href="/dashboard" class="brand-link">
                 <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTE Logo"  width="200" height="auto"  style="opacity: .8">
-                </a>
-                <!-- Sidebar -->
+            </a>
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-2 pb-2 mb-2 d-flex">
-                    <div class="image">
-                    <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
+                <div class="user-panel mt-2 pb-2 mb-2 d-flex align-items-center">
+                    <!-- Imagen de perfil -->
+                    <div class="image" style="width: 40px;">
+                        <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
                     </div>
-                    <div class="info">
-                    <a href="#" class="d-block">{{ $user->nombres }}</a>
+
+                    <!-- Nombre de usuario -->
+                    <div class="info" style="flex: 1; margin: 0 10px;">
+                        <a href="#" class="d-block" style="text-decoration: none;">{{ $user->nombres }}</a>
+                    </div>
+
+                    <!-- Icono de cerrar sesión -->
+                    <div class="logout">
+                        <form action="/logout" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0;" 
+                                    onmouseover="this.style.color='red';" 
+                                    onmouseout="this.style.color='#c2c7d0';">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2" style="margin-right: 10px;">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Menú
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
+                        <!-- Add icons to the links using the .nav-icon class
+                            with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Menú
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="/dashboard" class="nav-link">Inicio</a>
+                                </li>
                             </ul>
 
                             @if($user->es_administrador)
                                 <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/register" class="nav-link">Registrar Admin</a>
+                                    <li class="nav-item">
+                                        <a href="/register" class="nav-link">Registrar Admin</a>
+                                    </li>
                                 </ul>
                             @endif
-                        <!-- tablas -->
+                        </li>
+
+                        <!-- Gestion de Activos -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-table"></i>
-                            <p>
-                                Tablas
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
+                                <i class="nav-icon fas fa-laptop"></i>
+                                <p>
+                                    Gestión de Activos
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class = "nav-item">
-                                    <a href = "/tablaDatos" class = "nav-link">
-                                    <i class="nav-icon fas fa-table"></i>
-                                    <p>Activos asignados</p>
+                                <li class="nav-item">
+                                    <a href="/tablaDatos" class="nav-link">
+                                        <p>Activos Asignados</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/tablaActivos" class="nav-link">
-                                    <i class="nav-icon fas fa-laptop"></i>
-                                    <p>Activos</p>
+                                        <p>Activos</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="/tablaPersonas" class="nav-link">
-                                    <i class="nav-icon fas fa-user"></i>
-                                    <p>Personas</p>
-                                    </a>
-                                </li>
+                                @if($user->es_administrador)
+                                    <li class="nav-item">
+                                        <a href="/registrarActivo" class="nav-link">
+                                            <p>
+                                                Dar activo de alta
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
-
+                        <!-- Gestion de Personas -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-file-import"></i>
-                            <p>
-                                Importar Datos
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                    Gestión de Personas
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class = "nav-item">
-                                    <a href = "/importar" class = "nav-link">
-                                    <i class="nav-icon fas fa-table"></i>
-                                    <p>Importar Activos Asignados</p>
-                                    </a>
-                                </li>
                                 <li class="nav-item">
-                                    <a href="/importarActivos" class="nav-link">
-                                    <i class="nav-icon fas fa-laptop"></i>
-                                    <p>Importar Activos</p>
+                                    <a href="/tablaPersonas" class="nav-link">
+                                        <p>Personas</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="/importarPersonas" class="nav-link">
-                                    <i class="nav-icon fas fa-user"></i>
-                                    <p>Importar Personas</p>
-                                    </a>
-                                </li>
+                                @if($user->es_administrador)
+                                    <li class="nav-item">
+                                        <a href="/registrarPersona" class="nav-link">
+                                            <p>Registrar nueva persona</p>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
-                        <!--importar Excell-->
-                        <li class="nav-item">
-                            <a href="/exportar" class="nav-link">
-                            <i class = "nav-icon fas fa-file-export"></i>
-                            <p>
-                                Reportes
-                            </p>
-                            </a>
-                        </li>
 
-                        <!-- registrar persona -->
                         @if($user->es_administrador)
                             <li class="nav-item">
-                                <a href="/registrarActivo" class="nav-link">
-                                <i class="nav-icon fas fa-laptop-medical"></i>
-                                <p>
-                                    Dar activo de alta
-                                </p>
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-file-import"></i>
+                                    <p>
+                                        Importar Datos
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
                                 </a>
-                            </li>
-
-                            <!-- registrar persona -->
-                            <li class="nav-item">
-                                <a href="/registrarPersona" class="nav-link">
-                                <i class="nav-icon fas fa-user-plus"></i>
-                                <p>
-                                    Registrar nueva persona
-                                </p>
-                                </a>
-                            </li>
-
-                            <!-- registrar ubicacion-->
-                            <li class="nav-item">
-                                <a href="/registrarUbicacion" class="nav-link">
-                                <i class="nav-icon fas fa-map-marker-alt"></i>
-                                <p>
-                                    Registrar Ubicación
-                                </p>
-                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/importar" class="nav-link">
+                                            <p>Importar Activos Asignados</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/importarActivos" class="nav-link">
+                                            <p>Importar Activos</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/importarPersonas" class="nav-link">
+                                            <p>Importar Personas</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         @endif
 
-                            <form action="/logout" method="POST" class= "d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-link nav-link" style="color: #c2c7d0;" onmouseover="this.style.color='red';" onmouseout="this.style.color='#c2c7d0';"> <i class="fas fa-sign-out-alt"> Cerrar sesión</i></button>
-                            </form>
-                    </li>
+                        <!--Emportar Excell-->
+                        <li class="nav-item">
+                            <a href="/exportar" class="nav-link">
+                                <i class="nav-icon fas fa-file-export"></i>
+                                <p>
+                                    Reportes
+                                </p>
+                            </a>
+                        </li>
+                        
+                        <!-- registrar ubicacion-->
+                         @if($user->es_administrador)
+                            <li class="nav-item">
+                                <a href="/registrarUbicacion" class="nav-link">
+                                    <i class="nav-icon fas fa-map-marker-alt"></i>
+                                    <p>
+                                        Registrar Ubicación
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
-                <!-- /.sidebar -->
             </div>
         </aside>
 
@@ -236,90 +249,130 @@
             @yield('content')
         </div>
 
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Rosario Norte 615, Piso 23. Las Condes Santiago - Chile - Tel. 800 540 099 .</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0
+            </div>
+        </footer>
 
-      <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <strong>Rosario Norte 615, Piso 23. Las Condes Santiago - Chile - Tel. 800 540 099 .</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 3.2.0
-        </div>
-    </footer>
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- ./wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
     </div>
+    <!-- ./wrapper -->
 
-        <!-- jQuery -->
-        <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-        <!-- jQuery UI 1.11.4 -->
-        <script src="vendor/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
-        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-        <script>
+    <!-- jQuery -->
+    <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="vendor/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
         $.widget.bridge('uibutton', $.ui.button)
-        </script>
-        <!-- Bootstrap 4 -->
-        <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- ChartJS -->
-        <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
-        <!-- jQuery Knob Chart -->
-        <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
-        <!-- daterangepicker -->
-        <script src="vendor/adminlte/plugins/moment/moment.min.js"></script>
-        <script src="vendor/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
-        <!-- Tempusdominus Bootstrap 4 -->
-        <script src="vendor/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-        <!-- Summernote -->
-        <script src="vendor/adminlte/plugins/summernote/summernote-bs4.min.js"></script>
-        <!-- overlayScrollbars -->
-        <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="vendor/adminlte/plugins/moment/moment.min.js"></script>
+    <script src="vendor/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="vendor/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="vendor/adminlte/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @yield('scripts')
 
-        @yield('scripts')
+    <!-- Select2 -->
+    <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
-        <!-- Select2 -->
-        <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Toastr -->
+    <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
 
-        <!-- Toastr -->
-        <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
-
-        <script>
-            $(function() {
-                var Toast = Swal.mixin({
+    <script>
+        $(function() {
+            var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 3000
-                });
             });
-            $(function () {
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-
+        });
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
             })
+        })
+    </script>
 
-        </script>
+    <style>
+        .required-asterisk {
+            color: red;
+        }
 
-        <style>
-            .required-asterisk {
-                color: red;
-            }
+        .nav-item a.nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.1) !important; /* Oscurece ligeramente */
+            transition: background-color 0s ease-in-out; /* Suaviza el cambio */
+        }
 
-            .nav-item a.nav-link:hover {
-                background-color: rgba(0, 0, 0, 0.1) !important; /* Oscurece ligeramente */
-                transition: background-color 0s ease-in-out; /* Suaviza el cambio */
-            }
+        .nav-link {
+            display: flex;
+            align-items: center; /* Alinea verticalmente el icono con el texto */
+            gap: 8px; /* Espacio entre el icono y el texto */
+            white-space: normal; /* Permite el salto de línea */
+        }
 
-        </style>
+        .nav-link i {
+            flex-shrink: 0; /* Evita que el icono se reduzca de tamaño */
+            width: 24px; /* Asegura un tamaño uniforme del icono */
+            text-align: center;
+        }
+
+        .nav-link p {
+            flex-grow: 1; /* Permite que el texto use el espacio disponible */
+            margin: 0; /* Evita márgenes innecesarios */
+            word-wrap: break-word; /* Rompe palabras largas si es necesario */
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center; /* Alinea verticalmente los elementos */
+            width: 100%;
+            padding: 0 10px; /* Añade un poco de padding para evitar que los elementos estén pegados a los bordes */
+        }
+
+        .image {
+            width: 40px; /* Ancho fijo para la imagen */
+            margin-left: -10px; /* Mueve la imagen un poco a la izquierda */
+        }
+
+        .info {
+            flex: 1; /* Ocupa el espacio restante */
+            margin: 0 10px; /* Añade un margen a los lados para separar el nombre del usuario de los otros elementos */
+            white-space: nowrap; /* Evita que el nombre de usuario se divida en varias líneas */
+            overflow: hidden; /* Oculta el texto que se desborda */
+            text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+        }
+
+        .logout {
+            width: 40px; /* Ancho fijo para el botón de cerrar sesión */
+            text-align: right; /* Alinea el icono a la derecha */
+            margin-right: -11px; /* Mueve el botón un poco a la derecha */
+        }
+    </style>
     </body>
 </html>

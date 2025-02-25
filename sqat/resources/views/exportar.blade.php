@@ -21,8 +21,8 @@
     </div>
 
     <div class="mt-4 text-center">
-        <button id="btnExcel" class="btn btn-success mx-2">Exportar a Excel</button>
-        <button id="btnCSV" class="btn btn-primary mx-2">Exportar a CSV</button>
+        <button id="btnExcel" class="btn mx-2" style="background-color: #36cc36; color: white;">Exportar a Excel</button>
+        <button id="btnCSV" class="btn mx-2" style="background-color: #34848c; color: white;">Exportar a CSV</button>
     </div>
 </div>
 @endsection
@@ -78,14 +78,14 @@
     }
 
     .option:hover {
-        background-color: #007bff;
+        background-color: #34848c !important;
         color: white;
         transform: translateY(-5px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .option.selected {
-        background-color: #0056b3;
+        background-color: #34848c !important;
         color: white;
         transform: translateY(-5px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
