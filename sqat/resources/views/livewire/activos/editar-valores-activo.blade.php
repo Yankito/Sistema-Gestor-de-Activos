@@ -78,11 +78,11 @@
 
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo_select"></i>
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
                     <div class="d-flex">
-                    <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
+                    <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
                             <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                             @foreach($personas as $persona)
                                 <option value="{{$persona->id}}">
@@ -131,6 +131,12 @@
                 $('.select2bs4').select2({
                     theme: 'bootstrap4'
                 })
+            });
+            $(function () {
+                $('#responsable_de_activo').on('change', function () {
+                    console.log('cambio: ' + $(this).val());
+                    Livewire.dispatch('setResponsable', [$(this).val() ]);
+                });
             });
             $('#modal-editar-valores-activos').modal('show');
 

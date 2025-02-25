@@ -47,8 +47,8 @@
                                         <div class="col-md-6">
                                         <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombre_usuario">Nombre de Usuario <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="nombre_usuario" id="nombre_usuario" required class="form-control" />
+                                            <label class="form-label" for="user">Username <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="user" id="user" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -76,62 +76,36 @@
                                                 <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <!-- Supervisor -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="supervisor">Supervisor</label>
-                                                <input type="text" name="supervisor" id="supervisor" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class = "row">
                                         <div class = "col-md-6">
                                             <!-- Empresa -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="empresa">Empresa <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="empresa" id="empresa" required class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class = "col-md-6">
-                                            <!-- Centro Costo -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="centro_costo">Centro Costo <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="centro_costo" id="centro_costo" required class="form-control" />
+                                            <label class="form-label" for="nombre_empresa">Empresa <span class="required-asterisk">*</span></label>
+                                                <input type="text" name="nombre_empresa" id="nombre_empresa" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class = "row">
                                         <div class = "col-md-6">
-                                            <!-- Denominación -->
+                                            <!-- Cargo -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="denominacion">Denominación <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="denominacion" id="denominacion" required class="form-control" />
+                                                <label class="form-label" for="cargo">Cargo</label>
+                                                <input type="text" name="cargo" id="cargo" required class="form-control" />
                                             </div>
                                         </div>
-                                        <div class = "col-md-6">
-                                            <!-- Título Puesto -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="titulo_puesto">Título Puesto <span class="required-asterisk">*</span></label>
-                                                <input type="text" name="titulo_puesto" id="titulo_puesto" required class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class = "row">
                                         <div class = "col-md-6">
                                             <!-- Fecha Inicio -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="fecha_inicio">Fecha Inicio</label>
-                                                <input type="date" name="fecha_inicio" id="fecha_inicio" required class="form-control" />
+                                                <label class="form-label" for="fecha_ing">Fecha Inicio</label>
+                                                <input type="date" name="fecha_ing" id="fecha_ing" required class="form-control" />
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class = "row">
                                         <div class = "col-md-6">
-                                            <!-- Usuario TI -->
+                                            <!-- Correo -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="usuario_ti">Usuario TI</label>
-                                                <select name="usuario_ti" id="usuario_ti" class="form-control" required>
-                                                    <option value="1">SI</option>
-                                                    <option value="0">NO</option>
-                                                </select>
+                                                <label class="form-label" for="correo">Correo</label>
+                                                <input type="text" name="correo" id="correo" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +129,7 @@
                                                     <label class = "form-label">Activos</label>
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         @foreach($activos as $activo)
-                                                            @if ($activo->estado == 'DISPONIBLE')
+                                                            @if ($activo->estado == 3)
                                                                 <option value="{{$activo->id}}">{{$activo->nro_serie}}</option>
                                                             @endif
                                                         @endforeach
@@ -194,8 +168,8 @@
                                                 <label class="form-label" for="activosAdicionales">Activos adicionales</label>
                                                 <select class="select2bs4" multiple="multiple" data-placeholder="Seleccione un activo" style="width: 100%;" name="activosAdicionales[]" id="activosAdicionales">
                                                     @foreach($activos as $activo)
-                                                        @if ($activo->estado == 'DISPONIBLE')
-                                                            <option value="{{$activo->id}}">{{$activo->nro_serie}}</option>
+                                                        @if ($activo->estado == 3)
+                                                            <option value="{{$activo}}">{{$activo->id}} - {{ $activo->nro_serie }}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>
@@ -242,6 +216,7 @@
                     // Escucha el cambio de selección usando select2
                     $(selectElement).on('change', function() {
                         var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
+                        console.log(selectedActivos);
                         updateJustifications(selectedActivos); // Actualiza las justificaciones cada vez que se seleccionen activos
                     });
                 } else {
@@ -263,13 +238,17 @@
 
                     var label = document.createElement('label');
                     label.classList.add('form-label');
-                    label.textContent = 'Justificación para ' + activo;
+                    var activo = JSON.parse(activo);
+                    console.log("activo: ", activo);
+                    console.log("activo id: ", activo.id);
+                    console.log("activo nro_serie: ", activo.nro_serie);
+                    label.textContent = 'Justificación para ' + activo.nro_serie;
 
                     var input = document.createElement('input');
                     input.type = 'text';
-                    input.name = 'justificaciones[' + activo + ']';
+                    input.name = 'justificaciones[' + activo.id + ']';
                     input.classList.add('form-control');
-                    input.id = 'justificaciones[' + activo + ']';
+                    input.id = 'justificaciones[' + activo.id + ']';
 
                     div.appendChild(label);
                     div.appendChild(input);
@@ -332,11 +311,11 @@
                 // Agregar las opciones filtradas (excluyendo el activo seleccionado)
                 var activos = JSON.parse('{!! json_encode($activos) !!}');
                 activos.forEach(function(activo) {
-                    if (activo.estado === 'DISPONIBLE' && parseInt(activo.id) !== parseInt(activoSeleccionado)) {
+                    if (activo.estado === 3 && parseInt(activo.id) !== parseInt(activoSeleccionado)) {
                         var option = document.createElement('option');
-                        option.value = activo.id;
+                        option.value = JSON.stringify({ id: activo.id, nro_serie: activo.nro_serie });
                         option.textContent = activo.nro_serie;
-
+                        console.log(option.value);
                         // Restaurar selección si estaba previamente seleccionado
                         if (seleccionados.includes(option.value)) {
                             option.selected = true;
@@ -359,117 +338,114 @@
                     updateJustifications(selectedActivos);
                 });
             });
-        </script>
 
+            function validarRUT(rut) {
+                // Eliminar puntos y guion
+                rut = rut.replace(/[.\-]/g, '');
 
-            <script>
-                function validarRUT(rut) {
-                    // Eliminar puntos y guion
-                    rut = rut.replace(/[.\-]/g, '');
-
-                    // Validación con expresión regular
-                    const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
-                    if (!rutRegex.test(rut)) {
-                        return false;
-                    }
-
-                    // Verificar el dígito verificador
-                    let rutBody = rut.slice(0, -1);
-                    let dv = rut.slice(-1).toUpperCase();
-
-                    let suma = 0;
-                    let multiplicador = 2;
-
-                    for (let i = rutBody.length - 1; i >= 0; i--) {
-                        suma += parseInt(rutBody.charAt(i)) * multiplicador;
-                        multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
-                    }
-
-                    let dvCalculado = 11 - (suma % 11);
-                    if (dvCalculado === 11) dvCalculado = '0';
-                    if (dvCalculado === 10) dvCalculado = 'K';
-
-                    return dv === dvCalculado.toString();
+                // Validación con expresión regular
+                const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
+                if (!rutRegex.test(rut)) {
+                    return false;
                 }
 
-                async function comprobarRutRepetido(rut) {
-                    // Comprobar si el RUT ya existe en la base de datos
-                    try {
-                        let response = await fetch('/personas/' + rut);
-                        if (response.ok) {
-                            let data = await response.json();
-                            return data['exists'];
-                        } else {
-                            throw new Error('Error al comprobar el RUT');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        return false;
-                    }
+                // Verificar el dígito verificador
+                let rutBody = rut.slice(0, -1);
+                let dv = rut.slice(-1).toUpperCase();
+
+                let suma = 0;
+                let multiplicador = 2;
+
+                for (let i = rutBody.length - 1; i >= 0; i--) {
+                    suma += parseInt(rutBody.charAt(i)) * multiplicador;
+                    multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
                 }
 
-                document.getElementById('rut').addEventListener('blur', async function() {
-                    var rut = this.value;
-                    var errorSpan = document.getElementById('rutError');
-                    var repetidoSpan = document.getElementById('rutRepetido');
+                let dvCalculado = 11 - (suma % 11);
+                if (dvCalculado === 11) dvCalculado = '0';
+                if (dvCalculado === 10) dvCalculado = 'K';
 
-                    if (!validarRUT(rut)) {
-                        errorSpan.style.display = 'block';
-                        this.classList.add('is-invalid');
-                        repetidoSpan.style.display = 'none';
+                return dv === dvCalculado.toString();
+            }
+
+            async function comprobarRutRepetido(rut) {
+                // Comprobar si el RUT ya existe en la base de datos
+                try {
+                    let response = await fetch('/personas/' + rut);
+                    if (response.ok) {
+                        let data = await response.json();
+                        return data['exists'];
                     } else {
-                        errorSpan.style.display = 'none';
-                        this.classList.remove('is-invalid');
-                        if(await comprobarRutRepetido(rut)) {
-                            repetidoSpan.style.display = 'block';
-                            this.classList.add('is-invalid');
-                        } else {
-                            repetidoSpan.style.display = 'none';
-                            this.classList.remove('is-invalid');
-                        }
+                        throw new Error('Error al comprobar el RUT');
                     }
-                });
+                } catch (error) {
+                    console.error('Error:', error);
+                    return false;
+                }
+            }
+
+            document.getElementById('rut').addEventListener('blur', async function() {
+                var rut = this.value;
+                var errorSpan = document.getElementById('rutError');
+                var repetidoSpan = document.getElementById('rutRepetido');
+
+                if (!validarRUT(rut)) {
+                    errorSpan.style.display = 'block';
+                    this.classList.add('is-invalid');
+                    repetidoSpan.style.display = 'none';
+                } else {
+                    errorSpan.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                    if(await comprobarRutRepetido(rut)) {
+                        repetidoSpan.style.display = 'block';
+                        this.classList.add('is-invalid');
+                    } else {
+                        repetidoSpan.style.display = 'none';
+                        this.classList.remove('is-invalid');
+                    }
+                }
+            });
 
 
-                document.getElementById('formPersona').addEventListener('submit', async function(event) {
+            document.getElementById('formPersona').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                var rut = document.getElementById('rut').value;
+                var errorSpan = document.getElementById('rutError');
+                var repetidoSpan = document.getElementById('rutRepetido');
+
+                if (!validarRUT(rut)) {
+                    errorSpan.style.display = 'block';
+                    document.getElementById('rut').classList.add('is-invalid');
+                    document.getElementById('rut').focus();
                     event.preventDefault();
-
-                    var rut = document.getElementById('rut').value;
-                    var errorSpan = document.getElementById('rutError');
-                    var repetidoSpan = document.getElementById('rutRepetido');
-
-                    if (!validarRUT(rut)) {
-                        errorSpan.style.display = 'block';
+                }
+                else{
+                    if(await comprobarRutRepetido(rut)) {
+                        repetidoSpan.style.display = 'block';
                         document.getElementById('rut').classList.add('is-invalid');
                         document.getElementById('rut').focus();
                         event.preventDefault();
                     }
                     else{
-                        if(await comprobarRutRepetido(rut)) {
-                            repetidoSpan.style.display = 'block';
-                            document.getElementById('rut').classList.add('is-invalid');
-                            document.getElementById('rut').focus();
-                            event.preventDefault();
-                        }
-                        else{
-                            this.submit();
-                        }
+                        this.submit();
                     }
-
-                });
-
-            </script>
-
-            <style>
-                .is-invalid {
-                    border: 1px solid red;
-                    background-color: #ffe6e6;
                 }
-                form .form-label {
-                    font-size: 15px;
-                    color: #4b4b4b;
-                }
-            </style>
+
+            });
+
+        </script>
+
+        <style>
+            .is-invalid {
+                border: 1px solid red;
+                background-color: #ffe6e6;
+            }
+            form .form-label {
+                font-size: 15px;
+                color: #4b4b4b;
+            }
+        </style>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @if(session('error'))

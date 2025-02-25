@@ -96,7 +96,7 @@
 
             <div class="col-lg-7 connectedSortable ui-sortable" >
                 <!-- Aquí se incluye el mapa -->
-                @include('mapa')
+                @include('ubicaciones.mapa')
             </div>
 
         </div>
@@ -130,6 +130,7 @@
     </section>
     <!-- /.content -->
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if(session('success'))
         <script>
             Swal.fire({

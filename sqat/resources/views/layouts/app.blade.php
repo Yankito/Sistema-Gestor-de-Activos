@@ -292,7 +292,6 @@
     <!-- AdminLTE App -->
     <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('scripts')
 

@@ -9,7 +9,7 @@ class UbicacionController extends Controller
 {
     public function registro()
     {
-        return view('registrarUbicacion');
+        return view('ubicaciones.registrarUbicacion');
     }
 
     public function store(Request $request){
