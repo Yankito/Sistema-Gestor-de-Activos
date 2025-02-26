@@ -14,9 +14,14 @@ class ActivoController extends Controller
     // Obtener todos los activos
     public function registro()
     {
-        $personas = Persona::all();
-        $ubicaciones = Ubicacion::all();
-        return view('activos.registrarActivo', compact('personas', 'ubicaciones'));
+        // Verificar si el usuario es administrador
+        if (!auth()->user()->es_administrador) {
+            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        }else{
+            $personas = Persona::all();
+            $ubicaciones = Ubicacion::all();
+            return view('activos.registrarActivo', compact('personas', 'ubicaciones'));
+        }
     }
 
     // Crear un nuevo activo
