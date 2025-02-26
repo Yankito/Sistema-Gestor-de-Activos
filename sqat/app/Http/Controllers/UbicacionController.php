@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ubicacion;
+use Vinkla\Hashids\Facades\Hashids;
 
 class UbicacionController extends Controller
 {
@@ -64,7 +65,16 @@ class UbicacionController extends Controller
         return view('ubicaciones.modificarUbicacion', compact('ubicacion'));
     }
 
-    public function eliminar($id) {
+    public function eliminar($hashed_id) {
+         // Desencriptar el ID
+        $decoded = Hashids::decode($hashed_id);
+
+        if (empty($decoded)) {
+            return redirect()->route('ubicaciones')->with('error', 'ID inválido.');
+        }
+
+        $id = $decoded[0];
+
         // Verifica si la ubicación existe antes de eliminarla
         $ubicacion = Ubicacion::find($id);
 

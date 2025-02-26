@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
 });
 
-Route::delete('/ubicaciones/eliminar/{id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
+Route::delete('/ubicaciones/eliminar/{hashed_id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
 
 
 Route::get('/desplegable', function () {
