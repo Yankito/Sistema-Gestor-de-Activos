@@ -217,6 +217,15 @@
                                 </p>
                                 </a>
                             </li>
+                            <!-- registrar ubicacion-->
+                            <li class="nav-item">
+                                <a href="/ubicaciones" class="nav-link">
+                                <i class="nav-icon fas fa-map-marker-alt"></i>
+                                <p>
+                                    Modificar Ubicación
+                                </p>
+                                </a>
+                            </li>
                         @endif
 
                             <form action="/logout" method="POST" class= "d-inline">

@@ -52,6 +52,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/registrarActivo', [ActivoController::class, 'registro']);
     Route::get('/registrarPersona', [PersonaController::class,'registro']);
     Route::get('/registrarUbicacion', [UbicacionController::class, 'registro']);
+    Route::get('/modificarUbicacion', [UbicacionController::class, 'modificar'])->name('ubicaciones.modificar');
+    Route::get('/ubicaciones', [UbicacionController::class, 'index'])->name('ubicaciones');
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
@@ -63,6 +65,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/exportar', [ExportarController::class, 'index']);
     Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
 });
+
+Route::delete('/ubicaciones/eliminar/{id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
 
 
 Route::get('/desplegable', function () {
@@ -85,6 +89,7 @@ Route::middleware('auth')->get('/profile', function () {
 
 Route::post('/activos', [ActivoController::class, 'store']);
 Route::post('/ubicaciones', [UbicacionController::class, 'store']);
+Route::post('/ubicacionesUpdate', [UbicacionController::class, 'update']);
 Route::get('/personas/{rut}', [PersonaController::class, 'checkRut']);
 Route::get('/register/{correo}', [AuthController::class, 'checkCorreo']);
 
