@@ -1,6 +1,16 @@
 # Etapa 1: Construcción de dependencias con Composer
 FROM composer:2.6 AS builder
 
+# Instalar extensiones necesarias
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql
+
 WORKDIR /app
 
 # Copiar archivos de Laravel (excluir node_modules y vendor con .dockerignore)
