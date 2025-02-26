@@ -188,6 +188,36 @@
                             </ul>
                         </li>
 
+                        <!-- Gestion de ubicaciones -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-map-marked-alt"></i>
+                                <p>
+                                    Gestión de Ubicaciones
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <!-- registrar ubicacion-->
+                                <li class="nav-item">
+                                    <a href="/ubicaciones" class="nav-link">
+                                        <p>
+                                            Ubicación
+                                        </p>
+                                    </a>
+                                </li>
+                                <!-- modificar ubicacion-->
+                                @if($user->es_administrador)
+                                    <li class="nav-item">
+                                        <a href="/registrarUbicacion" class="nav-link">
+                                            <p>
+                                                Registrar Ubicación
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+
                         @if($user->es_administrador)
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
@@ -215,15 +245,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <!-- registrar ubicacion-->
-                            <li class="nav-item">
-                                <a href="/ubicaciones" class="nav-link">
-                                <i class="nav-icon fas fa-map-marker-alt"></i>
-                                <p>
-                                    Modificar Ubicación
-                                </p>
-                                </a>
-                            </li>
                         @endif
 
                         <!--Emportar Excell-->
@@ -235,18 +256,6 @@
                                 </p>
                             </a>
                         </li>
-                        
-                        <!-- registrar ubicacion-->
-                         @if($user->es_administrador)
-                            <li class="nav-item">
-                                <a href="/registrarUbicacion" class="nav-link">
-                                    <i class="nav-icon fas fa-map-marker-alt"></i>
-                                    <p>
-                                        Registrar Ubicación
-                                    </p>
-                                </a>
-                            </li>
-                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
