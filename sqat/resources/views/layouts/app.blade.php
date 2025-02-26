@@ -215,6 +215,15 @@
                                     </li>
                                 </ul>
                             </li>
+                            <!-- registrar ubicacion-->
+                            <li class="nav-item">
+                                <a href="/ubicaciones" class="nav-link">
+                                <i class="nav-icon fas fa-map-marker-alt"></i>
+                                <p>
+                                    Modificar Ubicación
+                                </p>
+                                </a>
+                            </li>
                         @endif
 
                         <!--Emportar Excell-->

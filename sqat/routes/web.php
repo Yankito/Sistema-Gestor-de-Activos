@@ -16,6 +16,7 @@ use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 // Rutas públicas
 Route::get('/login', function () {
@@ -44,6 +45,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/registrarActivo', [ActivoController::class, 'registro']);
     Route::get('/registrarPersona', [PersonaController::class,'registro']);
     Route::get('/registrarUbicacion', [UbicacionController::class, 'registro']);
+    Route::get('/modificarUbicacion', [UbicacionController::class, 'modificar'])->name('ubicaciones.modificar');
+    Route::get('/ubicaciones', [UbicacionController::class, 'index'])->name('ubicaciones');
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
@@ -55,6 +58,14 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/exportar', [ExportarController::class, 'index']);
     Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
 });
+
+Route::delete('/ubicaciones/eliminar/{id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
+
+
+Route::get('/desplegable', function () {
+    return view('desplegable');
+});
+
 
 // Ruta para procesar el inicio de sesión
 Route::post('/login', [AuthController::class, 'login']);
@@ -75,6 +86,7 @@ Route::middleware('auth')->get('/profile', function () {
 // Rutas para almacenar datos
 Route::post('/activos', [ActivoController::class, 'store']);
 Route::post('/ubicaciones', [UbicacionController::class, 'store']);
+Route::post('/ubicacionesUpdate', [UbicacionController::class, 'update']);
 Route::post('/personas', [PersonaController::class, 'store']);
 
 // Rutas para verificar datos
