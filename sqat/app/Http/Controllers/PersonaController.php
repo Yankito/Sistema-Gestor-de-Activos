@@ -15,12 +15,17 @@ class PersonaController extends Controller
     // Mostrar todos los registros de personas
     public function registro()
     {
-        $activos = Activo::all();
-        $ubicaciones = Ubicacion::all();
-        $personas = Persona::all();
+        // Verificar si el usuario es administrador
+        if (!auth()->user()->es_administrador) {
+            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        }else{
+            $activos = Activo::all();
+            $ubicaciones = Ubicacion::all();
+            $personas = Persona::all();
 
-        // Devolver una vista con la lista de personas
-        return view('personas.registrarPersona', compact('activos','ubicaciones', 'personas'));
+            // Devolver una vista con la lista de personas
+            return view('personas.registrarPersona', compact('activos','ubicaciones', 'personas'));
+        }
     }
 
     // Mostrar el formulario para crear una nueva persona

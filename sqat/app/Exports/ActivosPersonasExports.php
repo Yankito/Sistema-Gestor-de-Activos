@@ -16,7 +16,6 @@ class ActivosPersonasExports
     {
         $data = DB::select("
             SELECT 
-                activos.id AS id_activo,
                 activos.nro_serie,
                 activos.marca,
                 activos.modelo,
@@ -27,19 +26,17 @@ class ActivosPersonasExports
                 activos.precio,
                 ubicaciones.sitio AS nombre_ubicacion,
                 activos.justificacion_doble_activo,
-                personas.nombre_usuario,
-                personas.nombres,
-                personas.primer_apellido,
-                personas.segundo_apellido,
-                personas.supervisor,
-                personas.empresa,
+                personas.user,
+                personas.rut,
+                personas.nombre_completo,
+                personas.nombre_empresa,
                 personas.estado_empleado,
-                personas.centro_costo,
-                personas.denominacion,
-                personas.titulo_puesto,
-                personas.fecha_inicio,
-                personas.usuario_ti,
-                ubicaciones.sitio AS ubicacion_persona
+                personas.fecha_ing,
+                personas.fecha_ter,
+                personas.cargo,
+                ubicaciones.sitio AS ubicacion_persona,
+                personas.correo
+                
             FROM 
                 activos
             JOIN 
@@ -47,20 +44,19 @@ class ActivosPersonasExports
             JOIN 
                 ubicaciones ON activos.ubicacion = ubicaciones.id
             JOIN    
-                estados ON activos.estado = estados.id
-        ");
+                estados ON activos.estado = estados.id"
+        );
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Encabezados
         $headers = [
-            'ID Activo', 'Nro Serie', 'Marca', 'Modelo', 'Tipo de Activo', 'Estado', 
-            'Usuario de Activo', 'Responsable', 'Precio', 'Ubicación', 
-            'Justificación Doble Activo', 'Nombre Usuario', 'Nombres', 
-            'Primer Apellido', 'Segundo Apellido', 'Supervisor', 'Empresa', 
-            'Estado Empleado', 'Centro Costo', 'Denominación', 'Título de Puesto', 
-            'Fecha Inicio', 'Usuario TI', 'Ubicación Persona'
+            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 
+            'Estado Activo', 'Usuario de Activo', 'Responsable de Activo', 'Precio', 
+            'Ubicación', 'Justificación Doble Activo', 'Usuario', 'RUT', 'Nombre Completo','Empresa', 
+            'Estado Empleado','Fecha Ingreso', 'Fecha Termino', 'Cargo', 
+            'Ubicación Persona', 'correo'
         ];
 
         $column = 'A';
@@ -92,30 +88,26 @@ class ActivosPersonasExports
         // Datos
         $row = 2;
         foreach ($data as $item) {
-            $sheet->setCellValue('A' . $row, $item->id_activo)
-                  ->setCellValue('B' . $row, $item->nro_serie)
-                  ->setCellValue('C' . $row, $item->marca)
-                  ->setCellValue('D' . $row, $item->modelo)
-                  ->setCellValue('E' . $row, $item->tipo_de_activo)
-                  ->setCellValue('F' . $row, $item->estado_activo)
-                  ->setCellValue('G' . $row, $item->usuario_de_activo)
-                  ->setCellValue('H' . $row, $item->responsable_de_activo)
-                  ->setCellValue('I' . $row, $item->precio)
-                  ->setCellValue('J' . $row, $item->nombre_ubicacion)
-                  ->setCellValue('K' . $row, $item->justificacion_doble_activo)
-                  ->setCellValue('L' . $row, $item->nombre_usuario)
-                  ->setCellValue('M' . $row, $item->nombres)
-                  ->setCellValue('N' . $row, $item->primer_apellido)
-                  ->setCellValue('O' . $row, $item->segundo_apellido)
-                  ->setCellValue('P' . $row, $item->supervisor)
-                  ->setCellValue('Q' . $row, $item->empresa)
-                  ->setCellValue('R' . $row, $item->estado_empleado)
-                  ->setCellValue('S' . $row, $item->centro_costo)
-                  ->setCellValue('T' . $row, $item->denominacion)
-                  ->setCellValue('U' . $row, $item->titulo_puesto)
-                  ->setCellValue('V' . $row, $item->fecha_inicio)
-                  ->setCellValue('W' . $row, $item->usuario_ti)
-                  ->setCellValue('X' . $row, $item->ubicacion_persona);
+            $sheet->setCellValue('A' . $row, $item->nro_serie)
+                  ->setCellValue('B' . $row, $item->marca)
+                  ->setCellValue('C' . $row, $item->modelo)
+                  ->setCellValue('D' . $row, $item->tipo_de_activo)
+                  ->setCellValue('E' . $row, $item->estado_activo)
+                  ->setCellValue('F' . $row, $item->usuario_de_activo)
+                  ->setCellValue('G' . $row, $item->responsable_de_activo)
+                  ->setCellValue('H' . $row, $item->precio)
+                  ->setCellValue('I' . $row, $item->nombre_ubicacion)
+                  ->setCellValue('J' . $row, $item->justificacion_doble_activo)
+                  ->setCellValue('K' . $row, $item->user)
+                  ->setCellValue('L' . $row, $item->rut)
+                  ->setCellValue('M' . $row, $item->nombre_completo)
+                  ->setCellValue('N' . $row, $item->nombre_empresa)
+                  ->setCellValue('O' . $row, $item->estado_empleado)
+                  ->setCellValue('P' . $row, $item->fecha_ing)
+                  ->setCellValue('Q' . $row, $item->fecha_ter)
+                  ->setCellValue('R' . $row, $item->cargo)
+                  ->setCellValue('S' . $row, $item->ubicacion_persona)
+                  ->setCellValue('T' . $row, $item->correo);
 
             // Aplicar bordes a las celdas de datos
             $sheet->getStyle('A' . $row . ':X' . $row)->applyFromArray([

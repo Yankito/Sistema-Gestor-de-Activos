@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header" style="background-color: #34848c; color: white;">
                             <h3 class="card-title mb-0">Importar Datos de Personas</h3>
                         </div>
                         <div class="card-body">
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <input type="file" name="archivo_excel" class="form-control" required>
                                 </div>
-                                <button type="submit" class="btn btn-success btn-block">
+                                <button type="submit" class="btn btn-success btn-block" style="background-color: #36cc36;">
                                     <i class="fas fa-file-import"></i> Importar Datos
                                 </button>
                             </form>

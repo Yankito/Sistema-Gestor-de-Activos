@@ -12,7 +12,12 @@ class ImportarController extends Controller
 {
     public function index()
     {
-        return view('/importar');
+        // Verificar si el usuario es administrador
+        if (!auth()->user()->es_administrador) {
+            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        } else {
+            return view('/importar');
+        }
     }
 
     private function eliminarTildesYMayusculas($cadena)

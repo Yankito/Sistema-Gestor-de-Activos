@@ -6,59 +6,32 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // funcion para registrar un usuario
+    // Función para registrar un usuario
     public function register(Request $request)
     {
-        /**
-         * Validates the incoming request data for user authentication.
-         *
-         * Validation rules:
-         * - 'correo': Required, must be a valid email address with the domain @iansa.cl.
-         * - 'nombres': Required, must be a string with a maximum length of 255 characters.
-         * - 'primerApellido': Required, must be a string with a maximum length of 255 characters.
-         * - 'segundoApellido': Optional, must be a string with a maximum length of 255 characters.
-         * - 'contrasena': Required, must be at least 6 characters long.
-         *
-         * Custom error messages:
-         * - 'correo.regex': 'Solo se pueden registrar con dominio @iansa.cl'
-         *
-         * @param \Illuminate\Http\Request $request The incoming request instance.
-         * @return void
-         */
-        try{
+        try {
+            // Verificar si el usuario autenticado es administrador
+            if (!Auth::check() || !Auth::user()->es_administrador) {
+                return redirect('/dashboard')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
+            }
+
+            // Validar los datos del formulario
             $request->validate([
-                'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/'],
+                'correo' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@iansa\.cl$/', 'unique:usuarios'],
                 'nombres' => 'required|string|max:255',
                 'primer_apellido' => 'required|string|max:255',
                 'segundo_apellido' => 'nullable|string|max:255',
-                'contrasena' => 'required|min:6',
-            ], [
-                'correo.regex' => 'Solo se pueden registrarcon dominio @iansa.cl',
-            ]);
-
-            if (!Auth::user()->esAdministrador) {
-                return redirect('/')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
-            }
-            // validamos los datos
-            $validator = Validator::make($request->all(), [
-                'correo' => 'required|email|unique:usuarios',
-                'nombres' => 'required|string',
-                'primer_apellido' => 'required|string',
-                'segundo_apellido' => 'nullable|string',
                 'contrasena' => 'required|string|min:6',
-                'es_administrador' => 'boolean',
+                'es_administrador' => 'nullable|boolean',
+            ], [
+                'correo.regex' => 'Solo se pueden registrar correos con dominio @iansa.cl.',
+                'correo.unique' => 'El correo ya está registrado.',
             ]);
 
-            // si la validacion falla, retornamos un error
-            if ($validator->fails()) {
-                return back()->withInput()->with('error', 'Hubo un problema al registrar el usuario: ');
-            }
-
-            // creamos el usuario
+            // Crear el usuario
             $usuario = Usuario::create([
                 'correo' => $request->correo,
                 'nombres' => $request->nombres,
@@ -68,44 +41,51 @@ class AuthController extends Controller
                 'es_administrador' => $request->es_administrador ?? false,
             ]);
 
-            // Redirigimos al administrador a la página de usuarios registrados
+            // Redirigir al dashboard con mensaje de éxito
             return redirect('/dashboard')->with('success', 'Usuario registrado correctamente.');
         } catch (\Exception $e) {
-            // Si ocurre un error, redirigir con mensaje de error a la página actual
+            // Si ocurre un error, redirigir con mensaje de error
             return back()->withInput()->with('error', 'Hubo un problema al registrar el usuario: ' . $e->getMessage());
         }
     }
 
-    // funcion para loguear un usuario
+    // Función para iniciar sesión
     public function login(Request $request)
     {
-        // Obtener las credenciales
-        $credentials = [
-            'correo' => $request->correo,
-            'password' => $request->contrasena, // Laravel siempre busca 'password'
-        ];
+        // Validar las credenciales
+        $credentials = $request->validate([
+            'correo' => 'required|email',
+            'contrasena' => 'required|string',
+        ]);
 
         // Intentar autenticar al usuario
-        if (Auth::attempt(credentials: $credentials)) {
-            return redirect()->intended('/dashboard'); // Redirigir a la página de perfil si el login es exitoso
+        if (Auth::attempt(['correo' => $credentials['correo'], 'password' => $credentials['contrasena']])) {
+            return redirect()->intended('/dashboard'); // Redirigir al dashboard si el login es exitoso
         }
 
         // Si la autenticación falla, devolver con un mensaje de error
         return back()->with('error', 'Las credenciales son incorrectas.');
     }
 
-    // funcion para cerrar sesion
+    // Función para cerrar sesión
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'sesion cerrada'], 200);
+        session()->invalidate();
+        session()->regenerateToken();
+    
+        // Limpiar el caché del navegador
+        header("Cache-Control: no-cache, no-store, must-revalidate");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+    
+        return redirect('/login')->with('success', 'Sesión cerrada correctamente.');
     }
 
-
+    // Función para verificar si un correo ya está registrado
     public function checkCorreo($correo)
     {
         $usuario = Usuario::where('correo', $correo)->first();
         return response()->json(['exists' => $usuario !== null]);
     }
-
 }

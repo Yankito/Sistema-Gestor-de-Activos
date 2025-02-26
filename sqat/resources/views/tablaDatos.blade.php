@@ -58,7 +58,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tabla de datos</h3>
+                            <h3 class="card-title">Tabla de Activos Asignados</h3>
                             <!-- Add a "Clear Filters" button -->
                             <button id="clear-filters" class="btn btn-danger btn-sm float-right">
                                 <i class="fas fa-filter"></i> Limpiar Filtros
