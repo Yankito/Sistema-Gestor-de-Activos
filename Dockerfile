@@ -9,10 +9,9 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    zip \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    && docker-php-ext-install gd pdo pdo_mysql zip  # Instalar la extensión zip
 
 WORKDIR /app
 
@@ -33,7 +32,7 @@ FROM php:8.2-apache
 
 # Habilitar módulos de Apache y extensiones PHP necesarias
 RUN a2enmod rewrite
-RUN docker-php-ext-install pdo pdo_mysql zip
+RUN docker-php-ext-install pdo pdo_mysql zip  # Asegurarse de que zip está instalado aquí también
 
 # Configurar Apache para Laravel
 COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
