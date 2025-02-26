@@ -1,7 +1,10 @@
 # Etapa 1: Construcción de dependencias con Composer
-FROM composer:2.6 AS builder
+FROM php:8.2-cli AS builder
 
-# Instalar extensiones necesarias
+# Instalar Composer manualmente
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
