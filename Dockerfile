@@ -18,7 +18,7 @@ WORKDIR /app
 
 # Copiar archivos de Laravel (excluir node_modules y vendor con .dockerignore)
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader -v
 
 # Copiar el resto de la aplicación
 COPY . .
