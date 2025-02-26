@@ -119,7 +119,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/dashboard" class="nav-link">Inicio</a>
+                                    <a href="/dashboard" class="nav-link">Dashboard</a>
                                 </li>
                             </ul>
 

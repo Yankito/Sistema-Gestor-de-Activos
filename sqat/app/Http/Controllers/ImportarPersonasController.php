@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class ImportarPersonasController extends Controller
 {
+    public function index()
+    {
+        // Verificar si el usuario es administrador
+        if (!auth()->user()->es_administrador) {
+            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        }else{
+            return view('importarPersonas');
+        }
+    }
     private function convertirEstadoEmpleado($valor)
     {   
         $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
@@ -21,11 +30,6 @@ class ImportarPersonasController extends Controller
         }
 
         return null; // Devuelve null si el valor no es válido
-    }
-
-    public function index()
-    {
-        return view('importarPersonas');
     }
 
     private function convertirFecha($fecha)

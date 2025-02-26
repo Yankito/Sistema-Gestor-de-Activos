@@ -9,7 +9,12 @@ class UbicacionController extends Controller
 {
     public function registro()
     {
-        return view('ubicaciones.registrarUbicacion');
+        // Verificar si el usuario es administrador
+        if (!auth()->user()->es_administrador) {
+            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        }else{
+            return view('ubicaciones.registrarUbicacion');
+        }
     }
 
     public function store(Request $request){
