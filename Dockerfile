@@ -16,17 +16,23 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copiar archivos de Laravel (excluir node_modules y vendor con .dockerignore)
+# Copiar los archivos de configuración de Composer
 COPY composer.json composer.lock ./
+
+# Instalar las dependencias de Composer (sin dependencias de desarrollo)
 RUN composer install --no-dev --optimize-autoloader -v
 
-# Copiar el resto de la aplicación
+# Copiar el resto de los archivos de la aplicación (esto incluye artisan)
 COPY . .
 
-# Generar la configuración de Laravel
+# Asegurarse de que el archivo 'artisan' tiene permisos de ejecución
+RUN chmod +x /app/artisan
+
+# Ejecutar los comandos de Laravel después de la instalación
 RUN php artisan config:clear && \
     php artisan cache:clear && \
-    php artisan route:cache
+    php artisan route:cache && \
+    php artisan package:discover --ansi
 
 # Etapa 2: Imagen base con PHP y Apache
 FROM php:8.2-apache
@@ -42,7 +48,7 @@ COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
 # Copiar archivos de Laravel desde la etapa anterior
 COPY --from=builder /app /var/www/html
 
-# Configurar permisos
+# Configurar permisos de los archivos
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
 # Exponer el puerto
