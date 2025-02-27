@@ -49,6 +49,9 @@ RUN docker-php-ext-install pdo pdo_mysql zip  # Asegurarse de que zip está inst
 # Configurar Apache para Laravel
 COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
+# Configurar Apache para Laravel
+COPY .docker/apache.conf /etc/apache2/apache2.conf
+
 # Copiar archivos de Laravel desde la etapa anterior
 COPY --from=builder /app /var/www/html
 
