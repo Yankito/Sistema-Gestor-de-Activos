@@ -42,7 +42,7 @@
     <td>{{ $activo->marca }}</td>
     <td>{{ $activo->modelo }}</td>
     <td>{{ number_format($activo->precio, 0, ',', '.') }}</td>
-    <td>{{ $activo->tipo_de_activo }}</td>
+    <td>{{ $activo->tipoDeActivo->nombre }}</td>
     <td>
         <span class="estado-badge
             {{ $activo->estado === 1 ? 'estado-adquirido' : '' }}

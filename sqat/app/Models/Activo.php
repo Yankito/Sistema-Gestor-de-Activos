@@ -49,4 +49,9 @@ class Activo extends Model
         return $this->belongsTo(Estado::class, 'estado');
     }
 
+    public function tipoDeActivo(): BelongsTo
+    {
+        return $this->belongsTo(TipoActivo::class, 'tipo_de_activo');
+    }
+
 }

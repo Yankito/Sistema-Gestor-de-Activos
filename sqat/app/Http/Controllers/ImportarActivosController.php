@@ -78,13 +78,24 @@ class ImportarActivosController extends Controller
                     ];
                     continue;
                 }
+                //TIPO DE ACTIVO
+                $tipoActivo = $this->eliminarTildesYMayusculas($fila['D']);
+                $tipoActivoExistente = DB::table('tipo_activo')->where('nombre', $tipoActivo)->first();
+                if (!$tipoActivoExistente) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El tipo de activo '{$tipoActivo}' no existe en la base de datos."
+                    ];
+                    continue;
+                }
+                $tipoActivoId = $tipoActivoExistente->id;
     
                 // Crear el activo
                 Activo::create([
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
-                    'tipo_de_activo' => $fila['D'],
+                    'tipo_de_activo' => $tipoActivoId,
                     'estado' => $estadoId,
                     'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
@@ -94,12 +105,14 @@ class ImportarActivosController extends Controller
                 ]);
                 $ubicacionNombre = $ubicacionExistente->sitio;
                 $estadoNombre = $estado->nombre_estado;
+                //nombre del tipo de activo
+                $tipoActivoNombre = $tipoActivoExistente->nombre;
     
                 $activos[] = [
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
-                    'tipo_de_activo' => $fila['D'],
+                    'tipo_de_activo' => $tipoActivoNombre,
                     'estado' => $estadoNombre,
                     'usuario_de_activo' => null,
                     'responsable_de_activo' => null,

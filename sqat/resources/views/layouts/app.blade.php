@@ -161,6 +161,13 @@
                                         </a>
                                     </li>
                                 @endif
+                                <li class="nav-item">
+                                    <a href="/crearTipoActivo" class="nav-link">
+                                        <p>
+                                            Crear un tipo de activo
+                                        </p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <!-- Gestion de Personas -->

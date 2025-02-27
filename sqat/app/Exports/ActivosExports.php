@@ -22,8 +22,8 @@ class ActivosExports
 
         // Encabezados
         $headers = [
-            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 
-            'Ubicación'
+            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 'Estado', 'Usuario de Activo', 'Responsable de Activo', 'Precio',  'Ubicación','Justificación Doble Activo',
+           
         ];
 
         $column = 'A';
@@ -61,10 +61,10 @@ class ActivosExports
                   ->setCellValue('D' . $row, $activo->tipo_de_activo)
                   ->setCellValue('E' . $row, $activo->estado)
                   ->setCellValue('F' . $row, $activo->usuario_de_activo)
-                  ->setCellValue('H' . $row, $activo->responsable_de_activo)
-                  ->setCellValue('I' . $row, $activo->precio)
-                  ->setCellValue('J' . $row, $activo->ubicacion)
-                  ->setCellValue('K' . $row, $activo->justificacion_doble_activo);
+                  ->setCellValue('G' . $row, $activo->responsable_de_activo)
+                  ->setCellValue('H' . $row, $activo->precio)
+                  ->setCellValue('I' . $row, $activo->ubicacion)
+                  ->setCellValue('J' . $row, $activo->justificacion_doble_activo);
 
             // Aplicar bordes a las celdas de datos
             $sheet->getStyle('A' . $row . ':K' . $row)->applyFromArray([

@@ -196,7 +196,7 @@ $(document).ready(function () {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
             $('.filter-container').hide();
-        }, 100); // Adjust the delay as needed
+        }, 0); // Adjust the delay as needed
     });
 });
 
