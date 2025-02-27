@@ -35,6 +35,9 @@ RUN cp .env.example /var/www/html/.env
 RUN php artisan config:clear && \
     php artisan route:cache
 
+# Ejecutar la migración de la base de datos
+RUN php artisan migrate --force
+
 # Etapa 2: Imagen base con PHP y Apache
 FROM php:8.2-apache
 
