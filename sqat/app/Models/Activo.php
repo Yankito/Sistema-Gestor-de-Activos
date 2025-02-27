@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Activo extends Model
@@ -28,17 +28,19 @@ class Activo extends Model
     // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
     public $timestamps = true;
 
-    // Relación con la tabla Persona
-    public function usuarioDeActivo(): BelongsTo
+    // Relación muchos a muchos con Persona a través de la tabla asignaciones
+    public function usuarioDeActivo(): BelongsToMany
     {
-        return $this->belongsTo(Persona::class, 'usuario_de_activo');
+        return $this->belongsToMany(Persona::class, 'asignaciones', 'id_activo', 'id_persona');
     }
 
+    // Relación con la tabla Persona para el responsable
     public function responsableDeActivo(): BelongsTo
     {
         return $this->belongsTo(Persona::class, 'responsable_de_activo');
     }
 
+    // Otras relaciones existentes
     public function ubicacionRelation(): BelongsTo
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion');
@@ -53,5 +55,4 @@ class Activo extends Model
     {
         return $this->belongsTo(TipoActivo::class, 'tipo_de_activo');
     }
-
 }

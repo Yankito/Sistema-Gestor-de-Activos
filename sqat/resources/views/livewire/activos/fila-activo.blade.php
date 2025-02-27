@@ -15,11 +15,11 @@
             </button>
         @elseif ($activo->estado === 3)
             <button type="button" style="background-color: #0aa40d;" class="btn btn-success btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
-                <i class="fas fa-user-plus" ></i>
+                <i class="fas fa-user-plus"></i>
             </button>
         @elseif ($activo->estado === 4)
             <button type="button" style="background-color: #0a5964; border: #0a5964" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
-            <i class="fas fa-user-minus"></i>
+                <i class="fas fa-user-minus"></i>
             </button>
         @elseif ($activo->estado === 5 || $activo->estado === 6)
             <button type="button" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 7)">
@@ -58,8 +58,40 @@
             {{ $activo->estadoRelation->nombre_estado }}
         </span>
     </td>
-    <td>{{ $activo->usuarioDeActivo->rut ?? '' }}</td>
-    <td>{{ $activo->responsableDeActivo->rut ?? '' }}</td>
+    <td style="white-space: nowrap;">
+        @php
+            $usuarios = $activo->usuarioDeActivo;
+            $totalUsuarios = 0;
+        @endphp
+        @if ($usuarios->count() > 0)
+            @php
+                $totalUsuarios = $usuarios->count();
+            @endphp
+        @endif
+
+        @if ($totalUsuarios > 0)
+            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                @foreach ($usuarios->take(3) as $usuario)
+                    <li>- {{ $usuario->rut }}</li>
+                @endforeach
+            </ul>
+            @if ($totalUsuarios > 3)
+                <div id="usuarios-{{ $activo->id }}" style="display: none;">
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        @foreach ($usuarios->slice(3) as $usuario)
+                            <li>- {{ $usuario->rut }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-link btn-sm" onclick="toggleUsuarios({{ $activo->id }})">
+                    Ver más
+                </button>
+            @endif
+        @else
+            Sin usuarios
+        @endif
+    </td>
+    <td>{{ $activo->responsableDeActivo->rut ?? 'Sin responsable' }}</td>
     <td>{{ $activo->ubicacionRelation->sitio }}</td>
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>

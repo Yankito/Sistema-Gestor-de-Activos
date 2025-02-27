@@ -52,4 +52,17 @@
             default: return '';
         }
     }
+
+    function toggleUsuarios(activoId) {
+        const usuariosDiv = document.getElementById(`usuarios-${activoId}`);
+        const boton = document.querySelector(`button[onclick="toggleUsuarios(${activoId})"]`);
+
+        if (usuariosDiv.style.display === 'none') {
+            usuariosDiv.style.display = 'block';
+            boton.textContent = 'Ver menos';
+        } else {
+            usuariosDiv.style.display = 'none';
+            boton.textContent = 'Ver más';
+        }
+    }
 </script>
