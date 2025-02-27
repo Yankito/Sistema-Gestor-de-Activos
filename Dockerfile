@@ -19,14 +19,15 @@ WORKDIR /app
 # Copiar los archivos de configuración de Composer
 COPY composer.json composer.lock ./
 
-# Instalar las dependencias de Composer (sin dependencias de desarrollo)
-RUN composer install --no-dev --optimize-autoloader -v
-
-# Copiar el resto de los archivos de la aplicación (esto incluye artisan)
+# 🔹 Copiar todos los archivos del proyecto antes de ejecutar Composer
 COPY . .
 
-# Asegurarse de que el archivo 'artisan' tiene permisos de ejecución
+# 🔹 Asegurar que artisan tenga permisos de ejecución
 RUN chmod +x /app/artisan
+
+# Instalar dependencias de Composer (sin dependencias de desarrollo)
+RUN composer install --no-dev --optimize-autoloader -v
+
 
 # Ejecutar los comandos de Laravel después de la instalación
 RUN php artisan config:clear && \
