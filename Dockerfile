@@ -29,7 +29,7 @@ RUN chmod +x /app/artisan
 RUN composer install --no-dev --optimize-autoloader -v
 
 # Copiar .env.example y renombrarlo a .env
-RUN cp /var/www/html/.env.example /var/www/html/.env
+RUN cp .env.example /var/www/html/.env
 
 # Ejecutar los comandos de Laravel después de la instalación
 RUN php artisan config:clear && \
