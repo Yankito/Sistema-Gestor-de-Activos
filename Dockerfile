@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip  # Instalar la extensión zip
 
-WORKDIR /app
+WORKDIR /var/www/html
 
 # Copiar los archivos de configuración de Composer
 COPY composer.json composer.lock ./
