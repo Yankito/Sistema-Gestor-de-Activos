@@ -51,6 +51,7 @@ COPY --from=builder /app /var/www/html
 
 # Configurar permisos de los archivos
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer el puerto
 EXPOSE 80
