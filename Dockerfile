@@ -47,8 +47,6 @@ RUN a2enmod mpm_prefork
 RUN apt-get update && apt-get install -y libzip-dev  # Asegurarse de que libzip-dev esté instalado aquí también
 RUN docker-php-ext-install pdo pdo_mysql zip  # Asegurarse de que zip está instalado aquí también
 
-# Configurar Apache para Laravel
-COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Configurar Apache para Laravel
 COPY .docker/apache.conf /etc/apache2/apache2.conf
