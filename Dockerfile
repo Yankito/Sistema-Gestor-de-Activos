@@ -31,9 +31,7 @@ RUN composer install --no-dev --optimize-autoloader -v
 
 # Ejecutar los comandos de Laravel después de la instalación
 RUN php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan route:cache && \
-    php artisan package:discover --ansi
+    php artisan route:cache
 
 # Etapa 2: Imagen base con PHP y Apache
 FROM php:8.2-apache
