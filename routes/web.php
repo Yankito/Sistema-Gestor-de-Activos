@@ -52,7 +52,6 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/importar', [ImportarController::class, 'index']);
     Route::get('/dashboardUbicacion', [DashboardUbicacionController::class, 'index']);
     Route::get('/dashboardTipo', [DashboardTipoController::class, 'index'])->name('dashboard.tipo');
-    Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
     Route::get('/importarActivos', [ImportarActivosController::class, 'index']);
     Route::get('/importarPersonas', [ImportarPersonasController::class, 'index']);
     Route::get('/exportar', [ExportarController::class, 'index']);
