@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip  # Instalar la extensión zip
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 # Copiar los archivos de configuración de Composer
 COPY composer.json composer.lock ./
@@ -40,6 +40,9 @@ RUN php artisan migrate --force
 
 # Etapa 2: Imagen base con PHP y Apache
 FROM php:8.2-apache
+
+# Definir el directorio de trabajo para Laravel
+WORKDIR /var/www/html
 
 # Habilitar módulos de Apache y extensiones PHP necesarias
 RUN a2enmod rewrite
