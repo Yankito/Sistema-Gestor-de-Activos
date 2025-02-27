@@ -60,7 +60,7 @@ RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer el puerto
-EXPOSE 8080
+EXPOSE $PORT
 
 # Iniciar Apache en primer plano
 CMD ["apache2-foreground"]
