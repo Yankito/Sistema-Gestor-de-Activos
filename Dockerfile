@@ -28,6 +28,8 @@ RUN chmod +x /app/artisan
 # Instalar dependencias de Composer (sin dependencias de desarrollo)
 RUN composer install --no-dev --optimize-autoloader -v
 
+# Copiar .env.example y renombrarlo a .env
+RUN cp /var/www/html/.env.example /var/www/html/.env
 
 # Ejecutar los comandos de Laravel después de la instalación
 RUN php artisan config:clear && \
@@ -51,7 +53,7 @@ COPY --from=builder /app /var/www/html
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
 # Exponer el puerto
-EXPOSE 8000
+EXPOSE 80
 
 # Iniciar Apache en primer plano
 CMD ["apache2-foreground"]
