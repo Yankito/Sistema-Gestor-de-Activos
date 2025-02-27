@@ -42,7 +42,7 @@ RUN php artisan migrate --force
 FROM php:8.2-apache
 
 # Habilitar módulos de Apache y extensiones PHP necesarias
-RUN a2enmod rewrite
+RUN a2enmod mpm_prefork
 RUN apt-get update && apt-get install -y libzip-dev  # Asegurarse de que libzip-dev esté instalado aquí también
 RUN docker-php-ext-install pdo pdo_mysql zip  # Asegurarse de que zip está instalado aquí también
 
