@@ -45,7 +45,7 @@
         ></script>
 
         <!-- favicon -->
-        <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
+        <link rel="icon" href="{{secure_asset('pictures/iconoIansa.png')}}" type="image/png">
 
         @livewireStyles
         @livewireScripts
@@ -53,7 +53,7 @@
         <!-- Toastr -->
         <link rel="stylesheet" href="vendor/adminlte/plugins/toastr/toastr.min.css">
 
-        <link rel="stylesheet" href="{{ asset('assets/colores.css') }}">
+        <link rel="stylesheet" href="{{ secure_asset('assets/colores.css') }}">
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
