@@ -3,6 +3,9 @@
         .action-btns {
             width: 100px;
         }
+        td {
+            font-size: 12px;
+        }
     </style>
     <td class="action-btns">
         @if ($activo->estado === 1)
@@ -66,24 +69,27 @@
 
         @if ($totalUsuarios > 0)
             @foreach ($usuarios->take(3) as $usuario)
-            <li>{{ $usuario->rut }}</li>
+            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
             @endforeach
 
             @if ($totalUsuarios > 3)
             <div id="usuarios-{{ $activo->id }}" class="collapse">
-                @foreach ($usuarios->skip(3) as $usuario)
-                <li>{{ $usuario->rut }}</li>
-                @endforeach
+            @foreach ($usuarios->skip(3) as $usuario)
+            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+            @endforeach
             </div>
             <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
-                Ver más
+            Ver más
             </button>
             @endif
         @else
-            Sin usuarios
+            <span style="font-size: 12px;">Sin usuarios</span>
         @endif
     </td>
-    <td>{{ $activo->responsableDeActivo->rut ?? 'Sin responsable' }}</td>
+    <td>
+        {{ $activo->responsableDeActivo->nombre_completo ?? 'Sin responsable' }}
+        ({{ $activo->responsableDeActivo->user ?? 'Sin usuario' }})
+    </td>
     <td>{{ $activo->ubicacionRelation->sitio }}</td>
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>
