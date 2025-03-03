@@ -134,7 +134,7 @@
     <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="vendor/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ secure_asset('js/tablas.js') }}"></script>
 
 @endsection
 </html>
