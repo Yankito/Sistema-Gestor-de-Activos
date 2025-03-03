@@ -10,9 +10,6 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
 
-        <!-- Bootstrap CSS v5.2.1 -->
-
-        <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
 
     </head>
 
@@ -24,7 +21,7 @@
                         <div class="card rounded-3 text-black">
                             <div class="card-body p-md-5 mx-md-4">
                                 <div class="text-center mb-4">
-                                    <img src="{{asset('pictures/Logo Empresas Iansa.png')}}"
+                                    <img src="{{secure_asset('pictures/Logo Empresas Iansa.png')}}"
                                         style="width: 300px;" alt="logo">
                                 </div>
 

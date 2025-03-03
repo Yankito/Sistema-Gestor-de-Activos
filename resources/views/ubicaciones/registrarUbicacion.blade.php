@@ -28,7 +28,7 @@
                         <!-- Aquí va el contenido de la página centrado-->
                             <div class = "card-body p-md-5 mx-md-4">
                                 <div class="text-center mb-4">
-                                    <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
+                                    <img src="{{secure_asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
                                 </div>
 
                                 <h2>Registrar nueva Ubicación</h2>

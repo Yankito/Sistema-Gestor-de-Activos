@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <link rel="icon" href="{{ asset('pictures/iconoIansa.png') }}" type="image/x-icon">
+        <link rel="icon" href="{{ secure_asset('pictures/iconoIansa.png') }}" type="image/x-icon">
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -95,8 +95,8 @@
                     <div class="logout">
                         <form action="/logout" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0;" 
-                                    onmouseover="this.style.color='red';" 
+                            <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0;"
+                                    onmouseover="this.style.color='red';"
                                     onmouseout="this.style.color='#c2c7d0';">
                                 <i class="fas fa-sign-out-alt"></i>
                             </button>

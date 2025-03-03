@@ -160,7 +160,7 @@
 <script src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
 
 <!-- Page specific script -->
-<script src="{{ asset('js/tablas.js') }}"></script>
+<script src="{{ secure_asset('js/tablas.js') }}"></script>
 
 <script>
 
