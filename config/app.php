@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://sistema-gestor-de-activos-87080374122.us-central1.run.app'),
 
     /*
     |--------------------------------------------------------------------------
