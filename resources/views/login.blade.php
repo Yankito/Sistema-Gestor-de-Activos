@@ -9,7 +9,7 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <!-- favicon -->
-        <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
+        <link rel="icon" href="{{secure_asset('pictures/iconoIansa.png')}}" type="image/png">
         <!-- Bootstrap CSS v5.2.1 -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
