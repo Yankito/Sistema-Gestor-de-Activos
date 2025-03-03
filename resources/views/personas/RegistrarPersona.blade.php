@@ -30,7 +30,7 @@
                                 </div>
 
                                 <h2>Registrar nueva Persona</h2>
-                                <form action="/personas" method="POST" id="formPersona">
+                                <form action="{{secure_url('/personas')}}" method="POST" id="formPersona">
                                     @csrf
                                     <div class = "row">
                                         <div class="col-md-6">

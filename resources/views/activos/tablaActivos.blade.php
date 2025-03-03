@@ -135,7 +135,7 @@
             </script>
         @endif
 
-        <form id="cambiarEstadoForm" action="/activos/cambiarEstado" method="POST">
+        <form id="cambiarEstadoForm" action="{{secure_url('/activos/cambiarEstado')}}" method="POST">
             @csrf
             <input type="hidden" name="activo_id" id="activo_id">
             <input type="hidden" name="nuevo_estado" id="nuevo_estado">

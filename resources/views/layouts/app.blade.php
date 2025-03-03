@@ -93,7 +93,7 @@
 
                     <!-- Icono de cerrar sesión -->
                     <div class="logout">
-                        <form action="/logout" method="POST" class="d-inline">
+                        <form action="{{secure_url('/logout')}}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0;"
                                     onmouseover="this.style.color='red';"

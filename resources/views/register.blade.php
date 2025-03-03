@@ -8,12 +8,12 @@
                 <div class="card rounded-3 text-black">
                     <div class="card-body p-md-5 mx-md-4">
                         <div class="text-center">
-                            <img src="{{ asset('pictures/Logo Empresas Iansa.png') }}" style="width: 300px;" alt="logo">
+                            <img src="{{ secure_asset('pictures/Logo Empresas Iansa.png') }}" style="width: 300px;" alt="logo">
                         </div>
 
                         <h2>Registrar nuevo usuario</h2>
 
-                        <form action="/register" method="POST" id="formRegistro">
+                        <form action="{{secure_url('/register')}}" method="POST" id="formRegistro">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6">

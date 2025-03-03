@@ -32,7 +32,7 @@
                                 </div>
 
                                 <h2>Registrar nueva Ubicación</h2>
-                                <form action="/ubicaciones" method="POST">
+                                <form action="{{secure_url('/ubicaciones')}}" method="POST">
                                     @csrf
                                     <div class = "row">
 

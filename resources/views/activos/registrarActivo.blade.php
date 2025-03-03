@@ -27,7 +27,7 @@
 
                                 <h2>Dar activo de alta</h2>
 
-                                <form action="/activos" method="POST">
+                                <form action="{{secure_url('/activos')}}" method="POST">
                                     @csrf
                                     <div class = "row">
                                         <div class = " col-md-6">

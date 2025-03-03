@@ -37,7 +37,7 @@
                             style="width: 300px;" alt="logo">
 
                         </div>
-                        <form action="/login" method="POST">
+                        <form action="{{secure_url('/login')}}" method="POST">
                             @csrf
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <label class="form-label" for="correo">Correo</label>

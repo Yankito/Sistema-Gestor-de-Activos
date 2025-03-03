@@ -21,7 +21,7 @@
                             </div>
 
                             <h2>Modificar Ubicación</h2>
-                            <form action="/ubicacionesUpdate" method="POST">
+                            <form action="{{secure_url('/ubicacionesUpdate')}}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $ubicacion->id }}" />
 
