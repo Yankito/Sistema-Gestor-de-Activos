@@ -36,7 +36,7 @@
 
                             <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
 
-                            <form action="{{ route('ubicaciones.eliminar', $ubicacion->id) }}" method="POST" class="d-inline delete-form">
+                            <form action="{{ route('ubicaciones.eliminar', $ubicacion->hashed_id) }}" method="POST" class="d-inline delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
