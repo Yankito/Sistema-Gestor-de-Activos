@@ -66,10 +66,7 @@
 
                 </div>
             </div>
-            <div class="col-sm-6 d-flex align-items-center">
 
-
-            </div><!-- /.container-fluid -->
         </div>
 
         <!-- small box -->
