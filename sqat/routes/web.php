@@ -12,6 +12,7 @@ use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
 use App\Http\Controllers\DashboardUbicacionController;
 use App\Http\Controllers\DashboardTipoController;
+use App\Http\Controllers\DashboardFiltrosController;
 use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
@@ -52,6 +53,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/importar', [ImportarController::class, 'index']);
     Route::get('/dashboardUbicacion', [DashboardUbicacionController::class, 'index']);
     Route::get('/dashboardTipo', [DashboardTipoController::class, 'index'])->name('dashboard.tipo');
+    Route::get('/dashboardFiltros', [DashboardFiltrosController::class, 'index'])->name('dashboard.filtros');
     Route::get('/activos/{id}/editar', [ActivoController::class, 'editar'])->name('activos.update');
     Route::get('/importarActivos', [ImportarActivosController::class, 'index']);
     Route::get('/importarPersonas', [ImportarPersonasController::class, 'index']);
