@@ -38,6 +38,9 @@ RUN php artisan config:clear && \
 # Ejecutar la migración de la base de datos
 RUN php artisan migrate --force
 
+# Ejecutar seeders
+RUN php artisan db:seed --force
+
 # Etapa 2: Imagen base con PHP y Apache
 FROM php:8.2-apache
 
