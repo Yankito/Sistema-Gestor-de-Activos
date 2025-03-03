@@ -20,7 +20,7 @@
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
                         <div wire:ignore class="d-flex" id="for-bootstrap-select">
-                            <select wire:model="responsable_de_activo"  wire:change="actualizarUbicacion($event.target.value)" data-container="#for-bootstrap-select" id="responsable_de_activo_select" select class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
+                            <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" data-container="#for-bootstrap-select" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
                                 <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}">
@@ -39,7 +39,7 @@
                             <select wire:model="ubicacion" id="ubicacion_select" class="form-control">
                                 <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
                                 @foreach($ubicaciones as $ubicacion)
-                                    <option value="{{$ubicacion->id}}" >
+                                    <option value="{{$ubicacion->id}}">
                                         {{$ubicacion->sitio}}
                                     </option>
                                 @endforeach
@@ -47,6 +47,25 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Usuarios -->
+                @if($responsable_de_activo)
+                <div class="col-md-12 d-flex align-items-center">
+                    <div class="form-outline mb-4 flex-grow-1">
+                        <label class="form-label" for="usuarios">Usuarios</label>
+                        <div wire:ignore class="d-flex" id="for-bootstrap-select-usuarios">
+                            <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
+                                @foreach($personas as $persona)
+                                    <option value="{{$persona->id}}">
+                                        {{$persona->nombre_completo}} ({{$persona->rut}})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
             @endif
 
 
@@ -123,11 +142,17 @@
                 })
             });
             $(function () {
-            $('#responsable_de_activo_select').on('change', function () {
-                console.log('cambio: ' + $(this).val());
-                Livewire.dispatch('setResponsable', [$(this).val() ]);
+                $('#responsable_de_activo_select').on('change', function () {
+                    console.log('cambio: ' + $(this).val());
+                    Livewire.dispatch('setResponsable', [$(this).val() ]);
+                });
             });
-        });
+            $(function () {
+                $('#usuarios_select').on('change', function () {
+                    console.log('cambio: ' + $(this).val());
+                    Livewire.dispatch('setUsuarios', [$(this).val() ]);
+                });
+            });
 
         });
     });

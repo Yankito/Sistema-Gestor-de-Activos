@@ -143,11 +143,6 @@
                     </a>
                     <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/tablaDatos" class="nav-link">
-                        <p>Activos Asignados</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="/tablaActivos" class="nav-link">
                         <p>Activos</p>
                         </a>
