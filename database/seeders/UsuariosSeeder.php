@@ -15,7 +15,6 @@ class UsuariosSeeder extends Seeder
     {
         DB::table('usuarios')->insert([
             [
-                'id' => 1,
                 'correo' => 'yanko.acuna@iansa.cl',
                 'nombres' => 'Yanko',
                 'primer_apellido' => 'Acuna',
@@ -26,7 +25,6 @@ class UsuariosSeeder extends Seeder
                 'updated_at' => null
             ],
             [
-                'id' => 2,
                 'correo' => 'usuario@iansa.cl',
                 'nombres' => 'Usuario',
                 'primer_apellido' => 'Usando',
@@ -37,7 +35,6 @@ class UsuariosSeeder extends Seeder
                 'updated_at' => '2025-01-20 15:33:36'
             ],
             [
-                'id' => 3,
                 'correo' => 'rodrigo.domnigueza@iansa.cl',
                 'nombres' => 'Rodrigo',
                 'primer_apellido' => 'Dominguez',
@@ -48,7 +45,6 @@ class UsuariosSeeder extends Seeder
                 'updated_at' => '2025-01-23 19:00:29'
             ],
             [
-                'id' => 4,
                 'correo' => 'noadmin@correo.com',
                 'nombres' => 'juan',
                 'primer_apellido' => 'perez',
