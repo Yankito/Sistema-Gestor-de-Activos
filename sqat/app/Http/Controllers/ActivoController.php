@@ -27,10 +27,11 @@ class ActivoController extends Controller
     }
 
     // Crear un nuevo activo
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
+            // Crear el activo
             $activo = new Activo();
-
             $activo->nro_serie = $request->nro_serie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
@@ -41,19 +42,27 @@ class ActivoController extends Controller
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
             $activo->precio = $request->precio;
-            if($request->responsable != NULL){
+
+            // Guardar el activo primero para obtener su ID
+            $activo->save();
+
+            // Si se asigna un responsable, crear el registro
+            if ($request->responsable != NULL) {
                 $activo->usuario_de_activo = $request->responsable;
                 $activo->responsable_de_activo = $request->responsable;
                 $activo->estado = 4;
                 $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
+                $activo->update(); // Actualizar el activo con el responsable
+
+                // Crear el registro
                 $registro = new Registro();
-                $registro->persona = $request->responsable;
-                $registro->activo = $activo->id;
+                $registro->persona = $request->responsable; // Asignar el ID de la persona
+                $registro->activo = $activo->id; // Asignar el ID del activo recién creado
                 $registro->tipo_cambio = 'ASIGNACION';
-                $registro->encargado_cambio = Auth::user()->id;
+                $registro->encargado_cambio = Auth::user()->id; // ID del usuario que realizó el cambio
                 $registro->save();
             }
-            $activo->save();
+
             // Redirigir con un mensaje de éxito
             return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
         } catch (\Exception $e) {

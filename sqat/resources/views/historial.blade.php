@@ -44,12 +44,12 @@
                                                 realizó un cambio en el activo
                                             @endif
 
-                                            @if (is_object($registro->activo))
-                                                "{{ $registro->activo->nro_serie }}" <!-- Número de serie del activo -->
+                                            @if ($registro->activo)
+                                                "{{ $registro->activo}}" <!-- Número de serie del activo -->
                                             @endif
 
-                                            @if (is_object($registro->persona))
-                                                a {{ $registro->persona->nombre_completo }} <!-- Nombre de la persona involucrada -->
+                                            @if($registro->persona)
+                                                a {{ $registro->persona }} <!-- Nombre de la persona involucrada -->
                                             @endif
                                         </td>
                                         <td>{{ $registro->created_at->format('d/m/Y H:i') }}</td> <!-- Fecha formateada -->
