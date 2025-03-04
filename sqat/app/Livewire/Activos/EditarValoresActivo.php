@@ -7,7 +7,7 @@ use App\Models\Activo;
 use App\Models\Registro;
 use App\Models\Persona;
 use App\Models\Ubicacion;
-use APP\Models\TipoActivo;
+use App\Models\TipoActivo;
 
 class EditarValoresActivo extends Component
 {
