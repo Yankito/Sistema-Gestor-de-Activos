@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Persona extends Model
 {
@@ -34,5 +35,11 @@ class Persona extends Model
     public function scopeActivas($query)
     {
         return $query->where('estado_empleado', true);
+    }
+
+    // Relación muchos a muchos con Activo a través de la tabla asignaciones
+    public function activos(): BelongsToMany
+    {
+        return $this->belongsToMany(Activo::class, 'asignaciones', 'id_persona', 'id_activo');
     }
 }

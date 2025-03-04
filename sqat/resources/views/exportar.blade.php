@@ -1,32 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h3>Exportar Datos</h3>
+<section class = "content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Exportar Datos</h3>
+                </div>
 
-    <label for="tablasSeleccionadas">Selecciona la tabla a exportar:</label>
-    <div id="tablasSeleccionadas" class="d-flex justify-content-center mt-3">
-        <div class="option" data-value="activos">
-            <i class="fas fa-laptop fa-2x"></i>
-            <div>Tabla de Activos</div>
-        </div>
-        <div class="option" data-value="personas">
-            <i class="fas fa-user fa-2x"></i>
-            <div>Tabla de Personas</div>
-        </div>
-        <div class="option" data-value="activos_personas">
-            <i class="fas fa-users fa-2x"></i>
-            <div>Activos Asignados</div>
+                <div class="card-body">
+                    <label for="tablasSeleccionadas">Selecciona la tabla a exportar:</label>
+                    <div id="tablasSeleccionadas" class="d-flex justify-content-center mt-3">
+                        <div class="option" data-value="activos">
+                            <i class="fas fa-laptop fa-2x"></i>
+                            <div>Tabla de Activos</div>
+                        </div>
+                        <div class="option" data-value="personas">
+                            <i class="fas fa-user fa-2x"></i>
+                            <div>Tabla de Personas</div>
+                        </div>
+                        <div class="option" data-value="activos_personas">
+                            <i class="fas fa-users fa-2x"></i>
+                            <div>Activos Asignados</div>
+                        </div>
+                    </div>
+                
+                    <div class="mt-4 text-center">
+                        <button id="btnExcel" class="btn mx-2" style="background-color: #36cc36; color: white;">Exportar a Excel</button>
+                        <button id="btnCSV" class="btn mx-2" style="background-color: #34848c; color: white;">Exportar a CSV</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-
-    <div class="mt-4 text-center">
-        <button id="btnExcel" class="btn mx-2" style="background-color: #36cc36; color: white;">Exportar a Excel</button>
-        <button id="btnCSV" class="btn mx-2" style="background-color: #34848c; color: white;">Exportar a CSV</button>
-    </div>
-</div>
-@endsection
-
+</section>
+@endsection     
 @section('scripts')
 <script>
     $(document).ready(function () {

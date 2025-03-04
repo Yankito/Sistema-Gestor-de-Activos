@@ -77,11 +77,11 @@
 
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
                     <div class="d-flex">
-                    <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
+                        <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
                             <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
                             @foreach($personas as $persona)
                                 <option value="{{$persona->id}}">
@@ -92,7 +92,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
