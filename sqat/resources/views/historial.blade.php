@@ -45,11 +45,11 @@
                                             @endif
 
                                             @if ($registro->activo)
-                                                "{{ $registro->activo}}" <!-- Número de serie del activo -->
+                                                "{{ $registro->activoRelation->nro_serie}}" <!-- Número de serie del activo -->
                                             @endif
 
                                             @if($registro->persona)
-                                                a {{ $registro->persona }} <!-- Nombre de la persona involucrada -->
+                                                a {{ $registro->personaRelation->nombre_completo}} <!-- Nombre de la persona involucrada -->
                                             @endif
                                         </td>
                                         <td>{{ $registro->created_at->format('d/m/Y H:i') }}</td> <!-- Fecha formateada -->
