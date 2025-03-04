@@ -7,12 +7,14 @@ use App\Models\Activo;
 use App\Models\Registro;
 use App\Models\Persona;
 use App\Models\Ubicacion;
+use APP\Models\TipoActivo;
 
 class EditarValoresActivo extends Component
 {
     public $activo;
     public $personas;
     public $ubicaciones;
+    public $tiposDeActivo;
     public $responsable_de_activo;
     public $ubicacion;
     public $nro_serie;
@@ -27,6 +29,7 @@ class EditarValoresActivo extends Component
     {
         $this->personas = Persona::all();
         $this->ubicaciones = Ubicacion::all();
+        $this->tiposDeActivo = TipoActivo::all();
 
         if($this->activo != NULL) {
             $this->responsable_de_activo = $this->activo->responsable_de_activo;

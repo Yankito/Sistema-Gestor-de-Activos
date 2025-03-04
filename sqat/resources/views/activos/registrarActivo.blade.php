@@ -60,11 +60,9 @@
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                                                 <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
-                                                    <option value="LAPTOP">LAPTOP</option>
-                                                    <option value="DESKTOP">DESKTOP</option>
-                                                    <option value="MONITOR">MONITOR</option>
-                                                    <option value="IMPRESORA">IMPRESORA</option>
-                                                    <option value="CELULAR">CELULAR</option>
+                                                    @foreach($tiposDeActivo as $tipoDeActivo)
+                                                        <option value="{{$tipoDeActivo->id}}">{{$tipoDeActivo->nombre}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>

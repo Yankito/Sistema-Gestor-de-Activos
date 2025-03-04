@@ -7,6 +7,7 @@ use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Estado;
+use App\Models\TipoActivo;
 
 class DashboardFiltros extends Component
 {
@@ -28,18 +29,18 @@ class DashboardFiltros extends Component
         $this->valor = $valor;
         if($vista=="UBICACION"){
             $this->nombreVista = Ubicacion::find($valor)->sitio;
+            $this->filtro = "tipo_de_activo";
         }
-        else{
-            $this->nombreVista = $valor;
-        }
-        $this->atributos = $this->obtenerAtributos();
-        if($vista=="TIPO_DE_ACTIVO"){
+        else if($vista=="TIPO_DE_ACTIVO"){
+            $this->nombreVista = TipoActivo::find($valor)->nombre;
             $this->filtro = "ubicacion";
         }
         else{
+            $this->nombreVista = "General";
             $this->filtro = "tipo_de_activo";
         }
 
+        $this->atributos = $this->obtenerAtributos();
         $this->actualizarAtributo($this->filtro);
         $this->calcularCantidadActivos();
 
@@ -87,6 +88,15 @@ class DashboardFiltros extends Component
                     $ubicacion = Ubicacion::find($key);
                     $this->conteoValores[$key] = [
                         'nombre' => $ubicacion->sitio,
+                        'cantidad' => $value
+                    ];
+                }
+            }
+            else if($atributo === "tipo_de_activo"){
+                foreach($this->conteoValores as $key => $value){
+                    $tipo = TipoActivo::find($key);
+                    $this->conteoValores[$key] = [
+                        'nombre' => $tipo->nombre,
                         'cantidad' => $value
                     ];
                 }

@@ -43,9 +43,9 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        @foreach ($tiposDeActivo as $valor => $cantidad)
-                            <a href="#" class="dropdown-item" onclick="updateTipoDeActivo('{{ ucfirst($valor)}}')">
-                                {{ ucfirst($valor)}}
+                        @foreach ($tiposDeActivo as $valor)
+                            <a href="#" class="dropdown-item" onclick="updateTipoDeActivo('{{ $valor->id }}')">
+                                {{ ucfirst($valor->nombre) }}
                             </a>
                         @endforeach
                         <form id="update-tipoDeActivo-form" action="{{ route('actualizar.dashboardTipo') }}" method="POST" style="display: none;">
