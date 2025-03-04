@@ -32,7 +32,7 @@ COPY --from=builder /app /var/www/html
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
 # Exponer el puerto
-EXPOSE 8080
+EXPOSE 8000
 
 # Iniciar Apache en primer plano
 CMD ["apache2-foreground"]

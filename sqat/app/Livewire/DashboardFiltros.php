@@ -20,6 +20,8 @@ class DashboardFiltros extends Component
     {
         $this->cantidadActivos = Activo::count();
         $this->atributos = $this->obtenerAtributos();
+        $this->filtro = "tipo_de_activo";
+        $this->actualizarAtributo($this->filtro);
     }
     public function render()
     {
@@ -28,10 +30,12 @@ class DashboardFiltros extends Component
 
         $activos = Activo::all();
         $ubicaciones = Ubicacion::all();
+        $cantidadPorEstados = $this->calcularActivosPorEstados();
+        $this->cantidadActivos = Activo::count();
         // Pasar el usuario a la vista
         return view('livewire.dashboard-filtros',compact(
         'cantidadPersonas','cantidadUbicaciones','activos',
-        'ubicaciones'));
+        'ubicaciones', 'cantidadPorEstados'));
     }
 
     public function actualizarAtributo($atributo)
@@ -42,18 +46,34 @@ class DashboardFiltros extends Component
             if($atributo === "estado"){
                 foreach($this->conteoValores as $key => $value){
                     $estado = Estado::find($key);
-                    $this->conteoValores[$estado->nombre_estado] = $this->conteoValores[$key];
-                    unset($this->conteoValores[$key]);
+                    $this->conteoValores[$key] = [
+                        'nombre' => $estado->nombre_estado,
+                        'cantidad' => $value
+                    ];
                 }
             }
             else if($atributo === "ubicacion"){
                 foreach($this->conteoValores as $key => $value){
                     $ubicacion = Ubicacion::find($key);
-                    $this->conteoValores[$ubicacion->sitio] = $this->conteoValores[$key];
-                    unset($this->conteoValores[$key]);
+                    $this->conteoValores[$key] = [
+                        'nombre' => $ubicacion->sitio,
+                        'cantidad' => $value
+                    ];
+                }
+            }
+            else{
+                foreach($this->conteoValores as $key => $value){
+                    $this->conteoValores[$key] = [
+                        'nombre' => $key,
+                        'cantidad' => $value
+                    ];
                 }
             }
             $this->filtro = $atributo;
+        }
+        else{
+            $this->conteoValores = [];
+            $this->filtro = null;
         }
 
         $this->dispatch('$refresh');
