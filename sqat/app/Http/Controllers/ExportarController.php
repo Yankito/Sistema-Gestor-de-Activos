@@ -25,9 +25,6 @@ class ExportarController extends Controller
             case 'personas':
                 $export = new PersonasExports();
                 break;
-            case 'activos_personas':
-                $export = new ActivosPersonasExports();
-                break;
             default:
                 abort(404);
         }
