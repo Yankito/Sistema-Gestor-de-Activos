@@ -258,6 +258,16 @@
                     </p>
                     </a>
                 </li>
+                <!--Historial de Cambios-->
+                <li class="nav-item">
+                    <a href="/historial" class="nav-link">
+                    <i class="nav-icon fas fa-history"></i>
+                    <p>
+                        Historial de Cambios
+                    </p>
+                    </a>
+                </li>
+                
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

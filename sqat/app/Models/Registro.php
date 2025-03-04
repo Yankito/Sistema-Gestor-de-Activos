@@ -13,7 +13,7 @@ class Registro extends Model
         'persona',
         'activo',
         'tipoCambio',
-        'encargadoCambio',
+        'encargado_Cambio',
     ];
 
     // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
@@ -30,9 +30,9 @@ class Registro extends Model
         return $this->belongsTo(Activo::class, 'activo', 'id');
     }
 
-    public function ubicacion()
+    public function encargadoCambio()
     {
-        return $this->belongsTo(Usuario::class, 'encargadoCambio', 'id');
+        return $this->belongsTo(Usuario::class, 'encargado_cambio', 'id');
     }
 
 }

@@ -18,6 +18,7 @@ use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
 use App\Http\Controllers\TablaUbicacionesController;
 use App\Http\Controllers\CrearTipoActivoController;
+use App\Http\Controllers\HistorialController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -69,6 +70,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/exportar', [ExportarController::class, 'index']);
     Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
     Route::get('/crearTipoActivo', [CrearTipoActivoController::class, 'index']);
+    Route::get('/historial', [HistorialController::class, 'index'])->name('historial');
 });
 
 Route::delete('/ubicaciones/eliminar/{hashed_id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
