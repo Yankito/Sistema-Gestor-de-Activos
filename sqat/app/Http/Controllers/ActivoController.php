@@ -6,6 +6,7 @@ use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
+use App\Models\TipoActivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,8 @@ class ActivoController extends Controller
         }else{
             $personas = Persona::all();
             $ubicaciones = Ubicacion::all();
-            return view('activos.registrarActivo', compact('personas', 'ubicaciones'));
+            $tiposDeActivo = TipoActivo::all();
+            return view('activos.registrarActivo', compact('personas', 'ubicaciones', 'tiposDeActivo'));
         }
     }
 

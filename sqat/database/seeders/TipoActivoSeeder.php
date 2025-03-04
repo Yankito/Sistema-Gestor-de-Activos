@@ -16,7 +16,7 @@ class TipoActivoSeeder extends Seeder
     public function run()
     {
         $tiposActivos = [
-            ['nombre' => 'NOTEBOOK'],
+            ['nombre' => 'LAPTOP'],
             ['nombre' => 'DESKTOP'],
         ];
 

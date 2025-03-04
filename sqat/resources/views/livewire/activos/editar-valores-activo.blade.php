@@ -1,7 +1,6 @@
 <div>
 <div class="modal-body">
 @if (isset($activo))
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <h2>Editar activo</h2>
     <form wire:submit.prevent="updateValoresActivo" id="formulario-editar-valores">
         @csrf
@@ -40,11 +39,11 @@
                     <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                     <div class="d-flex">
                         <select wire:model="tipo_de_activo" id="tipo_de_activo" class="form-control" required disabled>
-                            <option value="LAPTOP">LAPTOP</option>
-                            <option value="DESKTOP">DESKTOP</option>
-                            <option value="MONITOR">MONITOR</option>
-                            <option value="IMPRESORA">IMPRESORA</option>
-                            <option value="CELULAR">CELULAR</option>
+                            @foreach ( $tiposDeActivo as $tipo )
+                                <option value="{{ $tipo->id }}" {{ $tipo->id == $activo->tipo_de_activo ? 'selected' : '' }}>
+                                    {{ $tipo->nombre }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

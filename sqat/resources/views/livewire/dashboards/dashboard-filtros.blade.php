@@ -3,7 +3,7 @@
     <div class="content-header">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Dashboard Principal</h1>
+                <h1 class="m-0 text-dark">Dashboard {{ ucfirst(strtolower(str_replace('_', ' ', $nombreVista))) }}</h1>
             </div>
             <div class="col-sm-6">
                 <div class="breadcrumb float-sm-right">
@@ -30,11 +30,24 @@
                 <!-- small box -->
                 <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
                     <div class="inner text-center">
-                        <p>Activos Totales</p>
-                        <h3>{{$cantidadActivos}}</h3>
+                        <p>Activos En Servicio</p>
+                        <h3>{{$activosEnServicio}}</h3>
                     </div>
                     <div class="icon" style="cursor: pointer;">
                         <i class="ion ion-laptop"></i>
+                    </div>
+                    <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
+                <!-- small box -->
+                <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
+                    <div class="inner text-center">
+                        <p>Activos Fuera de Servicio</p>
+                        <h3>{{$activosFueraDeServicio}}</h3>
+                    </div>
+                    <div class="icon" style="cursor: pointer;">
+                        <i class="ion ion-alert-circleds"></i>
                     </div>
                     <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
@@ -90,7 +103,8 @@
                 @foreach($conteoValores as $id => $valores)
 
                     <div class="col-lg-3 col-6" style="cursor: pointer;"
-                    onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" : "updateUbicacion('" .$id. "')" }}">
+                    onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" :
+                                ($filtro === 'ubicacion' ? "updateUbicacion('" .$id. "')" : '') }}">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">

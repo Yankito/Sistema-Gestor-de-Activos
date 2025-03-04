@@ -62,12 +62,17 @@
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="dashboard" class="nav-link">Inicio</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="dashboard" class="nav-link">Inicio</a>
+                </li>
+            </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Sección personalizada para el navbar -->
+                @yield('navbar-custom')
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -95,8 +100,8 @@
                 <div class="logout">
                 <form action="/logout" method="POST" class="d-inline">
                     @csrf
-                    <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0; font-size: 15px;" 
-                        onmouseover="this.style.color='red';" 
+                    <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0; font-size: 15px;"
+                        onmouseover="this.style.color='red';"
                         onmouseout="this.style.color='#c2c7d0';">
                     <i class="fas fa-sign-out-alt"></i>
                     </button>
