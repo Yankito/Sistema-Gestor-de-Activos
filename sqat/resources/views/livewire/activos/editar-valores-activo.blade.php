@@ -1,7 +1,6 @@
 <div>
 <div class="modal-body">
 @if (isset($activo))
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <h2>Editar activo</h2>
     <form wire:submit.prevent="updateValoresActivo" id="formulario-editar-valores">
         @csrf
