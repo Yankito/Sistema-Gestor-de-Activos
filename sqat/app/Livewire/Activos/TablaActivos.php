@@ -35,7 +35,7 @@ class TablaActivos extends Component
 
     private function cargarActivos()
     {
-        $this->activos = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
+        $this->activos = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation', 'tipoDeActivo')
             ->orderBy($this->sortColumn, $this->sortDirection)
             ->get();
     }

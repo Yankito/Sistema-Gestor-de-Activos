@@ -76,189 +76,191 @@
         <aside class="main-sidebar sidebar-dark-primary">
             <!-- Brand Logo lleva al dashboard -->
             <a href="/dashboard" class="brand-link">
-                <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTE Logo"  width="200" height="auto"  style="opacity: .8">
+            <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTE Logo"  width="200" height="auto"  style="opacity: .8">
             </a>
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-2 pb-2 mb-2 d-flex align-items-center">
-                    <!-- Imagen de perfil -->
-                    <div class="image" style="width: 40px;">
-                        <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
-                    </div>
-
-                    <!-- Nombre de usuario -->
-                    <div class="info" style="flex: 1; margin: 0 10px;">
-                        <a href="#" class="d-block" style="text-decoration: none;">{{ $user->nombres }}</a>
-                    </div>
-
-                    <!-- Icono de cerrar sesión -->
-                    <div class="logout">
-                        <form action="/logout" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0;" 
-                                    onmouseover="this.style.color='red';" 
-                                    onmouseout="this.style.color='#c2c7d0';">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </button>
-                        </form>
-                    </div>
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-2 pb-2 mb-2 d-flex align-items-center">
+                <!-- Imagen de perfil -->
+                <div class="image" style="width: 40px;">
+                <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
                 </div>
 
-                <!-- Sidebar Menu -->
-                <nav class="mt-2" style="margin-right: 10px;">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-                            with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Menú
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/dashboard" class="nav-link">Dashboard</a>
-                                </li>
-                            </ul>
+                <!-- Nombre de usuario -->
+                <div class="info" style="flex: 1; margin: 0 10px;">
+                <a href="#" class="d-block" style="text-decoration: none; font-size: 15px;">{{ $user->nombres }}</a>
+                </div>
 
-                            @if($user->es_administrador)
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="/register" class="nav-link">Registrar Admin</a>
-                                    </li>
-                                </ul>
-                            @endif
-                        </li>
+                <!-- Icono de cerrar sesión -->
+                <div class="logout">
+                <form action="/logout" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0; font-size: 15px;" 
+                        onmouseover="this.style.color='red';" 
+                        onmouseout="this.style.color='#c2c7d0';">
+                    <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+                </div>
+            </div>
 
-                        <!-- Gestion de Activos -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-laptop"></i>
-                                <p>
-                                    Gestión de Activos
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/tablaDatos" class="nav-link">
-                                        <p>Activos Asignados</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/tablaActivos" class="nav-link">
-                                        <p>Activos</p>
-                                    </a>
-                                </li>
-                                @if($user->es_administrador)
-                                    <li class="nav-item">
-                                        <a href="/registrarActivo" class="nav-link">
-                                            <p>
-                                                Dar activo de alta
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </li>
-                        <!-- Gestion de Personas -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>
-                                    Gestión de Personas
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/tablaPersonas" class="nav-link">
-                                        <p>Personas</p>
-                                    </a>
-                                </li>
-                                @if($user->es_administrador)
-                                    <li class="nav-item">
-                                        <a href="/registrarPersona" class="nav-link">
-                                            <p>Registrar nueva persona</p>
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </li>
+            <!-- Sidebar Menu -->
+            <nav class="mt-2" style="margin-right: 10px;">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="font-size: 15px;">
+                <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Menú
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link">Dashboard</a>
+                    </li>
+                    </ul>
 
-                        <!-- Gestion de ubicaciones -->
+                    @if($user->es_administrador)
+                    <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-map-marked-alt"></i>
-                                <p>
-                                    Gestión de Ubicaciones
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <!-- registrar ubicacion-->
-                                <li class="nav-item">
-                                    <a href="/ubicaciones" class="nav-link">
-                                        <p>
-                                            Ubicación
-                                        </p>
-                                    </a>
-                                </li>
-                                <!-- modificar ubicacion-->
-                                @if($user->es_administrador)
-                                    <li class="nav-item">
-                                        <a href="/registrarUbicacion" class="nav-link">
-                                            <p>
-                                                Registrar Ubicación
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-
-                        @if($user->es_administrador)
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-file-import"></i>
-                                    <p>
-                                        Importar Datos
-                                        <i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="/importar" class="nav-link">
-                                            <p>Importar Activos Asignados</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/importarActivos" class="nav-link">
-                                            <p>Importar Activos</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/importarPersonas" class="nav-link">
-                                            <p>Importar Personas</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-
-                        <!--Emportar Excell-->
-                        <li class="nav-item">
-                            <a href="/exportar" class="nav-link">
-                                <i class="nav-icon fas fa-file-export"></i>
-                                <p>
-                                    Reportes
-                                </p>
-                            </a>
+                        <a href="/register" class="nav-link">Registrar Admin</a>
                         </li>
                     </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
+                    @endif
+                </li>
+
+                <!-- Gestion de Activos -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-laptop"></i>
+                    <p>
+                        Gestión de Activos
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/tablaActivos" class="nav-link">
+                        <p>Activos</p>
+                        </a>
+                    </li>
+                    @if($user->es_administrador)
+                        <li class="nav-item">
+                        <a href="/registrarActivo" class="nav-link">
+                            <p>
+                            Dar activo de alta
+                            </p>
+                        </a>
+                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a href="/crearTipoActivo" class="nav-link">
+                        <p>
+                            Crear un tipo de activo
+                        </p>
+                        </a>
+                    </li>
+                    </ul>
+                </li>
+                <!-- Gestion de Personas -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Gestión de Personas
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/tablaPersonas" class="nav-link">
+                        <p>Personas</p>
+                        </a>
+                    </li>
+                    @if($user->es_administrador)
+                        <li class="nav-item">
+                        <a href="/registrarPersona" class="nav-link">
+                            <p>Registrar nueva persona</p>
+                        </a>
+                        </li>
+                    @endif
+                    </ul>
+                </li>
+
+                <!-- Gestion de ubicaciones -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-map-marked-alt"></i>
+                    <p>
+                        Gestión de Ubicaciones
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <!-- registrar ubicacion-->
+                    <li class="nav-item">
+                        <a href="/ubicaciones" class="nav-link">
+                        <p>
+                            Ubicación
+                        </p>
+                        </a>
+                    </li>
+                    <!-- modificar ubicacion-->
+                    @if($user->es_administrador)
+                        <li class="nav-item">
+                        <a href="/registrarUbicacion" class="nav-link">
+                            <p>
+                            Registrar Ubicación
+                            </p>
+                        </a>
+                        </li>
+                    @endif
+                    </ul>
+
+                @if($user->es_administrador)
+                    <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-file-import"></i>
+                        <p>
+                        Importar Datos
+                        <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                        <a href="/importar" class="nav-link">
+                            <p>Importar Activos Asignados</p>
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="/importarActivos" class="nav-link">
+                            <p>Importar Activos</p>
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="/importarPersonas" class="nav-link">
+                            <p>Importar Personas</p>
+                        </a>
+                        </li>
+                    </ul>
+                    </li>
+                @endif
+
+                <!--Emportar Excell-->
+                <li class="nav-item">
+                    <a href="/exportar" class="nav-link">
+                    <i class="nav-icon fas fa-file-export"></i>
+                    <p>
+                        Reportes
+                    </p>
+                    </a>
+                </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
             </div>
         </aside>
 

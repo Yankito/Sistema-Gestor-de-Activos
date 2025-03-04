@@ -16,6 +16,8 @@ use App\Http\Controllers\DashboardFiltrosController;
 use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
+use App\Http\Controllers\TablaUbicacionesController;
+use App\Http\Controllers\CrearTipoActivoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -36,6 +38,13 @@ Route::middleware('auth')->get('/register', function () {
         return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 });
+
+// Rutas para gestionar Tipos de Activo
+Route::middleware(['auth'])->group(function(){
+    Route::get('/tipos-activo', [CrearTipoActivoController::class, 'index'])->name('tipos-activo.index');
+    Route::post('/tipos-activo', [CrearTipoActivoController::class, 'store'])->name('tipos-activo.store');
+});
+
 
 // Ruta para procesar el registro (solo para administradores)
 Route::middleware('auth')->post('/register', [AuthController::class, 'register']);
@@ -59,6 +68,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/importarPersonas', [ImportarPersonasController::class, 'index']);
     Route::get('/exportar', [ExportarController::class, 'index']);
     Route::get('/exportar/{tabla}/{formato}', [ExportarController::class, 'exportar']);
+    Route::get('/crearTipoActivo', [CrearTipoActivoController::class, 'index']);
 });
 
 Route::delete('/ubicaciones/eliminar/{hashed_id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');

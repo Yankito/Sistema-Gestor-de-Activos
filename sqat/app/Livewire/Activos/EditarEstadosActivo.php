@@ -7,6 +7,7 @@ use App\Models\Activo;
 use App\Models\Registro;
 use App\Models\Persona;
 use App\Models\Ubicacion;
+use App\Models\Asignacion;
 use Illuminate\Support\Facades\Auth;
 
 class EditarEstadosActivo extends Component
@@ -16,8 +17,9 @@ class EditarEstadosActivo extends Component
     public $ubicaciones;
     public $responsable_de_activo;
     public $ubicacion;
+    public $usuarios;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal',  'setResponsable' => 'actualizarResponsable'];
+    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal',  'setResponsable' => 'actualizarResponsable', 'setUsuarios'=>'actualizarUsuarios'];
 
     public function mount()
     {
@@ -45,6 +47,7 @@ class EditarEstadosActivo extends Component
         $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
+        $this->usuarios = Persona::all();
         $this->dispatch('$refresh');
     }
 
@@ -78,7 +81,8 @@ class EditarEstadosActivo extends Component
 
     // Actualizar un activo existente
     public function updateActivo(){
-        //dd($this->activo, $this->responsable_de_activo, $this->ubicacion);
+        //dd($this->activo, $this->responsable_de_activo, $this->ubicacion, $this->usuarios);
+
 
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
             ->findOrFail($this->activo->id);
@@ -107,9 +111,25 @@ class EditarEstadosActivo extends Component
         $activo->usuario_de_activo = $this->responsable_de_activo;
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->update();
+
+        $this->manejarAsignaciones($activo->id, $this->usuarios);
+
         $this->dispatch('refreshRow', $activo->id);
         $this->dispatch('cerrar-modal');
         //$this->limpiarDatos();
+    }
+
+    protected function manejarAsignaciones($activoId, $usuarios) {
+        // Eliminar asignaciones anteriores para este activo (opcional, dependiendo de tu lógica)
+        Asignacion::where('id_activo', $activoId)->delete();
+    
+        // Iterar sobre los usuarios y crear nuevas asignaciones
+        foreach ($usuarios as $usuarioId) {
+            Asignacion::create([
+                'id_persona' => $usuarioId,
+                'id_activo' => $activoId,
+            ]);
+        }
     }
 
     public function actualizarUbicacion($responsableId)
@@ -135,6 +155,11 @@ class EditarEstadosActivo extends Component
     {
         $this->responsable_de_activo = $data;
         $this->dispatch('actualizarUbicacion', $data);
+        $this->dispatch('$refresh');
+    }
+    public function actualizarUsuarios($data)
+    {
+        $this->usuarios = $data;
         $this->dispatch('$refresh');
     }
 }
