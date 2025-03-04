@@ -28,7 +28,7 @@
         .filter-btn {
             background: none;
             border: none;
-            color: #007bff;
+            color: #005856;
             cursor: pointer;
             font-size: 10px;
         }
@@ -43,7 +43,7 @@
         }
 
         .estado-adquirido {
-            background-color: blue;
+            background-color: #00b5c4;
         }
 
         .estado-preparacion {
@@ -70,7 +70,7 @@
         }
 
         .estado-paraBaja {
-            background-color: #ff4d4d;
+            background-color: #e22551;
         }
 
         .estado-donado {

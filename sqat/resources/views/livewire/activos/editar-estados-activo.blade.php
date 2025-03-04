@@ -66,15 +66,15 @@
 
             @if ($activo->estado == 4)
                 <div class="action-btns">
-                    <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 7)">
+                    <button type="button" style="background-color: #0a5964; border: #0a5964" data-dismiss="modal" class="btn btn-primary btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 7)">
                         <i class="fas fa-exchange-alt"></i> <!-- Pasar a DEVUELTO -->
                         Devolución
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 5)">
+                    <button type="button" style="background-color: #e22551;" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 5)">
                         <i class="fas fa-question-circle"></i> <!-- Pasar a PERDIDO -->
                         Extraviado
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn btn-dark btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 6)">
+                    <button type="button" style="background-color: #000000;" data-dismiss="modal" class="btn btn-dark btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 6)">
                         <i class="fas fa-user-secret"></i> <!-- Pasar a ROBADO -->
                         Robado
                     </button>

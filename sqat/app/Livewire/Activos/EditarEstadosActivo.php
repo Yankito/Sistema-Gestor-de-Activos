@@ -50,7 +50,7 @@ class EditarEstadosActivo extends Component
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
-        $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
@@ -69,7 +69,7 @@ class EditarEstadosActivo extends Component
         $activo->estado = $nuevo_estado;
         $activo->update();
 
-        $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
+        $activoActualizado = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
         $this->dispatch('refreshRow', $activoActualizado);
         $this->dispatch('actualizarFila');
@@ -149,7 +149,7 @@ class EditarEstadosActivo extends Component
 
     public function resetearModal()
     {
-        $this->reset(['activo', 'responsable_de_activo', 'ubicacion']);
+        $this->reset(['activo', 'responsable_de_activo', 'ubicacion', 'usuarios']);
     }
 
     public function actualizarResponsable($data)

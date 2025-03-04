@@ -62,8 +62,6 @@ class FilaActivo extends Component
             $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
             $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
             $registroAntiguoResponsable->save();
-            $activo->responsable_de_activo = NULL;
-            $activo->usuario_de_activo = NULL;
         }
         $activo->estado = $nuevo_estado;
         $activo->update();

@@ -156,7 +156,7 @@
                         <li class="nav-item">
                         <a href="/registrarActivo" class="nav-link">
                             <p>
-                            Dar activo de alta
+                            Dar un activo de alta
                             </p>
                         </a>
                         </li>
