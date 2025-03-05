@@ -40,16 +40,23 @@
                                                 asignó el activo
                                             @elseif ($registro->tipo_cambio == 'DESVINCULACION')
                                                 dio de baja el activo
+                                            @elseif (in_array($registro->tipo_cambio, ['ADQUIRIDO', 'PREPARACION', 'DISPONIBLE', 'ASIGNADO', 'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO']))
+                                                cambió el estado del activo a "{{ strtolower($registro->tipo_cambio) }}"
                                             @else
                                                 realizó un cambio en el activo
                                             @endif
 
                                             @if ($registro->activo)
-                                                "{{ $registro->activoRelation->nro_serie}}" <!-- Número de serie del activo -->
+                                                "{{ $registro->activoRelation->nro_serie }}" <!-- Número de serie del activo -->
                                             @endif
 
                                             @if($registro->persona)
-                                                a {{ $registro->personaRelation->nombre_completo}} <!-- Nombre de la persona involucrada -->
+                                                a {{ $registro->personaRelation->nombre_completo }} <!-- Nombre de la persona involucrada -->
+                                            @endif
+
+                                            <!-- Mostrar el estado anterior y el nuevo estado si es un cambio de estado -->
+                                            @if ($registro->tipo_cambio == 'CAMBIO_ESTADO')
+                                                (Estado anterior: {{ $registro->estado_anterior }}, Nuevo estado: {{ $registro->nuevo_estado }})
                                             @endif
                                         </td>
                                         <td>{{ $registro->created_at->format('d/m/Y H:i') }}</td> <!-- Fecha formateada -->

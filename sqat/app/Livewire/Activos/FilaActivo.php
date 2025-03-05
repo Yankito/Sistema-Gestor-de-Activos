@@ -10,8 +10,6 @@ use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-
-
 class FilaActivo extends Component
 {
     public $activo;
@@ -41,43 +39,46 @@ class FilaActivo extends Component
         }
     }
 
-    public function editarActivo($id){
+    public function editarActivo($id)
+    {
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $this->dispatch('refreshModal', $activo);
     }
-    public function editarActivoValores($id){
+
+    public function editarActivoValores($id)
+    {
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $this->dispatch('refreshModalValores', $activo);
     }
-    public function cambiarEstado($activo_id, $nuevo_estado){
-        $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
-        if( $activo->estado == 7){
-            $activo->usuario_de_activo = NULL;
-            $activo->responsable_de_activo = NULL;
-        }
-        if( $nuevo_estado == 7){
-            $registroAntiguoResponsable = new Registro();
-            $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
-            $registroAntiguoResponsable->activo = $activo_id;
-            $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
-            $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
-            $registroAntiguoResponsable->save();
-            $activo->responsable_de_activo = NULL;
-            $activo->usuario_de_activo = NULL;
-        }
-        $activo->estado = $nuevo_estado;
-        $activo->update();
 
-        // dispatchir evento para notificar a la interfaz que se actualizó el estado
-        $this->dispatch('actualizarFila');
-        $this->dispatch('refreshRow', $activo_id);
+    public function cambiarEstado($activo_id, $nuevo_estado)
+{
+    // Obtener el activo
+    $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
 
-    }
+    // Guardar el estado anterior
+    $estado_anterior = $activo->estado;
 
-    public function editarDatos($id){
+    // Actualizar el estado del activo
+    $activo->estado = $nuevo_estado;
+    $activo->update();
+
+    // Crear un registro para el cambio de estado
+    $registroCambioEstado = new Registro();
+    $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser NULL)
+    $registroCambioEstado->activo = $activo_id;
+    $registroCambioEstado->tipo_cambio = $nuevo_estado; // Nuevo estado del activo
+    $registroCambioEstado->encargado_cambio = Auth::user()->id; // Usuario que realizó el cambio
+    $registroCambioEstado->save();
+
+    // Notificar a la interfaz que se actualizó el estado
+    $this->dispatch('actualizarFila');
+    $this->dispatch('refreshRow', $activo_id);
+}
+
+    public function editarDatos($id)
+    {
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         $this->dispatch('cargarModal', $activo);
     }
-
-
 }
