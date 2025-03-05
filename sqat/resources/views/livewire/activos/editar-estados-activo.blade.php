@@ -127,9 +127,8 @@
             toastr.success('Los cambios se han guardado correctamente.');
         });
 
-        Livewire.on('modal-cargado', () => {
-            console.log('modal cargado');
-            $('#modal-editar-estados-activos').modal('show');
+        Livewire.on('iniciar', () => {
+
             $(function () {
                 //Initialize Select2 Elements
                 $('.select2bs4').select2({
@@ -144,11 +143,20 @@
             });
             $(function () {
                 $('#usuarios_select').on('change', function () {
-                    console.log('cambio: ' + $(this).val());
+                    console.log('cambio usuarios: ' + $(this).val());
                     Livewire.dispatch('setUsuarios', [$(this).val() ]);
                 });
             });
 
+        });
+
+        Livewire.on('modal-cargado', () => {
+            console.log('modal cargado');
+            $(function () {
+                Livewire.dispatch('iniciarResponsable', [@this.responsable_de_activo]);
+            });
+
+            $('#modal-editar-estados-activos').modal('show');
         });
     });
 
