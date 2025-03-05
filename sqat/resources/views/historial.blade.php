@@ -30,12 +30,13 @@
                                 @foreach ($registros as $registro)
                                     <tr>
                                         <td>
+                                             <!-- Mostrar el valor de tipo_cambio para depuración -->
+                                            <strong>tipo_cambio:</strong> {{ $registro->tipo_cambio }} <br>
                                             @if ($registro->encargadoCambio)
                                                 {{ $registro->encargadoCambio->nombres }} {{ $registro->encargadoCambio->primer_apellido }} <!-- Nombre del encargado del cambio -->
                                             @else
                                                 ID desconocido
                                             @endif
-
                                             @if ($registro->tipo_cambio == 'ASIGNACION')
                                                 asignó el activo
                                             @elseif ($registro->tipo_cambio == 'DESVINCULACION')

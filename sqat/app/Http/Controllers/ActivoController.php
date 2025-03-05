@@ -36,7 +36,7 @@ class ActivoController extends Controller
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
-            $activo->estado = 1;
+            $activo->estado = 1; // Estado inicial (por ejemplo, "Adquirido")
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
@@ -50,17 +50,17 @@ class ActivoController extends Controller
             if ($request->responsable != NULL) {
                 $activo->usuario_de_activo = $request->responsable;
                 $activo->responsable_de_activo = $request->responsable;
-                $activo->estado = 4;
+                $activo->estado = 4; // Cambiar el estado a "Asignado"
                 $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
                 $activo->update(); // Actualizar el activo con el responsable
 
-                // Crear el registro
-                $registro = new Registro();
-                $registro->persona = $request->responsable; // Asignar el ID de la persona
-                $registro->activo = $activo->id; // Asignar el ID del activo recién creado
-                $registro->tipo_cambio = 'ASIGNACION';
-                $registro->encargado_cambio = Auth::user()->id; // ID del usuario que realizó el cambio
-                $registro->save();
+                // Crear el registro de asignación
+                $registroAsignacion = new Registro();
+                $registroAsignacion->persona = $request->responsable; // Asignar el ID de la persona
+                $registroAsignacion->activo = $activo->id; // Asignar el ID del activo recién creado
+                $registroAsignacion->tipo_cambio = 'ASIGNACION';
+                $registroAsignacion->encargado_cambio = Auth::user()->id; // ID del usuario que realizó el cambio
+                $registroAsignacion->save();
             }
 
             // Redirigir con un mensaje de éxito

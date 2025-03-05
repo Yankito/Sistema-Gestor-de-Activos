@@ -52,29 +52,43 @@ class FilaActivo extends Component
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado)
-{
-    // Obtener el activo
-    $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
-
-    // Guardar el estado anterior
-    $estado_anterior = $activo->estado;
-
-    // Actualizar el estado del activo
-    $activo->estado = $nuevo_estado;
-    $activo->update();
-
-    // Crear un registro para el cambio de estado
-    $registroCambioEstado = new Registro();
-    $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser NULL)
-    $registroCambioEstado->activo = $activo_id;
-    $registroCambioEstado->tipo_cambio = $nuevo_estado; // Nuevo estado del activo
-    $registroCambioEstado->encargado_cambio = Auth::user()->id; // Usuario que realizó el cambio
-    $registroCambioEstado->save();
-
-    // Notificar a la interfaz que se actualizó el estado
-    $this->dispatch('actualizarFila');
-    $this->dispatch('refreshRow', $activo_id);
-}
+    {
+        // Mapeo de estados numéricos a valores de ENUM
+        $estados = [
+            1 => 'ADQUIRIDO',
+            2 => 'PREPARACION',
+            3 => 'DISPONIBLE',
+            4 => 'ASIGNADO',
+            5 => 'PERDIDO',
+            6 => 'ROBADO',
+            7 => 'DEVUELTO',
+            8 => 'PARA_BAJA',
+            9 => 'DONADO',
+            10 => 'VENDIDO',
+        ];
+    
+        // Obtener el activo
+        $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
+    
+        // Guardar el estado anterior
+        $estado_anterior = $activo->estado;
+    
+        // Actualizar el estado del activo
+        $activo->estado = $nuevo_estado;
+        $activo->update();
+    
+        // Crear un registro para el cambio de estado
+        $registroCambioEstado = new Registro();
+        $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser NULL)
+        $registroCambioEstado->activo = $activo_id;
+        $registroCambioEstado->tipo_cambio = $estados[$nuevo_estado]; // Mapear el estado numérico a un valor de ENUM
+        $registroCambioEstado->encargado_cambio = Auth::user()->id; // Usuario que realizó el cambio
+        $registroCambioEstado->save();
+    
+        // Notificar a la interfaz que se actualizó el estado
+        $this->dispatch('actualizarFila');
+        $this->dispatch('refreshRow', $activo_id);
+    }
 
     public function editarDatos($id)
     {

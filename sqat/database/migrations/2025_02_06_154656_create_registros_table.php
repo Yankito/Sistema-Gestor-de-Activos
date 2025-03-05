@@ -16,8 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('persona')->nullable();
             $table->unsignedBigInteger('activo')->nullable();
             $table->enum('tipo_cambio', [
-                'ASIGNACION', 'DESVINCULACION', 'CREADO', 'MODIFICADO',
-                'ADQUIRIDO', 'PREPARACION', 'DISPONIBLE', 'ASIGNADO',
+                'ASIGNACION', 'DESVINCULACION',
+                'ADQUIRIDO', 'PREPARACION', 
+                'DISPONIBLE', 'ASIGNADO',
                 'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO'
             ]);
             $table->unsignedBigInteger('encargado_cambio');
