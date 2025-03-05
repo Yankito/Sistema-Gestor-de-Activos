@@ -30,6 +30,8 @@ class ExportarController extends Controller
         }
 
         $file = $export->export($formato);
-        return response()->download($file)->deleteFileAfterSend(true);
+        $nombreArchivo = 'Iansa_' . $tabla . '_' . date('Y-m-d') . '.xlsx';
+        return response()->download($file, $nombreArchivo)->deleteFileAfterSend(true);
+
     }
 }

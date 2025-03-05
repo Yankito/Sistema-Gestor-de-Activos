@@ -47,11 +47,11 @@
                                                 realizó un cambio en el activo
                                             @endif
 
-                                            @if ($registro->activo)
+                                            @if ($registro->activoRelation)
                                                 "{{ $registro->activoRelation->nro_serie }}" <!-- Número de serie del activo -->
                                             @endif
 
-                                            @if($registro->persona)
+                                            @if($registro->personaRelation)
                                                 a {{ $registro->personaRelation->nombre_completo }} <!-- Nombre de la persona involucrada -->
                                             @endif
 

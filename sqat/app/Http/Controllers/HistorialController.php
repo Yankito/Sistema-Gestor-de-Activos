@@ -11,6 +11,7 @@ class HistorialController extends Controller
     public function index(Request $request)
     {
         $filterDate = $request->input('filter_date');
+        $search = $request->input('search');
         // Iniciar la consulta con las relaciones necesarias
         $query = Registro::with(['personaRelation', 'activoRelation', 'encargadoCambio']);
     
@@ -18,6 +19,7 @@ class HistorialController extends Controller
         if ($request->has('filter_date') && !empty($request->filter_date)) {
             $query->whereDate('created_at', $request->filter_date);
         }
+        // filtrar
     
         // Obtener los registros filtrados
         $registros = $query->get();

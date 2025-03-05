@@ -114,6 +114,7 @@
                                                                 <td>{{ $error['fila']['B'] ?? '-' }}</td>
                                                                 <td>{{ $error['fila']['C'] ?? '-' }}</td>
                                                                 <td>{{ $error['fila']['D'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['E'] ?? '-' }}</td>
                                                                 <td>{{ $error['motivo'] }}</td>
                                                             </tr>
                                                         @endforeach
@@ -162,6 +163,17 @@
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
+            });
+        });
+
+        $(document).ready(function() {
+            $('#importForm').submit(function() {
+                // Deshabilita el botón de importar y cambia el texto
+                let button = $(this).find('button[type="submit"]');
+                button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Importando...');
+
+                // Permite que el formulario continúe con el envío
+                return true;
             });
         });
     </script>
