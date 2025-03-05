@@ -62,16 +62,14 @@
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="ubicacion">Ubicación</label>
-                    <div class="d-flex">
-                        <select wire:model="ubicacion" id="ubicacion" class="form-control" disabled>
-                            <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
-                            @foreach($ubicaciones as $ubicacion)
-                                <option value="{{$ubicacion->id}}" >
-                                    {{$ubicacion->sitio}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <select wire:model="ubicacion" id="ubicacion" class="form-control" disabled>
+                        <option value="" {{ is_null($activo->ubicacion) ? 'selected' : '' }}>Sin ubicacion</option>
+                        @foreach($ubicaciones as $ubicacion)
+                            <option value="{{$ubicacion->id}}" >
+                                {{$ubicacion->sitio}}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -80,16 +78,14 @@
                 <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
-                    <div class="d-flex">
-                        <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
-                            <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
-                            @foreach($personas as $persona)
-                                <option value="{{$persona->id}}">
-                                    {{$persona->rut}}: {{$persona->nombre_completo}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
+                        <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
+                        @foreach($personas as $persona)
+                            <option value="{{$persona->id}}">
+                                {{$persona->rut}}: {{$persona->nombre_completo}}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>

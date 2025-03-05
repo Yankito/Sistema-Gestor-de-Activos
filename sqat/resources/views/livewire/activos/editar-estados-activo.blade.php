@@ -18,16 +18,14 @@
                 <div class="col-md-6 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="responsable_de_activo">Responsable</label>
-                        <div wire:ignore class="d-flex" id="for-bootstrap-select">
-                            <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" data-container="#for-bootstrap-select" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
-                                <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
-                                @foreach($personas as $persona)
-                                    <option value="{{$persona->id}}">
-                                        {{$persona->rut}}: {{$persona->nombre_completo}}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo_select" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }}>
+                            <option value="" {{ is_null($activo->responsable_de_activo) ? 'selected' : '' }}>Sin Responsable</option>
+                            @foreach($personas as $persona)
+                                <option value="{{$persona->id}}">
+                                    {{$persona->rut}}: {{$persona->nombre_completo}}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -52,7 +50,6 @@
                 <div class="col-md-12 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="usuarios">Usuarios</label>
-                        <div wire:ignore class="d-flex" id="for-bootstrap-select-usuarios">
                             <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
                                 @foreach($personas as $persona)
                                     <option value="{{$persona->id}}">
@@ -60,7 +57,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
                     </div>
                 </div>
                 @endif
@@ -70,15 +66,15 @@
 
             @if ($activo->estado == 4)
                 <div class="action-btns">
-                    <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 7)">
+                    <button type="button" style="background-color: #0a5964; border: #0a5964" data-dismiss="modal" class="btn btn-primary btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 7)">
                         <i class="fas fa-exchange-alt"></i> <!-- Pasar a DEVUELTO -->
                         Devolución
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 5)">
+                    <button type="button" style="background-color: #e22551;" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 5)">
                         <i class="fas fa-question-circle"></i> <!-- Pasar a PERDIDO -->
                         Extraviado
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn btn-dark btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 6)">
+                    <button type="button" style="background-color: #000000;" data-dismiss="modal" class="btn btn-dark btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 6)">
                         <i class="fas fa-user-secret"></i> <!-- Pasar a ROBADO -->
                         Robado
                     </button>

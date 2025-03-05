@@ -52,7 +52,7 @@
                             @csrf
                             <input type="hidden" name="tipoDeActivo_id" id="tipoDeActivo_id" value="">
                         </form>
-                        <a href="/dashboard" class="dropdown-item dropdown-footer">Dashboard General</a>
+                        <a href="/dashboard" class="dropdown-item dropdown-footer">DASHBOARD GENERAL</a>
                     </div><!-- /.col -->
                 </div>
             </div>

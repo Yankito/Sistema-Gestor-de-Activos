@@ -16,13 +16,19 @@
                         <div class="option" data-value="activos">
                             <i class="fas fa-laptop fa-2x"></i>
                             <div>Tabla de Activos</div>
+                            <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                data-toggle="tooltip" data-placement="bottom" title="Reporte de activos con el detalle de sus atributos y con su respectivo responsable y usuarios.">
+                            </i>
                         </div>
                         <div class="option" data-value="personas">
                             <i class="fas fa-user fa-2x"></i>
                             <div>Tabla de Personas</div>
+                            <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                data-toggle="tooltip" data-placement="bottom" title="Reporte de personas con sus respectivos datos personales.">
+                            </i>
                         </div>
                     </div>
-                
+
                     <div class="mt-4 text-center">
                         <button id="btnExcel" class="btn mx-2" style="background-color: #36cc36; color: white;">Exportar a Excel</button>
                         <button id="btnCSV" class="btn mx-2" style="background-color: #34848c; color: white;">Exportar a CSV</button>
@@ -33,7 +39,8 @@
         </div>
     </div>
 </section>
-@endsection     
+@endsection
+
 @section('scripts')
 <script>
     $(document).ready(function () {
@@ -68,6 +75,10 @@
                 $('#btnCSV').html('Exportar a CSV').prop('disabled', false);
             }, 1000); // Simula un retraso de 1 segundo
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        $('[data-toggle="tooltip"]').tooltip(); // Inicializa los tooltips de Bootstrap
     });
 </script>
 

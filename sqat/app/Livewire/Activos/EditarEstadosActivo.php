@@ -25,7 +25,6 @@ class EditarEstadosActivo extends Component
     {
         $this->personas = Persona::all();
         $this->ubicaciones = Ubicacion::all();
-
         if($this->activo != NULL) {
             $this->responsable_de_activo = $this->activo->responsable_de_activo;
             $this->ubicacion = $this->activo->responsable_de_activo->ubicacion;
@@ -47,15 +46,17 @@ class EditarEstadosActivo extends Component
         $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
-        $this->usuarios = Persona::all();
         $this->dispatch('$refresh');
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
-        $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
+        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
+            $this->responsable_de_activo = NULL;
+            $this->usuarios = [];
+            $this->manejarAsignaciones($activo->id);
         }
         if( $nuevo_estado == 7){
             $registroAntiguoResponsable = new Registro();
@@ -64,13 +65,11 @@ class EditarEstadosActivo extends Component
             $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
             $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
             $registroAntiguoResponsable->save();
-            $activo->responsable_de_activo = NULL;
-            $activo->usuario_de_activo = NULL;
         }
         $activo->estado = $nuevo_estado;
         $activo->update();
 
-        $activoActualizado = Activo::with('estadoRelation')->findOrFail($activo_id);
+        $activoActualizado = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         // dispatchir evento para notificar a la interfaz que se actualizó el estado
         $this->dispatch('refreshRow', $activoActualizado);
         $this->dispatch('actualizarFila');
@@ -112,19 +111,21 @@ class EditarEstadosActivo extends Component
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->update();
 
-        $this->manejarAsignaciones($activo->id, $this->usuarios);
+        $this->manejarAsignaciones($activo->id);
 
         $this->dispatch('refreshRow', $activo->id);
         $this->dispatch('cerrar-modal');
         //$this->limpiarDatos();
     }
 
-    protected function manejarAsignaciones($activoId, $usuarios) {
+    protected function manejarAsignaciones($activoId) {
         // Eliminar asignaciones anteriores para este activo (opcional, dependiendo de tu lógica)
         Asignacion::where('id_activo', $activoId)->delete();
-    
         // Iterar sobre los usuarios y crear nuevas asignaciones
-        foreach ($usuarios as $usuarioId) {
+        if($this->usuarios == NULL){
+            $this->usuarios = [];
+        }
+        foreach ($this->usuarios as $usuarioId) {
             Asignacion::create([
                 'id_persona' => $usuarioId,
                 'id_activo' => $activoId,
@@ -148,7 +149,7 @@ class EditarEstadosActivo extends Component
 
     public function resetearModal()
     {
-        $this->reset(['activo', 'responsable_de_activo', 'ubicacion']);
+        $this->reset(['activo', 'responsable_de_activo', 'ubicacion', 'usuarios']);
     }
 
     public function actualizarResponsable($data)

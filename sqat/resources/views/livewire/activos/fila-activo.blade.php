@@ -1,19 +1,16 @@
 <tr>
     <style>
-        .action-btns {
-            width: 100px;
-        }
         td {
             font-size: 12px;
         }
     </style>
-    <td class="action-btns">
+    <td>
         @if ($activo->estado === 1)
-            <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
+            <button type="button" style="background-color: #00b5c4;" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($activo->estado === 2)
-            <button type="button" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 3)">
+            <button type="button" style="background-color: #00b5c4;" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 3)">
                 <i class="fas fa-arrow-right"></i>
             </button>
         @elseif ($activo->estado === 3)
@@ -37,7 +34,7 @@
                 <i class="fas fa-check-circle"></i>
             </button>
         @endif
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivoValores('{{ $activo->id }}')">
+        <button type="button" style="background-color: #ffaa00; border: #ffaa00;" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivoValores('{{ $activo->id }}')">
             <i class="fas fa-edit"></i>
         </button>
     </td>

@@ -19,6 +19,7 @@ $(document).ready(function () {
                 {
                     targets: 0,
                     orderable: false,
+                    width: '120px' // Set the width of column 0 to 100px
                 }
             ],
             buttons: [
@@ -199,5 +200,3 @@ $(document).ready(function () {
         }, 0); // Adjust the delay as needed
     });
 });
-
-
