@@ -316,12 +316,10 @@
     <script src="vendor/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
     <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
-
-
-    @yield('scripts')
-
     <!-- Select2 -->
     <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
+
+    @yield('scripts')
 
     <!-- Toastr -->
     <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>

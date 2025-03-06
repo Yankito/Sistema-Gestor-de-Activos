@@ -61,7 +61,8 @@
                                                 <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                                                 <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
                                                     @foreach($tiposDeActivo as $tipoDeActivo)
-                                                        <option value="{{$tipoDeActivo->id}}">{{$tipoDeActivo->nombre}}</option>
+                                                        <option value="{{$tipoDeActivo->id}}" data-caracteristicas="{{ json_encode($tipoDeActivo->caracteristicasAdicionales) }}">
+                                                        {{$tipoDeActivo->nombre}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -106,6 +107,10 @@
                                         </div>
                                     </div>
 
+                                    <!-- Características Adicionales -->
+                                    <div id="caracteristicasAdicionalesSection"></div>
+
+
                                     <!-- Botón de Enviar -->
                                     <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
                                 </form>
@@ -134,6 +139,46 @@
         @endif
 
         <script>
+
+            document.getElementById('tipo_de_activo').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const caracteristicas = JSON.parse(selectedOption.getAttribute('data-caracteristicas') || '[]');
+                const caracteristicasAdicionalesSection = document.getElementById('caracteristicasAdicionalesSection');
+
+                // Limpiar el contenido anterior
+                caracteristicasAdicionalesSection.innerHTML = '';
+
+                if (caracteristicas.length > 0) {
+                    // Crear el label solo si hay características adicionales
+                    const label = document.createElement('label');
+                    label.classList.add('form-label');
+                    label.style.fontWeight = 'bold';
+                    label.style.marginTop = '10px';
+                    label.innerText = 'Características Adicionales (opcionales)';
+                    caracteristicasAdicionalesSection.appendChild(label);
+
+                    // Agregar los campos de características adicionales
+                    caracteristicas.forEach(function(caracteristica) {
+                        const div = document.createElement('div');
+                        div.classList.add('form-outline', 'mb-4');
+
+                        const label = document.createElement('label');
+                        label.classList.add('form-label');
+                        label.innerText = caracteristica.nombre_caracteristica;
+
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.name = `caracteristicas[${caracteristica.id}]`;
+                        input.classList.add('form-control');
+
+                        div.appendChild(label);
+                        div.appendChild(input);
+                        caracteristicasAdicionalesSection.appendChild(div);
+                    });
+                }
+            });
+
+
             document.getElementById('asignarResponsable').addEventListener('change', function() {
                 var responsableSection = document.getElementById('responsableSection');
                 var responsableSelect = document.getElementById('responsable');

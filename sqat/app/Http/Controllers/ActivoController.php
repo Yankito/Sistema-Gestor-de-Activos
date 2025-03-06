@@ -22,6 +22,7 @@ class ActivoController extends Controller
             $personas = Persona::all();
             $ubicaciones = Ubicacion::all();
             $tiposDeActivo = TipoActivo::all();
+            $tiposDeActivo = TipoActivo::with('caracteristicasAdicionales')->get();
             return view('activos.registrarActivo', compact('personas', 'ubicaciones', 'tiposDeActivo'));
         }
     }
@@ -109,31 +110,6 @@ class ActivoController extends Controller
     {
         Activo::destroy($id);
         return response()->json(null, 204);
-    }
-
-    public function editar($id){
-        $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
-        $ubicaciones = Ubicacion::all();
-        $personas = Persona::all();
-        return view('activos.editarActivo', compact('activo','ubicaciones','personas'));
-    }
-
-    public function deshabilitar(Request $request, $id){
-        $activo = Activo::findOrFail($id);
-        $activo->estado = $request->estado;
-        if($activo->responsable_de_activo){
-            $registroAntiguoResponsable = new Registro();
-            $registroAntiguoResponsable->persona = $activo->responsable_de_activo;
-            $registroAntiguoResponsable->activo = $id;
-            $registroAntiguoResponsable->tipo_cambio = 'DESVINCULACION';
-            $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
-            $registroAntiguoResponsable->save();
-            $activo->responsable_de_activo = NULL;
-            $activo->usuario_de_activo = NULL;
-        }
-
-        $activo->update();
-        return redirect()->back()->with('success','Activo deshabilitado correctamente.');
     }
 
 
