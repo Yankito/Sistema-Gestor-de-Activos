@@ -107,6 +107,25 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-outline mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="asignarUsuarios" name="asignarUsuarios">
+                                            <label class="form-check-label" for="asignarUsuarios">Asignar Usuarios</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4" id="usuariosSection" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="form-label" for="usuarios">Usuarios</label>
+                                            <select name="usuarios[]" id="usuarios_select" class="form-control select2bs4" multiple>
+                                                @foreach($personas as $persona)
+                                                    <option value="{{$persona->id}}">
+                                                        {{$persona->nombre_completo}} ({{$persona->rut}})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <!-- Características Adicionales -->
                                     <div id="caracteristicasAdicionalesSection"></div>
 
@@ -205,6 +224,32 @@
                 }
             });
 
+            document.getElementById('asignarUsuarios').addEventListener('change', function() {
+                var usuariosSection = document.getElementById('usuariosSection');
+                var usuariosSelect = document.getElementById('usuarios');
+
+                if (this.checked) {
+                    usuariosSection.style.display = 'block';
+                } else {
+                    usuariosSection.style.display = 'none';
+                    // Resetea el valor del select antes de enviar el formulario
+                    usuariosSelect.value = null;
+                }
+            });
+
+            document.getElementById('usuariosSection').addEventListener('click', function() {
+                var usuariosSection = document.getElementById('usuariosSection');
+                var usuarios = document.getElementById('usuarios');
+
+                // Asegura que el select es visible y luego desplázate hacia él
+                if (usuariosSection.style.display !== 'none') {
+                    setTimeout(() => {
+                        usuarios.focus(); // Enfocar el select
+                        usuarios.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Desplazar suavemente hacia el select
+                    }, 200);
+                }
+            });
+
             // Resetea el valor del campo 'responsable' antes de enviar el formulario
             document.querySelector('form').addEventListener('submit', function() {
                 var asignarResponsable = document.getElementById('asignarResponsable');
@@ -212,6 +257,13 @@
 
                 if (!asignarResponsable.checked) {
                     responsableSelect.value = null;  // No envía el valor cuando no está marcado
+                }
+
+                var asignarUsuarios = document.getElementById('asignarUsuarios');
+                var usuariosSelect = document.getElementById('usuarios');
+
+                if (!asignarUsuarios.checked) {
+                    usuariosSelect.value = null;  // No envía el valor cuando no está marcado
                 }
             });
 

@@ -7,6 +7,8 @@ use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
 use App\Models\TipoActivo;
+use App\Models\Asignacion;
+use App\Models\ValorAdicional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +33,6 @@ class ActivoController extends Controller
     public function store(Request $request){
         try {
             $activo = new Activo();
-
             $activo->nro_serie = $request->nro_serie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
@@ -43,7 +44,6 @@ class ActivoController extends Controller
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
             $activo->precio = $request->precio;
             if($request->responsable != NULL){
-                $activo->usuario_de_activo = $request->responsable;
                 $activo->responsable_de_activo = $request->responsable;
                 $activo->estado = 4;
                 $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
@@ -55,6 +55,27 @@ class ActivoController extends Controller
                 $registro->save();
             }
             $activo->save();
+
+            if($request->usuarios != NULL){
+                foreach ($request->usuarios as $usuarioId) {
+                    Asignacion::create([
+                        'id_persona' => $usuarioId,
+                        'id_activo' => $activo->id
+                    ]);
+                }
+            }
+
+            if($request->caracteristicas != NULL){
+                foreach ($request->caracteristicas as $caracteristica => $valor) {
+                    ValorAdicional::create([
+                        'id_activo' => $activo->id,
+                        'id_caracteristica' => $caracteristica,
+                        'valor' => $valor
+                    ]);
+                }
+            }
+
+
             // Redirigir con un mensaje de éxito
             return redirect()->route('dashboard')->with('success', 'Activo registrado correctamente');
         } catch (\Exception $e) {
