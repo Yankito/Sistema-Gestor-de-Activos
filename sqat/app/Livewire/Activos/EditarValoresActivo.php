@@ -43,8 +43,6 @@ class EditarValoresActivo extends Component
             $this->tipo_de_activo = $this->activo->tipoDeActivo;
             $this->caracteristicasAdicionales = $this->activo->tipoDeActivo->caracteristicasAdicionales;
             $this->valoresAdicionales = $this->activo->valoresAdicionales;
-            dd($this->valoresAdicionales, $this->caracteristicasAdicionales);
-
         }
     }
     public function render()
@@ -103,6 +101,22 @@ class EditarValoresActivo extends Component
         $activo->tipo_de_activo = $this->tipo_de_activo->id;
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->usuario_de_activo = $this->responsable_de_activo;
+
+        foreach ($this->valoresAdicionales as $id => $valor) {
+            $valorAdicional = $activo->valoresAdicionales->where('id_caracteristica', $id)->first();
+            if ($valorAdicional) {
+                $valorAdicional->valor = $valor['valor'];
+                $valorAdicional->update();
+            } else {
+                if($valor['valor'] != ''){
+                    $activo->valoresAdicionales()->create([
+                        'id_caracteristica' => $id,
+                        'valor' => $valor['valor']
+                    ]);
+                }
+            }
+        }
+
         try {
             $activo->update();
             $this->dispatch('refreshRow', $activo->id);
