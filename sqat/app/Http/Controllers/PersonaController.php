@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Registro;
+use App\Models\Asignacion;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -59,10 +60,16 @@ class PersonaController extends Controller
             $data = $request->all();
             $data['nombre_completo'] = $nombre_completo;
             $data['estado_empleado'] = $data['estado_empleado'] ?? true;
+            $data['user'] = strtoupper($data['user']);
             //dd($data);
             //dd($request, $data);
             // Crear una nueva persona con los datos validados
             Persona::create($data);
+
+            if($request->activo == null){
+                // Redirigir con un mensaje de éxito
+                return redirect()->route('dashboard')->with('success', 'Persona registrada correctamente');
+            }
 
             // Asignar persona a activo de tal numero de serie
             $activo = Activo::where('id', $request->activo)->first();
@@ -76,7 +83,17 @@ class PersonaController extends Controller
             $activo->ubicacion = $request->ubicacion;
 
             // Asignar responsable a activo de tal numero de serie
-            $activo->responsable_de_activo = $request->has('responsable') ? $request->responsable : $idPersona;
+            if($request->has('responsable')){
+                $activo->responsable_de_activo = $request->responsable ;
+                Asignacion::create([
+                    'id_persona' => $idPersona,
+                    'id_activo' => $activo->id,
+                ]);
+            }
+            else{
+                $activo->responsable_de_activo = $idPersona;
+            }
+
             $activo->update();
 
             $registro = new Registro();
@@ -95,7 +112,16 @@ class PersonaController extends Controller
                     if ($activoAdicional) {
                         $activoAdicional->usuario_de_activo = $idPersona;
                         $activoAdicional->estado = 4;
-                        $activoAdicional->responsable_de_activo = $request->has('responsable') ? $request->responsable : $idPersona;
+                        if($request->has('responsable')){
+                            $activoAdicional->responsable_de_activo = $request->responsable ;
+                            Asignacion::create([
+                                'id_persona' => $idPersona,
+                                'id_activo' => $activoAdicional->id,
+                            ]);
+                        }
+                        else{
+                            $activoAdicional->responsable_de_activo = $idPersona;
+                        }
                         $activoAdicional->justificacion_doble_activo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();
 

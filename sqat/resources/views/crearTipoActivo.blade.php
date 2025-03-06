@@ -31,6 +31,12 @@
                                             <input type="text" name="nombre" id="nombre" required class="form-control" />
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="caracteristicasAdicionales">Características Adicionales</label>
+                                            <select name="caracteristicasAdicionales[]" id="caracteristicasAdicionales" class="form-control" multiple="multiple"></select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <button class="btn btn-primary btn-block mb-3" type="submit" style="background: #005856;">Registrar Tipo</button>
                             </form>
@@ -41,7 +47,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title text-center">Lista de Tipos de Activo</h4>
-                                            
+
                                             <!-- Input de búsqueda -->
                                             <div class="mb-3">
                                                 <input type="text" id="searchInput" class="form-control" placeholder="Buscar tipo de activo...">
@@ -113,4 +119,42 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#caracteristicasAdicionales').select2({
+                tags: true,  // Permite agregar texto libre como etiquetas
+                tokenSeparators: [','], // Separar etiquetas por comas
+                placeholder: "Añadir características",
+                width: '100%', // Ajusta el ancho
+                minimumResultsForSearch: Infinity, // Desactiva el buscador
+                createTag: function(params) {
+                    // Asegura que no se muestren las etiquetas en el dropdown
+                    return { id: params.term, text: params.term, newTag: true };
+                },
+                allowClear: true,  // Permite limpiar la selección
+                dropdownCssClass: "select2-no-results" // Oculta la sección de resultados
+            });
+
+            // Establecer el display del dropdown a 'none' para ocultarlo por completo
+            $('#caracteristicasAdicionales').on('select2:open', function (e) {
+                $(".select2-dropdown").css("display", "none");
+            });
+        });
+    </script>
+
+    <style>
+        .select2-container .select2-selection__choice {
+            background-color: #00C01E !important;  /* Color de fondo de la etiqueta */
+            color: white !important;  /* Color de texto de la etiqueta */
+            border: none !important;  /* Eliminar borde */
+        }
+
+        .select2-selection__choice__remove{
+            color: white !important;  /* Color de texto de la 'x' de la etiqueta */
+        }
+    </style>
+
 @endsection

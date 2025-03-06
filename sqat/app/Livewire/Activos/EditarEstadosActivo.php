@@ -19,7 +19,9 @@ class EditarEstadosActivo extends Component
     public $ubicacion;
     public $usuarios;
 
-    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo','actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal',  'setResponsable' => 'actualizarResponsable', 'setUsuarios'=>'actualizarUsuarios'];
+    protected $listeners = ['refreshModal' => 'refreshModal', 'updateActivo',
+    'actualizarUbicacion' => 'actualizarUbicacion', 'cerrarModal' => 'resetearModal',
+    'setResponsable' => 'actualizarResponsable', 'setUsuarios'=>'actualizarUsuarios', 'iniciarResponsable'];
 
     public function mount()
     {
@@ -33,7 +35,7 @@ class EditarEstadosActivo extends Component
     public function render()
     {
         if(isset($this->activo)) {
-            $this->dispatch('modal-cargado');
+            $this->dispatch('iniciar');
             return view('livewire.activos.editar-estados-activo');
         } else {
             return view('livewire.activos.editar-estados-activo');
@@ -46,7 +48,9 @@ class EditarEstadosActivo extends Component
         $this->activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo['id']);
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
+        $this->usuarios = $this->activo->usuarioDeActivo->pluck('id')->toArray();
         $this->dispatch('$refresh');
+        $this->dispatch('modal-cargado');
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
@@ -80,9 +84,6 @@ class EditarEstadosActivo extends Component
 
     // Actualizar un activo existente
     public function updateActivo(){
-        //dd($this->activo, $this->responsable_de_activo, $this->ubicacion, $this->usuarios);
-
-
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
             ->findOrFail($this->activo->id);
 
@@ -144,7 +145,8 @@ class EditarEstadosActivo extends Component
         } else {
             $this->ubicacion = null;
         }
-        $this->dispatch('$refresh');
+        $this->skipRender();
+
     }
 
     public function resetearModal()
@@ -156,11 +158,16 @@ class EditarEstadosActivo extends Component
     {
         $this->responsable_de_activo = $data;
         $this->dispatch('actualizarUbicacion', $data);
-        $this->dispatch('$refresh');
+
     }
     public function actualizarUsuarios($data)
     {
         $this->usuarios = $data;
-        $this->dispatch('$refresh');
+        $this->skipRender();
+    }
+
+    public function iniciarResponsable($data)
+    {
+        $this->responsable_de_activo = $data;
     }
 }

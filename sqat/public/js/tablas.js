@@ -23,30 +23,11 @@ $(document).ready(function () {
                 }
             ],
             buttons: [
-                {
-                    extend: "copy",
-                    title: "Iansa - Tabla de activos",
-                    text: "Copiar",
-                },
-                {
-                    extend: "csv",
-                    title: "Iansa - Tabla de activos",
-                    text: "CSV",
-                },
-                {
-                    extend: "excel",
-                    title: "Iansa - Tabla de activos",
-                    text: "Excel",
-                },
-                {
-                    extend: "print",
-                    title: "Iansa - Tabla de activos",
-                    text: "Imprimir",
-                },
-                {
-                    extend: "colvis",
-                    text: "Visibilidad de columnas",
-                }
+                { extend: "copy", title: "Iansa - Tabla de activos", text: "Copiar" },
+                { extend: "csv", title: "Iansa - Tabla de activos", text: "CSV" },
+                { extend: "excel", title: "Iansa - Tabla de activos", text: "Excel" },
+                { extend: "print", title: "Iansa - Tabla de activos", text: "Imprimir" },
+                { extend: "colvis", text: "Visibilidad de columnas" }
             ]
         });
 
@@ -62,71 +43,72 @@ $(document).ready(function () {
         let index = $(this).data('index');
         let filterContainer = $(`#filter-${index}`);
 
-        // Store the original position if not already stored
-        if (!filterPositions[index]) {
-            filterPositions[index] = {
-                top: filterContainer.css('top'),
-                left: filterContainer.css('left')
-            };
-        }
+        // Obtener la posición del botón de filtro
+        let buttonPosition = $(this).offset();
+        let buttonHeight = $(this).outerHeight();
 
-        // If the scroll position is not at the top, scroll to the top first
+        // Posicionar el contenedor de filtros debajo del botón
+        filterContainer.css({
+            "top": buttonPosition.top + buttonHeight + 5, // 5px de margen
+            "left": buttonPosition.left
+        });
+
+        // Llamar a la función toggleFilterContainer con el desplazamiento
+        toggleFilterContainer(filterContainer, event, index);
+    });
+
+    // Función para alternar la visibilidad del contenedor de filtros
+    function toggleFilterContainer(filterContainer, event, index) {
+        // Si la posición de desplazamiento no está en la parte superior, desplazar al principio
         if ($(window).scrollTop() !== 0) {
             $('html, body').animate({ scrollTop: 0 }, 'fast', function() {
-                // After scrolling to the top, show the filter container
-                toggleFilterContainer(filterContainer, event, index);
+                // Después de desplazar a|l principio, mostrar el contenedor de filtros
+                if (filterContainer.is(':visible')) {
+                    filterContainer.hide(); // Ocultar si ya está visible
+                } else {
+                    // Ocultar otros filtros
+                    $('.filter-container').not(filterContainer).hide();
+                    filterContainer.show(); // Mostrar el contenedor de filtros
+                }
             });
         } else {
-            // If already at the top, just toggle the filter container
-            toggleFilterContainer(filterContainer, event, index);
+            // Si ya está en la parte superior, simplemente alternar la visibilidad
+            if (filterContainer.is(':visible')) {
+                filterContainer.hide(); // Ocultar si ya está visible
+            } else {
+                // Ocultar otros filtros
+                $('.filter-container').not(filterContainer).hide();
+                filterContainer.show(); // Mostrar el contenedor de filtros
+            }
         }
 
         event.stopPropagation();
-    });
-
-    // Function to toggle the filter container
-    function toggleFilterContainer(filterContainer, event, index) {
-        if (filterContainer.is(':visible')) {
-            filterContainer.hide(); // Hide if already visible
-        } else {
-            // Hide other filters
-            $('.filter-container').not(filterContainer).hide();
-
-            // Apply the original position
-            filterContainer.css({
-                "top": filterPositions[index].top,
-                "left": filterPositions[index].left
-            }).show(); // Show the filter container
-        }
     }
 
-    // Hide filter container when clicking the close button
-    $('.filter-container').on('click', '.close-filter', function() {
-        $(this).closest('.filter-container').hide();
-    });
-
-    // Prevent filter container from hiding on checkbox click
-    $('.filter-container').click(function(event) {
-        event.stopPropagation();
-    });
-
     // Generate checkboxes for each column
-    $('.checkbox-filters').each(function() {
+    $('.checkbox-filters').each(function () {
         let index = $(this).data('index');
         let uniqueValues = new Set();
 
-        table.column(index).data().each(function(value) {
+        // Obtener valores únicos de la columna
+        table.column(index).data().each(function (value) {
             uniqueValues.add(value);
         });
 
+        // Limpiar contenedor antes de agregar nuevos checkboxes
         let checkboxContainer = $(this);
+        checkboxContainer.empty();
+
+        // Agregar checkbox "Seleccionar todo"
         checkboxContainer.append(`
             <div>
-                <input type="checkbox" class="select-all" data-index="${index}">
+                <input type="checkbox" class="select-all" data-index="${index}" checked>
                 <label>Seleccionar todo</label>
             </div>
         `);
-        uniqueValues.forEach(value => {
+
+        // Agregar checkboxes individuales
+        [...uniqueValues].forEach(value => {
             checkboxContainer.append(`
                 <div>
                     <input type="checkbox" class="filter-checkbox" data-index="${index}" value="${value}">
@@ -134,13 +116,43 @@ $(document).ready(function () {
                 </div>
             `);
         });
+
+        let isChecked = $(`.select-all[data-index="${index}"]`).is(':checked');
+
+        $(`.filter-checkbox[data-index="${index}"]`).each(function () {
+            $(this).prop('checked', isChecked);
+        });
+
+        console.log("Valores únicos en columna", index, [...uniqueValues]);
     });
 
-    // Select/Deselect all checkboxes
-    $(document).on('change', '.select-all', function() {
+    // Función para actualizar el estado del checkbox "Seleccionar todo"
+    function updateSelectAllCheckbox(index) {
+        let uniqueCheckboxes = new Set();
+        $(`.filter-checkbox[data-index="${index}"]`).each(function () {
+            uniqueCheckboxes.add($(this).val());
+        });
+        let totalCheckboxes = uniqueCheckboxes.size;
+
+        let checkedCheckboxes = $(`.filter-checkbox[data-index="${index}"]:checked`).length;
+        console.log("Total de checkboxes en columna", index, totalCheckboxes);
+        console.log("Total de checkboxes seleccionados en columna", index, checkedCheckboxes);
+
+        let selectAll = $(`.select-all[data-index="${index}"]`);
+        selectAll.prop('checked', totalCheckboxes === checkedCheckboxes);
+    }
+
+    // Evento para seleccionar/deseleccionar todos los checkboxes
+    $(document).on('change', '.select-all', function () {
         let index = $(this).data('index');
         let isChecked = $(this).is(':checked');
-        $(`.filter-checkbox[data-index="${index}"]`).prop('checked', isChecked).trigger('change');
+
+        $(`.filter-checkbox[data-index="${index}"]`).each(function () {
+            $(this).prop('checked', isChecked);
+        });
+
+        // Aplicar el filtro después de actualizar los checkboxes
+        applyFilter(index);
     });
 
     // Search inside checkboxes (but NOT the table)
@@ -154,40 +166,45 @@ $(document).ready(function () {
         });
     });
 
-    // Filter table based on selected checkboxes
-    $(document).on('change', '.filter-checkbox', function(event) {
-        // Stop event propagation to prevent triggering the scroll event
-        event.stopPropagation();
-
+    // Evento para actualizar filtro cuando cambian los checkboxes individuales
+    $(document).on('change', '.filter-checkbox', function () {
         let index = $(this).data('index');
-        let selectedValues = $(`.filter-checkbox[data-index="${index}"]:checked`).map(function() {
-            return $(this).val().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        console.log("Checkbox cambiado en columna", index);
+        console.log("Checkbox seleccionado:", $(this
+        ).val());
+        updateSelectAllCheckbox(index);
+
+        let checkedValues = [];
+        $(`.filter-checkbox[data-index="${index}"]:checked`).each(function () {
+            checkedValues.push($(this).val());
+            console.log("Checkbox seleccionado:", $(this).val());
+        });
+
+        console.log("Checkboxes activos en columna", index, "Valores seleccionados:", checkedValues);
+
+        applyFilter(index, checkedValues);
+    });
+
+
+
+    // Función para aplicar el filtro en la tabla
+    function applyFilter(index) {
+        let selectedValues = $(`.filter-checkbox[data-index="${index}"]:checked`).map(function () {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
         }).get();
 
         if (selectedValues.length > 0) {
-            table.column(index).search(selectedValues.join('|'), true, false, false).draw();
+            table.column(index).search(selectedValues.join('|'), true, false).draw();
         } else {
-            // If no checkboxes are selected, hide all rows
-            table.column(index).search('^$', true, false, false).draw();
+            table.column(index).search('^$', true, false).draw(); // Esto oculta todos los elementos si nada está seleccionado
         }
+    }
 
-        // Reopen the filter container at the original position
-        let filterContainer = $(`#filter-${index}`);
-        filterContainer.css({
-            "top": filterPositions[index].top,
-            "left": filterPositions[index].left
-        }).show();
-    });
-
-    // Clear all filters when the "Clear Filters" button is clicked
-    $('#clear-filters').click(function() {
-        // Clear all column searches
+    // Evento para limpiar todos los filtros
+    $('#clear-filters').click(function () {
         table.columns().search('').draw();
-
-        // Uncheck all filter checkboxes
         $('.filter-checkbox').prop('checked', false);
-
-        // Hide all filter containers
+        $('.select-all').prop('checked', false);
         $('.filter-container').hide();
     });
 
