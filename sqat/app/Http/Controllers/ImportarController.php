@@ -104,17 +104,21 @@ class ImportarController extends Controller
                 }
     
                 // Buscar el usuario
-                $usuario = Persona::where('user', $usuarioUser)->first();
-                if (!$usuario) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "Usuario '$usuarioUser' no encontrado."
-                    ];
-                    continue;
+                if (!empty($usuarioUser)) {
+                    $usuario = Persona::where('user', $usuarioUser)->first();
+                    if (!$usuario) {
+                        $errores[] = [
+                            'fila' => $fila,
+                            'motivo' => "Usuario '$usuarioUser' no encontrado."
+                        ];
+                        continue;
+                    }
+                } else {
+                    $usuario = null;
                 }
     
                 // Actualizar el estado y la justificación del activo
-                $activo->estado = $estado->id;
+                $activo->estado = $estado->id;  
                 $activo->justificacion_doble_activo = $justificacion ?: null;
     
                 // Actualizar la ubicación del activo a la ubicación del responsable (si existe)
@@ -128,11 +132,13 @@ class ImportarController extends Controller
                 $activo->save();
     
                 // Crear o actualizar la asignación en la tabla asignaciones
-                $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
+                if ($usuario) {
+                    $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
+                }
     
                 $asignaciones[] = [
                     'responsable' => $activo->responsable_de_activo ? Persona::find($activo->responsable_de_activo)->user : null,
-                    'usuario_activo' => $usuario->user,
+                    'usuario_activo' => $usuario ? $usuario->user : null,
                     'numero_serie' => $activo->nro_serie,
                     'estado' => $estado->nombre_estado,
                     'justificacion' => $activo->justificacion_doble_activo,

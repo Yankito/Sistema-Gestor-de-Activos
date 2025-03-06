@@ -56,6 +56,11 @@ class ImportarActivosController extends Controller
                 $ubicacion = $this->eliminarTildesYMayusculas($fila['E']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
     
+                if (empty($fila['E'])) {
+                    $ubicacion = 'ROSARIO NORTE';
+                    $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
+                }
+
                 if (!$ubicacionExistente) {
                     $errores[] = [
                         'fila' => $fila,
@@ -89,6 +94,7 @@ class ImportarActivosController extends Controller
                     continue;
                 }
                 $tipoActivoId = $tipoActivoExistente->id;
+
     
                 // Crear el activo
                 Activo::create([

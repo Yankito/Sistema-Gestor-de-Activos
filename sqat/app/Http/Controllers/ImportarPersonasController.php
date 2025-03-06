@@ -108,6 +108,30 @@ class ImportarPersonasController extends Controller
                     ];
                     continue;
                 }
+                // verificar si el user ya existe en la base de datos
+                if (empty($fila['A'])) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El campo 'user' no puede estar vacío."
+                    ];
+                    continue;
+                }
+
+                if ($fila['A'] !== '0' && Persona::where('user', $fila['A'])->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El user '{$fila['A']}' ya existe en la base de datos."
+                    ];
+                    continue;
+                }
+                //verificar que la fecha no sea null
+                if($fila['F'] == null){
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "La fecha de ingreso no puede ser nula."
+                    ];
+                    continue;
+                }
 
                 // Crear la persona
                 Persona::create([
