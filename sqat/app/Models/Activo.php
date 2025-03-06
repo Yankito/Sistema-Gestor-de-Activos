@@ -55,4 +55,5 @@ class Activo extends Model
     {
         return $this->belongsTo(TipoActivo::class, 'tipo_de_activo');
     }
+    
 }

@@ -31,7 +31,6 @@
                                     <tr>
                                         <td>
                                              <!-- Mostrar el valor de tipo_cambio para depuración -->
-                                            <strong>tipo_cambio:</strong> {{ $registro->tipo_cambio }} <br>
                                             @if ($registro->encargadoCambio)
                                                 {{ $registro->encargadoCambio->nombres }} {{ $registro->encargadoCambio->primer_apellido }} <!-- Nombre del encargado del cambio -->
                                             @else

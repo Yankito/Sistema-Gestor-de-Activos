@@ -29,6 +29,7 @@ class AuthController extends Controller
             ], [
                 'correo.regex' => 'Solo se pueden registrar correos con dominio @iansa.cl.',
                 'correo.unique' => 'El correo ya está registrado.',
+                'contrasena.min' => 'La contraseña debe tener al menos 6 caracteres.',
             ]);
 
             // Crear el usuario
