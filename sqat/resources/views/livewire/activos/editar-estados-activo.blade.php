@@ -50,13 +50,13 @@
                 <div class="col-md-12 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="usuarios">Usuarios</label>
-                            <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
-                                @foreach($personas as $persona)
-                                    <option value="{{$persona->id}}">
-                                        {{$persona->nombre_completo}} ({{$persona->rut}})
-                                    </option>
-                                @endforeach
-                            </select>
+                        <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
+                            @foreach($personas as $persona)
+                                <option value="{{$persona->id}}">
+                                    {{$persona->nombre_completo}} ({{$persona->rut}})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 @endif

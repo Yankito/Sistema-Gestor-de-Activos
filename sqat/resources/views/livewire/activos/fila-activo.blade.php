@@ -90,4 +90,9 @@
     <td>{{ $activo->ubicacionRelation->sitio }}</td>
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>
+    <td>
+        @foreach ($activo->valoresAdicionales as $valor)
+        <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
+        @endforeach
+    </td>
 </tr>

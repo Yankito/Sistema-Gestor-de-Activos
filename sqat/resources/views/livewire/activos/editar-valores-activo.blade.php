@@ -89,6 +89,31 @@
                 </div>
             </div>
         </div>
+
+        <div class = "row">
+
+            @if ($activo->tipoDeActivo->caracteristicasAdicionales->count() > 0)
+                <label class="form-label">Características Adicionales (opcionales)</label>
+                @foreach ($valoresAdicionales as $index => $valorAdicional)
+                    <div class="col-md-6 d-flex align-items-center">
+                        <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="caracteristica_{{ $index }}"></i>
+                        <div class="form-outline mb-4 flex-grow-1">
+                            <label class="form-label" for="caracteristica_{{ $index }}">{{ $valorAdicional['nombre_caracteristica'] }}</label>
+
+                            <input
+                                wire:model="valoresAdicionales.{{ $index}}.valor"
+                                type="text"
+                                id="caracteristica_{{ $index }}"
+                                class="form-control"
+                                value="{{ $valorAdicional ? $valorAdicional['valor'] : '' }}"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
+        </div>
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" >Guardar Cambios</button>
@@ -174,8 +199,6 @@
             default: return '';
         }
     }
-
-
 
 </script>
 </div>

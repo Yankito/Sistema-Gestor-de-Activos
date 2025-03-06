@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th>Acciones</th>
-                @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
+                @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación","Valores Adicionales"] as $index => $columna)
                     <th>
                         {{ $columna }}
                         <!-- boton filtro -->

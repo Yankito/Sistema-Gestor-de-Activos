@@ -23,7 +23,6 @@ class ActivoController extends Controller
         }else{
             $personas = Persona::all();
             $ubicaciones = Ubicacion::all();
-            $tiposDeActivo = TipoActivo::all();
             $tiposDeActivo = TipoActivo::with('caracteristicasAdicionales')->get();
             return view('activos.registrarActivo', compact('personas', 'ubicaciones', 'tiposDeActivo'));
         }
@@ -67,6 +66,9 @@ class ActivoController extends Controller
 
             if($request->caracteristicas != NULL){
                 foreach ($request->caracteristicas as $caracteristica => $valor) {
+                    if($valor == NULL){
+                        continue;
+                    }
                     ValorAdicional::create([
                         'id_activo' => $activo->id,
                         'id_caracteristica' => $caracteristica,
