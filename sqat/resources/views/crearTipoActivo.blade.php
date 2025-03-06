@@ -53,6 +53,16 @@
                                                     @foreach($tiposActivo as $tipo)
                                                         <tr>
                                                             <td>{{ $tipo->nombre }}</td>
+                                                            <td>
+                                                                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit"
+                                                                    style="cursor: pointer;"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modalEditarTipoActivo"
+                                                                    data-id="{{ $tipo->id }}"
+                                                                    data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}"
+                                                                    >
+                                                                </i>
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -84,6 +94,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal para mostrar características adicionales -->
+        <div class="modal fade" id="modalEditarTipoActivo" tabindex="-1" aria-labelledby="modalEditarTipoActivoLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarTipoActivoLabel">Características del Tipo de Activo</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="listaCaracteristicas" class="list-group">
+                            <!-- Aquí se agregarán dinámicamente las características -->
+                        </ul>
+                         <!-- Agregar el select de tags -->
+                        <div class="form-group mt-3">
+                            <label for="caracteristicasAdicionalesModal">Añadir Características Adicionales</label>
+                            <select name="caracteristicasAdicionales[]" id="caracteristicasAdicionalesModal" class="form-control" multiple="multiple"></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 @endsection
 
@@ -109,6 +145,27 @@
                 $(".select2-dropdown").css("display", "none");
             });
         });
+        $(document).ready(function () {
+            $('.toggle-edit').click(function () {
+                console.log('Clicked on pencil icon');  // Verifica si se dispara el evento
+                let caracteristicas = $(this).data('caracteristicas');
+                $('#listaCaracteristicas').empty();  // Limpiar las características previas
+
+                if (caracteristicas.length > 0) {
+                    caracteristicas.forEach(caracteristica => {
+                        $('#listaCaracteristicas').append(`<li class="list-group-item">${caracteristica.nombre_caracteristica}</li>`);
+                    });
+                } else {
+                    $('#listaCaracteristicas').append(`<li class="list-group-item text-muted">No hay características adicionales.</li>`);
+                }
+
+                // Usar AdminLTE para abrir el modal
+                $('#modalEditarTipoActivo').modal('show');
+            });
+        });
+
+
+
     </script>
 
     <style>
