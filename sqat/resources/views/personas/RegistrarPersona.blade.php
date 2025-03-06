@@ -36,7 +36,7 @@
                                         <div class="col-md-6">
                                             <!-- RUT -->
                                             <div class="form-outline mb-4">
-                                                <label class="form-label" for="rut">RUT <span class="required-asterisk">*</span></label>
+                                                <label class="form-label" for="rut">RUT </label>
                                                 <label class="form-label">Formato: 12345678-9</label>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
                                                 <span id="rutError" class="text-danger" style="display:none;">RUT inválido. Use el formato 12345678-9.</span>
@@ -47,7 +47,7 @@
                                         <div class="col-md-6">
                                         <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="user">Username <span class="required-asterisk">*</span></label>
+                                            <label class="form-label" for="user">Username </label>
                                                 <input type="text" name="user" id="user" required class="form-control" />
                                             </div>
                                         </div>
@@ -56,14 +56,14 @@
                                         <div class="col-md-6">
                                             <!-- Nombres -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombres">Nombres <span class="required-asterisk">*</span></label>
+                                            <label class="form-label" for="nombres">Nombres </label>
                                                 <input type="text" name="nombres" id="nombres" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <!-- Primer Apellido -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="primer_apellido">Primer Apellido <span class="required-asterisk">*</span></label>
+                                            <label class="form-label" for="primer_apellido">Primer Apellido </label>
                                                 <input type="text" name="primer_apellido" id="primer_apellido" required class="form-control" />
                                             </div>
                                         </div>
@@ -73,13 +73,13 @@
                                         <div class="col-md-6">
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
-                                                <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control" />
+                                                <input type="text" name="segundo_apellido" id="segundo_apellido" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Empresa -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombre_empresa">Empresa <span class="required-asterisk">*</span></label>
+                                            <label class="form-label" for="nombre_empresa">Empresa </label>
                                                 <input type="text" name="nombre_empresa" id="nombre_empresa" required class="form-control" />
                                             </div>
                                         </div>
@@ -128,6 +128,7 @@
                                                 <div class="form-group">
                                                     <label class = "form-label">Activos</label>
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
+                                                        <option value="" selected>SIN ACTIVO</option>
                                                         @foreach($activos as $activo)
                                                             @if ($activo->estado == 3)
                                                                 <option value="{{$activo->id}}">{{$activo->nro_serie}}</option>
@@ -341,13 +342,14 @@
 
             function validarRUT(rut) {
                 // Eliminar puntos y guion
-                rut = rut.replace(/[.\-]/g, '');
 
                 // Validación con expresión regular
-                const rutRegex = /^[0-9]{7,8}[-|]?[0-9kK]{1}$/;
+                const rutRegex = /^[0-9]{1,2}[0-9]{6}-[0-9kK]$/;
                 if (!rutRegex.test(rut)) {
                     return false;
                 }
+
+                rut = rut.replace(/[.\-]/g, '');
 
                 // Verificar el dígito verificador
                 let rutBody = rut.slice(0, -1);
