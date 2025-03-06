@@ -55,22 +55,6 @@
     .estado-inactivo {
         background-color: #808080;
     }
-    .dataTables_wrapper .dataTables_fixedHeader {
-        overflow: hidden;
-        z-index: 1;
-    }
-    .dataTables_wrapper .dataTables_scrollBody {
-        position: relative; /* Asegura que el contenedor de la tabla tenga un z-index menor */
-        z-index: 1;
-    }
-    .filter-container {
-        position: fixed;
-        z-index: 9999; /* Asegúrate de que esté por encima de otros elementos */
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 10px;
-        display: auto; /* Oculto por defecto */
-    }
 </style>
 </head>
 @section('content')
@@ -130,5 +114,6 @@
     <script src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
 
     <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 </html>
