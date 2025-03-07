@@ -102,7 +102,7 @@ class EditarValoresPersona extends Component
             $this->dispatch('refreshRowPersonas', $persona->id);
             $this->dispatch('cerrar-modal-valores', ['success' => true, 'mensaje' => 'Los cambios se han guardado correctamente.']);
         } catch (\Exception $e) {
-            $this->dispatch('cerrar-modal-valores', ['success' => false, 'mensaje' => 'El rut ya se encuentra registrado.']);
+            $this->dispatch('cerrar-modal-valores', ['success' => false, 'mensaje' => 'El rut o user ya se encuentra registrado.']);
         }
 
     }
