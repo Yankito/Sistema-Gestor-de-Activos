@@ -73,7 +73,11 @@
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
+                        cancelButtonText: 'Cancelar',
+                        customClass: {
+                            confirmButton: 'btn-confirm',
+                            cancelButton: 'btn-cancel'
+                        },
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.closest('.delete-form').submit();
@@ -83,5 +87,19 @@
             });
         });
     </script>
+
+    <style>
+        .btn-confirm {
+            background-color: #005856 !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .btn-cancel {
+            background-color: #ccc !important;
+            color: white !important;
+            border: none !important;
+        }
+    </style>
 @endsection
 </html>

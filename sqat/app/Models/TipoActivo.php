@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Vinkla\Hashids\Facades\Hashids;
+
 
 class TipoActivo extends Model
 {
@@ -15,6 +15,9 @@ class TipoActivo extends Model
         'nombre',
     ];
 
+    public function getHashedIdAttribute(){
+        return Hashids::encode($this->id);
+    }
     // Relación muchos a muchos con Persona a través de la tabla asignaciones
     public function caracteristicasAdicionales()
     {

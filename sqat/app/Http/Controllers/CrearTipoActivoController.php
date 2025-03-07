@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TipoActivo;
 use App\Models\Activo;
 use App\Models\CaracteristicaAdicional;
+use Vinkla\Hashids\Facades\Hashids;
 
 
 class CrearTipoActivoController extends Controller
@@ -14,6 +15,12 @@ class CrearTipoActivoController extends Controller
     {
         // Obtener todos los tipos de activos desde la base de datos
         $tiposActivo = TipoActivo::all();
+
+        foreach ($tiposActivo as $tipo) {
+            foreach ($tipo->caracteristicasAdicionales as $caracteristica) {
+                $caracteristica->hashed_id = $caracteristica->getHashedIdAttribute(); // Forzar su inclusión
+            }
+        }
 
         // Pasar los datos a la vista
         return view('crearTipoActivo', compact('tiposActivo'));
@@ -25,8 +32,6 @@ class CrearTipoActivoController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255|unique:tipo_activo,nombre',
         ]);
-
-
 
         // Crear un nuevo tipo de activo
         $tipoActivo = TipoActivo::create([
@@ -50,8 +55,17 @@ class CrearTipoActivoController extends Controller
         return redirect()->route('tipos-activo.index')->with('success', 'Tipo de activo registrado correctamente.');
     }
 
-    public function destroy($id)
+    public function destroy($hashed_id)
     {
+        // Desencriptar el ID
+        $decoded = Hashids::decode($hashed_id);
+
+        if (empty($decoded)) {
+            return redirect()->route('tipos-activo.index')->with('error', 'ID inválido.');
+        }
+
+        $id = $decoded[0];
+
         // Buscar el tipo de activo por ID
         $tipoActivo = TipoActivo::findOrFail($id);
 
@@ -93,8 +107,18 @@ class CrearTipoActivoController extends Controller
 
     }
 
-    public function destroyCaracteristicaAdicional($id)
+    public function destroyCaracteristicaAdicional($hashed_id)
     {
+        // Desencriptar el ID
+        $decoded = Hashids::decode($hashed_id);
+
+        if (empty($decoded)) {
+            return redirect()->route('tipos-activo.index')->with('error', 'ID inválido.');
+        }
+
+        $id = $decoded[0];
+
+
         // Buscar la caracteristica adicional
         $caracteristicaAdicional = CaracteristicaAdicional::findOrFail($id);
 

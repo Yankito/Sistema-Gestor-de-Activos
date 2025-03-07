@@ -74,10 +74,10 @@
                                                                             </i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" id="delete-form-{{ $tipo->id }}">
+                                                                    <form action="{{ route('tipos-activo.destroy', $tipo->hashed_id) }}" method="POST" id="delete-form-{{ $tipo->hashed_id }}">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ $tipo->id }}')">
+                                                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ $tipo->hashed_id }}')">
                                                                             <i class="fas fa-trash"></i>
                                                                         </button>
                                                                     </form>
@@ -184,7 +184,6 @@
                     confirmButton: 'btn-confirm',
                     cancelButton: 'btn-cancel'
                 },
-                buttonsStyling: false, // Desactiva los estilos predeterminados
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Si el usuario confirma, enviamos el formulario
@@ -205,7 +204,6 @@
                     confirmButton: 'btn-confirm',
                     cancelButton: 'btn-cancel'
                 },
-                buttonsStyling: false, // Desactiva los estilos predeterminados
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Si el usuario confirma, enviamos el formulario
@@ -267,14 +265,14 @@
 
                 $('#listaCaracteristicas').empty();  // Limpiar las características previas
 
-
+                console.log(caracteristicas);
                 if (caracteristicas.length > 0) {
                     caracteristicas.forEach(caracteristica => {
                         $('#listaCaracteristicas').append(`
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between">
                                 ${caracteristica.nombre_caracteristica}
-                                <form action="/caracteristicaAdicional/${caracteristica.id}" method="POST" id="deleteCarac-form-${caracteristica.id}">
+                                <form action="/caracteristicaAdicional/${caracteristica.hashed_id}" method="POST" id="deleteCarac-form-${caracteristica.id}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteCarac('${caracteristica.id}')">
@@ -310,14 +308,12 @@
             color: white !important;  /* Color de texto de la 'x' de la etiqueta */
         }
 
-        /* Estilo para el botón de confirmación de SweetAlert */
         .btn-confirm {
             background-color: #005856 !important;
             color: white !important;
             border: none !important;
         }
 
-        /* Estilo para el botón de cancelar (si deseas personalizarlo) */
         .btn-cancel {
             background-color: #ccc !important;
             color: white !important;
