@@ -10,12 +10,9 @@ use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\TablaDatosController;
-use App\Http\Controllers\DashboardUbicacionController;
-use App\Http\Controllers\DashboardTipoController;
 use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
-use App\Http\Controllers\TablaUbicacionesController;
 use App\Http\Controllers\CrearTipoActivoController;
 use App\Http\Controllers\HistorialController;
 use Illuminate\Support\Facades\Auth;
@@ -63,8 +60,6 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tablaPersonas', [TablaPersonasController::class, 'index']);
     Route::get('/tablaActivos', [TablaActivosController::class, 'index']);
     Route::get('/importar', [ImportarController::class, 'index']);
-    Route::get('/dashboardUbicacion', [DashboardUbicacionController::class, 'index']);
-    Route::get('/dashboardTipo', [DashboardTipoController::class, 'index'])->name('dashboard.tipo');
     Route::get('/importarActivos', [ImportarActivosController::class, 'index']);
     Route::get('/importarPersonas', [ImportarPersonasController::class, 'index']);
     Route::get('/exportar', [ExportarController::class, 'index']);
@@ -74,11 +69,6 @@ Route::middleware(['auth'])->group(function(){
 });
 
 Route::delete('/ubicaciones/eliminar/{hashed_id}', [UbicacionController::class, 'eliminar'])->name('ubicaciones.eliminar');
-
-
-Route::get('/desplegable', function () {
-    return view('desplegable');
-});
 
 
 // Ruta para procesar el inicio de sesión
@@ -133,7 +123,3 @@ Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
 
 // Ruta para confirmar importación
 Route::get('/confirmarImportacion', [ImportarController::class, 'confirmarImportacion'])->name('confirmar.importacion');
-
-// Rutas para actualizar dashboards
-Route::post('/actualizarDashboardUbicacion', [DashboardUbicacionController::class, 'actualizarUbicacion'])->name('actualizar.dashboardUbicacion');
-Route::post('/actualizarDashboardTipo', [DashboardTipoController::class, 'actualizarTipo'])->name('actualizar.dashboardTipo');

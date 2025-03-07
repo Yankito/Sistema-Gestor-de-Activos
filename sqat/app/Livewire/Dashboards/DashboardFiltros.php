@@ -11,7 +11,7 @@ use App\Models\TipoActivo;
 
 class DashboardFiltros extends Component
 {
-    protected $listeners = ['actualizarAtributo'];
+    protected $listeners = ['actualizarAtributo', 'cambiarDashboard'];
     public $cantidadActivos;
     public $filtro;
     public $conteoValores;
@@ -52,12 +52,41 @@ class DashboardFiltros extends Component
 
         $ubicaciones = Ubicacion::all();
         $cantidadPorEstados = $this->calcularActivosPorEstados();
-
+        $tiposDeActivo = TipoActivo::all();
+        $opcionesDashboard = $this->obtenerOpcionesDashboard();
         $this->calcularCantidadActivos();
+
+        $this->dispatch('actualizarDashboard', [
+            'vista' => $this->vista,
+            'opcionesDashboard' => $opcionesDashboard,
+        ]);
+
         // Pasar el usuario a la vista
         return view('livewire.dashboards.dashboard-filtros',compact(
         'cantidadPersonas','cantidadUbicaciones',
-        'ubicaciones', 'cantidadPorEstados'));
+        'ubicaciones', 'cantidadPorEstados','tiposDeActivo','opcionesDashboard'));
+    }
+
+    public function obtenerOpcionesDashboard(){
+        if($this->vista=="UBICACION"){
+            $ubicaciones = Ubicacion::all();
+            $opciones = [];
+            foreach($ubicaciones as $ubicacion){
+                $opciones[$ubicacion->id] = $ubicacion->sitio;
+            }
+        }
+        else if($this->vista=="TIPO_DE_ACTIVO"){
+            $tiposDeActivo = TipoActivo::all();
+            $opciones = [];
+            foreach($tiposDeActivo as $tipo){
+                $opciones[$tipo->id] = $tipo->nombre;
+            }
+        }
+        else{
+            $opciones = [];
+        }
+        return $opciones;
+
     }
 
     public function actualizarAtributo($atributo)
@@ -175,6 +204,30 @@ class DashboardFiltros extends Component
             $this->activosFueraDeServicio = Activo::where('tipo_de_activo', $this->valor)->whereIn('estado', [5, 6, 8, 9, 10])->count();
         }
 
+    }
+
+    public function cambiarDashboard($vista, $tipoDeActivo_id = null){
+
+        $this->vista = $vista;
+        $this->valor = $tipoDeActivo_id;
+        if($this->vista=="UBICACION"){
+            $this->nombreVista = Ubicacion::find($this->valor)->sitio;
+            $this->filtro = "tipo_de_activo";
+        }
+        else if($this->vista=="TIPO_DE_ACTIVO"){
+            $this->nombreVista = TipoActivo::find($this->valor)->nombre;
+            $this->filtro = "ubicacion";
+        }
+        else{
+            $this->nombreVista = "General";
+            $this->filtro = "tipo_de_activo";
+            $this->dispatch('$refresh');
+        }
+
+        $this->atributos = $this->obtenerAtributos();
+        $this->actualizarAtributo($this->filtro);
+        $this->calcularCantidadActivos();
+        $this->dispatch('$refresh');
     }
 
 }

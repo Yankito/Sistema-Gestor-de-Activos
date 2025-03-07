@@ -41,13 +41,18 @@
 
     <script>
         function updateUbicacion(id) {
-            document.getElementById('ubicacion_id').value = id;
-            document.getElementById('update-ubicacion-form').submit();
+            console.log('cambio: ' + id);
+            Livewire.dispatch('cambiarDashboard', ["UBICACION",id]);
         }
 
         function updateTipoDeActivo(id) {
-            document.getElementById('tipoDeActivo_id').value = id;
-            document.getElementById('update-tipoDeActivo-form').submit();
+            console.log('cambio: ' + id);
+            Livewire.dispatch('cambiarDashboard', ["TIPO_DE_ACTIVO",id]);
+        }
+
+        function updateGeneral() {
+            console.log('cambio: GENERAL');
+            Livewire.dispatch('cambiarDashboard', ["GENERAL"]);
         }
 
         document.addEventListener("DOMContentLoaded", function() {

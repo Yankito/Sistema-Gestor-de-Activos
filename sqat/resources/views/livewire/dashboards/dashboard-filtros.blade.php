@@ -1,5 +1,34 @@
 <section class="content">
 
+    <style>
+        .dropdown-menu {
+            max-height: 300px; /* Ajusta la altura según necesites */
+            overflow-y: auto;
+        }
+    </style>
+    @section('navbar-custom')
+        <div id="navbar-custom" wire:ignore>
+            <div class="col-sm-12">
+                <div class="breadcrumb float-sm-right">
+                    <a class="nav-link me-2" data-toggle="dropdown" href="#">
+                        <i class="fas fa-th mr-1"></i>
+                        <span id="navbar-text">
+                            @if($vista === "UBICACION")
+                                Cambiar Ubicación
+                            @elseif($vista === "TIPO_DE_ACTIVO")
+                                Cambiar Tipo de Activo
+                            @endif
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="navbar-dropdown">
+                        <a class="dropdown-item dropdown-footer" style="cursor: pointer;" onclick="updateGeneral()" >DASHBOARD GENERAL</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endsection
+
     <div class="content-header">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -98,7 +127,7 @@
                 @foreach($conteoValores as $id => $valores)
 
                     <div class="col-lg-3 col-6" style="cursor: pointer;"
-                    onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" :
+                        onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" :
                                 ($filtro === 'ubicacion' ? "updateUbicacion('" .$id. "')" : '') }}">
                         <!-- small box -->
                         <div class="small-box bg-success">
@@ -112,14 +141,6 @@
                         </div>
                     </div>
                 @endforeach
-                <form id="update-tipoDeActivo-form" action="{{ route('actualizar.dashboardTipo') }}" method="POST" style="display: none;">
-                    @csrf
-                    <input type="hidden" name="tipoDeActivo_id" id="tipoDeActivo_id" value="">
-                </form>
-                <form id="update-ubicacion-form" action="{{ route('actualizar.dashboardUbicacion') }}" method="POST" style="display: none;">
-                    @csrf
-                    <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="">
-                </form>
             @endif
 
         </div>
@@ -136,14 +157,43 @@
                 Livewire.dispatch('actualizarAtributo', [$(this).val() ]);
             });
         });
-    });
-    function updateTipoDeActivo(id) {
-        document.getElementById('tipoDeActivo_id').value = id;
-        document.getElementById('update-tipoDeActivo-form').submit();
-    }
 
-    function updateUbicacion(id) {
-        document.getElementById('ubicacion_id').value = id;
-        document.getElementById('update-ubicacion-form').submit();
-    }
+        Livewire.on('actualizarDashboard', (data) => {
+            console.log('Actualizando navbar-custom con:', data);
+            let vista = data[0]['vista'];
+            let opcionesDashboard = data[0]['opcionesDashboard'];
+
+            // Actualizar el texto del navbar
+            let navbarText = document.getElementById('navbar-text');
+            if (navbarText) {
+                navbarText.textContent = vista === "UBICACION" ? "Cambiar Ubicación" : "Cambiar Tipo de Activo";
+            }
+
+            // Actualizar las opciones del dropdown
+            let dropdownMenu = document.getElementById('navbar-dropdown');
+            if (dropdownMenu) {
+                dropdownMenu.innerHTML = ''; // Vaciar contenido
+                dropdownMenu.className = "dropdown-menu dropdown-menu-lg dropdown-menu-right";
+
+                // Iterar sobre las claves y valores del objeto opcionesDashboard
+                Object.entries(opcionesDashboard).forEach(([opcion, nombre]) => {
+                    let item = document.createElement('a');
+                    item.className = "dropdown-item";
+                    item.textContent = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+                    item.onclick = function() { vista === "UBICACION" ? updateUbicacion(opcion) : updateTipoDeActivo(opcion) };
+                    item.style.cursor = "pointer";
+                    dropdownMenu.appendChild(item);
+                });
+
+                // Agregar opción de dashboard general
+                let generalItem = document.createElement('a');
+                generalItem.className = "dropdown-item dropdown-footer";
+                generalItem.textContent = "DASHBOARD GENERAL";
+                generalItem.onclick = updateGeneral;
+                item.style.cursor = "pointer";
+                dropdownMenu.appendChild(generalItem);
+            }
+        });
+    });
+
 </script>
