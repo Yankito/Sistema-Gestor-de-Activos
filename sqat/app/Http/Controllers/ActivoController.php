@@ -29,14 +29,16 @@ class ActivoController extends Controller
     }
 
     // Crear un nuevo activo
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
+            // Crear el activo
             $activo = new Activo();
             $activo->nro_serie = $request->nro_serie;
             $activo->marca = $request->marca;
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
-            $activo->estado = 1;
+            $activo->estado = 1; // Estado inicial (por ejemplo, "Adquirido")
             $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
@@ -44,14 +46,17 @@ class ActivoController extends Controller
             $activo->precio = $request->precio;
             if($request->responsable != NULL){
                 $activo->responsable_de_activo = $request->responsable;
-                $activo->estado = 4;
+                $activo->estado = 4; // Cambiar el estado a "Asignado"
                 $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
-                $registro = new Registro();
-                $registro->persona = $request->responsable;
-                $registro->activo = $activo->id;
-                $registro->tipo_cambio = 'ASIGNACION';
-                $registro->encargado_cambio = Auth::user()->id;
-                $registro->save();
+                $activo->update(); // Actualizar el activo con el responsable
+
+                // Crear el registro de asignación
+                $registroAsignacion = new Registro();
+                $registroAsignacion->persona = $request->responsable; // Asignar el ID de la persona
+                $registroAsignacion->activo = $activo->id; // Asignar el ID del activo recién creado
+                $registroAsignacion->tipo_cambio = 'ASIGNACION';
+                $registroAsignacion->encargado_cambio = Auth::user()->id; // ID del usuario que realizó el cambio
+                $registroAsignacion->save();
             }
             $activo->save();
 

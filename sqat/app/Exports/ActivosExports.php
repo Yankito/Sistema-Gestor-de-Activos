@@ -3,6 +3,11 @@
 namespace App\Exports;
 
 use App\Models\Activo;
+use App\Models\TipoActivo;
+use App\Models\Estado;
+use App\Models\Persona;
+use App\Models\Ubicacion;
+use App\Models\Asignacion; // Importar el modelo Asignacion
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -15,15 +20,22 @@ class ActivosExports
 {
     public function export($formato)
     {
+        // Obtener todos los activos
         $activos = Activo::all();
+
+        // Obtener los datos de las tablas relacionadas
+        $tiposActivo = TipoActivo::pluck('nombre', 'id')->all();
+        $estados = Estado::pluck('nombre_estado', 'id')->all();
+        $responsables = Persona::pluck('nombre_completo', 'id')->all();
+        $ubicaciones = Ubicacion::pluck('sitio', 'id')->all();
+        $personas = Persona::pluck('nombre_completo', 'id')->all(); // Para obtener nombres de usuarios
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Encabezados
         $headers = [
-            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 'Estado', 'Usuario de Activo', 'Responsable de Activo', 'Precio',  'Ubicación','Justificación Doble Activo',
-           
+            'Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo', 'Estado', 'Usuario de Activo', 'Responsable de Activo', 'Precio', 'Ubicación', 'Justificación Doble Activo',
         ];
 
         $column = 'A';
@@ -48,26 +60,44 @@ class ActivosExports
                     ],
                 ],
             ]);
-            $sheet -> getColumnDimension($column)->setAutoSize(true);
+            $sheet->getColumnDimension($column)->setAutoSize(true);
             $column++;
         }
 
         // Datos
         $row = 2;
         foreach ($activos as $activo) {
+            // Obtener los nombres correspondientes a los IDs
+            $tipoActivoNombre = $tiposActivo[$activo->tipo_de_activo] ?? 'Desconocido';
+            $estadoNombre = $estados[$activo->estado] ?? 'Desconocido';
+            $responsableNombre = $responsables[$activo->responsable_de_activo] ?? 'Desconocido';
+            $ubicacionNombre = $ubicaciones[$activo->ubicacion] ?? 'Desconocido';
+
+            // Obtener los usuarios asignados al activo actual
+            $usuariosAsignados = Asignacion::where('id_activo', $activo->id)
+                ->join('personas', 'asignaciones.id_persona', '=', 'personas.id')
+                ->pluck('personas.nombre_completo')
+                ->toArray();
+
+            // Formatear los nombres de los usuarios
+            $usuariosFormateados = implode("\n• ", $usuariosAsignados);
+            if (!empty($usuariosFormateados)) {
+                $usuariosFormateados = "• " . $usuariosFormateados;
+            }
+
             $sheet->setCellValue('A' . $row, $activo->nro_serie)
                   ->setCellValue('B' . $row, $activo->marca)
                   ->setCellValue('C' . $row, $activo->modelo)
-                  ->setCellValue('D' . $row, $activo->tipo_de_activo)
-                  ->setCellValue('E' . $row, $activo->estado)
-                  ->setCellValue('F' . $row, $activo->usuario_de_activo)
-                  ->setCellValue('G' . $row, $activo->responsable_de_activo)
+                  ->setCellValue('D' . $row, $tipoActivoNombre) // Tipo de Activo (nombre)
+                  ->setCellValue('E' . $row, $estadoNombre) // Estado (nombre)
+                  ->setCellValue('F' . $row, $usuariosFormateados) // Usuarios de Activo (formateados)
+                  ->setCellValue('G' . $row, $responsableNombre) // Responsable de Activo (nombre)
                   ->setCellValue('H' . $row, $activo->precio)
-                  ->setCellValue('I' . $row, $activo->ubicacion)
+                  ->setCellValue('I' . $row, $ubicacionNombre) // Ubicación (nombre)
                   ->setCellValue('J' . $row, $activo->justificacion_doble_activo);
 
             // Aplicar bordes a las celdas de datos
-            $sheet->getStyle('A' . $row . ':K' . $row)->applyFromArray([
+            $sheet->getStyle('A' . $row . ':J' . $row)->applyFromArray([
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
@@ -76,11 +106,16 @@ class ActivosExports
                 ],
             ]);
 
+            // Ajustar el alto de la fila si hay múltiples usuarios
+            if (count($usuariosAsignados) > 1) {
+                $sheet->getRowDimension($row)->setRowHeight(15 * count($usuariosAsignados));
+            }
+
             $row++;
         }
 
         // Estilo de formato de número para columnas con precios
-        $sheet->getStyle('I2:I' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        $sheet->getStyle('H2:H' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
         // Crear el archivo
         $filePath = tempnam(sys_get_temp_dir(), 'activos');

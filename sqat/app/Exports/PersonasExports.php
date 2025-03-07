@@ -2,6 +2,7 @@
 namespace App\Exports;
 
 use App\Models\Persona;
+use App\Models\Ubicacion;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -17,6 +18,7 @@ class PersonasExports
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+        $ubicaciones = Ubicacion::pluck('sitio', 'id')->all();
 
         // Encabezados
         $headers = [
@@ -54,15 +56,17 @@ class PersonasExports
         // Datos
         $row = 2;
         foreach ($personas as $persona) {
+            $ubicacionNombre = $ubicaciones[$persona->ubicacion] ?? 'Desconocido';
+
             $sheet->setCellValue('A' . $row, $persona->user)
                   ->setCellValue('B' . $row, $persona->rut)
                   ->setCellValue('C' . $row, $persona->nombre_completo)
                   ->setCellValue('D' . $row, $persona->nombre_empresa)
-                  ->setCellValue('E' . $row, $persona->estado_empleado)
+                  ->setCellValue('E' . $row, $persona->estado_empleado == 1 ? 'Activo' : 'Inactivo')
                   ->setCellValue('F' . $row, $persona->fecha_ing)
                   ->setCellValue('G' . $row, $persona->fecha_ter)
                   ->setCellValue('H' . $row, $persona->cargo)
-                  ->setCellValue('I' . $row, $persona->ubicacion)
+                  ->setCellValue('I' . $row, $ubicacionNombre)
                   ->setCellValue('J' . $row, $persona->correo);
             // Aplicar bordes a las celdas de datos
             $sheet->getStyle('A' . $row . ':M' . $row)->applyFromArray([

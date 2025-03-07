@@ -25,14 +25,13 @@ class ExportarController extends Controller
             case 'personas':
                 $export = new PersonasExports();
                 break;
-            case 'activos_personas':
-                $export = new ActivosPersonasExports();
-                break;
             default:
                 abort(404);
         }
 
         $file = $export->export($formato);
-        return response()->download($file)->deleteFileAfterSend(true);
+        $nombreArchivo = 'Iansa_' . $tabla . '_' . date('Y-m-d') . '.xlsx';
+        return response()->download($file, $nombreArchivo)->deleteFileAfterSend(true);
+
     }
 }

@@ -12,27 +12,27 @@ class Registro extends Model
     protected $fillable = [
         'persona',
         'activo',
-        'tipoCambio',
-        'encargadoCambio',
+        'tipo_cambio',
+        'encargado_cambio',
     ];
 
     // Si no utilizas timestamps (created_at y updated_at), puedes desactivarlos
     public $timestamps = true;
 
     // Relación con la tabla Persona
-    public function persona()
+    public function personaRelation()
     {
         return $this->belongsTo(Persona::class, 'persona', 'id');
     }
 
-    public function activo()
+    public function activoRelation()
     {
         return $this->belongsTo(Activo::class, 'activo', 'id');
     }
 
-    public function ubicacion()
+    public function encargadoCambio()
     {
-        return $this->belongsTo(Usuario::class, 'encargadoCambio', 'id');
+        return $this->belongsTo(Usuario::class, 'encargado_cambio', 'id');
     }
 
 }

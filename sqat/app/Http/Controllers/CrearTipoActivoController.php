@@ -45,4 +45,25 @@ class CrearTipoActivoController extends Controller
         return redirect()->route('tipos-activo.index')->with('success', 'Tipo de activo registrado correctamente.');
     }
 
+    public function destroy($id)
+    {
+    
+        // Buscar el tipo de activo por ID
+        $tipoActivo = TipoActivo::findOrFail($id);
+
+        // Verificar si hay activos asociados a este tipo
+        $activosAsociados = Activo::where('tipo_de_activo', $id)->exists();
+
+        if ($activosAsociados) {
+            // Si hay activos asociados, no se puede eliminar
+            return redirect()->route('tipos-activo.index')->with('error', 'No se puede eliminar el tipo de activo porque hay activos asociados.');
+        }
+
+        // Si no hay activos asociados, proceder a eliminar
+        $tipoActivo->delete();
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('tipos-activo.index')->with('success', 'Tipo de activo eliminado correctamente.');
+    }
+
 }

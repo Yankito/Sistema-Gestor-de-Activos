@@ -9,16 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('registros', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('persona')->nullable();
             $table->unsignedBigInteger('activo')->nullable();
-            $table->enum('tipo_cambio', ['ASIGNACION', 'DESVINCULACION','CREADO','MODIFICADO']);
+            $table->enum('tipo_cambio', [
+                'ASIGNACION', 'DESVINCULACION',
+                'ADQUIRIDO', 'PREPARACION', 
+                'DISPONIBLE', 'ASIGNADO',
+                'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO'
+            ]);
             $table->unsignedBigInteger('encargado_cambio');
             $table->timestamps();
-
+    
             $table->foreign('persona')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('activo')->references('id')->on('activos')->onDelete('set null');
             $table->foreign('encargado_cambio')->references('id')->on('usuarios')->onDelete('cascade');

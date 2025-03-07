@@ -55,7 +55,7 @@
                                 <div class="col-md-6">
                                     <div class="form-outline mb-2">
                                         <label class="form-label" for="contrasena">Contraseña:</label>
-                                        <input type="password" name="contrasena" id="contrasena" required class="form-control">
+                                        <input type="password" name="contrasena" id="contrasena" required minlength="6" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

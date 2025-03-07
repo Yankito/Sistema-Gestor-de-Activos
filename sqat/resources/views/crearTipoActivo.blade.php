@@ -11,6 +11,17 @@
                                 <img src="{{ asset('pictures/Logo Empresas Iansa.png') }}" style="width: 300px;" alt="logo">
                             </div>
                             <h2>Registrar Tipo de Activo</h2>
+                            @if(session('success'))
+                                <div id="success-message" style="background: #00b000; color: white; padding: 10px; margin-bottom: 10px;">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if(session('error'))
+                                <div id="error-message" style="background: #ffaa00; color: white; padding: 10px; margin-bottom: 10px;">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <form action="/tipos-activo" method="POST">
                                 @csrf
                                 <div class="row">
@@ -27,9 +38,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary btn-block mb-3" type="submit">Registrar Tipo</button>
+                                <button class="btn btn-primary btn-block mb-3" type="submit" style="background: #005856;">Registrar Tipo</button>
                             </form>
-                            <a href="/dashboard" class="btn btn-outline-danger">Volver atrás</a>
 
                             <!-- Buscador -->
                             <div class="row d-flex justify-content-center mt-5">
@@ -47,6 +57,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tipoActivoTable">
@@ -62,6 +73,11 @@
                                                                     data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}"
                                                                     >
                                                                 </i>
+                                                                <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este tipo de activo?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                                                </form>
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -87,6 +103,22 @@
                                         row.style.display = text.includes(filter) ? "" : "none";
                                     });
                                 });
+
+                                // Ocultar el mensaje de éxito después de 3 segundos
+                                const successMessage = document.getElementById('success-message');
+                                if (successMessage) {
+                                    setTimeout(() => {
+                                        successMessage.style.display = 'none';
+                                    }, 3000); // 3000 milisegundos = 3 segundos
+                                }
+
+                                // Ocultar el mensaje de error después de 3 segundos
+                                const errorMessage = document.getElementById('error-message');
+                                if (errorMessage) {
+                                    setTimeout(() => {
+                                        errorMessage.style.display = 'none';
+                                    }, 3000); // 3000 milisegundos = 3 segundos
+                                }
                             </script>
 
                         </div>

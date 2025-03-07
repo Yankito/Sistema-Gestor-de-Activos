@@ -175,5 +175,16 @@
                 $(this).next('.custom-file-label').html(fileName);
             });
         });
+
+        $(document).ready(function() {
+            $('#importForm').submit(function() {
+                // Deshabilita el botón de importar y cambia el texto
+                let button = $(this).find('button[type="submit"]');
+                button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Importando...');
+
+                // Permite que el formulario continúe con el envío
+                return true;
+            });
+        });
     </script>
 @endsection

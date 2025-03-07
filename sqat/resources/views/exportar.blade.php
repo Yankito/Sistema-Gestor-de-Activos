@@ -27,10 +27,6 @@
                                 data-toggle="tooltip" data-placement="bottom" title="Reporte de personas con sus respectivos datos personales.">
                             </i>
                         </div>
-                        <div class="option" data-value="activos_personas">
-                            <i class="fas fa-users fa-2x"></i>
-                            <div>Activos Asignados</div>
-                        </div>
                     </div>
 
                     <div class="mt-4 text-center">
