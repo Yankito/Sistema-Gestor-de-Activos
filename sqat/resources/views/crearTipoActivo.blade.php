@@ -145,6 +145,26 @@
                 $(".select2-dropdown").css("display", "none");
             });
         });
+        $(document).ready(function() {
+            $('#caracteristicasAdicionalesModal').select2({
+                tags: true,  // Permite agregar texto libre como etiquetas
+                tokenSeparators: [','], // Separar etiquetas por comas
+                placeholder: "Añadir características",
+                width: '100%', // Ajusta el ancho
+                minimumResultsForSearch: Infinity, // Desactiva el buscador
+                createTag: function(params) {
+                    // Asegura que no se muestren las etiquetas en el dropdown
+                    return { id: params.term, text: params.term, newTag: true };
+                },
+                allowClear: true,  // Permite limpiar la selección
+                dropdownCssClass: "select2-no-results" // Oculta la sección de resultados
+            });
+
+            // Establecer el display del dropdown a 'none' para ocultarlo por completo
+            $('#caracteristicasAdicionalesModal').on('select2:open', function (e) {
+                $(".select2-dropdown").css("display", "none");
+            });
+        });
         $(document).ready(function () {
             $('.toggle-edit').click(function () {
                 console.log('Clicked on pencil icon');  // Verifica si se dispara el evento
