@@ -123,7 +123,6 @@ $(document).ready(function () {
             $(this).prop('checked', isChecked);
         });
 
-        console.log("Valores únicos en columna", index, [...uniqueValues]);
     });
 
     // Función para actualizar el estado del checkbox "Seleccionar todo"
@@ -135,8 +134,6 @@ $(document).ready(function () {
         let totalCheckboxes = uniqueCheckboxes.size;
 
         let checkedCheckboxes = $(`.filter-checkbox[data-index="${index}"]:checked`).length;
-        console.log("Total de checkboxes en columna", index, totalCheckboxes);
-        console.log("Total de checkboxes seleccionados en columna", index, checkedCheckboxes);
 
         let selectAll = $(`.select-all[data-index="${index}"]`);
         selectAll.prop('checked', totalCheckboxes === checkedCheckboxes);
@@ -169,18 +166,13 @@ $(document).ready(function () {
     // Evento para actualizar filtro cuando cambian los checkboxes individuales
     $(document).on('change', '.filter-checkbox', function () {
         let index = $(this).data('index');
-        console.log("Checkbox cambiado en columna", index);
-        console.log("Checkbox seleccionado:", $(this
-        ).val());
+
         updateSelectAllCheckbox(index);
 
         let checkedValues = [];
         $(`.filter-checkbox[data-index="${index}"]:checked`).each(function () {
             checkedValues.push($(this).val());
-            console.log("Checkbox seleccionado:", $(this).val());
         });
-
-        console.log("Checkboxes activos en columna", index, "Valores seleccionados:", checkedValues);
 
         applyFilter(index, checkedValues);
     });

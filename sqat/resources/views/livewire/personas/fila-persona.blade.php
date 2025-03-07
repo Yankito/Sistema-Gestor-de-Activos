@@ -1,4 +1,9 @@
 <tr>
+    <style>
+        td {
+            font-size: 12px;
+        }
+    </style>
     <td class="action-btns">
         <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
             <i class="fas fa-edit"></i>
