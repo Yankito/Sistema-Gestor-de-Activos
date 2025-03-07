@@ -1,6 +1,6 @@
 <tr>
     <td class="action-btns">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
+        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
             <i class="fas fa-edit"></i>
         </button>
     </td>

@@ -15,6 +15,10 @@
     background-color: #0aa40d !important;
 }
 
+.small-box.bg-info{
+    background-color: #00b5c4 !important;
+}
+
 .btn-info{
     background-color: #00b5c4 !important;
     border-color: #00b5c4 !important;

@@ -28,7 +28,7 @@
         <div class="col-lg-5 connectedSortable ui-sortable">
             <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
                 <!-- small box -->
-                <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
+                <div class="small-box bg-info">
                     <div class="inner text-center">
                         <p>Activos En Servicio</p>
                         <h3>{{$activosEnServicio}}</h3>
@@ -41,7 +41,7 @@
             </div>
             <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
                 <!-- small box -->
-                <div class="small-box bg-info" style="background-color: #50ACB8 !important;">
+                <div class="small-box bg-info">
                     <div class="inner text-center">
                         <p>Activos Fuera de Servicio</p>
                         <h3>{{$activosFueraDeServicio}}</h3>
@@ -55,22 +55,17 @@
         </div>
 
         <div class="col-lg-7 connectedSortable ui-sortable" >
-            <div class="card bg-gradient-info" >
-                <div class="card-header border-0" style="background-color: #50ACB8 !important;">
-                    <h3 class="card-title">
+            <div class="card bg-gradient-info" style="border: #00b5c4 !important;" >
+                <div class="card-header border-0" style="background-color: #00b5c4 !important;">
+                    <h3 class="card-title" style="color: #ffffff !important;">
                         <i class="fas fa-th mr-1"></i>
                         Cantidad de activos por estado
                     </h3>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- /.card-body -->
-                <div class="card-footer bg-transparent" style="background-color: #50ACB8 !important;">
+                <div class="card-footer bg-transparent" style="background-color: #00b5c4 !important">
                     <div class="row">
                         @foreach($cantidadPorEstados as $nombre => $estado)
                             <div class="col-md-6">

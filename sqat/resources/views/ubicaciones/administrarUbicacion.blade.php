@@ -19,8 +19,6 @@
                     <th>ID</th>
                     <th>Nombre Sitio</th>
                     <th>Soporte TI</th>
-                    <th>Dirección</th>
-                    <th>Ciudad</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -30,8 +28,6 @@
                         <td>{{ $ubicacion->id }}</td>
                         <td>{{ $ubicacion->sitio }}</td>
                         <td>{{ $ubicacion->soporte_ti }}</td>
-                        <td>{{ $ubicacion->direccion }}</td>
-                        <td>{{ $ubicacion->ciudad }}</td>
                         <td>
 
                             <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
