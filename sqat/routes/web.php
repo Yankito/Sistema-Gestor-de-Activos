@@ -9,7 +9,6 @@ use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\TablaPersonasController;
 use App\Http\Controllers\TablaActivosController;
 use App\Http\Controllers\ImportarController;
-use App\Http\Controllers\TablaDatosController;
 use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
@@ -117,9 +116,6 @@ Route::get('/descargarPersonasExcel', function () {
 Route::post('/importar', [ImportarController::class, 'importExcel'])->name('importar.excel');
 Route::post('/importarActivos', [ImportarActivosController::class, 'importExcel'])->name('importar.excel.activos');
 Route::post('/importarPersonas', [ImportarPersonasController::class, 'importExcel'])->name('importar.excel.personas');
-
-// Rutas para la tabla de datos
-Route::get('/tablaDatos', [TablaDatosController::class, 'index']);
 
 // Ruta para confirmar importación
 Route::get('/confirmarImportacion', [ImportarController::class, 'confirmarImportacion'])->name('confirmar.importacion');
