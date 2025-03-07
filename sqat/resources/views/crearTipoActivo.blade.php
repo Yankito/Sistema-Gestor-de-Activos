@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary btn-block mb-3" type="submit" style="background: #005856;">Registrar Tipo</button>
+                                <button class="btn btn-primary btn-block mb-3" type="submit" style="background: #005856; border: #005856;">Registrar Tipo</button>
                             </form>
 
                             <!-- Buscador -->
@@ -63,7 +63,7 @@
                                                             <td>
                                                                 <div class="d-flex">
                                                                     <form  class="mr-2">
-                                                                        <button type="button" class="btn btn-primary">
+                                                                        <button type="button" class="btn btn-info">
                                                                             <i class="fas fa-pencil-alt toggle-edit"
                                                                                 style="cursor: pointer;"
                                                                                 data-toggle="modal"
@@ -74,10 +74,10 @@
                                                                             </i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este tipo de activo?');">
+                                                                    <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" id="delete-form-{{ $tipo->id }}">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="submit" class="btn btn-danger">
+                                                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ $tipo->id }}')">
                                                                             <i class="fas fa-trash"></i>
                                                                         </button>
                                                                     </form>
@@ -172,6 +172,49 @@
 
 
     <script>
+        function confirmDelete(tipoId) {
+            Swal.fire({
+                title: '¿Estás seguro de que deseas eliminar este tipo de activo?',
+                text: "No podrás revertir esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'btn-confirm',
+                    cancelButton: 'btn-cancel'
+                },
+                buttonsStyling: false, // Desactiva los estilos predeterminados
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, enviamos el formulario
+                    document.getElementById('delete-form-' + tipoId).submit();
+                }
+            });
+        }
+
+        function confirmDeleteCarac(tipoId) {
+            Swal.fire({
+                title: '¿Estás seguro de que deseas eliminar esta característica adicional?',
+                text: "No podrás revertir esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'btn-confirm',
+                    cancelButton: 'btn-cancel'
+                },
+                buttonsStyling: false, // Desactiva los estilos predeterminados
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, enviamos el formulario
+                    document.getElementById('deleteCarac-form-' + tipoId).submit();
+                }
+            });
+        }
+
+
         $(document).ready(function() {
             $('#caracteristicasAdicionales').select2({
                 tags: true,  // Permite agregar texto libre como etiquetas
@@ -231,10 +274,10 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between">
                                 ${caracteristica.nombre_caracteristica}
-                                <form action="/caracteristicaAdicional/${caracteristica.id}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta característica adicional?');">
+                                <form action="/caracteristicaAdicional/${caracteristica.id}" method="POST" id="deleteCarac-form-${caracteristica.id}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteCarac('${caracteristica.id}')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -265,6 +308,20 @@
 
         .select2-selection__choice__remove{
             color: white !important;  /* Color de texto de la 'x' de la etiqueta */
+        }
+
+        /* Estilo para el botón de confirmación de SweetAlert */
+        .btn-confirm {
+            background-color: #005856 !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        /* Estilo para el botón de cancelar (si deseas personalizarlo) */
+        .btn-cancel {
+            background-color: #ccc !important;
+            color: white !important;
+            border: none !important;
         }
     </style>
 
