@@ -30,8 +30,13 @@ class CrearTipoActivoController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:tipo_activo,nombre',
+            'nombre' => 'required|string|max:255',
         ]);
+
+        // Verificar si el nombre ya existe
+        if (TipoActivo::where('nombre', strtoupper($request->nombre))->exists()) {
+            return redirect()->route('tipos-activo.index')->with('error', 'Tipo de activo ya se encuentra registrado.');
+        }
 
         // Crear un nuevo tipo de activo
         $tipoActivo = TipoActivo::create([
@@ -92,13 +97,21 @@ class CrearTipoActivoController extends Controller
     public function nuevasCaracteristicas(Request $request)
     {
         $caracteristicasAdicionales = $request->caracteristicasAdicionales;
+
+        //comprobar que no se agregue caracteristica repetida para el mismo tipo de activo
+        foreach ($caracteristicasAdicionales as $caracteristica) {
+            if (CaracteristicaAdicional::where('tipo_activo_id', $request->tipoActivoId)->where('nombre_caracteristica', strtoupper($caracteristica))->exists()) {
+                return redirect()->route('tipos-activo.index')->with('error', 'Característica adicional ya se encuentra registrada.');
+            }
+        }
+
         if($caracteristicasAdicionales == null){
-            return redirect()->route('tipos-activo.index')->with('success', 'Características agregadas correctamente.');
+            return redirect()->route('tipos-activo.index');
         }
 
         //Agregar las caracteristicas adicionales
         foreach ($caracteristicasAdicionales as $caracteristica) {
-            CaracteristicaAdicional::create([
+            CaracteristicaAdicional::create(attributes: [
                 'tipo_activo_id' => $request->tipoActivoId,
                 'nombre_caracteristica' => strtoupper($caracteristica),
             ]);

@@ -31,6 +31,11 @@ class UbicacionController extends Controller
             'longitud' => 'required|numeric',
         ]);
 
+        //comprobar que no se repita el nombre de la ubicación
+        if (Ubicacion::where('sitio', strtoupper($request->sitio))->exists()) {
+            return redirect()->route('ubicaciones')->with('error', 'Ubicación ya se encuentra registrada.');
+        }
+
         $request->merge([
             'sitio' => strtoupper($request->sitio),
             'soporte_ti' => strtoupper($request->soporte_ti),

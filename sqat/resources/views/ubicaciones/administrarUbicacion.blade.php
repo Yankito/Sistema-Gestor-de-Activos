@@ -49,14 +49,18 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if(session('success'))
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: "{{session('title')}}",
-                text: "{{ session('success') }}",
-                confirmButtonText: 'Aceptar'
+            $(document).ready(function () {
+                    toastr.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            $(document).ready(function () {
+                toastr.error("{{ session('error') }}");
             });
         </script>
     @endif
