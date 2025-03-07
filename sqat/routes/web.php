@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tipos-activo', [CrearTipoActivoController::class, 'index'])->name('tipos-activo.index');
     Route::post('/tipos-activo', [CrearTipoActivoController::class, 'store'])->name('tipos-activo.store');
     Route::delete('/tipos-activo/{id}', [CrearTipoActivoController::class, 'destroy'])->name('tipos-activo.destroy');
+    Route::post('/agregarCaracteristicas', [CrearTipoActivoController::class, 'nuevasCaracteristicas']);
+    Route::delete('/caracteristicaAdicional/{id}', [CrearTipoActivoController::class, 'destroyCaracteristicaAdicional'])->name('caracteristicaAdicional.destroy');
 });
 
 

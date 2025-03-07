@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CaracteristicaAdicional extends Model
 {
@@ -26,5 +26,10 @@ class CaracteristicaAdicional extends Model
     public function tipoActivo()
     {
         return $this->belongsTo(TipoActivo::class, 'tipo_activo_id', 'id');
+    }
+
+    public function valoresAdicionales(): HasMany
+    {
+        return $this->hasMany(ValorAdicional::class, 'id_caracteristica');
     }
 }

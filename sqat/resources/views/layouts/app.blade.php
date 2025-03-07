@@ -272,7 +272,7 @@
                     </p>
                     </a>
                 </li>
-                
+
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
@@ -329,11 +329,10 @@
     <!-- Select2 -->
     <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
-    @yield('scripts')
-
     <!-- Toastr -->
     <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(function() {
             var Toast = Swal.mixin({
@@ -350,6 +349,9 @@
             })
         })
     </script>
+
+    @yield('scripts')
+
 
     <style>
         .required-asterisk {

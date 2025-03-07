@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TipoActivo; // Asegúrate de importar el modelo
+use App\Models\TipoActivo;
+use App\Models\Activo;
 use App\Models\CaracteristicaAdicional;
 
 
@@ -34,6 +35,10 @@ class CrearTipoActivoController extends Controller
 
         $caracteristicasAdicionales = $request->caracteristicasAdicionales;
 
+        if($caracteristicasAdicionales == null){
+            return redirect()->route('tipos-activo.index')->with('success', 'Tipo de activo registrado correctamente.');
+        }
+
         //Agregar las caracteristicas adicionales
         foreach ($caracteristicasAdicionales as $caracteristica) {
             CaracteristicaAdicional::create([
@@ -47,7 +52,6 @@ class CrearTipoActivoController extends Controller
 
     public function destroy($id)
     {
-    
         // Buscar el tipo de activo por ID
         $tipoActivo = TipoActivo::findOrFail($id);
 
@@ -62,8 +66,52 @@ class CrearTipoActivoController extends Controller
         // Si no hay activos asociados, proceder a eliminar
         $tipoActivo->delete();
 
+        // Eliminar las caracteristicas adicionales asociadas
+        $tipoActivo->caracteristicasAdicionales()->delete();
+
         // Redirigir con un mensaje de éxito
         return redirect()->route('tipos-activo.index')->with('success', 'Tipo de activo eliminado correctamente.');
     }
+
+
+
+    public function nuevasCaracteristicas(Request $request)
+    {
+        $caracteristicasAdicionales = $request->caracteristicasAdicionales;
+        if($caracteristicasAdicionales == null){
+            return redirect()->route('tipos-activo.index')->with('success', 'Características agregadas correctamente.');
+        }
+
+        //Agregar las caracteristicas adicionales
+        foreach ($caracteristicasAdicionales as $caracteristica) {
+            CaracteristicaAdicional::create([
+                'tipo_activo_id' => $request->tipoActivoId,
+                'nombre_caracteristica' => strtoupper($caracteristica),
+            ]);
+        }
+        return redirect()->route('tipos-activo.index')->with('success', value: 'Características agregadas correctamente.');
+
+    }
+
+    public function destroyCaracteristicaAdicional($id)
+    {
+        // Buscar la caracteristica adicional
+        $caracteristicaAdicional = CaracteristicaAdicional::findOrFail($id);
+
+        // Verificar si hay valores adicionales asociados
+        $valoresAdicionales = $caracteristicaAdicional->valoresAdicionales()->count();
+
+        if ($valoresAdicionales > 0) {
+            // Redirigir con un mensaje de error
+            return redirect()->route('tipos-activo.index')->with('error', 'No se puede eliminar la característica adicional porque tiene valores asociados.');
+        }
+
+        // Si no hay valores adicionales, eliminar la caracteristica adicional
+        $caracteristicaAdicional->delete();
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('tipos-activo.index')->with('success', 'Característica adicional eliminada correctamente.');
+    }
+
 
 }

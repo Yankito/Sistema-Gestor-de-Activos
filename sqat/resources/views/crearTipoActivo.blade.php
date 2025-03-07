@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+<head>
+      <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
+</head>
 @section('content')
     <section class="h-100 gradient-form" style="background-color: #eee;">
         <div class="container py-5 h-100">
@@ -11,17 +17,7 @@
                                 <img src="{{ asset('pictures/Logo Empresas Iansa.png') }}" style="width: 300px;" alt="logo">
                             </div>
                             <h2>Registrar Tipo de Activo</h2>
-                            @if(session('success'))
-                                <div id="success-message" style="background: #00b000; color: white; padding: 10px; margin-bottom: 10px;">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
 
-                            @if(session('error'))
-                                <div id="error-message" style="background: #ffaa00; color: white; padding: 10px; margin-bottom: 10px;">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
                             <form action="/tipos-activo" method="POST">
                                 @csrf
                                 <div class="row">
@@ -65,19 +61,28 @@
                                                         <tr>
                                                             <td>{{ $tipo->nombre }}</td>
                                                             <td>
-                                                                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit"
-                                                                    style="cursor: pointer;"
-                                                                    data-toggle="modal"
-                                                                    data-target="#modalEditarTipoActivo"
-                                                                    data-id="{{ $tipo->id }}"
-                                                                    data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}"
-                                                                    >
-                                                                </i>
-                                                                <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este tipo de activo?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                                                </form>
+                                                                <div class="d-flex">
+                                                                    <form  class="mr-2">
+                                                                        <button type="button" class="btn btn-primary">
+                                                                            <i class="fas fa-pencil-alt toggle-edit"
+                                                                                style="cursor: pointer;"
+                                                                                data-toggle="modal"
+                                                                                data-target="#modalEditarTipoActivo"
+                                                                                data-id="{{ $tipo->id }}"
+                                                                                data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}"
+                                                                                >
+                                                                            </i>
+                                                                        </button>
+                                                                    </form>
+                                                                    <form action="{{ route('tipos-activo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este tipo de activo?');">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -104,21 +109,6 @@
                                     });
                                 });
 
-                                // Ocultar el mensaje de éxito después de 3 segundos
-                                const successMessage = document.getElementById('success-message');
-                                if (successMessage) {
-                                    setTimeout(() => {
-                                        successMessage.style.display = 'none';
-                                    }, 3000); // 3000 milisegundos = 3 segundos
-                                }
-
-                                // Ocultar el mensaje de error después de 3 segundos
-                                const errorMessage = document.getElementById('error-message');
-                                if (errorMessage) {
-                                    setTimeout(() => {
-                                        errorMessage.style.display = 'none';
-                                    }, 3000); // 3000 milisegundos = 3 segundos
-                                }
                             </script>
 
                         </div>
@@ -135,19 +125,26 @@
                         <h5 class="modal-title" id="modalEditarTipoActivoLabel">Características del Tipo de Activo</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <ul id="listaCaracteristicas" class="list-group">
-                            <!-- Aquí se agregarán dinámicamente las características -->
-                        </ul>
-                         <!-- Agregar el select de tags -->
-                        <div class="form-group mt-3">
-                            <label for="caracteristicasAdicionalesModal">Añadir Características Adicionales</label>
-                            <select name="caracteristicasAdicionales[]" id="caracteristicasAdicionalesModal" class="form-control" multiple="multiple"></select>
+                    <form action="/agregarCaracteristicas" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <ul id="listaCaracteristicas" class="list-group">
+                                <!-- Aquí se agregarán dinámicamente las características -->
+                            </ul>
+                            <!-- Agregar el select de tags -->
+                            <div class="form-group mt-3">
+                                <label for="caracteristicasAdicionalesModal">Añadir Características Adicionales</label>
+                                <select name="caracteristicasAdicionales[]" id="caracteristicasAdicionalesModal" class="form-control" multiple="multiple"></select>
+                            </div>
+
+                            <input type="hidden" name="tipoActivoId" id="tipoActivoId">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -156,6 +153,24 @@
 @endsection
 
 @section('scripts')
+
+    @if(session('success'))
+        <script>
+            $(document).ready(function () {
+                    toastr.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            $(document).ready(function () {
+                toastr.error("{{ session('error') }}");
+            });
+        </script>
+    @endif
+
+
+
     <script>
         $(document).ready(function() {
             $('#caracteristicasAdicionales').select2({
@@ -200,21 +215,42 @@
         $(document).ready(function () {
             $('.toggle-edit').click(function () {
                 console.log('Clicked on pencil icon');  // Verifica si se dispara el evento
+
+                let id = $(this).data('id');  // Obtener el ID del activo
                 let caracteristicas = $(this).data('caracteristicas');
+
+                // Asignar el ID al campo oculto en el formulario del modal
+                $('#tipoActivoId').val(id);
+
                 $('#listaCaracteristicas').empty();  // Limpiar las características previas
+
 
                 if (caracteristicas.length > 0) {
                     caracteristicas.forEach(caracteristica => {
-                        $('#listaCaracteristicas').append(`<li class="list-group-item">${caracteristica.nombre_caracteristica}</li>`);
+                        $('#listaCaracteristicas').append(`
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                ${caracteristica.nombre_caracteristica}
+                                <form action="/caracteristicaAdicional/${caracteristica.id}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta característica adicional?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                </div>
+                        </li>
+                        `);
                     });
                 } else {
                     $('#listaCaracteristicas').append(`<li class="list-group-item text-muted">No hay características adicionales.</li>`);
                 }
 
-                // Usar AdminLTE para abrir el modal
+                // Abrir el modal
                 $('#modalEditarTipoActivo').modal('show');
             });
         });
+
 
 
 
