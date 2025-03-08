@@ -1,5 +1,5 @@
 <div style="overflow-x:auto;">
-    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline"  data-user-is-admin="{{ $user->es_administrador }}">
+    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline"  data-user-is-admin="{{ $user->es_administrador }}" data-tipo-tabla="Activos">
         <thead>
             <tr>
                 <th>Acciones</th>

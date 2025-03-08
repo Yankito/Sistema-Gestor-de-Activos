@@ -2,6 +2,7 @@ $(document).ready(function () {
     // Declare table variable in the global scope
     let table;
     let userIsAdmin = $('#tabla').data('user-is-admin');
+    let tipoTabla = $('#tabla').data('tipo-tabla');
 
     // Initialize DataTable
     if (!$.fn.DataTable.isDataTable('#tabla')) {
@@ -25,10 +26,70 @@ $(document).ready(function () {
                 }
             ],
             buttons: [
-                { extend: "copy", title: "Iansa - Tabla de activos", text: "Copiar" },
-                { extend: "csv", title: "Iansa - Tabla de activos", text: "CSV" },
-                { extend: "excel", title: "Iansa - Tabla de activos", text: "Excel" },
-                { extend: "print", title: "Iansa - Tabla de activos", text: "Imprimir" },
+                {
+                    extend: "copy",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Copiar",
+                    exportOptions: {
+                        columns: ':not(:first)',
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: "csv",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "CSV",
+                    exportOptions: {
+                        columns: ':not(:first)',
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: "excel",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Excel",
+                    exportOptions: {
+                        columns: ":not(:first)",
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            },
+                        }
+                    }
+                },
+                {
+                    extend: "print",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Imprimir",
+                    exportOptions: {
+                        columns: ":not(:first)",
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
                 { extend: "colvis", text: "Visibilidad de columnas" }
             ]
         });

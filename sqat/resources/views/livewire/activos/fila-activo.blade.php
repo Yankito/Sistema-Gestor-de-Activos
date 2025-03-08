@@ -68,18 +68,18 @@
 
         @if ($totalUsuarios > 0)
             @foreach ($usuarios->take(3) as $usuario)
-            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+                <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
             @endforeach
 
             @if ($totalUsuarios > 3)
-            <div id="usuarios-{{ $activo->id }}" class="collapse">
-            @foreach ($usuarios->skip(3) as $usuario)
-            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
-            @endforeach
-            </div>
-            <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
-            Ver más
-            </button>
+                <div id="usuarios-{{ $activo->id }}" class="collapse">
+                    @foreach ($usuarios->skip(3) as $usuario)
+                        <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+                    @endforeach
+                </div>
+                <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
+                    Ver más
+                </button>
             @endif
         @else
             <span style="font-size: 12px;">Sin usuarios</span>
@@ -93,8 +93,21 @@
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>
     <td>
-        @foreach ($activo->valoresAdicionales as $valor)
-        <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
+        @php
+            $totalValores = $activo->valoresAdicionales->count();
+        @endphp
+        @foreach ($activo->valoresAdicionales->take(3) as $valor)
+            <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
         @endforeach
+        @if ($totalValores > 3)
+            <div id="valores-{{ $activo->id }}" class="collapse">
+                @foreach ($activo->valoresAdicionales->skip(3) as $valor)
+                    <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
+                @endforeach
+            </div>
+            <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#valores-{{ $activo->id }}">
+                    Ver más
+            </button>
+        @endif
     </td>
 </tr>

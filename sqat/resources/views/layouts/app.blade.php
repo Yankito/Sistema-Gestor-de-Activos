@@ -149,7 +149,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="/tablaActivos" class="nav-link">
-                            <p>Lista de Activos</p>
+                            <p>Listado de Activos</p>
                             </a>
                         </li>
                         @if($user->es_administrador)
@@ -183,7 +183,7 @@
                     <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="/tablaPersonas" class="nav-link">
-                        <p>Lista de Personas</p>
+                        <p>Listado de Personas</p>
                         </a>
                     </li>
                     @if($user->es_administrador)
