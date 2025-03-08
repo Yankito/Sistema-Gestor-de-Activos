@@ -98,6 +98,10 @@ class CrearTipoActivoController extends Controller
     {
         $caracteristicasAdicionales = $request->caracteristicasAdicionales;
 
+        if($caracteristicasAdicionales == null){
+            return redirect()->route('tipos-activo.index')->with('error', 'No se han ingresado características adicionales.');
+        }
+
         //comprobar que no se agregue caracteristica repetida para el mismo tipo de activo
         foreach ($caracteristicasAdicionales as $caracteristica) {
             if (CaracteristicaAdicional::where('tipo_activo_id', $request->tipoActivoId)->where('nombre_caracteristica', strtoupper($caracteristica))->exists()) {
