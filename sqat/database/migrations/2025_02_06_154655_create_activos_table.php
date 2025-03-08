@@ -14,7 +14,6 @@ class CreateActivosTable extends Migration
             $table->string('marca', 100);
             $table->string('modelo', 100);
             $table->unsignedBigInteger('estado');
-            $table->unsignedBigInteger('usuario_de_activo')->nullable();
             $table->unsignedBigInteger('responsable_de_activo')->nullable();
             $table->integer('precio')->nullable();
             $table->unsignedBigInteger('tipo_de_activo');
@@ -22,7 +21,6 @@ class CreateActivosTable extends Migration
             $table->text('justificacion_doble_activo')->nullable();
 
             // Relacionar las claves foráneas con la tabla Persona (si es que ya tienes la tabla Persona)
-            $table->foreign('usuario_de_activo')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('responsable_de_activo')->references('id')->on('personas')->onDelete('set null');
             $table->foreign('ubicacion')->references('id')->on('ubicaciones')->onDelete('set null');
             $table->foreign('estado')->references('id')->on('estados')->onDelete('cascade');

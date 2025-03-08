@@ -100,7 +100,6 @@ class EditarValoresActivo extends Component
         $activo->precio = $this->precio;
         $activo->tipo_de_activo = $this->tipo_de_activo->id;
         $activo->responsable_de_activo = $this->responsable_de_activo;
-        $activo->usuario_de_activo = $this->responsable_de_activo;
 
         foreach ($this->valoresAdicionales as $id => $valor) {
             $valorAdicional = $activo->valoresAdicionales->where('id_caracteristica', $id)->first();

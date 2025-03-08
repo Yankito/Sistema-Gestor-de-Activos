@@ -19,7 +19,6 @@ class Activo extends Model
         'modelo',
         'tipo_de_activo',
         'estado',
-        'usuario_de_activo',
         'responsable_de_activo',
         'precio',
         'ubicacion',

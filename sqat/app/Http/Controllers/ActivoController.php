@@ -34,12 +34,11 @@ class ActivoController extends Controller
         try {
             // Crear el activo
             $activo = new Activo();
-            $activo->nro_serie = $request->nro_serie;
-            $activo->marca = $request->marca;
+            $activo->nro_serie = strtoupper($request->nro_serie);
+            $activo->marca = strtoupper($request->marca);
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
             $activo->estado = 1; // Estado inicial (por ejemplo, "Adquirido")
-            $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
@@ -103,7 +102,6 @@ class ActivoController extends Controller
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($id);
         //dd($request->all());
         $data = $request->all();
-        $data['usuario_de_activo'] = $request->responsable_de_activo;
         //dd($data, $activo);
 
         if($activo->respons_de_activo != $request->responsable_de_activo){

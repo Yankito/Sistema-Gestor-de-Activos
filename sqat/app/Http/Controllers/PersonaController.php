@@ -78,7 +78,6 @@ class PersonaController extends Controller
             }
 
             $idPersona = Persona::where('rut', $request->rut)->first()->id;
-            $activo->usuario_de_activo = $idPersona;
             $activo->estado = 4;
             $activo->ubicacion = $request->ubicacion;
 
@@ -110,7 +109,6 @@ class PersonaController extends Controller
                     $id = $activoAdicional['id'];
                     $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
-                        $activoAdicional->usuario_de_activo = $idPersona;
                         $activoAdicional->estado = 4;
                         if($request->has('responsable')){
                             $activoAdicional->responsable_de_activo = $request->responsable ;

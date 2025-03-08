@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 class FilaActivo extends Component
 {
     public $activo;
-    public $usuario_de_activo;
     public $responsable_de_activo;
     public $ubicacion;
     public $valoresAdicionales;
@@ -22,7 +21,6 @@ class FilaActivo extends Component
     public function mount($activo)
     {
         $this->activo = $activo;
-        $this->usuario_de_activo = $activo->usuario_de_activo;
         $this->responsable_de_activo = $activo->responsable_de_activo;
         $this->ubicacion = $activo->ubicacion;
         $this->valoresAdicionales = $activo->valoresAdicionales;

@@ -56,7 +56,6 @@ class EditarEstadosActivo extends Component
     public function cambiarEstado($activo_id, $nuevo_estado){
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){
-            $activo->usuario_de_activo = NULL;
             $activo->responsable_de_activo = NULL;
             $this->responsable_de_activo = NULL;
             $this->usuarios = [];
@@ -108,7 +107,6 @@ class EditarEstadosActivo extends Component
             }
         }
 
-        $activo->usuario_de_activo = $this->responsable_de_activo;
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->update();
 

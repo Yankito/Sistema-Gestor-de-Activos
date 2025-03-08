@@ -17,7 +17,7 @@ class ImportarActivosController extends Controller
         }else{
             return view('importarActivos');
         }
-        
+
     }
 
     private function eliminarTildesYMayusculas($cadena)
@@ -33,29 +33,29 @@ class ImportarActivosController extends Controller
         $request->validate([
             'archivo_excel' => 'required|mimes:xlsx,xls'
         ]);
-    
+
         $archivo = $request->file('archivo_excel');
         $spreadsheet = IOFactory::load($archivo->getPathname());
         $hoja = $spreadsheet->getActiveSheet();
         $datos = $hoja->toArray(null, true, true, true);
-    
+
         DB::beginTransaction();
         try {
             $activos = [];
             $errores = [];
-    
+
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
-    
+
                 // Verificar si la fila está vacía
                 if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
                     continue;
                 }
-    
+
                 // Convertir la ubicación a mayúsculas y eliminar tildes
                 $ubicacion = $this->eliminarTildesYMayusculas($fila['E']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
-    
+
                 if (empty($fila['E'])) {
                     $ubicacion = 'ROSARIO NORTE';
                     $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
@@ -68,14 +68,14 @@ class ImportarActivosController extends Controller
                     ];
                     continue;
                 }
-    
+
                 $ubicacionId = $ubicacionExistente->id;
-    
+
                 // Obtener el ID del estado
                 $estadoNombre = 'Adquirido'; // Estado predefinido como 'Adquirido'
                 $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
                 $estadoId = $estado->id;
-                
+
                 if(Activo::where('nro_serie', $fila['A'])->exists()) {
                     $errores[] = [
                         'fila' => $fila,
@@ -95,7 +95,7 @@ class ImportarActivosController extends Controller
                 }
                 $tipoActivoId = $tipoActivoExistente->id;
 
-    
+
                 // Crear el activo
                 Activo::create([
                     'nro_serie' => $fila['A'],
@@ -103,7 +103,6 @@ class ImportarActivosController extends Controller
                     'modelo' => $fila['C'],
                     'tipo_de_activo' => $tipoActivoId,
                     'estado' => $estadoId,
-                    'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
                     'precio' => null,
                     'ubicacion' => $ubicacionId,
@@ -113,21 +112,20 @@ class ImportarActivosController extends Controller
                 $estadoNombre = $estado->nombre_estado;
                 //nombre del tipo de activo
                 $tipoActivoNombre = $tipoActivoExistente->nombre;
-    
+
                 $activos[] = [
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
                     'tipo_de_activo' => $tipoActivoNombre,
                     'estado' => $estadoNombre,
-                    'usuario_de_activo' => null,
                     'responsable_de_activo' => null,
                     'precio' => null,
                     'ubicacion' => $ubicacionNombre,
                     'justificacion_doble_activo' => null
                 ];
             }
-    
+
             DB::commit();
             return view('importarActivos', compact('datos', 'activos', 'errores'))->with('success', 'Activos importados correctamente.');
         } catch (\Exception $e) {
