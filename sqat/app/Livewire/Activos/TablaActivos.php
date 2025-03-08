@@ -7,7 +7,7 @@ use App\Models\Activo;
 
 class TablaActivos extends Component
 {
-    protected $listeners = ['eventoOrdenar' => 'ordenarPor'];
+    protected $listeners = ['eventoOrdenarPersonas' => 'ordenarPor'];
     public $activos;
     public $sortColumn = 'nro_serie'; // Columna por defecto
     public $sortDirection = 'asc'; // Dirección por defecto

@@ -1,9 +1,9 @@
 <div style="overflow-x:auto;">
-    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
+    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline"  data-user-is-admin="{{ $user->es_administrador }}" data-tipo-tabla="Activos">
         <thead>
             <tr>
                 <th>Acciones</th>
-                @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación"] as $index => $columna)
+                @foreach(["Número de serie", "Marca", "Modelo", "Precio", "Tipo", "Estado", "Usuario", "Responsable", "Sitio", "Soporte TI", "Justificación","Valores Adicionales"] as $index => $columna)
                     <th>
                         {{ $columna }}
                         <!-- boton filtro -->

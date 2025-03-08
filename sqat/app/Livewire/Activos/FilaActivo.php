@@ -16,6 +16,7 @@ class FilaActivo extends Component
     public $usuario_de_activo;
     public $responsable_de_activo;
     public $ubicacion;
+    public $valoresAdicionales;
     protected $listeners = ['refreshRow' => 'refreshRow', 'updateActivo'];
 
     public function mount($activo)
@@ -24,6 +25,7 @@ class FilaActivo extends Component
         $this->usuario_de_activo = $activo->usuario_de_activo;
         $this->responsable_de_activo = $activo->responsable_de_activo;
         $this->ubicacion = $activo->ubicacion;
+        $this->valoresAdicionales = $activo->valoresAdicionales;
     }
 
     public function render()
@@ -66,17 +68,17 @@ class FilaActivo extends Component
             9 => 'DONADO',
             10 => 'VENDIDO',
         ];
-    
+
         // Obtener el activo
         $activo = Activo::with('estadoRelation')->findOrFail($activo_id);
-    
+
         // Guardar el estado anterior
         $estado_anterior = $activo->estado;
-    
+
         // Actualizar el estado del activo
         $activo->estado = $nuevo_estado;
         $activo->update();
-    
+
         // Crear un registro para el cambio de estado
         $registroCambioEstado = new Registro();
         $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser NULL)
@@ -84,7 +86,7 @@ class FilaActivo extends Component
         $registroCambioEstado->tipo_cambio = $estados[$nuevo_estado]; // Mapear el estado numérico a un valor de ENUM
         $registroCambioEstado->encargado_cambio = Auth::user()->id; // Usuario que realizó el cambio
         $registroCambioEstado->save();
-    
+
         // Notificar a la interfaz que se actualizó el estado
         $this->dispatch('actualizarFila');
         $this->dispatch('refreshRow', $activo_id);

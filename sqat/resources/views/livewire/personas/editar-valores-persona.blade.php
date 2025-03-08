@@ -1,7 +1,6 @@
 <div>
 <div class="modal-body">
 @if (isset($persona))
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <h2>Editar persona</h2>
     <form wire:submit.prevent="updateValoresPersona" id="formulario-editar-valores">
         @csrf
@@ -17,84 +16,69 @@
         </div>
         <!-- Nombre de Usuario -->
         <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nombre_usuario"></i>
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="user"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="nombre_usuario">Nombre de Usuario</label>
-                <input wire:model="nombre_usuario" type="text" id="nombre_usuario" required class="form-control" value="{{ $persona->nombre_usuario }}" readonly />
+                <label class="form-label" for="user">Nombre de Usuario</label>
+                <input wire:model="user" type="text" id="user" required class="form-control" value="{{ $persona->user }}" readonly />
             </div>
         </div>
 
-        <!-- Nombres -->
+        <!-- Nombre Completo -->
         <div class="col-md-6 d-flex align-items-center">
             <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nombres"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="nombres">Nombres</label>
-                <input wire:model="nombres" type="text" id="nombres" required class="form-control" value="{{ $persona->nombres }}" readonly />
-            </div>
-        </div>
-
-        <!-- Primer Apellido -->
-        <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="primer_apellido"></i>
-            <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="primer_apellido">Primer Apellido</label>
-                <input wire:model="primer_apellido" type="text" id="primer_apellido" required class="form-control" value="{{ $persona->primer_apellido }}" readonly />
-            </div>
-        </div>
-
-        <!-- Segundo Apellido -->
-        <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="segundo_apellido"></i>
-            <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
-                <input wire:model="segundo_apellido" type="text" id="segundo_apellido" class="form-control" value="{{ $persona->segundo_apellido }}" readonly />
-            </div>
-        </div>
-
-        <!-- Supervisor -->
-        <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="supervisor"></i>
-            <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="supervisor">Supervisor</label>
-                <input wire:model="supervisor" type="text" id="supervisor" class="form-control" value="{{ $persona->supervisor }}" readonly />
+                <label class="form-label" for="nombre_completo">Nombre Completo</label>
+                <input wire:model="nombre_completo" type="text" id="nombre_completo" required class="form-control" value="{{ $persona->nombre_completo }}" readonly />
             </div>
         </div>
 
         <!-- Empresa -->
         <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="empresa"></i>
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nombre_empresa"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="empresa">Empresa</label>
-                <input wire:model="empresa" type="text" id="empresa" required class="form-control" value="{{ $persona->empresa }}" readonly />
+                <label class="form-label" for="nombre_empresa">Empresa</label>
+                <input wire:model="nombre_empresa" type="text" id="nombre_empresa" required class="form-control" value="{{ $persona->nombre_empresa }}" readonly />
             </div>
         </div>
 
-        <!-- Centro Costo -->
+        <!-- Cargo -->
         <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="centro_costo"></i>
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="cargo"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="centro_costo">Centro Costo</label>
-                <input wire:model="centro_costo" type="text" id="centro_costo" required class="form-control" value="{{ $persona->centro_costo }}" readonly />
+                <label class="form-label" for="cargo">Centro Costo</label>
+                <input wire:model="cargo" type="text" id="cargo" required class="form-control" value="{{ $persona->cargo }}" readonly />
             </div>
         </div>
 
-        <!-- Denominación -->
+        <!-- Correo -->
         <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="denominacion"></i>
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="correo"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="denominacion">Denominación</label>
-                <input wire:model="denominacion" type="text" id="denominacion" required class="form-control" value="{{ $persona->denominacion }}" readonly />
+                <label class="form-label" for="correo">Correo</label>
+                <input wire:model="correo" type="text" id="correo" required class="form-control" value="{{ $persona->correo }}" readonly />
             </div>
         </div>
 
-        <!-- Título Puesto -->
-        <div class="col-md-6 d-flex align-items-center">
-            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="titulo_puesto"></i>
+        <!-- Fecha Inicio -->
+        <div class = "col-md-6 d-flex align-items-center">
+            <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="fecha_ing"></i>
             <div class="form-outline mb-4 flex-grow-1">
-                <label class="form-label" for="titulo_puesto">Título Puesto</label>
-                <input wire:model="titulo_puesto" type="text" id="titulo_puesto" required class="form-control" value="{{ $persona->titulo_puesto }}" readonly />
+                <label class="form-label" for="fecha_ing">Fecha Inicio</label>
+                <input wire:model="fecha_ing" type="date" name="fecha_ing" id="fecha_ing" class="form-control" readonly/>
             </div>
         </div>
+
+        <!-- Fecha Termino -->
+        <div class = "col-md-6 d-flex align-items-center">
+        <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="fecha_ter"></i>
+            <div class="form-outline mb-4 flex-grow-1">
+                <label class="form-label" for="fecha_ter">Fecha Termino</label>
+                <input wire:model="fecha_ter" type="date" name="fecha_ter" id="fecha_ter" class="form-control" readonly/>
+            </div>
+        </div>
+
+
+        <!--Ubicación-->
         <div class="col-md-6 d-flex align-items-center">
             <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
             <div class="form-outline mb-4 flex-grow-1">
@@ -113,6 +97,16 @@
         </div>
 
         </div>
+
+        <!-- boton desactivar persona-->
+        <div class="form-group">
+            <label for="estado_empleado">Estado</label>
+            <select wire:model="estado_empleado" class="form-control" id="estado_empleado" >
+                <option value="1" {{ $persona->estado_empleado == 1 ? 'selected' : '' }}>Activo</option>
+                <option value="0" {{ $persona->estado_empleado == 0 ? 'selected' : '' }}>Inactivo</option>
+            </select>
+        </div>
+
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -152,6 +146,7 @@
 
             $(function () {
                 $('.toggle-edit').on('click',function toggleEditField (event) {
+                    console.log('toggle edit field');
                     let dataTarget = event.target.getAttribute('data-target')
                     let inputField = document.getElementById(dataTarget);
 

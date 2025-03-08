@@ -53,8 +53,9 @@
                                 <p style="color: red">{{ session('error') }}</p>
                             @endif
                             <div class="text-center pt-1 mb-5 pb-1">
-                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
-                                in</button>
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">
+                                    Iniciar Sesión
+                                </button>
                                 <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
 

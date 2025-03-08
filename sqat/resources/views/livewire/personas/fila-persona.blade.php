@@ -1,8 +1,15 @@
 <tr>
+    <style>
+        td {
+            font-size: 12px;
+        }
+    </style>
     <td class="action-btns">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
-            <i class="fas fa-edit"></i>
-        </button>
+        @if($user->es_administrador)
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
+                <i class="fas fa-user-edit"></i>
+            </button>
+        @endif
     </td>
 
     <td>{{ $persona->user }}</td>

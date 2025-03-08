@@ -18,17 +18,17 @@
 
     <style>
         .filter-container {
-        display: none;
-        background: white;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        position: fixed;
-        z-index: 1000;
-        min-width: 200px;
-        max-height: 300px;
-        overflow-y: auto;
+            display: none;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            z-index: 1000;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
         }
         .filter-btn {
             background: none;
@@ -55,11 +55,11 @@
             background-color: gray;
         }
         .estado-disponible {
-            background-color: #0aa40d;
+            background-color: #00C01E;
         }
 
         .estado-asignado {
-            background-color: #0a5964;
+            background-color: #005856;
         }
 
         .estado-perdido {
@@ -71,7 +71,7 @@
         }
 
         .estado-devuelto {
-            background-color: #0a5964;
+            background-color: #005856;
         }
 
         .estado-paraBaja {
@@ -79,7 +79,7 @@
         }
 
         .estado-donado {
-            background-color: #007bff;
+            background-color: #00b5c4;
         }
 
         .estado-vendido {

@@ -31,6 +31,16 @@ class UbicacionController extends Controller
             'longitud' => 'required|numeric',
         ]);
 
+        //comprobar que no se repita el nombre de la ubicación
+        if (Ubicacion::where('sitio', strtoupper($request->sitio))->exists()) {
+            return redirect()->route('ubicaciones')->with('error', 'Ubicación ya se encuentra registrada.');
+        }
+
+        $request->merge([
+            'sitio' => strtoupper($request->sitio),
+            'soporte_ti' => strtoupper($request->soporte_ti),
+        ]);
+
         Ubicacion::create([
             'sitio' => $request->sitio,
             'soporte_ti' => $request->soporte_ti,
@@ -47,6 +57,11 @@ class UbicacionController extends Controller
             'soporte_ti' => 'required|string|max:255',
             'latitud' => 'required|numeric',
             'longitud' => 'required|numeric',
+        ]);
+
+        $request->merge([
+            'sitio' => strtoupper($request->sitio),
+            'soporte_ti' => strtoupper($request->soporte_ti),
         ]);
 
         Ubicacion::where('id', $request->id)->update([
@@ -66,7 +81,7 @@ class UbicacionController extends Controller
     }
 
     public function eliminar($hashed_id) {
-         // Desencriptar el ID
+        // Desencriptar el ID
         $decoded = Hashids::decode($hashed_id);
 
         if (empty($decoded)) {

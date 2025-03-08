@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Activo extends Model
 {
@@ -55,5 +56,9 @@ class Activo extends Model
     {
         return $this->belongsTo(TipoActivo::class, 'tipo_de_activo');
     }
-    
+
+    public function valoresAdicionales(): HasMany
+    {
+        return $this->hasMany(ValorAdicional::class, 'id_activo', 'id');
+    }
 }

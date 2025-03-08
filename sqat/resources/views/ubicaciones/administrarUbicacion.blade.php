@@ -19,9 +19,9 @@
                     <th>ID</th>
                     <th>Nombre Sitio</th>
                     <th>Soporte TI</th>
-                    <th>Dirección</th>
-                    <th>Ciudad</th>
-                    <th>Acciones</th>
+                    @if($user->es_administrador)
+                        <th>Acciones</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -30,19 +30,16 @@
                         <td>{{ $ubicacion->id }}</td>
                         <td>{{ $ubicacion->sitio }}</td>
                         <td>{{ $ubicacion->soporte_ti }}</td>
-                        <td>{{ $ubicacion->direccion }}</td>
-                        <td>{{ $ubicacion->ciudad }}</td>
-                        <td>
-
-                            <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
-
-                            <form action="{{ route('ubicaciones.eliminar', $ubicacion->hashed_id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
-                            </form>
-
-                        </td>
+                        @if($user->es_administrador)
+                            <td>
+                                <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
+                                <form action="{{ route('ubicaciones.eliminar', $ubicacion->hashed_id) }}" method="POST" class="d-inline delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
+                                </form>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
@@ -53,14 +50,18 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if(session('success'))
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: "{{session('title')}}",
-                text: "{{ session('success') }}",
-                confirmButtonText: 'Aceptar'
+            $(document).ready(function () {
+                    toastr.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            $(document).ready(function () {
+                toastr.error("{{ session('error') }}");
             });
         </script>
     @endif
@@ -77,7 +78,11 @@
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
+                        cancelButtonText: 'Cancelar',
+                        customClass: {
+                            confirmButton: 'btn-confirm',
+                            cancelButton: 'btn-cancel'
+                        },
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.closest('.delete-form').submit();
@@ -87,5 +92,19 @@
             });
         });
     </script>
+
+    <style>
+        .btn-confirm {
+            background-color: #005856 !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .btn-cancel {
+            background-color: #ccc !important;
+            color: white !important;
+            border: none !important;
+        }
+    </style>
 @endsection
 </html>

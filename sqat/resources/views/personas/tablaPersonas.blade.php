@@ -35,7 +35,7 @@
     .filter-btn {
       background: none;
       border: none;
-      color: #007bff;
+      color: #005856;
       cursor: pointer;
       font-size: 10px;
     }
@@ -49,7 +49,7 @@
         min-width: 80px;
     }
     .estado-activo {
-        background-color: #0aa40d;
+        background-color: #00C01E;
     }
 
     .estado-inactivo {

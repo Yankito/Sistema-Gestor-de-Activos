@@ -1,6 +1,8 @@
 $(document).ready(function () {
     // Declare table variable in the global scope
     let table;
+    let userIsAdmin = $('#tabla').data('user-is-admin');
+    let tipoTabla = $('#tabla').data('tipo-tabla');
 
     // Initialize DataTable
     if (!$.fn.DataTable.isDataTable('#tabla')) {
@@ -19,14 +21,75 @@ $(document).ready(function () {
                 {
                     targets: 0,
                     orderable: false,
-                    width: '120px' // Set the width of column 0 to 100px
+                    width: '80px', // Set the width of column 0 to 100px
+                    visible: userIsAdmin // Replace with a valid JavaScript variable or condition
                 }
             ],
             buttons: [
-                { extend: "copy", title: "Iansa - Tabla de activos", text: "Copiar" },
-                { extend: "csv", title: "Iansa - Tabla de activos", text: "CSV" },
-                { extend: "excel", title: "Iansa - Tabla de activos", text: "Excel" },
-                { extend: "print", title: "Iansa - Tabla de activos", text: "Imprimir" },
+                {
+                    extend: "copy",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Copiar",
+                    exportOptions: {
+                        columns: ':not(:first)',
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: "csv",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "CSV",
+                    exportOptions: {
+                        columns: ':not(:first)',
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: "excel",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Excel",
+                    exportOptions: {
+                        columns: ":not(:first)",
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            },
+                        }
+                    }
+                },
+                {
+                    extend: "print",
+                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+                    text: "Imprimir",
+                    exportOptions: {
+                        columns: ":not(:first)",
+                        format: {
+                            header: function (data, columnIdx) {
+                                // Extraer solo el texto principal del encabezado
+                                let tempDiv = document.createElement("div");
+                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
+                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
+                            }
+                        }
+                    }
+                },
                 { extend: "colvis", text: "Visibilidad de columnas" }
             ]
         });
@@ -123,7 +186,6 @@ $(document).ready(function () {
             $(this).prop('checked', isChecked);
         });
 
-        console.log("Valores únicos en columna", index, [...uniqueValues]);
     });
 
     // Función para actualizar el estado del checkbox "Seleccionar todo"
@@ -135,8 +197,6 @@ $(document).ready(function () {
         let totalCheckboxes = uniqueCheckboxes.size;
 
         let checkedCheckboxes = $(`.filter-checkbox[data-index="${index}"]:checked`).length;
-        console.log("Total de checkboxes en columna", index, totalCheckboxes);
-        console.log("Total de checkboxes seleccionados en columna", index, checkedCheckboxes);
 
         let selectAll = $(`.select-all[data-index="${index}"]`);
         selectAll.prop('checked', totalCheckboxes === checkedCheckboxes);
@@ -169,18 +229,13 @@ $(document).ready(function () {
     // Evento para actualizar filtro cuando cambian los checkboxes individuales
     $(document).on('change', '.filter-checkbox', function () {
         let index = $(this).data('index');
-        console.log("Checkbox cambiado en columna", index);
-        console.log("Checkbox seleccionado:", $(this
-        ).val());
+
         updateSelectAllCheckbox(index);
 
         let checkedValues = [];
         $(`.filter-checkbox[data-index="${index}"]:checked`).each(function () {
             checkedValues.push($(this).val());
-            console.log("Checkbox seleccionado:", $(this).val());
         });
-
-        console.log("Checkboxes activos en columna", index, "Valores seleccionados:", checkedValues);
 
         applyFilter(index, checkedValues);
     });

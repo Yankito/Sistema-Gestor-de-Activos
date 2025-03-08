@@ -22,6 +22,8 @@ class EditarValoresActivo extends Component
     public $modelo;
     public $precio;
     public $tipo_de_activo;
+    public $caracteristicasAdicionales;
+    public $valoresAdicionales;
 
     protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal', 'actualizarUbicacion', 'setResponsable' => 'actualizarResponsable'];
 
@@ -38,7 +40,9 @@ class EditarValoresActivo extends Component
             $this->marca = $this->activo->marca;
             $this->modelo = $this->activo->modelo;
             $this->precio = $this->activo->precio;
-            $this->tipo_de_activo = $this->activo->tipo_de_activo;
+            $this->tipo_de_activo = $this->activo->tipoDeActivo;
+            $this->caracteristicasAdicionales = $this->activo->tipoDeActivo->caracteristicasAdicionales;
+            $this->valoresAdicionales = $this->activo->valoresAdicionales;
         }
     }
     public function render()
@@ -60,10 +64,23 @@ class EditarValoresActivo extends Component
         $this->marca = $this->activo->marca;
         $this->modelo = $this->activo->modelo;
         $this->precio = $this->activo->precio;
-        $this->tipo_de_activo = $this->activo->tipo_de_activo;
+        $this->tipo_de_activo = $this->activo->tipoDeActivo;
+        $this->caracteristicasAdicionales = $this->activo->tipoDeActivo->caracteristicasAdicionales;
+        $this->valoresAdicionales = $this->generarArregloValoresAdicionales($this->caracteristicasAdicionales);
+        //dd($this->valoresAdicionales, $this->caracteristicasAdicionales);
         $this->dispatch('$refresh');
     }
 
+    public function generarArregloValoresAdicionales($caracteristicasAdicionales)
+    {
+        $valoresAdicionales = [];
+        foreach ($caracteristicasAdicionales as $caracteristica) {
+            $valor = $this->activo->valoresAdicionales->where('id_caracteristica', $caracteristica->id)->first();
+            $valoresAdicionales[$caracteristica->id]['nombre_caracteristica'] = $caracteristica->nombre_caracteristica;
+            $valoresAdicionales[$caracteristica->id]['valor'] = $valor ? $valor->valor : '';
+        }
+        return $valoresAdicionales;
+    }
     public function updateValoresActivo(){
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')
             ->findOrFail($this->activo->id);
@@ -74,17 +91,32 @@ class EditarValoresActivo extends Component
             $persona = Persona::find($this->responsable_de_activo);
             if ($persona) {
                 $persona->ubicacion = $this->ubicacion;
-                $persona->save();
+                $persona->update();
             }
         }
         $activo->nro_serie = $this->nro_serie;
         $activo->marca = $this->marca;
         $activo->modelo = $this->modelo;
         $activo->precio = $this->precio;
-        $activo->tipo_de_activo = $this->tipo_de_activo;
+        $activo->tipo_de_activo = $this->tipo_de_activo->id;
         $activo->responsable_de_activo = $this->responsable_de_activo;
         $activo->usuario_de_activo = $this->responsable_de_activo;
-        //dd($this->responsable_de_activo);
+
+        foreach ($this->valoresAdicionales as $id => $valor) {
+            $valorAdicional = $activo->valoresAdicionales->where('id_caracteristica', $id)->first();
+            if ($valorAdicional) {
+                $valorAdicional->valor = $valor['valor'];
+                $valorAdicional->update();
+            } else {
+                if($valor['valor'] != ''){
+                    $activo->valoresAdicionales()->create([
+                        'id_caracteristica' => $id,
+                        'valor' => $valor['valor']
+                    ]);
+                }
+            }
+        }
+
         try {
             $activo->update();
             $this->dispatch('refreshRow', $activo->id);

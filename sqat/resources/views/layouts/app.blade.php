@@ -129,11 +129,11 @@
                     </ul>
 
                     @if($user->es_administrador)
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                        <a href="/register" class="nav-link">Registrar Admin</a>
-                        </li>
-                    </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                            <a href="/register" class="nav-link">Registrar Admin</a>
+                            </li>
+                        </ul>
                     @endif
                 </li>
 
@@ -147,27 +147,28 @@
                     </p>
                     </a>
                     <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="/tablaActivos" class="nav-link">
-                        <p>Lista de Activos</p>
-                        </a>
-                    </li>
-                    @if($user->es_administrador)
                         <li class="nav-item">
-                        <a href="/registrarActivo" class="nav-link">
-                            <p>
-                            Dar un activo de alta
-                            </p>
-                        </a>
+                            <a href="/tablaActivos" class="nav-link">
+                            <p>Listado de Activos</p>
+                            </a>
                         </li>
-                    @endif
-                    <li class="nav-item">
-                        <a href="/crearTipoActivo" class="nav-link">
-                        <p>
-                            Crear un tipo de activo
-                        </p>
-                        </a>
-                    </li>
+                        @if($user->es_administrador)
+                            <li class="nav-item">
+                            <a href="/registrarActivo" class="nav-link">
+                                <p>
+                                Dar un activo de alta
+                                </p>
+                            </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/tipos-activo" class="nav-link">
+                                <p>
+                                    Crear un tipo de activo
+                                </p>
+                                </a>
+                            </li>
+                        @endif
+
                     </ul>
                 </li>
                 <!-- Gestion de Personas -->
@@ -182,7 +183,7 @@
                     <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="/tablaPersonas" class="nav-link">
-                        <p>Lista de Personas</p>
+                        <p>Listado de Personas</p>
                         </a>
                     </li>
                     @if($user->es_administrador)
@@ -209,7 +210,7 @@
                     <li class="nav-item">
                         <a href="/ubicaciones" class="nav-link">
                         <p>
-                            Ubicación
+                            Listado de ubicaciones
                         </p>
                         </a>
                     </li>
@@ -272,7 +273,7 @@
                     </p>
                     </a>
                 </li>
-                
+
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
@@ -329,11 +330,10 @@
     <!-- Select2 -->
     <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
-    @yield('scripts')
-
     <!-- Toastr -->
     <script src="vendor/adminlte/plugins/toastr/toastr.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(function() {
             var Toast = Swal.mixin({
@@ -350,6 +350,9 @@
             })
         })
     </script>
+
+    @yield('scripts')
+
 
     <style>
         .required-asterisk {

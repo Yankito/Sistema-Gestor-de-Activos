@@ -8,6 +8,7 @@ use App\Models\Persona;
 class FilaPersona extends Component
 {
     public $persona;
+    protected $listeners = ['refreshRowPersonas' => 'refreshRowPersonas'];
 
     public function mount($persona){
         $this->persona = $persona;
@@ -17,9 +18,10 @@ class FilaPersona extends Component
         return view('livewire.personas.fila-persona');
     }
 
-    public function refreshRowPersona($id)
+    public function refreshRowPersonas($id)
     {
         if ($this->persona->id == $id) {
+            $this->persona = Persona::with('ubicacionRelation')->findOrFail($id);
             $this->dispatch('$refresh');
         }
     }

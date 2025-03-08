@@ -5,38 +5,40 @@
         }
     </style>
     <td>
-        @if ($activo->estado === 1)
-            <button type="button" style="background-color: #00b5c4;" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        @elseif ($activo->estado === 2)
-            <button type="button" style="background-color: #00b5c4;" class="btn btn-primary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 3)">
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        @elseif ($activo->estado === 3)
-            <button type="button" style="background-color: #0aa40d;" class="btn btn-success btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
-                <i class="fas fa-user-plus"></i>
-            </button>
-        @elseif ($activo->estado === 4)
-            <button type="button" style="background-color: #0a5964; border: #0a5964" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
-                <i class="fas fa-user-minus"></i>
-            </button>
-        @elseif ($activo->estado === 5 || $activo->estado === 6)
-            <button type="button" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 7)">
-                <i class="fas fa-undo"></i>
-            </button>
-        @elseif ($activo->estado === 7)
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
-                <i class="fas fa-cogs"></i>
-            </button>
-        @elseif ($activo->estado === 8 || $activo->estado === 9 || $activo->estado === 10)
-            <button type="button" class="btn btn-secondary btn-sm" disabled>
-                <i class="fas fa-check-circle"></i>
+        @if($user->es_administrador)
+            @if ($activo->estado === 1)
+                <button type="button" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            @elseif ($activo->estado === 2)
+                <button type="button" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 3)">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            @elseif ($activo->estado === 3)
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            @elseif ($activo->estado === 4)
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
+                    <i class="fas fa-user-minus"></i>
+                </button>
+            @elseif ($activo->estado === 5 || $activo->estado === 6)
+                <button type="button" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 7)">
+                    <i class="fas fa-undo"></i>
+                </button>
+            @elseif ($activo->estado === 7)
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivo('{{ $activo->id }}')">
+                    <i class="fas fa-cogs"></i>
+                </button>
+            @elseif ($activo->estado === 8 || $activo->estado === 9 || $activo->estado === 10)
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    <i class="fas fa-check-circle"></i>
+                </button>
+            @endif
+            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" wire:click="editarActivoValores('{{ $activo->id }}')">
+                <i class="fas fa-edit"></i>
             </button>
         @endif
-        <button type="button" style="background-color: #ffaa00; border: #ffaa00;" class="btn btn-primary btn-sm" data-toggle="modal" wire:click="editarActivoValores('{{ $activo->id }}')">
-            <i class="fas fa-edit"></i>
-        </button>
     </td>
     <td>{{ $activo->nro_serie }}</td>
     <td>{{ $activo->marca }}</td>
@@ -66,18 +68,18 @@
 
         @if ($totalUsuarios > 0)
             @foreach ($usuarios->take(3) as $usuario)
-            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+                <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
             @endforeach
 
             @if ($totalUsuarios > 3)
-            <div id="usuarios-{{ $activo->id }}" class="collapse">
-            @foreach ($usuarios->skip(3) as $usuario)
-            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
-            @endforeach
-            </div>
-            <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
-            Ver más
-            </button>
+                <div id="usuarios-{{ $activo->id }}" class="collapse">
+                    @foreach ($usuarios->skip(3) as $usuario)
+                        <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+                    @endforeach
+                </div>
+                <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
+                    Ver más
+                </button>
             @endif
         @else
             <span style="font-size: 12px;">Sin usuarios</span>
@@ -90,4 +92,22 @@
     <td>{{ $activo->ubicacionRelation->sitio }}</td>
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>
     <td>{{ $activo->justificacion_doble_activo }}</td>
+    <td>
+        @php
+            $totalValores = $activo->valoresAdicionales->count();
+        @endphp
+        @foreach ($activo->valoresAdicionales->take(3) as $valor)
+            <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
+        @endforeach
+        @if ($totalValores > 3)
+            <div id="valores-{{ $activo->id }}" class="collapse">
+                @foreach ($activo->valoresAdicionales->skip(3) as $valor)
+                    <li style="font-size: 12px;">{{ $valor->idCaracteristica->nombre_caracteristica }}: {{ $valor->valor }}</li>
+                @endforeach
+            </div>
+            <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#valores-{{ $activo->id }}">
+                    Ver más
+            </button>
+        @endif
+    </td>
 </tr>

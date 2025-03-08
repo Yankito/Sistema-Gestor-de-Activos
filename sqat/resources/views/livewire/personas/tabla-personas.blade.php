@@ -1,5 +1,5 @@
 <div style = "overflow-x:auto">
-    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline">
+    <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline" data-user-is-admin="{{ $user->es_administrador }}" data-tipo-tabla="Personas">
         <thead>
             <tr>
                 <th>Acciones</th>
@@ -30,6 +30,9 @@
     document.addEventListener('livewire:navigated', function() {
         Livewire.on('actualizarFila', function() {
             toastr.success('Estado cambiado correctamente.');
+        });
+        Livewire.on('eventoOrdenarPersonas', function(columna) {
+            console.log("Evento recibido:", columna);
         });
     });
 </script>

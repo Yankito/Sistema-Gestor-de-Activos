@@ -14,3 +14,34 @@
 .small-box.bg-success{
     background-color: #0aa40d !important;
 }
+
+.small-box.bg-info{
+    background-color: #00b5c4 !important;
+}
+
+.btn-info{
+    background-color: #00b5c4 !important;
+    border-color: #00b5c4 !important;
+    color: #ffffff !important;
+}
+
+.btn-primary{
+    background-color: #005856 !important;
+    border-color: #005856 !important;
+}
+
+.btn-danger{
+    background-color: #e22551 !important;
+    border-color: #e22551 !important;
+}
+
+.btn-warning{
+    background-color: #ffaa00 !important;
+    border-color: #ffaa00 !important;
+    color: #ffffff !important;
+}
+
+.btn-success{
+    background-color: #0aa40d !important;
+    border-color: #0aa40d !important;
+}

@@ -50,13 +50,13 @@
                 <div class="col-md-12 d-flex align-items-center">
                     <div class="form-outline mb-4 flex-grow-1">
                         <label class="form-label" for="usuarios">Usuarios</label>
-                            <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
-                                @foreach($personas as $persona)
-                                    <option value="{{$persona->id}}">
-                                        {{$persona->nombre_completo}} ({{$persona->rut}})
-                                    </option>
-                                @endforeach
-                            </select>
+                        <select wire:model="usuarios" id="usuarios_select" class="form-control select2bs4" multiple>
+                            @foreach($personas as $persona)
+                                <option value="{{$persona->id}}">
+                                    {{$persona->nombre_completo}} ({{$persona->rut}})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 @endif
@@ -65,7 +65,7 @@
 
 
             @if ($activo->estado == 4)
-                <div class="action-btns">
+                <div class="action-btns mb-2">
                     <button type="button" style="background-color: #0a5964; border: #0a5964" data-dismiss="modal" class="btn btn-primary btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 7)">
                         <i class="fas fa-exchange-alt"></i> <!-- Pasar a DEVUELTO -->
                         Devolución
@@ -80,23 +80,29 @@
                     </button>
                 </div>
             @elseif ($activo->estado == 7)
-                <div class="action-btn">
-                <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 8)">
-                    <i class="fas fa-arrow-down"></i> <!-- Pasar a PARA BAJA -->
-                    Dar de baja
-                </button>
-                <button type="button" data-dismiss="modal" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 9)">
-                    <i class="fas fa-hand-holding-heart"></i> <!-- Pasar a DONADO -->
-                    Donar
-                </button>
-                <button type="button" data-dismiss="modal" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 10)">
-                    <i class="fas fa-dollar-sign"></i> <!-- Pasar a VENDIDO -->
-                    Vender
-                </button>
-                <button type="button" data-dismiss="modal" class="btn btn-secondary btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
-                    <i class="fas fa-undo"></i> <!-- Volver a PREPARACIÓN -->
-                    Volver a preparación
-                </button>
+
+                <div class="mb-2">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg" wire:click="cambiarEstado('{{ $activo->id }}', 2)">
+                        <i class="fas fa-undo"></i> <!-- Volver a PREPARACIÓN -->
+                        Volver a preparación
+                    </button>
+                </div>
+
+                <div class="action-btn mb-2">
+
+                    <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 8)">
+                        <i class="fas fa-arrow-down"></i> <!-- Pasar a PARA BAJA -->
+                        Dar de baja
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn btn-info btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 9)">
+                        <i class="fas fa-hand-holding-heart"></i> <!-- Pasar a DONADO -->
+                        Donar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn btn-success btn-sm" wire:click="cambiarEstado('{{ $activo->id }}', 10)">
+                        <i class="fas fa-dollar-sign"></i> <!-- Pasar a VENDIDO -->
+                        Vender
+                    </button>
+
                 </div>
 
             @endif

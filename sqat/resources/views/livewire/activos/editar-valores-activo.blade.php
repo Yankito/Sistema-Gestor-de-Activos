@@ -8,7 +8,7 @@
         <div class = "row">
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie" ></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="nro_serie" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="nro_serie">Nro. Serie</label>
                     <input wire:model="nro_serie" type="text" id="nro_serie" required class="form-control" value="{{ $activo->nro_serie }}" readonly />
@@ -17,7 +17,7 @@
 
             <!-- Marca -->
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="marca"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="marca" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="marca">Marca</label>
                     <input wire:model="marca" type="text" id="marca" required class="form-control" value="{{ $activo->marca }}" readonly />
@@ -26,7 +26,7 @@
 
             <!-- Modelo -->
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="modelo"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="modelo" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="modelo">Modelo</label>
                     <input wire:model="modelo" type="text" id="modelo" required class="form-control" value="{{ $activo->modelo }}" readonly />
@@ -34,7 +34,7 @@
             </div>
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="tipo_de_activo"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="tipo_de_activo" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
                     <div class="d-flex">
@@ -51,7 +51,7 @@
 
             <!-- Precio -->
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="precio"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="precio" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="precio">Precio</label>
                     <input wire:model="precio" type="number" id="precio" required class="form-control" value="{{ $activo->precio }}" readonly />
@@ -59,7 +59,7 @@
             </div>
 
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="ubicacion" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="ubicacion">Ubicación</label>
                     <select wire:model="ubicacion" id="ubicacion" class="form-control" disabled>
@@ -75,7 +75,7 @@
 
             <!-- Responsable -->
             <div class="col-md-6 d-flex align-items-center">
-                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo"></i>
+                <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="responsable_de_activo" style="cursor: pointer;"></i>
                 <div class="form-outline mb-4 flex-grow-1">
                     <label class="form-label" for="responsable_de_activo">Responsable</label>
                     <select wire:model="responsable_de_activo" wire:change="actualizarUbicacion($event.target.value)" id="responsable_de_activo" class="form-control select2bs4" {{ $activo->estado == 4 ? 'disabled' : '' }} disabled>
@@ -89,6 +89,31 @@
                 </div>
             </div>
         </div>
+
+        <div class = "row">
+
+            @if ($activo->tipoDeActivo->caracteristicasAdicionales->count() > 0)
+                <label class="form-label">Características Adicionales (opcionales)</label>
+                @foreach ($valoresAdicionales as $index => $valorAdicional)
+                    <div class="col-md-6 d-flex align-items-center">
+                        <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="caracteristica_{{ $index }}"></i>
+                        <div class="form-outline mb-4 flex-grow-1">
+                            <label class="form-label" for="caracteristica_{{ $index }}">{{ $valorAdicional['nombre_caracteristica'] }}</label>
+
+                            <input
+                                wire:model="valoresAdicionales.{{ $index}}.valor"
+                                type="text"
+                                id="caracteristica_{{ $index }}"
+                                class="form-control"
+                                value="{{ $valorAdicional ? $valorAdicional['valor'] : '' }}"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
+        </div>
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" >Guardar Cambios</button>
@@ -100,14 +125,11 @@
 
 <script>
 
+    document.addEventListener('livewire:navigated', function() {
 
-    document.addEventListener('DOMContentLoaded', function () {
         $('#modal-editar-valores-activos').on('hidden.bs.modal', function () {
             Livewire.dispatch('cerrarModalValores'); // Emite el evento a Livewire
         });
-    });
-
-    document.addEventListener('livewire:navigated', function() {
 
         Livewire.on('cerrar-modal-valores', (data) => {
             $('#formulario-editar-valores').closest('.modal').modal('hide');
@@ -174,8 +196,6 @@
             default: return '';
         }
     }
-
-
 
 </script>
 </div>

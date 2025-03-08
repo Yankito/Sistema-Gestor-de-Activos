@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // Función para mostrar el formulario de inicio de sesión
+    public function index()
+    {
+        if(Auth::check()){
+            return redirect('/dashboard');
+        }
+        return view('login');
+    }
+
     // Función para registrar un usuario
     public function register(Request $request)
     {
@@ -74,12 +83,12 @@ class AuthController extends Controller
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
-    
+
         // Limpiar el caché del navegador
         header("Cache-Control: no-cache, no-store, must-revalidate");
         header("Pragma: no-cache");
         header("Expires: 0");
-    
+
         return redirect('/login')->with('success', 'Sesión cerrada correctamente.');
     }
 
