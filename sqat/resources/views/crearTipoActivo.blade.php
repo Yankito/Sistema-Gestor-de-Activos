@@ -54,6 +54,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
+                                                        <th>Características Adicionales</th> <!-- Nueva columna -->
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -62,16 +63,26 @@
                                                         <tr>
                                                             <td>{{ $tipo->nombre }}</td>
                                                             <td>
+                                                                @if($tipo->caracteristicasAdicionales->count() > 0)
+                                                                    <ul>
+                                                                        @foreach($tipo->caracteristicasAdicionales as $caracteristica)
+                                                                            <li>{{ $caracteristica->nombre_caracteristica }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                @else
+                                                                    <span class="text-muted">Sin características adicionales</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
                                                                 <div class="d-flex">
-                                                                    <form  class="mr-2">
+                                                                    <form class="mr-2">
                                                                         <button type="button" class="btn btn-info">
                                                                             <i class="fas fa-pencil-alt toggle-edit"
                                                                                 style="cursor: pointer;"
                                                                                 data-toggle="modal"
                                                                                 data-target="#modalEditarTipoActivo"
                                                                                 data-id="{{ $tipo->id }}"
-                                                                                data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}"
-                                                                                >
+                                                                                data-caracteristicas="{{ json_encode($tipo->caracteristicasAdicionales) }}">
                                                                             </i>
                                                                         </button>
                                                                     </form>
@@ -83,13 +94,11 @@
                                                                         </button>
                                                                     </form>
                                                                 </div>
-
                                                             </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>
-
                                             @if($tiposActivo->isEmpty())
                                                 <p class="text-center">No hay tipos de activos registrados.</p>
                                             @endif
