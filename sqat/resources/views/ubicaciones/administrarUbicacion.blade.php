@@ -19,7 +19,9 @@
                     <th>ID</th>
                     <th>Nombre Sitio</th>
                     <th>Soporte TI</th>
-                    <th>Acciones</th>
+                    @if($user->es_administrador)
+                        <th>Acciones</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -28,17 +30,16 @@
                         <td>{{ $ubicacion->id }}</td>
                         <td>{{ $ubicacion->sitio }}</td>
                         <td>{{ $ubicacion->soporte_ti }}</td>
-                        <td>
-
-                            <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
-
-                            <form action="{{ route('ubicaciones.eliminar', $ubicacion->hashed_id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
-                            </form>
-
-                        </td>
+                        @if($user->es_administrador)
+                            <td>
+                                <a href="{{ route('ubicaciones.modificar', ['id' => $ubicacion->id]) }}" class="btn btn-warning btn-sm">Modificar</a>
+                                <form action="{{ route('ubicaciones.eliminar', $ubicacion->hashed_id) }}" method="POST" class="d-inline delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
+                                </form>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

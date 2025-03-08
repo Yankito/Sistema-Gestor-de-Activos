@@ -129,11 +129,11 @@
                     </ul>
 
                     @if($user->es_administrador)
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                        <a href="/register" class="nav-link">Registrar Admin</a>
-                        </li>
-                    </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                            <a href="/register" class="nav-link">Registrar Admin</a>
+                            </li>
+                        </ul>
                     @endif
                 </li>
 
@@ -147,27 +147,28 @@
                     </p>
                     </a>
                     <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="/tablaActivos" class="nav-link">
-                        <p>Lista de Activos</p>
-                        </a>
-                    </li>
-                    @if($user->es_administrador)
                         <li class="nav-item">
-                        <a href="/registrarActivo" class="nav-link">
-                            <p>
-                            Dar un activo de alta
-                            </p>
-                        </a>
+                            <a href="/tablaActivos" class="nav-link">
+                            <p>Lista de Activos</p>
+                            </a>
                         </li>
-                    @endif
-                    <li class="nav-item">
-                        <a href="/crearTipoActivo" class="nav-link">
-                        <p>
-                            Crear un tipo de activo
-                        </p>
-                        </a>
-                    </li>
+                        @if($user->es_administrador)
+                            <li class="nav-item">
+                            <a href="/registrarActivo" class="nav-link">
+                                <p>
+                                Dar un activo de alta
+                                </p>
+                            </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/tipos-activo" class="nav-link">
+                                <p>
+                                    Crear un tipo de activo
+                                </p>
+                                </a>
+                            </li>
+                        @endif
+
                     </ul>
                 </li>
                 <!-- Gestion de Personas -->
@@ -209,7 +210,7 @@
                     <li class="nav-item">
                         <a href="/ubicaciones" class="nav-link">
                         <p>
-                            Ubicación
+                            Listado de ubicaciones
                         </p>
                         </a>
                     </li>
