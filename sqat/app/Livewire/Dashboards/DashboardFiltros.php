@@ -150,7 +150,7 @@ class DashboardFiltros extends Component
 
     public function obtenerAtributos(){
         $atributos = (new Activo())->getFillable();
-        $atributos = array_diff($atributos, ['id', 'nro_serie', 'usuario_de_activo',
+        $atributos = array_diff($atributos, ['id', 'nro_serie',
         'responsable_de_activo','precio','justificacion_doble_activo','created_at', 'updated_at']);
         if ($this->vista=="UBICACION"){
             $atributos = array_diff($atributos, ['ubicacion']);
