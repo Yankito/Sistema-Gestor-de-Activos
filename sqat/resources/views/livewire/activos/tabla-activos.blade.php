@@ -31,10 +31,6 @@
         Livewire.on('actualizarFila', function() {
             toastr.success('Estado cambiado correctamente.');
         });
-        Livewire.on('eventoOrdenar', function(columna) {
-            console.log("Evento recibido:", columna);
-        });
-
     });
 
     function obtenerClaseEstado(estado) {

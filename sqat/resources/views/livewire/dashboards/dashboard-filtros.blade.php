@@ -35,25 +35,25 @@
                 <h1 class="m-0 text-dark">Dashboard {{ ucfirst(strtolower(str_replace('_', ' ', $nombreVista))) }}</h1>
             </div>
             <div class="col-sm-6">
-                <div class="breadcrumb float-sm-right">
+                <div class="breadcrumb float-sm-right" wire:ignore>
                     <div class="nav-link me-2" data-toggle="dropdown" href="#">
                         <i class="fas fa-th mr-1"></i>
                         Aplicar filtro
                     </div>
-                        <select wire:model="filtro" wire:change="actualizarAtributo($event.target.value)" id="filtro" class="form-control">
-                            @foreach ($atributos as $atributo)
-                                <option value="{{$atributo}}">
-                                    {{ ucfirst(str_replace('_', ' ', $atributo)) }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <select wire:model="filtro" wire:change="actualizarAtributo($event.target.value)" id="filtro" class="form-control">
+                        @foreach ($atributos as $atributo)
+                            <option value="{{$atributo}}">
+                                {{ ucfirst(str_replace('_', ' ', $atributo)) }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" wire:poll.5s>
         <div class="col-lg-5 connectedSortable ui-sortable">
             <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
                 <!-- small box -->
@@ -101,7 +101,7 @@
                                 <div class="progress-group">
                                     {{ $nombre }}
                                     <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
-                                        data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}">
+                                        data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}" wire:ignore>
                                     </i>
                                     <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
                                     <div class="progress progress-sm">
@@ -153,13 +153,11 @@
     document.addEventListener('livewire:navigated', function() {
         $(function () {
             $('#filtro').on('change', function () {
-                console.log('cambio: ' + $(this).val());
                 Livewire.dispatch('actualizarAtributo', [$(this).val() ]);
             });
         });
 
         Livewire.on('actualizarDashboard', (data) => {
-            console.log('Actualizando navbar-custom con:', data);
             let vista = data[0]['vista'];
             let opcionesDashboard = data[0]['opcionesDashboard'];
 
@@ -182,6 +180,12 @@
                     item.textContent = nombre.charAt(0).toUpperCase() + nombre.slice(1);
                     item.onclick = function() { vista === "UBICACION" ? updateUbicacion(opcion) : updateTipoDeActivo(opcion) };
                     item.style.cursor = "pointer";
+
+                    // Marcar el seleccionado
+                    if (opcion === data[0]['valor']){
+                        item.classList.add('active');
+                    }
+
                     dropdownMenu.appendChild(item);
                 });
 
@@ -190,7 +194,7 @@
                 generalItem.className = "dropdown-item dropdown-footer";
                 generalItem.textContent = "DASHBOARD GENERAL";
                 generalItem.onclick = updateGeneral;
-                item.style.cursor = "pointer";
+                generalItem.style.cursor = "pointer";
                 dropdownMenu.appendChild(generalItem);
             }
         });

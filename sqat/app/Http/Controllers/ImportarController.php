@@ -16,7 +16,7 @@ class ImportarController extends Controller
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
         } else {
-            return view('/importar');
+            return view('importar.importar');
         }
     }
 
@@ -33,31 +33,31 @@ class ImportarController extends Controller
         $request->validate([
             'archivo_excel' => 'required|mimes:xlsx,csv'
         ]);
-    
+
         $archivo = $request->file('archivo_excel');
         $spreadsheet = IOFactory::load($archivo->getPathname());
         $hoja = $spreadsheet->getActiveSheet();
         $datos = $hoja->toArray(null, true, true, true);
-    
+
         DB::beginTransaction();
         try {
             $asignaciones = [];
             $errores = [];
-    
+
             foreach ($datos as $index => $fila) {
                 if ($index == 1) continue; // Saltar encabezados
-    
+
                 // Verificar si la fila está vacía
                 if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
                     continue;
                 }
-    
+
                 $responsableUser = $this->eliminarTildesYMayusculas($fila['A']);
                 $usuarioUser = $this->eliminarTildesYMayusculas($fila['B']);
                 $nroSerie = $this->eliminarTildesYMayusculas($fila['C']);
                 $estadoExcel = $this->eliminarTildesYMayusculas($fila['D']);
                 $justificacion = $fila['E'];
-    
+
                 // Buscar el activo
                 $activo = Activo::where('nro_serie', $nroSerie)->first();
                 if (!$activo) {
@@ -67,7 +67,7 @@ class ImportarController extends Controller
                     ];
                     continue;
                 }
-    
+
                 // Buscar el estado
                 $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
                 if (!$estado) {
@@ -77,7 +77,7 @@ class ImportarController extends Controller
                     ];
                     continue;
                 }
-    
+
                 // Manejar el responsable
                 if (!empty($responsableUser)) {
                     // Si se proporciona un responsable en el archivo, buscarlo
@@ -102,7 +102,7 @@ class ImportarController extends Controller
                     }
                     // No es necesario actualizar el responsable, se mantiene el actual
                 }
-    
+
                 // Buscar el usuario
                 if (!empty($usuarioUser)) {
                     $usuario = Persona::where('user', $usuarioUser)->first();
@@ -116,11 +116,11 @@ class ImportarController extends Controller
                 } else {
                     $usuario = null;
                 }
-    
+
                 // Actualizar el estado y la justificación del activo
-                $activo->estado = $estado->id;  
+                $activo->estado = $estado->id;
                 $activo->justificacion_doble_activo = $justificacion ?: null;
-    
+
                 // Actualizar la ubicación del activo a la ubicación del responsable (si existe)
                 if ($activo->responsable_de_activo) {
                     $responsable = Persona::find($activo->responsable_de_activo);
@@ -128,14 +128,14 @@ class ImportarController extends Controller
                         $activo->ubicacion = $responsable->ubicacion;
                     }
                 }
-    
+
                 $activo->save();
-    
+
                 // Crear o actualizar la asignación en la tabla asignaciones
                 if ($usuario) {
                     $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
                 }
-    
+
                 $asignaciones[] = [
                     'responsable' => $activo->responsable_de_activo ? Persona::find($activo->responsable_de_activo)->user : null,
                     'usuario_activo' => $usuario ? $usuario->user : null,
@@ -144,9 +144,9 @@ class ImportarController extends Controller
                     'justificacion' => $activo->justificacion_doble_activo,
                 ];
             }
-    
+
             DB::commit();
-            return view('importar', compact('datos', 'asignaciones', 'errores'))->with('success', 'Datos importados correctamente.');
+            return view('importar.importar', compact('datos', 'asignaciones', 'errores'))->with('success', 'Datos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
