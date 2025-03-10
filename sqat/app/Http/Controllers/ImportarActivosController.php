@@ -195,7 +195,7 @@ class ImportarActivosController extends Controller
                     'precio' => null,
                     'ubicacion' => $ubicacionNombre,
                     'justificacion_doble_activo' => null,
-                    'caracteristicas_adicionales' => implode(',', $caracteristicasValidas)
+                    'caracteristicas_adicionales' => $caracteristicasValidas
                 ];
             }
 

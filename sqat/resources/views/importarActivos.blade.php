@@ -88,6 +88,21 @@
                                                                     <td>{{ $activo['tipo_de_activo'] }}</td>
                                                                     <td>{{ $activo['estado'] }}</td>
                                                                     <td>{{ $activo['ubicacion'] }}</td>
+                                                                    <td>
+                                                                        @if (!empty($activo['caracteristicas_adicionales']))
+                                                                            <ul>
+                                                                                @foreach ($activo['caracteristicas_adicionales'] as $caracteristica)
+                                                                                    @if (is_array($caracteristica))
+                                                                                        <li>{{ $caracteristica['nombre'] }}: {{ $caracteristica['valor'] }}</li>
+                                                                                    @else
+                                                                                        <li>{{ $caracteristica }}</li>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        @else
+                                                                            Sin características adicionales
+                                                                        @endif
+                                                                    </td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
