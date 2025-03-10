@@ -31,8 +31,5 @@
         Livewire.on('actualizarFila', function() {
             toastr.success('Estado cambiado correctamente.');
         });
-        Livewire.on('eventoOrdenarPersonas', function(columna) {
-            console.log("Evento recibido:", columna);
-        });
     });
 </script>

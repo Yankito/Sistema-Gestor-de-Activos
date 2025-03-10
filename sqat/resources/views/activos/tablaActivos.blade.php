@@ -96,6 +96,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Tabla de activos</h3>
+
                 <!-- Add a "Clear Filters" button -->
                 <button id="clear-filters" class="btn btn-danger btn-sm float-right">
                     <i class="fas fa-filter"></i> Limpiar Filtros

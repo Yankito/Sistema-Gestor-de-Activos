@@ -8,11 +8,8 @@ use App\Models\Persona;
 class TablaPersonas extends Component
 {
     public $personas;
-    protected $listeners = ['eventoOrdenarPersonas' => 'ordenarPor'];
+    protected $listeners = [];
 
-
-    public $sortColumn = 'user'; // Columna por defecto
-    public $sortDirection = 'asc'; // Dirección por defecto
 
     public function mount()
     {
@@ -20,27 +17,9 @@ class TablaPersonas extends Component
         $this->cargarPersonas();
     }
 
-    public function ordenarPor($columna)
-    {
-        //dd($columna);
-        // Si la columna seleccionada es la misma, cambia la dirección
-        if ($this->sortColumn === $columna) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            // Si se cambia de columna, inicia en orden ascendente
-            $this->sortColumn = $columna;
-            $this->sortDirection = 'asc';
-        }
-
-        // Recargar los datos ordenados
-        $this->cargarActivos();
-    }
-
     private function cargarPersonas()
     {
-        $this->personas = Persona::with('ubicacionRelation')
-            ->orderBy($this->sortColumn, $this->sortDirection)
-            ->get();
+        $this->personas = Persona::with('ubicacionRelation')->get();
     }
 
 
