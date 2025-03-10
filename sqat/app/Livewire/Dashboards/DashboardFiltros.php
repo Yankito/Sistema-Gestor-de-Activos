@@ -56,10 +56,6 @@ class DashboardFiltros extends Component
         $opcionesDashboard = $this->obtenerOpcionesDashboard();
         $this->calcularCantidadActivos();
 
-        $this->dispatch('actualizarDashboard', [
-            'vista' => $this->vista,
-            'opcionesDashboard' => $opcionesDashboard,
-        ]);
 
         // Pasar el usuario a la vista
         return view('livewire.dashboards.dashboard-filtros',compact(
@@ -222,12 +218,22 @@ class DashboardFiltros extends Component
             $this->nombreVista = "General";
             $this->filtro = "tipo_de_activo";
             $this->dispatch('$refresh');
+            $this->dispatch('actualizarDashboard', [
+                'vista' => $this->vista,
+                'opcionesDashboard' => $this->obtenerOpcionesDashboard(),
+                'valor' => $this->valor,
+            ]);
         }
 
         $this->atributos = $this->obtenerAtributos();
         $this->actualizarAtributo($this->filtro);
         $this->calcularCantidadActivos();
         $this->dispatch('$refresh');
+        $this->dispatch('actualizarDashboard', [
+            'vista' => $this->vista,
+            'opcionesDashboard' => $this->obtenerOpcionesDashboard(),
+            'valor' => $this->valor,
+        ]);
     }
 
 }
