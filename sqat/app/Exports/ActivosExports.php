@@ -8,6 +8,8 @@ use App\Models\Estado;
 use App\Models\Persona;
 use App\Models\Ubicacion;
 use App\Models\Asignacion; // Importar el modelo Asignacion
+use App\Models\CaracteristicaAdicional; // Importar el modelo CaracteristicaAdicional
+use App\Models\ValorAdicional; // Importar el modelo ValorAdicional
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -20,18 +22,45 @@ class ActivosExports
 {
     public function export($formato)
     {
-        // Obtener todos los activos
-        $activos = Activo::all();
+        // Obtener todos los activos con sus relaciones
+        $activos = Activo::with(['tipoDeActivo', 'estadoRelation', 'responsableDeActivo', 'ubicacionRelation', 'valoresAdicionales.idCaracteristica'])->get();
 
-        // Obtener los datos de las tablas relacionadas
-        $tiposActivo = TipoActivo::pluck('nombre', 'id')->all();
-        $estados = Estado::pluck('nombre_estado', 'id')->all();
-        $responsables = Persona::pluck('nombre_completo', 'id')->all();
-        $ubicaciones = Ubicacion::pluck('sitio', 'id')->all();
-        $personas = Persona::pluck('nombre_completo', 'id')->all(); // Para obtener nombres de usuarios
+        // Obtener los tipos de activo únicos
+        $tiposActivo = TipoActivo::with('caracteristicasAdicionales')->get();
 
+        // Crear el archivo de Excel
         $spreadsheet = new Spreadsheet();
+
+        // Hoja general
+        $this->crearHojaGeneral($spreadsheet, $activos);
+
+        // Hojas por tipo de activo
+        foreach ($tiposActivo as $tipo) {
+            $this->crearHojaPorTipoActivo($spreadsheet, $tipo, $activos);
+        }
+
+        // Guardar el archivo
+        $filePath = tempnam(sys_get_temp_dir(), 'activos');
+        if ($formato == 'excel') {
+            $writer = new Xlsx($spreadsheet);
+            $filePath .= '.xlsx';
+        } elseif ($formato == 'csv') {
+            // No es compatible con múltiples hojas, por lo que solo exportará la hoja general
+            $writer = new Csv($spreadsheet);
+            $filePath .= '.csv';
+        }
+        $writer->save($filePath);
+
+        return $filePath;
+    }
+
+    /**
+     * Crea la hoja general con los datos de todos los activos.
+     */
+    private function crearHojaGeneral($spreadsheet, $activos)
+    {
         $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('General');
 
         // Encabezados
         $headers = [
@@ -41,25 +70,7 @@ class ActivosExports
         $column = 'A';
         foreach ($headers as $header) {
             $sheet->setCellValue($column . '1', $header);
-            $sheet->getStyle($column . '1')->applyFromArray([
-                'font' => [
-                    'bold' => true,
-                    'color' => ['argb' => 'FFFFFFFF'],
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'startColor' => ['argb' => 'FF4CAF50'],
-                ],
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color' => ['argb' => 'FF000000'],
-                    ],
-                ],
-            ]);
+            $this->aplicarEstiloEncabezado($sheet, $column . '1');
             $sheet->getColumnDimension($column)->setAutoSize(true);
             $column++;
         }
@@ -67,19 +78,7 @@ class ActivosExports
         // Datos
         $row = 2;
         foreach ($activos as $activo) {
-            // Obtener los nombres correspondientes a los IDs
-            $tipoActivoNombre = $tiposActivo[$activo->tipo_de_activo] ?? 'Desconocido';
-            $estadoNombre = $estados[$activo->estado] ?? 'Desconocido';
-            $responsableNombre = $responsables[$activo->responsable_de_activo] ?? 'Desconocido';
-            $ubicacionNombre = $ubicaciones[$activo->ubicacion] ?? 'Desconocido';
-
-            // Obtener los usuarios asignados al activo actual
-            $usuariosAsignados = Asignacion::where('id_activo', $activo->id)
-                ->join('personas', 'asignaciones.id_persona', '=', 'personas.id')
-                ->pluck('personas.nombre_completo')
-                ->toArray();
-
-            // Formatear los nombres de los usuarios
+            $usuariosAsignados = $activo->usuarioDeActivo->pluck('nombre_completo')->toArray();
             $usuariosFormateados = implode("\n• ", $usuariosAsignados);
             if (!empty($usuariosFormateados)) {
                 $usuariosFormateados = "• " . $usuariosFormateados;
@@ -88,25 +87,16 @@ class ActivosExports
             $sheet->setCellValue('A' . $row, $activo->nro_serie)
                   ->setCellValue('B' . $row, $activo->marca)
                   ->setCellValue('C' . $row, $activo->modelo)
-                  ->setCellValue('D' . $row, $tipoActivoNombre) // Tipo de Activo (nombre)
-                  ->setCellValue('E' . $row, $estadoNombre) // Estado (nombre)
-                  ->setCellValue('F' . $row, $usuariosFormateados) // Usuarios de Activo (formateados)
-                  ->setCellValue('G' . $row, $responsableNombre) // Responsable de Activo (nombre)
+                  ->setCellValue('D' . $row, $activo->tipoDeActivo->nombre)
+                  ->setCellValue('E' . $row, $activo->estadoRelation->nombre_estado)
+                  ->setCellValue('F' . $row, $usuariosFormateados)
+                  ->setCellValue('G' . $row, $activo->responsableDeActivo->nombre_completo ?? 'Desconocido')
                   ->setCellValue('H' . $row, $activo->precio)
-                  ->setCellValue('I' . $row, $ubicacionNombre) // Ubicación (nombre)
+                  ->setCellValue('I' . $row, $activo->ubicacionRelation->sitio)
                   ->setCellValue('J' . $row, $activo->justificacion_doble_activo);
 
-            // Aplicar bordes a las celdas de datos
-            $sheet->getStyle('A' . $row . ':J' . $row)->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color' => ['argb' => 'FF000000'],
-                    ],
-                ],
-            ]);
+            $this->aplicarEstiloCeldas($sheet, 'A' . $row . ':J' . $row);
 
-            // Ajustar el alto de la fila si hay múltiples usuarios
             if (count($usuariosAsignados) > 1) {
                 $sheet->getRowDimension($row)->setRowHeight(15 * count($usuariosAsignados));
             }
@@ -114,22 +104,99 @@ class ActivosExports
             $row++;
         }
 
-        // Estilo de formato de número para columnas con precios
+        // Formato de número para precios
         $sheet->getStyle('H2:H' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+    }
 
-        // Crear el archivo
-        $filePath = tempnam(sys_get_temp_dir(), 'activos');
-        if ($formato == 'excel') {
-            $writer = new Xlsx($spreadsheet);
-            $filePath .= '.xlsx';
-        } elseif ($formato == 'csv') {
-            $writer = new Csv($spreadsheet);
-            $filePath .= '.csv';
-        } elseif ($formato == 'pdf') {
-            // Implementar la lógica para exportar a PDF si es necesario
+    /**
+     * Crea una hoja por tipo de activo con las características adicionales.
+     */
+    private function crearHojaPorTipoActivo($spreadsheet, $tipo, $activos)
+    {
+        $sheet = $spreadsheet->createSheet();
+        $sheet->setTitle(substr($tipo->nombre, 0, 31)); // Limitar el nombre de la hoja a 31 caracteres
+
+        // Encabezados fijos
+        $headers = ['Número de Serie', 'Marca', 'Modelo', 'Tipo de Activo'];
+
+        // Agregar encabezados para las características adicionales
+        foreach ($tipo->caracteristicasAdicionales as $caracteristica) {
+            $headers[] = $caracteristica->nombre_caracteristica;
         }
-        $writer->save($filePath);
 
-        return $filePath;
+        // Escribir encabezados
+        $column = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($column . '1', $header);
+            $this->aplicarEstiloEncabezado($sheet, $column . '1');
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+            $column++;
+        }
+
+        // Filtrar activos por tipo
+        $activosFiltrados = $activos->where('tipo_de_activo', $tipo->id);
+
+        // Escribir datos
+        $row = 2;
+        foreach ($activosFiltrados as $activo) {
+            $sheet->setCellValue('A' . $row, $activo->nro_serie)
+                  ->setCellValue('B' . $row, $activo->marca)
+                  ->setCellValue('C' . $row, $activo->modelo)
+                  ->setCellValue('D' . $row, $tipo->nombre);
+
+            $column = 'E';
+            foreach ($tipo->caracteristicasAdicionales as $caracteristica) {
+                $valor = $activo->valoresAdicionales
+                    ->where('id_caracteristica', $caracteristica->id)
+                    ->first()
+                    ->valor ?? 'N/A';
+                $sheet->setCellValue($column . $row, $valor);
+                $column++;
+            }
+
+            $this->aplicarEstiloCeldas($sheet, 'A' . $row . ':' . $column . $row);
+            $row++;
+        }
+    }
+
+    /**
+     * Aplica estilos a los encabezados.
+     */
+    private function aplicarEstiloEncabezado($sheet, $celda)
+    {
+        $sheet->getStyle($celda)->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF4CAF50'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Aplica estilos a las celdas de datos.
+     */
+    private function aplicarEstiloCeldas($sheet, $rango)
+    {
+        $sheet->getStyle($rango)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ]);
     }
 }

@@ -88,10 +88,8 @@ Route::middleware(['auth'])->group(function(){
         return Response::download($filePath, 'PlantillaAsignacion.xlsx');
     })->name('descargar.excel');
 
-    Route::get('/descargarActivosExcel', function () {
-        $filePath = public_path('excel/PlantillaActivos.xlsx');
-        return Response::download($filePath, 'PlantillaActivos.xlsx');
-    })->name('descargarActivos.excel');
+    Route::get('/descargar-plantilla-activos', [ImportarActivosController::class, 'generarPlantilla'])
+        ->name('descargarActivos.excel');
 
     Route::get('/descargarPersonasExcel', function () {
         $filePath = public_path('excel/PlantillaPersonas.xlsx');

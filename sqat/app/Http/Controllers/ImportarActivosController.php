@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Activo;
 use Illuminate\Support\Facades\DB;
 
@@ -11,13 +13,11 @@ class ImportarActivosController extends Controller
 {
     public function index()
     {
-        // Verificar si el usuario es administrador
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
-        }else{
+        } else {
             return view('importarActivos');
         }
-
     }
 
     private function eliminarTildesYMayusculas($cadena)
@@ -28,6 +28,89 @@ class ImportarActivosController extends Controller
         return str_replace($buscar, $reemplazar, $cadena);
     }
 
+    public function generarPlantilla()
+    {
+        $spreadsheet = new Spreadsheet();
+
+        // Hoja principal general
+        $hojaGeneral = $spreadsheet->getActiveSheet();
+        $hojaGeneral->setTitle('General');
+        $hojaGeneral->setCellValue('A1', 'Número de serie');
+        $hojaGeneral->setCellValue('B1', 'Marca');
+        $hojaGeneral->setCellValue('C1', 'Modelo');
+        $hojaGeneral->setCellValue('D1', 'Tipo de activo');
+        $hojaGeneral->setCellValue('E1', 'Ubicación');
+
+        // Estilo para las cabeceras
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF808080'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+
+        $hojaGeneral->getStyle('A1:E1')->applyFromArray($styleArray);
+
+        // Ajustar ancho de columnas
+        foreach (range('A', 'E') as $columnID) {
+            $hojaGeneral->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Consultar los tipos de activos
+        $tiposActivos = DB::table('tipo_activo')->get();
+
+        foreach ($tiposActivos as $tipoActivo) {
+            $hoja = $spreadsheet->createSheet();
+            $hoja->setTitle($tipoActivo->nombre);
+
+            // Cabecera por defecto
+            $hoja->setCellValue('A1', 'Número de serie');
+
+            // Consultar las características adicionales para el tipo de activo
+            $caracteristicas = DB::table('caracteristicas_adicionales')
+                ->where('tipo_activo_id', $tipoActivo->id)
+                ->pluck('nombre_caracteristica');
+
+            // Asignar cabeceras adicionales
+            $columna = 'B';
+            foreach ($caracteristicas as $caracteristica) {
+                $hoja->setCellValue($columna . '1', $caracteristica);
+                $columna++;
+            }
+
+            // Aplicar estilo a las cabeceras
+            $hoja->getStyle('A1:' . $columna . '1')->applyFromArray($styleArray);
+
+            // Ajustar ancho de columnas
+            foreach (range('A', $columna) as $columnID) {
+                $hoja->getColumnDimension($columnID)->setAutoSize(true);
+            }
+        }
+
+        // Crear archivo Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Plantilla_Importacion_Activos.xlsx';
+        $filePath = storage_path('app/public/' . $fileName);
+
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
     public function importExcel(Request $request)
     {
         $request->validate([
@@ -36,174 +119,108 @@ class ImportarActivosController extends Controller
 
         $archivo = $request->file('archivo_excel');
         $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
+        $hojaGeneral = $spreadsheet->getSheetByName('General');
+
+        if (!$hojaGeneral) {
+            return back()->with('error', 'La hoja General no fue encontrada en el archivo.');
+        }
+
+        $datosGenerales = $hojaGeneral->toArray(null, true, true, true);
 
         DB::beginTransaction();
         try {
             $activos = [];
             $errores = [];
 
-            foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
+            foreach ($datosGenerales as $index => $fila) {
+                if ($index == 1) continue;
 
-                // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F'])) {
-                        continue;
-                    }
-                //obetener tipo de activo 
+                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
+                    continue;
+                }
+
                 $tipoActivoNombre = $this->eliminarTildesYMayusculas($fila['D']);
                 $tipoActivo = DB::table('tipo_activo')->where('nombre', $tipoActivoNombre)->first();
 
                 if (!$tipoActivo) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El tipo de activo '{$tipoActivo}' no existe en la base de datos."
-                    ];
+                    $errores[] = ['fila' => $fila, 'motivo' => "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos."];
                     continue;
                 }
 
-                //obtener las caracteristicas permitidas para este tipo de activo
-                $caracteristicasPermitidas = DB::table('caracteristicas_adicionales')
-                ->where('tipo_activo_id', $tipoActivo->id)
-                ->get()
-                ->keyBy('nombre_caracteristica');
-
-                //processar las caracteristicas adicionales
-
-                $caracteristicasIngresadas =!empty($fila['F']) ? explode("\n", $fila['F']) : [];
-                $caracteristicasValidas = [];
-                $caracteristicasInvalidas = [];
-
-                foreach ($caracteristicasIngresadas as $caracteristica) {
-                    $caracteristica = trim($caracteristica); // Eliminar espacios en blanco
-                    if (empty($caracteristica)) {
-                        continue; // Saltar si la línea está vacía
-                    }
-                
-                    // Dividir el nombre y el valor de la característica
-                    $partes = explode(':', $caracteristica, 2); // Dividir en máximo 2 partes
-                    $nombreCaracteristica = strtoupper(trim($partes[0] ?? '')); // Normalizar nombre
-                    $valorCaracteristica = trim($partes[1] ?? ''); // Valor de la característica
-                
-                    // Verificar si la característica es permitida
-                    if (isset($caracteristicasPermitidas[$nombreCaracteristica])) {
-                        $caracteristicaId = $caracteristicasPermitidas[$nombreCaracteristica]->id; // Obtener el ID de la base de datos
-                        $caracteristicasValidas[] = "{$nombreCaracteristica}: {$valorCaracteristica}";
-                    } else {
-                        $caracteristicasInvalidas[] = $caracteristica;
-                    }
-                }
-
-                if(!empty($caracteristicasInvalidas)){
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "Características no permitidas para '{$tipoActivoNombre}': " . implode(', ', $caracteristicasInvalidas)
-                    ];
-                    continue;
-                }
-
-                // Convertir la ubicación a mayúsculas y eliminar tildes
                 $ubicacion = $this->eliminarTildesYMayusculas($fila['E']);
-                $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
-
                 if (empty($fila['E'])) {
                     $ubicacion = 'ROSARIO NORTE';
-                    $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
                 }
+
+                $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
-                    ];
+                    $errores[] = ['fila' => $fila, 'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."];
                     continue;
                 }
 
-                $ubicacionId = $ubicacionExistente->id;
+                $estado = DB::table('estados')->where('nombre_estado', 'Adquirido')->first();
 
-                // Obtener el ID del estado
-                $estadoNombre = 'Adquirido'; // Estado predefinido como 'Adquirido'
-                $estado = DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
-                $estadoId = $estado->id;
-
-                if(Activo::where('nro_serie', $fila['A'])->exists()) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."
-                    ];
+                if (Activo::where('nro_serie', $fila['A'])->exists()) {
+                    $errores[] = ['fila' => $fila, 'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
                     continue;
                 }
-                //TIPO DE ACTIVO
-                $tipoActivo = $this->eliminarTildesYMayusculas($fila['D']);
-                $tipoActivoExistente = DB::table('tipo_activo')->where('nombre', $tipoActivo)->first();
-                if (!$tipoActivoExistente) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El tipo de activo '{$tipoActivo}' no existe en la base de datos."
-                    ];
-                    continue;
-                }
-                $tipoActivoId = $tipoActivoExistente->id;
 
-
-                // Crear el activo
                 $activo = Activo::create([
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
-                    'tipo_de_activo' => $tipoActivoId,
-                    'estado' => $estadoId,
+                    'tipo_de_activo' => $tipoActivo->id,
+                    'estado' => $estado->id,
                     'responsable_de_activo' => null,
                     'precio' => null,
-                    'ubicacion' => $ubicacionId,
-                    'justificacion_doble_activo' => null,
-                    'caracteristicas_adicionales' => !empty($caracteristicasValidas) ? implode(',', $caracteristicasValidas) :null
+                    'ubicacion' => $ubicacionExistente->id,
+                    'justificacion_doble_activo' => null
                 ]);
 
-                //guardar los valores adicionales en la tabla valores_adicionales
-                if (!empty($caracteristicasValidas)) {
-                    foreach ($caracteristicasValidas as $caracteristicaValida) {
-                        // Descomponer el string en nombre y valor
-                        list($nombreCaracteristica, $valorCaracteristica) = explode(':', $caracteristicaValida);
+                $hojaEspecifica = $spreadsheet->getSheetByName($tipoActivo->nombre);
 
-                        // Obtener el ID de la característica adicional
-                        $caracteristicaId = $caracteristicasPermitidas[$nombreCaracteristica]->id;
+                if ($hojaEspecifica) {
+                    $datosEspecificos = $hojaEspecifica->toArray(null, true, true, true);
 
-                        // Insertar en la tabla valores_adicionales
-                        DB::table('valores_adicionales')->insert([
-                            'id_activo' => $activo->id,
-                            'id_caracteristica' => $caracteristicaId,
-                            'valor' => trim($valorCaracteristica)
-                        ]);
+                    foreach ($datosEspecificos as $idx => $filaEspecifica) {
+                        if ($idx == 1) continue;
+
+                        if ($filaEspecifica['A'] !== $fila['A']) continue;
+
+                        $caracteristicas = DB::table('caracteristicas_adicionales')
+                            ->where('tipo_activo_id', $tipoActivo->id)
+                            ->pluck('id', 'nombre_caracteristica');
+
+                        $columna = 'B';
+                        foreach ($caracteristicas as $nombre => $caracteristicaId) {
+                            $valor = $filaEspecifica[$columna] ?? null;
+
+                            if ($valor) {
+                                DB::table('valores_adicionales')->insert([
+                                    'id_activo' => $activo->id,
+                                    'id_caracteristica' => $caracteristicaId,
+                                    'valor' => $valor
+                                ]);
+                            }
+                            $columna++;
+                        }
                     }
                 }
-            
 
-                $ubicacionNombre = $ubicacionExistente->sitio;
-                $estadoNombre = $estado->nombre_estado;
-                //nombre del tipo de activo
-                $tipoActivoNombre = $tipoActivoExistente->nombre;
-
-                $activos[] = [
-                    'nro_serie' => $fila['A'],
-                    'marca' => $fila['B'],
-                    'modelo' => $fila['C'],
-                    'tipo_de_activo' => $tipoActivoNombre,
-                    'estado' => $estadoNombre,
-                    'responsable_de_activo' => null,
-                    'precio' => null,
-                    'ubicacion' => $ubicacionNombre,
-                    'justificacion_doble_activo' => null,
-                    'caracteristicas_adicionales' => $caracteristicasValidas
-                ];
+                $activos[] = $activo;
             }
 
             DB::commit();
-            return view('importarActivos', compact('datos', 'activos', 'errores'))->with('success', 'Activos importados correctamente.');
+
+            if (!empty($errores)) {
+                return back()->with('errores', $errores);
+            }
+
+            return back()->with('success', 'Importación completada con éxito.');
         } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
+            DB::rollBack();
+            return back()->with('error', 'Error durante la importación: ' . $e->getMessage());
         }
     }
 }
