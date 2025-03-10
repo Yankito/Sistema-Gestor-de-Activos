@@ -75,6 +75,7 @@
                                                             <th>Tipo de Activo</th>
                                                             <th>Estado</th>
                                                             <th>Ubicación</th>
+                                                            <th>Caracteristicas</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -108,19 +109,21 @@
                                                             <th>Modelo</th>
                                                             <th>Tipo de Activo</th>
                                                             <th>Ubicación</th>
+                                                            <th>Caracteristicas</th>
                                                             <th>Motivo del Error</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($errores as $error)
-                                                            @if (!empty(array_filter($error['fila'])))
-                                                                <tr>
-                                                                    @foreach ($error['fila'] as $cell)
-                                                                        <td>{{ $cell ?? '-' }}</td>
-                                                                    @endforeach
-                                                                    <td>{{ $error['motivo'] }}</td>
-                                                                </tr>
-                                                            @endif
+                                                            <tr>
+                                                                <td>{{ $error['fila']['A'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['B'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['C'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['D'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['E'] ?? '-' }}</td>
+                                                                <td>{{ $error['fila']['F'] ?? '-' }}</td>
+                                                                <td>{{ $error['motivo'] }}</td>
+                                                            </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>

@@ -53,6 +53,13 @@ class ImportarPersonasController extends Controller
         throw new \Exception("Formato de fecha no reconocido: '{$fecha}'");
     }
 
+    private function generarUserProvisional()
+    {
+        $prefix = 'PROV_'; // Prefijo para identificar que es un user provisional
+        $randomString = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 10); // Genera una cadena aleatoria de 10 caracteres
+        return $prefix . $randomString;
+    }
+
     private function eliminarTildesYMayusculas($cadena)
     {
         $cadena = strtoupper($cadena);
@@ -108,24 +115,24 @@ class ImportarPersonasController extends Controller
                     ];
                     continue;
                 }
-                // verificar si el user ya existe en la base de datos
-                if (empty($fila['A'])) {
+
+                // Verificar si el user es 0 y generar un user provisional
+                $user = $fila['A'];
+                if ($user == 0) {
+                    $user = $this->generarUserProvisional();
+                }
+
+                // Verificar si el user ya existe en la base de datos (sin excepciones)
+                if (Persona::where('user', $user)->exists()) {
                     $errores[] = [
                         'fila' => $fila,
-                        'motivo' => "El campo 'user' no puede estar vacío."
+                        'motivo' => "El user '{$user}' ya existe en la base de datos."
                     ];
                     continue;
                 }
 
-                if ($fila['A'] !== '0' && Persona::where('user', $fila['A'])->exists()) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El user '{$fila['A']}' ya existe en la base de datos."
-                    ];
-                    continue;
-                }
-                //verificar que la fecha no sea null
-                if($fila['F'] == null){
+                // Verificar que la fecha no sea null
+                if ($fila['F'] == null) {
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "La fecha de ingreso no puede ser nula."
@@ -135,7 +142,7 @@ class ImportarPersonasController extends Controller
 
                 // Crear la persona
                 Persona::create([
-                    'user' => $fila['A'],
+                    'user' => $user,
                     'rut' => $fila['B'],
                     'nombre_completo' => $fila['C'],
                     'nombre_empresa' => $fila['D'],
@@ -153,7 +160,7 @@ class ImportarPersonasController extends Controller
                 $ubicacionNombre = $ubicacionExistente->sitio;
 
                 $personas[] = [
-                    'user' => $fila['A'],
+                    'user' => $user,
                     'rut' => $fila['B'],
                     'nombre_completo' => $fila['C'],
                     'nombre_empresa' => $fila['D'],

@@ -13,7 +13,7 @@ class CrearTipoActivoController extends Controller
 {
     public function index()
     {
-        // Obtener todos los tipos de activos desde la base de datos
+        // Obtener todos los tipos de activos desde la base de dat  os
         $tiposActivo = TipoActivo::all();
 
         foreach ($tiposActivo as $tipo) {
@@ -21,6 +21,9 @@ class CrearTipoActivoController extends Controller
                 $caracteristica->hashed_id = $caracteristica->getHashedIdAttribute(); // Forzar su inclusión
             }
         }
+
+        // Obtener todos los tipos de activos con sus características adicionales
+        $tiposActivo = TipoActivo::with('caracteristicasAdicionales')->get();
 
         // Pasar los datos a la vista
         return view('crearTipoActivo', compact('tiposActivo'));
