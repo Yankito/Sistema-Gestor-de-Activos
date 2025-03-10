@@ -166,7 +166,7 @@ class ImportarActivosController extends Controller
                     continue;
                 }
 
-                $activo = Activo::create([
+                $nuevo_activo = Activo::create([
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
@@ -177,6 +177,18 @@ class ImportarActivosController extends Controller
                     'ubicacion' => $ubicacionExistente->id,
                     'justificacion_doble_activo' => null
                 ]);
+
+                $activos[] = [
+                    'nro_serie' => $fila['A'],
+                    'marca' => $fila['B'],
+                    'modelo' => $fila['C'],
+                    'tipo_de_activo' => $tipoActivo->nombre,
+                    'estado' => $estado->nombre_estado,
+                    'responsable_de_activo' => null,
+                    'precio' => null,
+                    'ubicacion' => $ubicacionExistente->sitio,
+                    'justificacion_doble_activo' => null
+                ];
 
                 $hojaEspecifica = $spreadsheet->getSheetByName($tipoActivo->nombre);
 
@@ -198,7 +210,7 @@ class ImportarActivosController extends Controller
 
                             if ($valor) {
                                 DB::table('valores_adicionales')->insert([
-                                    'id_activo' => $activo->id,
+                                    'id_activo' => $nuevo_activo->id,
                                     'id_caracteristica' => $caracteristicaId,
                                     'valor' => $valor
                                 ]);
@@ -207,17 +219,11 @@ class ImportarActivosController extends Controller
                         }
                     }
                 }
-
-                $activos[] = $activo;
             }
 
             DB::commit();
 
-            if (!empty($errores)) {
-                return back()->with('errores', $errores);
-            }
-
-            return back()->with('success', 'Importación completada con éxito.');
+            return view('importarActivos', compact('datosGenerales','activos', 'errores'))-> with('success', 'Importación realizada con éxito.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error durante la importación: ' . $e->getMessage());

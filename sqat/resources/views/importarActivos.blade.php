@@ -80,7 +80,7 @@
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($activos as $activo)
-                                                            @if (!empty(array_filter($activo)))
+                                                            @if (!empty($activo))
                                                                 <tr>
                                                                     <td>{{ $activo['nro_serie'] }}</td>
                                                                     <td>{{ $activo['marca'] }}</td>
