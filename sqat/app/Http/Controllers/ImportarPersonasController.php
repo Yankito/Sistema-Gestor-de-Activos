@@ -15,11 +15,11 @@ class ImportarPersonasController extends Controller
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
         }else{
-            return view('importarPersonas');
+            return view('importar.importarPersonas');
         }
     }
     private function convertirEstadoEmpleado($valor)
-    {   
+    {
         $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
 
         if ($valor === 'ACTIVO') {
@@ -37,19 +37,19 @@ class ImportarPersonasController extends Controller
         if (!$fecha) {
             return null; // Si la fecha está vacía, devolver NULL
         }
-    
+
         $fecha = trim($fecha);
-    
+
         //  Caso 1: Excel almacena la fecha como un número
         if (is_numeric($fecha)) {
             return date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($fecha));
         }
-    
+
         //  Caso 2: Fecha en formato DD/MM/YYYY o D/M/YYYY
         if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $fecha, $matches)) {
             return sprintf('%04d-%02d-%02d', $matches[3], $matches[1], $matches[2]); // Convertir a YYYY-MM-DD
         }
-    
+
         throw new \Exception("Formato de fecha no reconocido: '{$fecha}'");
     }
 
@@ -167,7 +167,7 @@ class ImportarPersonasController extends Controller
             }
 
             DB::commit();
-            return view('importarPersonas', compact('datos', 'personas', 'errores'))->with('success', 'Datos importados correctamente.');
+            return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))->with('success', 'Datos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
