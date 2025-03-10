@@ -16,7 +16,7 @@ class ImportarActivosController extends Controller
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
         } else {
-            return view('importarimportarActivos');
+            return view('importar.importarActivos');
         }
     }
 
