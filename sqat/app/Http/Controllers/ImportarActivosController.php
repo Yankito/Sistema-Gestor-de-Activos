@@ -16,7 +16,7 @@ class ImportarActivosController extends Controller
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
         } else {
-            return view('importarActivos');
+            return view('importarimportarActivos');
         }
     }
 
@@ -232,7 +232,7 @@ class ImportarActivosController extends Controller
 
             DB::commit();
 
-            return view('importarActivos', compact('datosGenerales','activos', 'errores'))-> with('success', 'Importación realizada con éxito.');
+            return view('importar.importarActivos', compact('datosGenerales','activos', 'errores'))-> with('success', 'Importación realizada con éxito.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error durante la importación: ' . $e->getMessage());
