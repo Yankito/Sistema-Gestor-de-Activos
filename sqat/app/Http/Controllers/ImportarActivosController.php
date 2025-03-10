@@ -178,17 +178,8 @@ class ImportarActivosController extends Controller
                     'justificacion_doble_activo' => null
                 ]);
 
-                $activos[] = [
-                    'nro_serie' => $fila['A'],
-                    'marca' => $fila['B'],
-                    'modelo' => $fila['C'],
-                    'tipo_de_activo' => $tipoActivo->nombre,
-                    'estado' => $estado->nombre_estado,
-                    'responsable_de_activo' => null,
-                    'precio' => null,
-                    'ubicacion' => $ubicacionExistente->sitio,
-                    'justificacion_doble_activo' => null
-                ];
+                // Inicializar el array de características adicionales
+                $caracteristicasAdicionales = [];
 
                 $hojaEspecifica = $spreadsheet->getSheetByName($tipoActivo->nombre);
 
@@ -214,11 +205,29 @@ class ImportarActivosController extends Controller
                                     'id_caracteristica' => $caracteristicaId,
                                     'valor' => $valor
                                 ]);
+
+                                // Agregar las características adicionales al array
+                                $caracteristicasAdicionales[] = [
+                                    'nombre' => $nombre,
+                                    'valor' => $valor
+                                ];
                             }
                             $columna++;
                         }
                     }
                 }
+                $activos[] = [
+                    'nro_serie' => $fila['A'],
+                    'marca' => $fila['B'],
+                    'modelo' => $fila['C'],
+                    'tipo_de_activo' => $tipoActivo->nombre,
+                    'estado' => $estado->nombre_estado,
+                    'responsable_de_activo' => null,
+                    'precio' => null,
+                    'ubicacion' => $ubicacionExistente->sitio,
+                    'justificacion_doble_activo' => null,
+                    'caracteristicas_adicionales' => $caracteristicasAdicionales
+                ];
             }
 
             DB::commit();
