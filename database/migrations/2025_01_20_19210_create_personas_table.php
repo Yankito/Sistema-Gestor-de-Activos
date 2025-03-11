@@ -17,7 +17,7 @@ class CreatePersonasTable extends Migration
             // Definir la estructura de la tabla
             $table->id();
             $table->string('user', 20)->unique();
-            $table->string('rut', 15)->unique();  
+            $table->string('rut', 15);  
             $table->string('nombre_completo', 100); 
             $table->string('nombre_empresa', 100);         
             $table->boolean('estado_empleado')->default(true);  
