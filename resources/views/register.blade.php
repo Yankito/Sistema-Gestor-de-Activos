@@ -45,8 +45,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-outline mb-2">
-                                        <label class="form-label" for="segundo_apellido">Segundo apellido (opcional):</label>
-                                        <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control">
+                                        <label class="form-label" for="segundo_apellido">Segundo apellido:</label>
+                                        <input type="text" name="segundo_apellido" id="segundo_apellido" required class="form-control">
                                     </div>
                                 </div>
                             </div>

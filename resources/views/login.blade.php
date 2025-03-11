@@ -45,7 +45,7 @@
                             </div>
 
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <label class="form-label" for="contrasena">Password</label>
+                                <label class="form-label" for="contrasena">Contraseña</label>
                                 <input type="password" name="contrasena" id="contrasena" required class="form-control" />
                             </div>
 
@@ -56,7 +56,6 @@
                                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">
                                     Iniciar Sesión
                                 </button>
-                                <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
 
                         </form>

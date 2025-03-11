@@ -367,7 +367,6 @@
         .nav-link {
             display: flex;
             align-items: center; /* Alinea verticalmente el icono con el texto */
-            gap: 8px; /* Espacio entre el icono y el texto */
             white-space: normal; /* Permite el salto de línea */
         }
 
