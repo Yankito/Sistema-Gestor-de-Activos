@@ -92,6 +92,8 @@ class ImportarPersonasController extends Controller
                     continue;
                 }
 
+                $fila['A'] = strtoupper($fila['A']);
+
                 // Convertir la ubicación a mayúsculas y eliminar tildes
                 $ubicacion = $this->eliminarTildesYMayusculas($fila['I']);
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();

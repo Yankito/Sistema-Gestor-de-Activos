@@ -52,6 +52,10 @@ class ImportarController extends Controller
                     continue;
                 }
 
+                $fila['A'] = strtoupper($fila['A']);
+                $fila['B'] = strtoupper($fila['B']);
+                $fila['C'] = strtoupper($fila['C']);
+                $fila['D'] = strtoupper($fila['D']);
                 $responsableUser = $this->eliminarTildesYMayusculas($fila['A']);
                 $usuarioUser = $this->eliminarTildesYMayusculas($fila['B']);
                 $nroSerie = $this->eliminarTildesYMayusculas($fila['C']);
@@ -137,8 +141,8 @@ class ImportarController extends Controller
                 }
 
                 $asignaciones[] = [
-                    'responsable' => $activo->responsable_de_activo ? Persona::find($activo->responsable_de_activo)->user : null,
-                    'usuario_activo' => $usuario ? $usuario->user : null,
+                    'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
+                    'usuario_activo' => $usuario ? strtoupper($usuario->user) : null,
                     'numero_serie' => $activo->nro_serie,
                     'estado' => $estado->nombre_estado,
                     'justificacion' => $activo->justificacion_doble_activo,
