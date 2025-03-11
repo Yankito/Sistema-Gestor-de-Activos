@@ -161,13 +161,13 @@ class ImportarActivosController extends Controller
 
                 $estado = DB::table('estados')->where('nombre_estado', 'Adquirido')->first();
 
-                if (Activo::where('nro_serie', $fila['A'])->exists()) {
+                if (Activo::where('nro_serie', strtoupper($fila['A']))->exists()) {
                     $errores[] = ['fila' => $fila, 'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
                     continue;
                 }
 
                 $nuevo_activo = Activo::create([
-                    'nro_serie' => $fila['A'],
+                    'nro_serie' => strtoupper($fila['A']),
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
                     'tipo_de_activo' => $tipoActivo->id,

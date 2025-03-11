@@ -117,13 +117,13 @@ class ImportarPersonasController extends Controller
                 }
 
                 // Verificar si el user es 0 y generar un user provisional
-                $user = $fila['A'];
+                $user = strtoupper($fila['A']);
                 if ($user == 0) {
                     $user = $this->generarUserProvisional();
                 }
 
                 // Verificar si el user ya existe en la base de datos (sin excepciones)
-                if (Persona::where('user', $user)->exists()) {
+                if (Persona::where('user', operator: $user)->exists()) {
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "El user '{$user}' ya existe en la base de datos."
