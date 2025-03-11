@@ -1,6 +1,7 @@
 <!-- resources/views/registros/index.blade.php -->
 @extends('layouts.app')
-
+<!doctype html>
+<html lang="es">
 @section('content')
 <section class="content">
     <div class="container-fluid">
@@ -79,3 +80,4 @@
     });
 </script>
 @endsection
+</html>

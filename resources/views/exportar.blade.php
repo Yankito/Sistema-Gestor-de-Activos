@@ -1,5 +1,6 @@
 @extends('layouts.app')
-
+<!doctype html>
+<html lang="es">
 @section('content')
 <section class = "content">
       <div class="container-fluid">
@@ -127,3 +128,4 @@
     }
 </style>
 @endsection
+</html>
