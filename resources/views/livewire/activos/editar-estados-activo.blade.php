@@ -72,7 +72,7 @@
                     </button>
                     <button type="button" style="background-color: #e22551;" data-dismiss="modal" class="btn btn-danger btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 5)">
                         <i class="fas fa-question-circle"></i> <!-- Pasar a PERDIDO -->
-                        Extraviado
+                        Perdido
                     </button>
                     <button type="button" style="background-color: #000000;" data-dismiss="modal" class="btn btn-dark btn-sm" wire:click="cambiarEstado({{ $activo->id }}, 6)">
                         <i class="fas fa-user-secret"></i> <!-- Pasar a ROBADO -->
