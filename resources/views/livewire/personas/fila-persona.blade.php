@@ -3,8 +3,13 @@
         td {
             font-size: 12px;
         }
+        i {
+            flex-shrink: 0; /* Evita que el icono se reduzca de tamaño */
+            width: 16px; /* Asegura un tamaño uniforme del icono */
+            text-align: center;
+        }
     </style>
-    <td class="action-btns">
+    <td style="text-align: center;">
         @if($user->es_administrador)
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" wire:click="editarPersona('{{ $persona->id }}')">
                 <i class="fas fa-user-edit"></i>
