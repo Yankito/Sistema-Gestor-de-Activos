@@ -9,7 +9,7 @@ use App\Models\CaracteristicaAdicional;
 use Vinkla\Hashids\Facades\Hashids;
 
 
-class CrearTipoActivoController extends Controller
+class GestionarTipoActivoController extends Controller
 {
     public function index()
     {
@@ -26,7 +26,7 @@ class CrearTipoActivoController extends Controller
         $tiposActivo = TipoActivo::with('caracteristicasAdicionales')->get();
 
         // Pasar los datos a la vista
-        return view('crearTipoActivo', compact('tiposActivo'));
+        return view('gestionarTipoActivo', compact('tiposActivo'));
     }
 
     public function store(Request $request)
