@@ -108,7 +108,7 @@ class ImportarPersonasController extends Controller
                 $ubicacionId = $ubicacionExistente->id;
 
                 // Verificar si el RUT ya existe en la base de datos
-                if (Persona::where('rut', $fila['B'])->exists()) {
+                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
