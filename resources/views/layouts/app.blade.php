@@ -131,7 +131,7 @@
                     @if($user->es_administrador)
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                            <a href="/register" class="nav-link">Registrar Admin</a>
+                            <a href="/register" class="nav-link">Registrar Usuario</a>
                             </li>
                         </ul>
                     @endif

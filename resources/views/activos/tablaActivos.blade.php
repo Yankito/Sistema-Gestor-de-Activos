@@ -89,6 +89,9 @@
     </style>
 </head>
     @section('content')
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img src="pictures/Logo Empresas Iansa.png" alt="AdminLTELogo" height="100" width="300">
+    </div>
     <section class = "content">
       <div class="container-fluid">
         <div class="row">
