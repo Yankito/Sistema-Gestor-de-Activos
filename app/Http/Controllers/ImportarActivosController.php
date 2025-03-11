@@ -7,6 +7,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Activo;
+use App\Models\TipoActivo;
 use Illuminate\Support\Facades\DB;
 
 class ImportarActivosController extends Controller
@@ -71,9 +72,12 @@ class ImportarActivosController extends Controller
         }
 
         // Consultar los tipos de activos
-        $tiposActivos = DB::table('tipo_activo')->get();
+        $tiposActivos = TipoActivo::with('caracteristicasAdicionales')->get();
 
         foreach ($tiposActivos as $tipoActivo) {
+            if($tipoActivo->caracteristicasAdicionales->isEmpty()) {
+                continue;
+            }
             $hoja = $spreadsheet->createSheet();
             $hoja->setTitle($tipoActivo->nombre);
 
@@ -81,9 +85,7 @@ class ImportarActivosController extends Controller
             $hoja->setCellValue('A1', 'Número de serie');
 
             // Consultar las características adicionales para el tipo de activo
-            $caracteristicas = DB::table('caracteristicas_adicionales')
-                ->where('tipo_activo_id', $tipoActivo->id)
-                ->pluck('nombre_caracteristica');
+            $caracteristicas = $tipoActivo->caracteristicasAdicionales->pluck('nombre_caracteristica')->toArray();
 
             // Asignar cabeceras adicionales
             $columna = 'B';
@@ -91,7 +93,7 @@ class ImportarActivosController extends Controller
                 $hoja->setCellValue($columna . '1', $caracteristica);
                 $columna++;
             }
-
+            $columna = chr(ord($columna) - 1);
             // Aplicar estilo a las cabeceras
             $hoja->getStyle('A1:' . $columna . '1')->applyFromArray($styleArray);
 
