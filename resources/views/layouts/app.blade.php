@@ -288,10 +288,6 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <strong>Rosario Norte 615, Piso 23. Las Condes Santiago - Chile - Tel. 800 540 099 .</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0
-            </div>
         </footer>
 
         <!-- Control Sidebar -->
