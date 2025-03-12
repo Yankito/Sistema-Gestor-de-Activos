@@ -85,19 +85,36 @@ class ImportarPersonasController extends Controller
             $errores = [];
 
             foreach ($datos as $index => $fila) {
-                if ($index == 1 || $this->filaVacia($fila)) continue;
+                if ($index == 1) continue; // Saltar encabezados
 
-                $ubicacion = $this->obtenerUbicacion($fila['I'], $errores);
-                if (!$ubicacion) continue;
-
-                if ($this->rutExiste($fila['B'])) {
-                    $errores[] = $this->crearError($fila, "El RUT '{$fila['B']}' ya existe.");
+                // Verificar si la fila está vacía
+                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I'])) {
                     continue;
                 }
 
-                $user = $this->obtenerUser($fila['A']);
-                if ($this->userExiste($user)) {
-                    $errores[] = $this->crearError($fila, "El user '{$user}' ya existe.");
+                $fila['A'] = strtoupper($fila['A']);
+
+                // Convertir la ubicación a mayúsculas y eliminar tildes
+                $ubicacion = $this->eliminarTildesYMayusculas($fila['I']);
+                $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
+
+                if (!$ubicacionExistente) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
+                    ];
+                    continue;
+                }
+
+                // Obtener el ID de la ubicación
+                $ubicacionId = $ubicacionExistente->id;
+
+                // Verificar si el RUT ya existe en la base de datos
+                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
+                    ];
                     continue;
                 }
 
@@ -116,8 +133,46 @@ class ImportarPersonasController extends Controller
                     continue;
                 }
 
-                $nuevaPersona = $this->crearPersona($fila, $ubicacion->id, $user);
-                $personas[] = $this->formatearPersona($nuevaPersona, $ubicacion);
+                // Verificar que la fecha no sea null
+                if ($fila['F'] == null) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "La fecha de ingreso no puede ser nula."
+                    ];
+                    continue;
+                }
+
+                // Crear la persona
+                Persona::create([
+                    'user' => $user,
+                    'rut' => $fila['B'],
+                    'nombre_completo' => $fila['C'],
+                    'nombre_empresa' => $fila['D'],
+                    'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['E']), FILTER_VALIDATE_BOOLEAN),
+                    'fecha_ing' => $this->convertirFecha($fila['F']),
+                    'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
+                    'cargo' => $fila['H'],
+                    'ubicacion' => $ubicacionId,
+                    'correo' => $fila['J']
+                ]);
+
+                // Transformar el estado y la ubicación para mostrarlos en la vista
+                $estadoEmpleado = $this->convertirEstadoEmpleado($fila['E']);
+                $estadoEmpleadoNombre = $estadoEmpleado === 1 ? 'ACTIVO' : ($estadoEmpleado === 0 ? 'INACTIVO' : 'DESCONOCIDO');
+                $ubicacionNombre = $ubicacionExistente->sitio;
+
+                $personas[] = [
+                    'user' => $user,
+                    'rut' => $fila['B'],
+                    'nombre_completo' => $fila['C'],
+                    'nombre_empresa' => $fila['D'],
+                    'estado_empleado' => $estadoEmpleadoNombre, // Mostrar el nombre del estado
+                    'fecha_ing' => $this->convertirFecha($fila['F']),
+                    'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
+                    'cargo' => $fila['H'],
+                    'ubicacion' => $ubicacionNombre, // Mostrar el nombre de la ubicación
+                    'correo' => $fila['J']
+                ];
             }
 
             // Crear registro en el historial
@@ -128,120 +183,9 @@ class ImportarPersonasController extends Controller
         });
     }
 
-    private function filaVacia($fila)
-    {
-        return empty(array_filter($fila));
-    }
-
-    private function obtenerUbicacion($ubicacion, &$errores)
-    {
-        $ubicacion = $this->eliminarTildesYMayusculas($ubicacion);
-        $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
-
-        if (!$ubicacionExistente) {
-            $errores[] = $this->crearError([], "La ubicación '{$ubicacion}' no existe.");
-        }
-
-        return $ubicacionExistente;
-    }
-
-    private function rutExiste($rut)
-    {
-        return $rut !== '11111111-1' && Persona::where('rut', $rut)->exists();
-    }
-
-    private function userExiste($user)
-    {
-        return Persona::where('user', $user)->exists();
-    }
-
-    private function obtenerUser($user)
-    {
-        return strtoupper($user) ?: $this->generarUserProvisional();
-    }
-
-    private function crearPersona($fila, $ubicacionId, $user)
-    {
-        return Persona::create([
-            'user' => $user,
-            'rut' => $fila['B'],
-            'nombre_completo' => $fila['C'],
-            'nombre_empresa' => $fila['D'],
-            'estado_empleado' => filter_var($this->convertirEstadoEmpleado($fila['E']), FILTER_VALIDATE_BOOLEAN),
-            'fecha_ing' => $this->convertirFecha($fila['F']),
-            'fecha_ter' => $fila['G'] ? $this->convertirFecha($fila['G']) : null,
-            'cargo' => $fila['H'],
-            'ubicacion' => $ubicacionId,
-            'correo' => $fila['J']
-        ]);
-    }
-
-    private function formatearPersona($persona, $ubicacion)
-    {
-        return [
-            'user' => $persona->user,
-            'rut' => $persona->rut,
-            'nombre_completo' => $persona->nombre_completo,
-            'nombre_empresa' => $persona->nombre_empresa,
-            'estado_empleado' => $persona->estado_empleado ? 'ACTIVO' : 'INACTIVO',
-            'fecha_ing' => $persona->fecha_ing,
-            'fecha_ter' => $persona->fecha_ter,
-            'cargo' => $persona->cargo,
-            'ubicacion' => $ubicacion->sitio,
-            'correo' => $persona->correo
-        ];
-    }
-
-    private function crearError($fila, $motivo)
-    {
-        return ['fila' => $fila, 'motivo' => $motivo];
-    }
-
-    private function registrarHistorial()
-    {
-        Registro::create([
-            'activo' => null,
-            'persona' => null,
-            'tipo_cambio' => 'IMPORTÓ PERSONAS',
-            'encargado_cambio' => Auth::id()
-        ]);
-    }
-
-    private function eliminarTildesYMayusculas($cadena)
-    {
-        $cadena = strtoupper($cadena);
-        return str_replace(['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'], ['A', 'E', 'I', 'O', 'U', 'N'], $cadena);
-    }
-
-    private function convertirEstadoEmpleado($valor)
-    {
-        $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
-        return $valor === 'ACTIVO' ? 1 : ($valor === 'TERMINADO' ? 0 : null);
-    }
-
-    private function convertirFecha($fecha)
-    {
-        if (!$fecha) return null;
-        $fecha = trim($fecha);
-
-        if (is_numeric($fecha)) {
-            return date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($fecha));
-        }
-
-        if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $fecha, $matches)) {
-            return sprintf('%04d-%02d-%02d', $matches[3], $matches[1], $matches[2]);
-        }
-
-        throw new \Exception("Formato de fecha no reconocido: '{$fecha}'");
-    }
-
-    private function generarUserProvisional()
-    {
-        return 'PROV_' . substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 10);
-    }
-
     public function confirmarImportacion()
     {
         return view('confirmar-importacion');
     }
 }
+?>
