@@ -94,13 +94,14 @@ class PersonaController extends Controller
             // Asignar responsable a activo de tal numero de serie
             if ($request->has('responsable')) {
                 $activo->responsable_de_activo = $request->responsable;
-                Asignacion::create([
-                    'id_persona' => $idPersona,
-                    'id_activo' => $activo->id,
-                ]);
+                $activo->ubicacion = Persona::where('id', $request->ubicacion)->first()->ubicacion;
             } else {
                 $activo->responsable_de_activo = $idPersona;
             }
+            Asignacion::create([
+                'id_persona' => $idPersona,
+                'id_activo' => $activo->id,
+            ]);
 
             $activo->update();
 
@@ -118,15 +119,17 @@ class PersonaController extends Controller
                     $activoAdicional = Activo::where('id', $id)->first();
                     if ($activoAdicional) {
                         $activoAdicional->estado = 4;
+                        $activoAdicional->ubicacion = $request->ubicacion;
                         if ($request->has('responsable')) {
                             $activoAdicional->responsable_de_activo = $request->responsable;
-                            Asignacion::create([
-                                'id_persona' => $idPersona,
-                                'id_activo' => $activoAdicional->id,
-                            ]);
+                            $activoAdicional->ubicacion = Persona::where('id', $request->ubicacion)->first()->ubicacion;
                         } else {
                             $activoAdicional->responsable_de_activo = $idPersona;
                         }
+                        Asignacion::create([
+                            'id_persona' => $idPersona,
+                            'id_activo' => $activoAdicional->id,
+                        ]);
                         $activoAdicional->justificacion_doble_activo = $data['justificaciones'][$id] ?? null;
                         $activoAdicional->update();
 
@@ -210,6 +213,12 @@ class PersonaController extends Controller
     public function checkRut($rut)
     {
         $persona = Persona::where('rut', $rut)->first();
+        return response()->json(['exists' => $persona !== null]);
+    }
+
+    public function checkUser($user)
+    {
+        $persona = Persona::where('user', $user)->first();
         return response()->json(['exists' => $persona !== null]);
     }
 }

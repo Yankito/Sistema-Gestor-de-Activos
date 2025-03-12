@@ -50,6 +50,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
     Route::get('/registrarPersona', [PersonaController::class,'registro']);
     Route::post('/personas', [PersonaController::class, 'store']);
     Route::get('/personas/{rut}', [PersonaController::class, 'checkRut']);
+    Route::get('/personas/user/{user}', [PersonaController::class, 'checkUser']);
 
 
     // Rutas para ubicaciones
