@@ -238,7 +238,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                         <a href="/importar" class="nav-link">
-                            <p>Importar Activos Asignados</p>
+                            <p>Importar Asignación de Activos</p>
                         </a>
                         </li>
                         <li class="nav-item">
