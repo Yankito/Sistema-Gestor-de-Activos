@@ -222,3 +222,4 @@ class PersonaController extends Controller
         return response()->json(['exists' => $persona !== null]);
     }
 }
+?>

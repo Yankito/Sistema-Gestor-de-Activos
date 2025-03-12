@@ -111,3 +111,4 @@ class EditarValoresPersona extends Component
         $this->reset(['persona', 'rut', 'user', 'nombre_completo', 'nombre_empresa', 'cargo', 'correo', 'fecha_ing','fecha_ter', 'ubicacion', 'estado_empleado']);
     }
 }
+?>

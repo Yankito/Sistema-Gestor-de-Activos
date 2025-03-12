@@ -22,8 +22,8 @@ class PersonasExports
 
         // Encabezados
         $headers = [
-            'User','Rut', 'Nombre Completo', 'Nombre Empresa', 
-            'Estado', 'Fecha de Inicio', 'Fecha Término', 'Cargo', 
+            'User','Rut', 'Nombre Completo', 'Nombre Empresa',
+            'Estado', 'Fecha de Inicio', 'Fecha Término', 'Cargo',
             'Ubicación', 'Correo'
         ];
 
@@ -78,7 +78,7 @@ class PersonasExports
                 ],
             ]);
 
-            
+
             $row++;
         }
 

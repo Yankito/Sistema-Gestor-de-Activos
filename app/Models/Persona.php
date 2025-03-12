@@ -43,3 +43,4 @@ class Persona extends Model
         return $this->belongsToMany(Activo::class, 'asignaciones', 'id_persona', 'id_activo');
     }
 }
+?>

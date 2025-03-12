@@ -99,3 +99,4 @@ class AuthController extends Controller
         return response()->json(['exists' => $usuario !== null]);
     }
 }
+?>

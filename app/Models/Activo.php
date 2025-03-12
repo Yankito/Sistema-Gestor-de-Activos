@@ -61,3 +61,4 @@ class Activo extends Model
         return $this->hasMany(ValorAdicional::class, 'id_activo', 'id');
     }
 }
+?>
