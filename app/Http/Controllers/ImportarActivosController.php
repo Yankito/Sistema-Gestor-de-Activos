@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Activo;
 use App\Models\TipoActivo;
 use Illuminate\Support\Facades\DB;
@@ -116,7 +118,9 @@ class ImportarActivosController extends Controller
     public function importExcel(Request $request)
     {
         $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls'
+            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
+        ], [
+            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
         ]);
 
         $archivo = $request->file('archivo_excel');
@@ -231,6 +235,14 @@ class ImportarActivosController extends Controller
                     'caracteristicas_adicionales' => $caracteristicasAdicionales
                 ];
             }
+
+            // Crear registro en el historial para el nuevo activo
+            $registro = new Registro();
+            $registro->activo = null;
+            $registro->persona = null;
+            $registro->tipo_cambio = 'IMPORTÓ ACTIVOS';
+            $registro->encargado_cambio = Auth::user()->id;
+            $registro->save();
 
             DB::commit();
 

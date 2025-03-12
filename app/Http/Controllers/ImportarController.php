@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Activo;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -31,7 +33,9 @@ class ImportarController extends Controller
     public function importExcel(Request $request)
     {
         $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,csv'
+            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
+        ], [
+            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
         ]);
 
         $archivo = $request->file('archivo_excel');
@@ -148,6 +152,13 @@ class ImportarController extends Controller
                     'justificacion' => $activo->justificacion_doble_activo,
                 ];
             }
+            // Crear registro en el historial para el nuevo activo
+            $registro = new Registro();
+            $registro->activo = null;
+            $registro->persona = null;
+            $registro->tipo_cambio ='IMPORTÓ ASIGNACIONES';  
+            $registro->encargado_cambio = Auth::user()->id;
+            $registro->save();
 
             DB::commit();
             return view('importar.importar', compact('datos', 'asignaciones', 'errores'))->with('success', 'Datos importados correctamente.');

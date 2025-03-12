@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Persona;
 use Illuminate\Support\Facades\DB;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
 
 class ImportarPersonasController extends Controller
 {
@@ -71,7 +73,9 @@ class ImportarPersonasController extends Controller
     public function importExcel(Request $request)
     {
         $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls'
+            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
+        ], [
+            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
         ]);
 
         $archivo = $request->file('archivo_excel');
@@ -174,6 +178,13 @@ class ImportarPersonasController extends Controller
                     'correo' => $fila['J']
                 ];
             }
+            // Crear registro en el historial para el nuevo activo
+            $registro = new Registro();
+            $registro->activo = null;
+            $registro->persona = null;
+            $registro->tipo_cambio = 'IMPORTÓ PERSONAS';
+            $registro->encargado_cambio = Auth::user()->id;
+            $registro->save();
 
             DB::commit();
             return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))->with('success', 'Datos importados correctamente.');

@@ -19,7 +19,7 @@ return new class extends Migration
                 'ASIGNACION', 'DESVINCULACION',
                 'ADQUIRIDO', 'PREPARACION', 
                 'DISPONIBLE', 'ASIGNADO',
-                'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO'
+                'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO', 'IMPORTÓ PERSONAS', 'IMPORTÓ ACTIVOS', 'IMPORTÓ ASIGNACIONES'
             ]);
             $table->unsignedBigInteger('encargado_cambio');
             $table->timestamps();
