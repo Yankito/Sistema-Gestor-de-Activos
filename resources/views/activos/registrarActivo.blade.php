@@ -268,7 +268,6 @@
             });
 
             $(document).ready(function () {
-                $('#responsable').select2(); // Inicializa Select2 si no lo está
 
                 $('#responsable').on('select2:select', function (e) {
                     var selectedOption = e.params.data.element;  // Opción seleccionada
