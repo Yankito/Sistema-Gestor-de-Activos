@@ -6,7 +6,7 @@ use App\Models\Activo;
 use Livewire\Component;
 use App\Models\Persona;
 use App\Models\Ubicacion;
-
+use App\Models\Asignacion;
 
 class EditarValoresPersona extends Component
 {
@@ -74,10 +74,11 @@ class EditarValoresPersona extends Component
         $persona->correo = $this->correo;
         $persona->fecha_ing = $this->fecha_ing;
         $persona->fecha_ter = $this->fecha_ter;
+        $activos = Activo::where('responsable_de_activo', $persona->id)->get();
+
         if ($persona->ubicacion != $this->ubicacion) {
             $persona->ubicacion = $this->ubicacion;
 
-            $activos = Activo::where('responsable_de_activo', $persona->id)->get();
             foreach ($activos as $activo) {
                 $activo->ubicacion = $this->ubicacion;
                 $activo->update();
@@ -87,6 +88,12 @@ class EditarValoresPersona extends Component
             if($this->estado_empleado == 0){
                 $persona->estado_empleado = $this->estado_empleado;
                 $persona->fecha_ter = date('Y-m-d');
+                foreach ($activos as $activo) {
+                    $activo->estado = 7;
+                    $activo->responsable_de_activo = NULL;
+                    Asignacion::where('id_activo', $activo->id)->delete();
+                    $activo->update();
+                }
             }
             else{
                 $persona->estado_empleado = $this->estado_empleado;

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Persona;
+use App\Models\Activo;
+use App\Models\Asignacion;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
@@ -140,7 +142,7 @@ class ImportarPersonasController extends Controller
                 }
 
                 // Crear la persona
-                Persona::create([
+                $persona = Persona::create([
                     'user' => $user,
                     'rut' => $fila['B'],
                     'nombre_completo' => $fila['C'],
@@ -155,6 +157,16 @@ class ImportarPersonasController extends Controller
 
                 // Transformar el estado y la ubicación para mostrarlos en la vista
                 $estadoEmpleado = $this->convertirEstadoEmpleado($fila['E']);
+                $activos = Activo::where('responsable_de_activo', $persona->id)->get();
+                if($estadoEmpleado == 0){
+                    foreach ($activos as $activo) {
+                        $activo->estado = 7;
+                        $activo->responsable_de_activo = NULL;
+                        Asignacion::where('id_activo', $activo->id)->delete();
+                        $activo->update();
+                    }
+                }
+
                 $estadoEmpleadoNombre = $estadoEmpleado === 1 ? 'ACTIVO' : ($estadoEmpleado === 0 ? 'INACTIVO' : 'DESCONOCIDO');
                 $ubicacionNombre = $ubicacionExistente->sitio;
 
