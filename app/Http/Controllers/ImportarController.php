@@ -44,10 +44,7 @@ class ImportarController extends Controller
             $errores = [];
 
             foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
-
-                // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
+                if ($index == 1 || $this->filaVacia($fila, 'A', 'E')) {
                     continue;
                 }
 
@@ -156,3 +153,4 @@ class ImportarController extends Controller
         });
     }
 }
+?>

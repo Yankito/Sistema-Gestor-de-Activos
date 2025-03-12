@@ -134,10 +134,8 @@ class ImportarActivosController extends Controller
             $errores = [];
 
             foreach ($datosGenerales as $index => $fila) {
-                if ($index == 1) continue;
-
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
-                    continue;
+                if ($index == 1 || $this->filaVacia($fila, 'A', 'E')) {
+                    continue; // Saltar encabezados y filas vacías
                 }
 
                 $tipoActivoNombre = $this->eliminarTildesYMayusculas($fila['D']);
@@ -167,7 +165,7 @@ class ImportarActivosController extends Controller
                     continue;
                 }
 
-                $nuevo_activo = Activo::create([
+                $nuevoActivo = Activo::create([
                     'nro_serie' => strtoupper($fila['A']),
                     'marca' => $fila['B'],
                     'modelo' => $fila['C'],
@@ -179,44 +177,8 @@ class ImportarActivosController extends Controller
                     'justificacion_doble_activo' => null
                 ]);
 
-                // Inicializar el array de características adicionales
-                $caracteristicasAdicionales = [];
+                $caracteristicasAdicionales = $this->agregarCaracteristicasAdicionales($spreadsheet, $tipoActivo, $fila['A'], $nuevoActivo);
 
-                $hojaEspecifica = $spreadsheet->getSheetByName($tipoActivo->nombre);
-
-                if ($hojaEspecifica) {
-                    $datosEspecificos = $hojaEspecifica->toArray(null, true, true, true);
-
-                    foreach ($datosEspecificos as $idx => $filaEspecifica) {
-                        if ($idx == 1) continue;
-
-                        if ($filaEspecifica['A'] !== $fila['A']) continue;
-
-                        $caracteristicas = DB::table('caracteristicas_adicionales')
-                            ->where('tipo_activo_id', $tipoActivo->id)
-                            ->pluck('id', 'nombre_caracteristica');
-
-                        $columna = 'B';
-                        foreach ($caracteristicas as $nombre => $caracteristicaId) {
-                            $valor = $filaEspecifica[$columna] ?? null;
-
-                            if ($valor) {
-                                DB::table('valores_adicionales')->insert([
-                                    'id_activo' => $nuevo_activo->id,
-                                    'id_caracteristica' => $caracteristicaId,
-                                    'valor' => $valor
-                                ]);
-
-                                // Agregar las características adicionales al array
-                                $caracteristicasAdicionales[] = [
-                                    'nombre' => $nombre,
-                                    'valor' => $valor
-                                ];
-                            }
-                            $columna++;
-                        }
-                    }
-                }
                 $activos[] = [
                     'nro_serie' => $fila['A'],
                     'marca' => $fila['B'],
@@ -238,4 +200,48 @@ class ImportarActivosController extends Controller
                 ->with('success', 'Importación realizada con éxito.');
         });
     }
+
+    public function agregarCaracteristicasAdicionales($spreadsheet, $tipoActivo, $nroSerie, $nuevoActivo){
+        // Inicializar el array de características adicionales
+        $caracteristicasAdicionales = [];
+
+        $hojaEspecifica = $spreadsheet->getSheetByName($tipoActivo->nombre);
+
+        if ($hojaEspecifica) {
+            $datosEspecificos = $hojaEspecifica->toArray(null, true, true, true);
+
+            foreach ($datosEspecificos as $idx => $filaEspecifica) {
+                if ($idx == 1 || $filaEspecifica['A'] !== $nroSerie){
+                    continue;
+                }
+
+                $caracteristicas = DB::table('caracteristicas_adicionales')
+                    ->where('tipo_activo_id', $tipoActivo->id)
+                    ->pluck('id', 'nombre_caracteristica');
+
+                $columna = 'B';
+                foreach ($caracteristicas as $nombre => $caracteristicaId) {
+                    $valor = $filaEspecifica[$columna] ?? null;
+
+                    if ($valor) {
+                        DB::table('valores_adicionales')->insert([
+                            'id_activo' => $nuevoActivo->id,
+                            'id_caracteristica' => $caracteristicaId,
+                            'valor' => $valor
+                        ]);
+
+                        // Agregar las características adicionales al array
+                        $caracteristicasAdicionales[] = [
+                            'nombre' => $nombre,
+                            'valor' => $valor
+                        ];
+                    }
+                    $columna++;
+                }
+            }
+        }
+        return $caracteristicasAdicionales;
+    }
+
 }
+?>

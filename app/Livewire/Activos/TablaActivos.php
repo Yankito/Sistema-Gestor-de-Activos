@@ -27,3 +27,4 @@ class TablaActivos extends Component
         ]);
     }
 }
+?>

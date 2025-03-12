@@ -38,3 +38,4 @@ class CaracteristicaAdicional extends Model
         return Hashids::encode($this->id);
     }
 }
+?>

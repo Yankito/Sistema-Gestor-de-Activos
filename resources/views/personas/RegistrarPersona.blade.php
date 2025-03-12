@@ -49,6 +49,7 @@
                                             <div class="form-outline mb-4">
                                             <label class="form-label" for="user">Username </label>
                                                 <input type="text" name="user" id="user" required class="form-control" />
+                                                <span id="userRepetido" class="text-danger" style="display:none;">El user ya se encuentra registrado.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -105,7 +106,7 @@
                                             <!-- Correo -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="correo">Correo</label>
-                                                <input type="text" name="correo" id="correo" required class="form-control" />
+                                                <input type="email" name="correo" id="correo" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -408,6 +409,34 @@
                 }
             });
 
+            async function comprobarUserRepetido(user) {
+                // Comprobar si el user ya existe en la base de datos
+                try {
+                    let response = await fetch('/personas/user/' + user);
+                    if (response.ok) {
+                        let data = await response.json();
+                        return data['exists'];
+                    } else {
+                        throw new Error('Error al comprobar el user');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return false;
+                }
+            }
+
+            document.getElementById('user').addEventListener('blur', async function() {
+                var user = this.value;
+                var repetidoSpan = document.getElementById('userRepetido');
+                if(await comprobarUserRepetido(user)) {
+                    repetidoSpan.style.display = 'block';
+                    this.classList.add('is-invalid');
+                } else {
+                    repetidoSpan.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                }
+            });
+
 
             document.getElementById('formPersona').addEventListener('submit', async function(event) {
                 event.preventDefault();
@@ -415,6 +444,8 @@
                 var rut = document.getElementById('rut').value;
                 var errorSpan = document.getElementById('rutError');
                 var repetidoSpan = document.getElementById('rutRepetido');
+                var user = document.getElementById('user').value;
+                var repetidoUserSpan = document.getElementById('userRepetido');
 
                 if (!validarRUT(rut)) {
                     errorSpan.style.display = 'block';
@@ -430,7 +461,15 @@
                         event.preventDefault();
                     }
                     else{
-                        this.submit();
+                        if(await comprobarUserRepetido(user)) {
+                            repetidoUserSpan.style.display = 'block';
+                            document.getElementById('user').classList.add('is-invalid');
+                            document.getElementById('user').focus();
+                            event.preventDefault();
+                        }
+                        else{
+                            this.submit();
+                        }
                     }
                 }
 

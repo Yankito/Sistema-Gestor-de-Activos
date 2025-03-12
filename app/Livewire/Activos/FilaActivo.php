@@ -96,3 +96,4 @@ class FilaActivo extends Component
         $this->dispatch('cargarModal', $activo);
     }
 }
+?>

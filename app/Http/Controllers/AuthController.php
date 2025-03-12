@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function index()
     {
         if(Auth::check()){
-            return redirect('/dashboard');
+            return redirect('dashboard');
         }
         return view('login');
     }
@@ -24,7 +24,7 @@ class AuthController extends Controller
         try {
             // Verificar si el usuario autenticado es administrador
             if (!Auth::check() || !Auth::user()->es_administrador) {
-                return redirect('/dashboard')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
+                return redirect('dashboard')->with('error', 'Solo los administradores pueden registrar nuevos usuarios.');
             }
 
             // Validar los datos del formulario
@@ -52,7 +52,7 @@ class AuthController extends Controller
             ]);
 
             // Redirigir al dashboard con mensaje de éxito
-            return redirect('/dashboard')->with('success', 'Usuario registrado correctamente.');
+            return redirect('dashboard')->with('success', 'Usuario registrado correctamente.');
         } catch (\Exception $e) {
             // Si ocurre un error, redirigir con mensaje de error
             return back()->withInput()->with('error', 'Hubo un problema al registrar el usuario: ' . $e->getMessage());
@@ -70,7 +70,7 @@ class AuthController extends Controller
 
         // Intentar autenticar al usuario
         if (Auth::attempt(['correo' => $credentials['correo'], 'password' => $credentials['contrasena']])) {
-            return redirect()->intended('/dashboard'); // Redirigir al dashboard si el login es exitoso
+            return redirect()->intended('dashboard'); // Redirigir al dashboard si el login es exitoso
         }
 
         // Si la autenticación falla, devolver con un mensaje de error
@@ -99,3 +99,4 @@ class AuthController extends Controller
         return response()->json(['exists' => $usuario !== null]);
     }
 }
+?>

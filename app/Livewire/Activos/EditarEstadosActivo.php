@@ -176,3 +176,4 @@ class EditarEstadosActivo extends Component
         $this->responsable_de_activo = $data;
     }
 }
+?>

@@ -2,6 +2,10 @@
 @extends('layouts.app')
 <!doctype html>
 <html lang="es">
+<head>
+    <title>Historial de cambios</title>
+</head>
+
 @section('content')
 <section class="content">
     <div class="container-fluid">

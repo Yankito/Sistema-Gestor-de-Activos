@@ -16,3 +16,4 @@ class Estado extends Model
     ];
 
 }
+?>

@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Http\Middleware\AdminMiddleware;
 
+const LOGIN_ROUTE = '/login';
+
 // Rutas públicas
-Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get(LOGIN_ROUTE, [AuthController::class, 'index'])->name('login');
 Route::get('/', [AuthController::class, 'index']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post(LOGIN_ROUTE, [AuthController::class, 'login']);
 
 // Ruta para mostrar el formulario de registro (solo para administradores)
 Route::middleware('auth')->get('/register', function () {
@@ -50,6 +52,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
     Route::get('/registrarPersona', [PersonaController::class,'registro']);
     Route::post('/personas', [PersonaController::class, 'store']);
     Route::get('/personas/{rut}', [PersonaController::class, 'checkRut']);
+    Route::get('/personas/user/{user}', [PersonaController::class, 'checkUser']);
 
 
     // Rutas para ubicaciones
@@ -101,7 +104,7 @@ Route::middleware(['auth'])->group(function(){
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
-        return redirect('/login')->with('success', 'Sesión cerrada correctamente.');
+        return redirect(LOGIN_ROUTE)->with('success', 'Sesión cerrada correctamente.');
     });
 });
 

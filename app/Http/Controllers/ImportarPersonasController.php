@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Persona;
+use App\Models\Activo;
+use App\Models\Asignacion;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
@@ -85,11 +87,8 @@ class ImportarPersonasController extends Controller
             $errores = [];
 
             foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
-
-                // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I'])) {
-                    continue;
+                if ($index == 1 || $this->filaVacia($fila, 'A', 'I')) {
+                    continue; // Saltar encabezados y filas vacías
                 }
 
                 $fila['A'] = strtoupper($fila['A']);
@@ -143,7 +142,7 @@ class ImportarPersonasController extends Controller
                 }
 
                 // Crear la persona
-                Persona::create([
+                $persona = Persona::create([
                     'user' => $user,
                     'rut' => $fila['B'],
                     'nombre_completo' => $fila['C'],
@@ -158,6 +157,16 @@ class ImportarPersonasController extends Controller
 
                 // Transformar el estado y la ubicación para mostrarlos en la vista
                 $estadoEmpleado = $this->convertirEstadoEmpleado($fila['E']);
+                $activos = Activo::where('responsable_de_activo', $persona->id)->get();
+                if($estadoEmpleado == 0){
+                    foreach ($activos as $activo) {
+                        $activo->estado = 7;
+                        $activo->responsable_de_activo = NULL;
+                        Asignacion::where('id_activo', $activo->id)->delete();
+                        $activo->update();
+                    }
+                }
+
                 $estadoEmpleadoNombre = $estadoEmpleado === 1 ? 'ACTIVO' : ($estadoEmpleado === 0 ? 'INACTIVO' : 'DESCONOCIDO');
                 $ubicacionNombre = $ubicacionExistente->sitio;
 
@@ -188,3 +197,4 @@ class ImportarPersonasController extends Controller
         return view('confirmar-importacion');
     }
 }
+?>

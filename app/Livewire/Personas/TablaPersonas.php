@@ -28,3 +28,4 @@ class TablaPersonas extends Component
         return view('livewire.personas.tabla-personas');
     }
 }
+?>
