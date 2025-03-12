@@ -31,7 +31,9 @@ class ImportarController extends Controller
     public function importExcel(Request $request)
     {
         $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,csv'
+            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
+        ], [
+            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
         ]);
 
         $archivo = $request->file('archivo_excel');
