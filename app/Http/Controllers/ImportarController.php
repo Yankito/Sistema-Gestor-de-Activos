@@ -14,20 +14,17 @@ class ImportarController extends Controller
 {
     public function index()
     {
-        // Verificar si el usuario es administrador
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
-        } else {
-            return view('importar.importar');
         }
+        return view('importar.importar');
     }
 
     private function eliminarTildesYMayusculas($cadena)
     {
-        $cadena = strtoupper($cadena);
         $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
         $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
-        return str_replace($buscar, $reemplazar, $cadena);
+        return str_replace($buscar, $reemplazar, strtoupper($cadena));
     }
 
     public function importExcel(Request $request)
@@ -49,123 +46,104 @@ class ImportarController extends Controller
             $errores = [];
 
             foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
+                if ($index == 1 || $this->filaVacia($fila)) continue;
 
-                // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E'])) {
-                    continue;
-                }
-
-                $fila['A'] = strtoupper($fila['A']);
-                $fila['B'] = strtoupper($fila['B']);
-                $fila['C'] = strtoupper($fila['C']);
-                $fila['D'] = strtoupper($fila['D']);
-                $responsableUser = $this->eliminarTildesYMayusculas($fila['A']);
-                $usuarioUser = $this->eliminarTildesYMayusculas($fila['B']);
-                $nroSerie = $this->eliminarTildesYMayusculas($fila['C']);
-                $estadoExcel = $this->eliminarTildesYMayusculas($fila['D']);
-                $justificacion = $fila['E'];
-
-                // Buscar el activo
-                $activo = Activo::where('nro_serie', $nroSerie)->first();
-                if (!$activo) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "Activo con número de serie '$nroSerie' no encontrado."
-                    ];
-                    continue;
-                }
-
-                // Buscar el estado
-                $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
-                if (!$estado) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "Estado '$estadoExcel' no encontrado en la base de datos."
-                    ];
-                    continue;
-                }
-
-                // Manejar el responsable
-                if (!empty($responsableUser)) {
-                    // Si se proporciona un responsable en el archivo, buscarlo
-                    $responsable = Persona::where('user', $responsableUser)->first();
-                    if (!$responsable) {
-                        $errores[] = [
-                            'fila' => $fila,
-                            'motivo' => "Responsable '$responsableUser' no encontrado."
-                        ];
-                        continue;
-                    }
-                    // Actualizar el responsable del activo
-                    $activo->responsable_de_activo = $responsable->id;
+                $resultado = $this->procesarFila($fila);
+                if ($resultado['error']) {
+                    $errores[] = $resultado['mensaje'];
                 } else {
-                    // Si no se proporciona un responsable, mantener el responsable actual (si existe)
-                    if (!$activo->responsable_de_activo) {
-                        $errores[] = [
-                            'fila' => $fila,
-                            'motivo' => "El activo no tiene un responsable actual y no se proporcionó uno en el archivo."
-                        ];
-                        continue;
-                    }
-                    // No es necesario actualizar el responsable, se mantiene el actual
+                    $asignaciones[] = $resultado['asignacion'];
                 }
-
-                // Buscar el usuario
-                if (!empty($usuarioUser)) {
-                    $usuario = Persona::where('user', $usuarioUser)->first();
-                    if (!$usuario) {
-                        $errores[] = [
-                            'fila' => $fila,
-                            'motivo' => "Usuario '$usuarioUser' no encontrado."
-                        ];
-                        continue;
-                    }
-                } else {
-                    $usuario = null;
-                }
-
-                // Actualizar el estado y la justificación del activo
-                $activo->estado = $estado->id;
-                $activo->justificacion_doble_activo = $justificacion ?: null;
-
-                // Actualizar la ubicación del activo a la ubicación del responsable (si existe)
-                if ($activo->responsable_de_activo) {
-                    $responsable = Persona::find($activo->responsable_de_activo);
-                    if ($responsable) {
-                        $activo->ubicacion = $responsable->ubicacion;
-                    }
-                }
-
-                $activo->save();
-
-                // Crear o actualizar la asignación en la tabla asignaciones
-                if ($usuario) {
-                    $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
-                }
-
-                $asignaciones[] = [
-                    'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
-                    'usuario_activo' => $usuario ? strtoupper($usuario->user) : null,
-                    'numero_serie' => $activo->nro_serie,
-                    'estado' => $estado->nombre_estado,
-                    'justificacion' => $activo->justificacion_doble_activo,
-                ];
             }
-            // Crear registro en el historial para el nuevo activo
-            $registro = new Registro();
-            $registro->activo = null;
-            $registro->persona = null;
-            $registro->tipo_cambio ='IMPORTÓ ASIGNACIONES';  
-            $registro->encargado_cambio = Auth::user()->id;
-            $registro->save();
 
+            $this->registrarImportacion();
             DB::commit();
-            return view('importar.importar', compact('datos', 'asignaciones', 'errores'))->with('success', 'Datos importados correctamente.');
+
+            return view('importar.importar', compact('datos', 'asignaciones', 'errores'))
+                ->with('success', 'Datos importados correctamente.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
         }
+    }
+
+    private function filaVacia($fila)
+    {
+        return empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']);
+    }
+
+    private function procesarFila($fila)
+    {
+        $responsableUser = $this->eliminarTildesYMayusculas($fila['A']);
+        $usuarioUser = $this->eliminarTildesYMayusculas($fila['B']);
+        $nroSerie = $this->eliminarTildesYMayusculas($fila['C']);
+        $estadoExcel = $this->eliminarTildesYMayusculas($fila['D']);
+        $justificacion = $fila['E'];
+
+        $activo = $this->obtenerActivo($nroSerie);
+        if (!$activo) return ['error' => true, 'mensaje' => "Activo con número de serie '$nroSerie' no encontrado."];
+
+        $estado = $this->obtenerEstado($estadoExcel);
+        if (!$estado) return ['error' => true, 'mensaje' => "Estado '$estadoExcel' no encontrado en la base de datos."];
+
+        $responsable = $this->obtenerPersona($responsableUser, "Responsable");
+        if (!$responsable && !empty($responsableUser)) return ['error' => true, 'mensaje' => "Responsable '$responsableUser' no encontrado."];
+
+        $usuario = $this->obtenerPersona($usuarioUser, "Usuario");
+
+        $this->actualizarActivo($activo, $responsable, $usuario, $estado, $justificacion);
+
+        return [
+            'error' => false,
+            'asignacion' => [
+                'responsable' => $responsable ? strtoupper($responsable->user) : null,
+                'usuario_activo' => $usuario ? strtoupper($usuario->user) : null,
+                'numero_serie' => $activo->nro_serie,
+                'estado' => $estado->nombre_estado,
+                'justificacion' => $activo->justificacion_doble_activo,
+            ]
+        ];
+    }
+
+    private function obtenerActivo($nroSerie)
+    {
+        return Activo::where('nro_serie', $nroSerie)->first();
+    }
+
+    private function obtenerEstado($estadoNombre)
+    {
+        return DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
+    }
+
+    private function obtenerPersona($usuario, $tipo)
+    {
+        return !empty($usuario) ? Persona::where('user', $usuario)->first() : null;
+    }
+
+    private function actualizarActivo($activo, $responsable, $usuario, $estado, $justificacion)
+    {
+        if ($responsable) {
+            $activo->responsable_de_activo = $responsable->id;
+            $activo->ubicacion = $responsable->ubicacion;
+        }
+
+        $activo->estado = $estado->id;
+        $activo->justificacion_doble_activo = $justificacion ?: null;
+        $activo->save();
+
+        if ($usuario) {
+            $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
+        }
+    }
+
+    private function registrarImportacion()
+    {
+        Registro::create([
+            'activo' => null,
+            'persona' => null,
+            'tipo_cambio' => 'IMPORTÓ ASIGNACIONES',
+            'encargado_cambio' => Auth::user()->id
+        ]);
     }
 }
 ?>
