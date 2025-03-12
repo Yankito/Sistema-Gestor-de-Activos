@@ -163,7 +163,7 @@
                             <li class="nav-item">
                                 <a href="/tipos-activo" class="nav-link">
                                 <p>
-                                    Crear un tipo de activo
+                                    Gestionar tipos de activos
                                 </p>
                                 </a>
                             </li>

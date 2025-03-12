@@ -12,7 +12,7 @@ use App\Http\Controllers\ImportarController;
 use App\Http\Controllers\ImportarActivosController;
 use App\Http\Controllers\ImportarPersonasController;
 use App\Http\Controllers\ExportarController;
-use App\Http\Controllers\CrearTipoActivoController;
+use App\Http\Controllers\GestionarTipoActivoController;
 use App\Http\Controllers\HistorialController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -38,11 +38,11 @@ Route::middleware([AdminMiddleware::class])->group(function(){
     Route::post('/register', [AuthController::class, 'register']);
 
     // Rutas para gestionar Tipos de Activo (solo para administradores)
-    Route::get('/tipos-activo', [CrearTipoActivoController::class, 'index'])->name('tipos-activo.index');
-    Route::post('/tipos-activo', [CrearTipoActivoController::class, 'store'])->name('tipos-activo.store');
-    Route::delete('/tipos-activo/{hashed_id}', [CrearTipoActivoController::class, 'destroy'])->name('tipos-activo.destroy');
-    Route::post('/agregarCaracteristicas', [CrearTipoActivoController::class, 'nuevasCaracteristicas']);
-    Route::delete('/caracteristicaAdicional/{hashed_id}', [CrearTipoActivoController::class, 'destroyCaracteristicaAdicional'])->name('caracteristicaAdicional.destroy');
+    Route::get('/tipos-activo', [GestionarTipoActivoController::class, 'index'])->name('tipos-activo.index');
+    Route::post('/tipos-activo', [GestionarTipoActivoController::class, 'store'])->name('tipos-activo.store');
+    Route::delete('/tipos-activo/{hashed_id}', [GestionarTipoActivoController::class, 'destroy'])->name('tipos-activo.destroy');
+    Route::post('/agregarCaracteristicas', [GestionarTipoActivoController::class, 'nuevasCaracteristicas']);
+    Route::delete('/caracteristicaAdicional/{hashed_id}', [GestionarTipoActivoController::class, 'destroyCaracteristicaAdicional'])->name('caracteristicaAdicional.destroy');
 
     Route::post('/activos', [ActivoController::class, 'store']);
     Route::get('/registrarActivo', [ActivoController::class, 'registro']);
