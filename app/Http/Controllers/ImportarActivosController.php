@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\Registro;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Activo;
 use App\Models\TipoActivo;
 use Illuminate\Support\Facades\DB;
@@ -233,6 +235,14 @@ class ImportarActivosController extends Controller
                     'caracteristicas_adicionales' => $caracteristicasAdicionales
                 ];
             }
+
+            // Crear registro en el historial para el nuevo activo
+            $registro = new Registro();
+            $registro->activo = null;
+            $registro->persona = null;
+            $registro->tipo_cambio = 'IMPORTÓ ACTIVOS';
+            $registro->encargado_cambio = Auth::user()->id;
+            $registro->save();
 
             DB::commit();
 

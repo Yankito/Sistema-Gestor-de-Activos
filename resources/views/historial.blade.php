@@ -43,6 +43,8 @@
                                                 dio de baja el activo
                                             @elseif (in_array($registro->tipo_cambio, ['ADQUIRIDO', 'PREPARACION', 'DISPONIBLE', 'ASIGNADO', 'PERDIDO', 'ROBADO', 'DEVUELTO', 'PARA_BAJA', 'DONADO', 'VENDIDO']))
                                                 cambió el estado del activo a "{{ strtolower($registro->tipo_cambio) }}"
+                                            @elseif (in_array($registro->tipo_cambio, ['IMPORTÓ ACTIVOS', 'IMPORTÓ PERSONAS', 'IMPORTÓ ASIGNACIONES']))
+                                                {{ $registro->tipo_cambio }}
                                             @else
                                                 realizó un cambio en el activo
                                             @endif
