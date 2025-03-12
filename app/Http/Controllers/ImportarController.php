@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,41 +8,38 @@ use App\Models\Activo;
 use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Traits\ImportarTrait;
+use App\Services\ImportarExcelService;
 
 class ImportarController extends Controller
 {
+    use ImportarTrait;  // Usar el trait
+
+    protected $importarExcelService;
+
+    public function __construct(ImportarExcelService $importarExcelService)
+    {
+        $this->importarExcelService = $importarExcelService;
+    }
+
     public function index()
     {
-        if (!auth()->user()->es_administrador) {
-            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        if ($redirect = $this->redirigirSiNoEsAdmin()) {
+            return $redirect;
         }
         return view('importar.importar');
     }
 
-    private function eliminarTildesYMayusculas($cadena)
-    {
-        $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
-        $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
-        return str_replace($buscar, $reemplazar, strtoupper($cadena));
-    }
-
     public function importExcel(Request $request)
     {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
-        ], [
-            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
-        ]);
+        $this->importarExcelService->validarArchivo($request);
 
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
+        return $this->importarExcelService->manejarTransaccion(function () use ($request) {
+            $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
+            $hoja = $spreadsheet->getActiveSheet();
+            $datos = $hoja->toArray(null, true, true, true);
 
-        DB::beginTransaction();
-        try {
             $asignaciones = [];
             $errores = [];
 
@@ -93,47 +91,21 @@ class ImportarController extends Controller
 
         $this->actualizarActivo($activo, $responsable, $usuario, $estado, $justificacion);
 
-        return [
-            'error' => false,
-            'asignacion' => [
-                'responsable' => $responsable ? strtoupper($responsable->user) : null,
-                'usuario_activo' => $usuario ? strtoupper($usuario->user) : null,
-                'numero_serie' => $activo->nro_serie,
-                'estado' => $estado->nombre_estado,
-                'justificacion' => $activo->justificacion_doble_activo,
-            ]
-        ];
-    }
+                $asignaciones[] = [
+                    'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
+                    'usuario_activo' => $usuario ? strtoupper($usuario->user) : null,
+                    'numero_serie' => $activo->nro_serie,
+                    'estado' => $estado->nombre_estado,
+                    'justificacion' => $activo->justificacion_doble_activo,
+                ];
+            }
 
-    private function obtenerActivo($nroSerie)
-    {
-        return Activo::where('nro_serie', $nroSerie)->first();
-    }
+            // Crear registro en el historial
+            $this->crearRegistro('IMPORTÓ ASIGNACIONES');
 
-    private function obtenerEstado($estadoNombre)
-    {
-        return DB::table('estados')->where('nombre_estado', $estadoNombre)->first();
-    }
-
-    private function obtenerPersona($usuario, $tipo)
-    {
-        return !empty($usuario) ? Persona::where('user', $usuario)->first() : null;
-    }
-
-    private function actualizarActivo($activo, $responsable, $usuario, $estado, $justificacion)
-    {
-        if ($responsable) {
-            $activo->responsable_de_activo = $responsable->id;
-            $activo->ubicacion = $responsable->ubicacion;
-        }
-
-        $activo->estado = $estado->id;
-        $activo->justificacion_doble_activo = $justificacion ?: null;
-        $activo->save();
-
-        if ($usuario) {
-            $activo->usuarioDeActivo()->syncWithoutDetaching([$usuario->id]);
-        }
+            return view('importar.importar', compact('datos', 'asignaciones', 'errores'))
+                ->with('success', 'Datos importados correctamente.');
+        });
     }
 
     private function registrarImportacion()
@@ -146,4 +118,3 @@ class ImportarController extends Controller
         ]);
     }
 }
-?>

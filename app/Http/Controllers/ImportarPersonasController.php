@@ -8,30 +8,79 @@ use App\Models\Persona;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\ImportarTrait;
+use App\Services\ImportarExcelService;
 
 class ImportarPersonasController extends Controller
 {
+    use ImportarTrait;  // Usar el trait
+
+    protected $importarExcelService;
+
+    public function __construct(ImportarExcelService $importarExcelService)
+    {
+        $this->importarExcelService = $importarExcelService;
+    }
+
     public function index()
     {
-        if (!auth()->user()->es_administrador) {
-            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        if ($redirect = $this->redirigirSiNoEsAdmin()) {
+            return $redirect;
         }
         return view('importar.importarPersonas');
     }
 
+    private function convertirEstadoEmpleado($valor)
+    {
+        $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
+
+        if ($valor === 'ACTIVO') {
+            return 1;
+        }
+        if ($valor === 'TERMINADO') {
+            return 0;
+        }
+
+        return null; // Devuelve null si el valor no es válido
+    }
+
+    private function convertirFecha($fecha)
+    {
+        if (!$fecha) {
+            return null; // Si la fecha está vacía, devolver NULL
+        }
+
+        $fecha = trim($fecha);
+
+        //  Caso 1: Excel almacena la fecha como un número
+        if (is_numeric($fecha)) {
+            return date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($fecha));
+        }
+
+        //  Caso 2: Fecha en formato DD/MM/YYYY o D/M/YYYY
+        if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $fecha, $matches)) {
+            return sprintf('%04d-%02d-%02d', $matches[3], $matches[1], $matches[2]); // Convertir a YYYY-MM-DD
+        }
+
+        throw new \Exception("Formato de fecha no reconocido: '{$fecha}'");
+    }
+
+    private function generarUserProvisional()
+    {
+        $prefix = 'PROV_'; // Prefijo para identificar que es un user provisional
+        $randomString = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 10); // Genera una cadena aleatoria de 10 caracteres
+        return $prefix . $randomString;
+    }
+
     public function importExcel(Request $request)
     {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
-        ], ['archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.']);
+        $this->importarExcelService->validarArchivo($request);
 
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
+        return $this->importarExcelService->manejarTransaccion(function () use ($request) {
+            $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
+            $hoja = $spreadsheet->getActiveSheet();
+            $datos = $hoja->toArray(null, true, true, true);
 
-        DB::beginTransaction();
-        try {
             $personas = [];
             $errores = [];
 
@@ -52,8 +101,18 @@ class ImportarPersonasController extends Controller
                     continue;
                 }
 
-                if (!$fila['F']) {
-                    $errores[] = $this->crearError($fila, "La fecha de ingreso no puede ser nula.");
+                // Verificar si el user es 0 y generar un user provisional
+                $user = strtoupper($fila['A']);
+                if ($user == 0) {
+                    $user = $this->generarUserProvisional();
+                }
+
+                // Verificar si el user ya existe en la base de datos
+                if (Persona::where('user', $user)->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El user '{$user}' ya existe en la base de datos."
+                    ];
                     continue;
                 }
 
@@ -61,14 +120,12 @@ class ImportarPersonasController extends Controller
                 $personas[] = $this->formatearPersona($nuevaPersona, $ubicacion);
             }
 
-            $this->registrarHistorial();
-            DB::commit();
+            // Crear registro en el historial
+            $this->crearRegistro('IMPORTÓ PERSONAS');
+
             return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))
                 ->with('success', 'Datos importados correctamente.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
-        }
+        });
     }
 
     private function filaVacia($fila)
