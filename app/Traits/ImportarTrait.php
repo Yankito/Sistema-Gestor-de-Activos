@@ -49,4 +49,14 @@ trait ImportarTrait
         $registro->encargado_cambio = Auth::user()->id;
         $registro->save();
     }
+
+    protected function filaVacia($fila, $inicio, $fin)
+    {
+        for ($i = $inicio; $i <= $fin; $i++) {
+            if (!empty($fila[$i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

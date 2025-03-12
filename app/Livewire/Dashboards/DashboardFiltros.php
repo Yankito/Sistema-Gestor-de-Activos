@@ -87,62 +87,66 @@ class DashboardFiltros extends Component
 
     public function actualizarAtributo($atributo)
     {
-        if (in_array($atributo, $this->atributos)) {
-
-            if($this->vista=="UBICACION"){
-                $valores = Activo::where('ubicacion', $this->valor)->pluck($atributo)->toArray();
-            }
-            else if($this->vista=="TIPO_DE_ACTIVO"){
-                $valores = Activo::where('tipo_de_activo', $this->valor)->pluck($atributo)->toArray();
-            }
-            else{
-                $valores = Activo::pluck($atributo)->toArray();
-            }
-            $this->conteoValores = array_count_values($valores);
-            if($atributo === "estado"){
-                foreach($this->conteoValores as $key => $value){
-                    $estado = Estado::find($key);
-                    $this->conteoValores[$key] = [
-                        'nombre' => $estado->nombre_estado,
-                        'cantidad' => $value
-                    ];
-                }
-            }
-            else if($atributo === "ubicacion"){
-                foreach($this->conteoValores as $key => $value){
-                    $ubicacion = Ubicacion::find($key);
-                    $this->conteoValores[$key] = [
-                        'nombre' => $ubicacion->sitio,
-                        'cantidad' => $value
-                    ];
-                }
-            }
-            else if($atributo === "tipo_de_activo"){
-                foreach($this->conteoValores as $key => $value){
-                    $tipo = TipoActivo::find($key);
-                    $this->conteoValores[$key] = [
-                        'nombre' => $tipo->nombre,
-                        'cantidad' => $value
-                    ];
-                }
-            }
-            else{
-                foreach($this->conteoValores as $key => $value){
-                    $this->conteoValores[$key] = [
-                        'nombre' => $key,
-                        'cantidad' => $value
-                    ];
-                }
-            }
-            $this->filtro = $atributo;
-        }
-        else{
+        if (!in_array($atributo, $this->atributos)) {
             $this->conteoValores = [];
             $this->filtro = null;
+            $this->dispatch('$refresh');
+            return;
         }
+
+        $valores = $this->obtenerValoresPorAtributo($atributo);
+        $this->conteoValores = array_count_values($valores);
+
+        $this->conteoValores = $this->mapearNombres($atributo, $this->conteoValores);
+        $this->filtro = $atributo;
 
         $this->dispatch('$refresh');
     }
+
+    /**
+     * Obtiene los valores de un atributo en función de la vista actual.
+     */
+    private function obtenerValoresPorAtributo($atributo)
+    {
+        $query = Activo::query();
+
+        if ($this->vista === "UBICACION") {
+            $query->where('ubicacion', $this->valor);
+        } elseif ($this->vista === "TIPO_DE_ACTIVO") {
+            $query->where('tipo_de_activo', $this->valor);
+        }
+
+        return $query->pluck($atributo)->toArray();
+    }
+
+    /**
+     * Mapea los valores de un atributo con su respectivo nombre.
+     */
+    private function mapearNombres($atributo, $conteoValores)
+    {
+        $modelos = [
+            "estado" => Estado::class,
+            "ubicacion" => Ubicacion::class,
+            "tipo_de_activo" => TipoActivo::class,
+        ];
+
+        if (isset($modelos[$atributo])) {
+            foreach ($conteoValores as $key => $value) {
+                $modelo = optional($modelos[$atributo]::find($key));
+                $conteoValores[$key] = [
+                    'nombre' => $modelo->nombre ?? $modelo->sitio ?? $modelo->nombre_estado ?? $key,
+                    'cantidad' => $value
+                ];
+            }
+        } else {
+            foreach ($conteoValores as $key => $value) {
+                $conteoValores[$key] = ['nombre' => $key, 'cantidad' => $value];
+            }
+        }
+
+        return $conteoValores;
+    }
+
 
     public function obtenerAtributos(){
         $atributos = (new Activo())->getFillable();

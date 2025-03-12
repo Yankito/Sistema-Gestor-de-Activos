@@ -8,6 +8,8 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class UbicacionController extends Controller
 {
+    private const NUMERIC_RULE = 'required|numeric';
+    const STRING_RULE = 'required|string|max:100';
 
     public function index(){
         $ubicaciones = Ubicacion::all();
@@ -18,20 +20,19 @@ class UbicacionController extends Controller
         // Verificar si el usuario es administrador
         if (!auth()->user()->es_administrador) {
             return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
-        }else{
-            return view('ubicaciones.registrarUbicacion');
         }
+        return view('ubicaciones.registrarUbicacion');
     }
 
     public function store(Request $request){
         $request->validate([
-            'sitio' => 'required|string|max:255',
-            'soporte_ti' => 'required|string|max:255',
-            'latitud' => 'required|numeric',
-            'longitud' => 'required|numeric',
+            'sitio' => self::STRING_RULE,
+            'soporte_ti' => self::STRING_RULE,
+            'latitud' => self::NUMERIC_RULE,
+            'longitud' => self::NUMERIC_RULE,
         ]);
 
-        //comprobar que no se repita el nombre de la ubicación
+        // comprobar que no se repita el nombre de la ubicación
         if (Ubicacion::where('sitio', strtoupper($request->sitio))->exists()) {
             return redirect()->route('ubicaciones')->with('error', 'Ubicación ya se encuentra registrada.');
         }
@@ -53,10 +54,10 @@ class UbicacionController extends Controller
 
     public function update(Request $request){
         $request->validate([
-            'sitio' => 'required|string|max:255',
-            'soporte_ti' => 'required|string|max:255',
-            'latitud' => 'required|numeric',
-            'longitud' => 'required|numeric',
+            'sitio' => self::STRING_RULE,
+            'soporte_ti' => self::STRING_RULE,
+            'latitud' => self::NUMERIC_RULE,
+            'longitud' => self::NUMERIC_RULE,
         ]);
 
         $request->merge([

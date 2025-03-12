@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonaController extends Controller
 {
-    const validacionCadenas = 'required|string|max:100';
+    const STRING_RULE = 'required|string|max:100';
     // Mostrar todos los registros de personas
     public function registro()
     {
@@ -53,15 +53,15 @@ class PersonaController extends Controller
                         }
                     },
                 ],
-                'user' => 'validacionCadenas',
-                'nombres' => 'validacionCadenas',
-                'primer_apellido' => 'validacionCadenas',
+                'user' => self::STRING_RULE,,
+                'nombres' => self::STRING_RULE,,
+                'primer_apellido' => self::STRING_RULE,,
                 'segundo_apellido' => 'nullable|string|max:100',
-                'nombre_empresa' => 'validacionCadenas',
+                'nombre_empresa' => self::STRING_RULE,,
                 'fecha_ing' => 'required|date',
-                'cargo' => 'validacionCadenas',
+                'cargo' => self::STRING_RULE,,
                 'ubicacion' => 'nullable|exists:ubicaciones,id',
-                'correo' => 'validacionCadenas'
+                'correo' => self::STRING_RULE,
             ], [
                 'rut.regex' => 'El campo rut debe ser un rut válido',
             ]);
@@ -181,14 +181,14 @@ class PersonaController extends Controller
                     }
                 },
             ],
-            'nombre_completo' => 'validacionCadenas',
-            'nombre_empresa' => 'validacionCadenas',
+            'nombre_completo' => self::STRING_RULE,,
+            'nombre_empresa' => self::STRING_RULE,,
             'estado_empleado' => 'required|boolean',
             'fecha_ing' => 'required|date',
             'fecha_ter' => 'required|date',
-            'cargo' => 'validacionCadenas',
+            'cargo' => self::STRING_RULE,,
             'ubicacion' => 'nullable|exists:ubicaciones,id',
-            'correo' => 'validacionCadenas'
+            'correo' => self::STRING_RULE,
         ], [
             'rut.regex' => 'El campo rut debe ser un rut válido',
         ]);

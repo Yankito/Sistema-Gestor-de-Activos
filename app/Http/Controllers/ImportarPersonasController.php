@@ -85,11 +85,8 @@ class ImportarPersonasController extends Controller
             $errores = [];
 
             foreach ($datos as $index => $fila) {
-                if ($index == 1) continue; // Saltar encabezados
-
-                // Verificar si la fila está vacía
-                if (empty($fila['A']) && empty($fila['B']) && empty($fila['C']) && empty($fila['D']) && empty($fila['E']) && empty($fila['F']) && empty($fila['G']) && empty($fila['H']) && empty($fila['I'])) {
-                    continue;
+                if ($index == 1 || $this->filaVacia($fila, 'A', 'I')) {
+                    continue; // Saltar encabezados y filas vacías
                 }
 
                 $fila['A'] = strtoupper($fila['A']);

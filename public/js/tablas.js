@@ -211,7 +211,7 @@ $(document).ready(function () {
             checkedValues.push($(this).val());
         });
 
-        applyFilter(index, checkedValues);
+        applyFilter(index);
     });
 
 
