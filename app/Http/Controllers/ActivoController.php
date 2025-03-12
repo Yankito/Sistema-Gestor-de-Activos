@@ -59,8 +59,13 @@ class ActivoController extends Controller
             }
             $activo->save();
 
-            if($request->usuarios != NULL){
-                foreach ($request->usuarios as $usuarioId) {
+            $usuarios = $request->usuarios;
+            if ($request->responsable != NULL && !in_array($request->responsable, $usuarios)) {
+                array_push($usuarios, $request->responsable);
+            }
+
+            if($usuarios != NULL){
+                foreach ($usuarios as $usuarioId) {
                     Asignacion::create([
                         'id_persona' => $usuarioId,
                         'id_activo' => $activo->id
