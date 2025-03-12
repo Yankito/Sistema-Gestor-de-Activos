@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonaController extends Controller
 {
+    const validacionCadenas = 'required|string|max:100';
     // Mostrar todos los registros de personas
     public function registro()
     {
@@ -52,15 +53,15 @@ class PersonaController extends Controller
                         }
                     },
                 ],
-                'user' => 'required|string|max:100',
-                'nombres' => 'required|string|max:100',
-                'primer_apellido' => 'required|string|max:100',
+                'user' => 'validacionCadenas',
+                'nombres' => 'validacionCadenas',
+                'primer_apellido' => 'validacionCadenas',
                 'segundo_apellido' => 'nullable|string|max:100',
-                'nombre_empresa' => 'required|string|max:100',
+                'nombre_empresa' => 'validacionCadenas',
                 'fecha_ing' => 'required|date',
-                'cargo' => 'required|string|max:100',
+                'cargo' => 'validacionCadenas',
                 'ubicacion' => 'nullable|exists:ubicaciones,id',
-                'correo' => 'required|string|max:100'
+                'correo' => 'validacionCadenas'
             ], [
                 'rut.regex' => 'El campo rut debe ser un rut válido',
             ]);
@@ -180,14 +181,14 @@ class PersonaController extends Controller
                     }
                 },
             ],
-            'nombre_completo' => 'required|string|max:100',
-            'nombre_empresa' => 'required|string|max:100',
+            'nombre_completo' => 'validacionCadenas',
+            'nombre_empresa' => 'validacionCadenas',
             'estado_empleado' => 'required|boolean',
             'fecha_ing' => 'required|date',
             'fecha_ter' => 'required|date',
-            'cargo' => 'required|string|max:100',
+            'cargo' => 'validacionCadenas',
             'ubicacion' => 'nullable|exists:ubicaciones,id',
-            'correo' => 'required|string|max:100'
+            'correo' => 'validacionCadenas'
         ], [
             'rut.regex' => 'El campo rut debe ser un rut válido',
         ]);

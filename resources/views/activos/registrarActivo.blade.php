@@ -12,7 +12,7 @@
 
         <!-- Bootstrap CSS v5.2.1 -->
 
-        <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
+        <link href="{{asset('assets/.css')}}" rel="stylesheet">
 
     </head>
 

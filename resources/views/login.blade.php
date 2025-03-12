@@ -19,6 +19,11 @@
         />
         <link href="{{asset('assets/estiloLogin.css')}}" rel="stylesheet">
 
+        <style>
+            .gradient-custom-2 {
+                background-color: #04646c; /* Color sólido */
+            }
+        </style>
 
     </head>
 
