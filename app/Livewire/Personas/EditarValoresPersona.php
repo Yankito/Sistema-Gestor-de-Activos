@@ -25,20 +25,25 @@ class EditarValoresPersona extends Component
 
     protected $listeners = ['refreshModalValores', 'cerrarModalValores' => 'resetearModal'];
 
+    public function asignarVariables()
+    {
+        $this->rut = $this->persona->rut;
+        $this->user = $this->persona->user;
+        $this->nombre_completo = $this->persona->nombre_completo;
+        $this->nombre_empresa = $this->persona->nombre_empresa;
+        $this->cargo = $this->persona->cargo;
+        $this->correo = $this->persona->correo;
+        $this->fecha_ing = $this->persona->fecha_ing;
+        $this->fecha_ter = $this->persona->fecha_ter;
+        $this->ubicacion = $this->persona->ubicacion;
+        $this->estado_empleado = $this->persona->estado_empleado;
+    }
+
     public function mount()
     {
         $this->ubicaciones = Ubicacion::all();
         if($this->persona != NULL) {
-            $this->rut = $this->persona->rut;
-            $this->user = $this->persona->user;
-            $this->nombre_completo = $this->persona->nombre_completo;
-            $this->nombre_empresa = $this->persona->nombre_empresa;
-            $this->cargo = $this->persona->cargo;
-            $this->correo = $this->persona->correo;
-            $this->fecha_ing = $this->persona->fecha_ing;
-            $this->fecha_ter = $this->persona->fecha_ter;
-            $this->ubicacion = $this->persona->ubicacion;
-            $this->estado_empleado = $this->persona->estado_empleado;
+            $this->asignarVariables();
         }
     }
 
@@ -55,16 +60,7 @@ class EditarValoresPersona extends Component
     public function refreshModalValores($persona)
     {
         $this->persona = Persona::findOrFail($persona['id']);
-        $this->rut = $this->persona->rut;
-        $this->user = $this->persona->user;
-        $this->nombre_completo = $this->persona->nombre_completo;
-        $this->nombre_empresa = $this->persona->nombre_empresa;
-        $this->cargo = $this->persona->cargo;
-        $this->correo = $this->persona->correo;
-        $this->fecha_ing = $this->persona->fecha_ing;
-        $this->fecha_ter = $this->persona->fecha_ter;
-        $this->ubicacion = $this->persona->ubicacion;
-        $this->estado_empleado = $this->persona->estado_empleado;
+        $this->asignarVariables();
         $this->dispatch('$refresh');
     }
 

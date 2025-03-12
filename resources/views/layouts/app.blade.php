@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <link rel="icon" href="{{ asset('pictures/iconoIansa.png') }}" type="image/x-icon">
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -43,9 +42,6 @@
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             crossorigin="anonymous"
         ></script>
-
-        <!-- favicon -->
-        <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
 
         @livewireStyles
         @livewireScripts

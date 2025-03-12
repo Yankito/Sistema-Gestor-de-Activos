@@ -1,15 +1,13 @@
 <!doctype html>
 <html lang="es">
     <head>
-        <title>Title</title>
+        <title>Inicio de Sesión</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <!-- favicon -->
-        <link rel="icon" href="{{asset('pictures/iconoIansa.png')}}" type="image/png">
         <!-- Bootstrap CSS v5.2.1 -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
