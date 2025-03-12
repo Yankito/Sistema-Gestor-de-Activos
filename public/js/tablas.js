@@ -42,76 +42,34 @@ $(document).ready(function () {
                 }
             },
             buttons: [
-                {
-                    extend: "copy",
-                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
-                    text: "Copiar",
-                    exportOptions: {
-                        columns: ':not(:first)',
-                        format: {
-                            header: function (data, columnIdx) {
-                                // Extraer solo el texto principal del encabezado
-                                let tempDiv = document.createElement("div");
-                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
-                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
-                            }
-                        }
-                    }
-                },
-                {
-                    extend: "csv",
-                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
-                    text: "CSV",
-                    exportOptions: {
-                        columns: ':not(:first)',
-                        format: {
-                            header: function (data, columnIdx) {
-                                // Extraer solo el texto principal del encabezado
-                                let tempDiv = document.createElement("div");
-                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
-                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
-                            }
-                        }
-                    }
-                },
-                {
-                    extend: "excel",
-                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
-                    text: "Excel",
-                    exportOptions: {
-                        columns: ":not(:first)",
-                        format: {
-                            header: function (data, columnIdx) {
-                                // Extraer solo el texto principal del encabezado
-                                let tempDiv = document.createElement("div");
-                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
-                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
-                            },
-                        }
-                    }
-                },
-                {
-                    extend: "print",
-                    title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
-                    text: "Imprimir",
-                    exportOptions: {
-                        columns: ":not(:first)",
-                        format: {
-                            header: function (data, columnIdx) {
-                                // Extraer solo el texto principal del encabezado
-                                let tempDiv = document.createElement("div");
-                                tempDiv.innerHTML = data; // Convertir el HTML en un nodo DOM
-                                return tempDiv.childNodes[0].nodeValue.trim(); // Extraer solo el texto principal
-                            }
-                        }
-                    }
-                },
+                crearBotonExportacion("copy", "Copiar"),
+                crearBotonExportacion("csv", "CSV"),
+                crearBotonExportacion("excel", "Excel"),
+                crearBotonExportacion("print", "Imprimir"),
                 { extend: "colvis", text: "Visibilidad de columnas" }
             ]
         });
 
         // Add buttons to the interface
         table.buttons().container().appendTo('#tabla_wrapper .col-md-6:eq(0)');
+    }
+
+    function crearBotonExportacion(tipo, texto) {
+        return {
+            extend: tipo,
+            title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+            text: texto,
+            exportOptions: {
+                columns: ':not(:first)',
+                format: {
+                    header: function (data, columnIdx) {
+                        let tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = data;
+                        return tempDiv.childNodes[0].nodeValue.trim();
+                    }
+                }
+            }
+        };
     }
 
     // Store original positions of filter containers
