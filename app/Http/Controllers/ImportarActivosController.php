@@ -3,35 +3,133 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Registro;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Activo;
 use App\Models\TipoActivo;
 use Illuminate\Support\Facades\DB;
+use App\Traits\ImportarTrait;
+use App\Services\ImportarExcelService;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ImportarActivosController extends Controller
 {
-    public function importExcel(Request $request)
+    use ImportarTrait;  // Usar el trait
+
+    protected $importarExcelService;
+
+    public function __construct(ImportarExcelService $importarExcelService)
     {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
-        ], [
-            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
-        ]);
+        $this->importarExcelService = $importarExcelService;
+    }
 
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hojaGeneral = $spreadsheet->getSheetByName('General');
+    public function index()
+    {
+        if ($redirect = $this->redirigirSiNoEsAdmin()) {
+            return $redirect;
+        }
+        return view('importar.importarActivos');
+    }
 
-        if (!$hojaGeneral) {
-            return back()->with('error', 'La hoja General no fue encontrada en el archivo.');
+    public function generarPlantilla()
+    {
+        $spreadsheet = new Spreadsheet();
+
+        // Hoja principal general
+        $hojaGeneral = $spreadsheet->getActiveSheet();
+        $hojaGeneral->setTitle('General');
+        $hojaGeneral->setCellValue('A1', 'Número de serie');
+        $hojaGeneral->setCellValue('B1', 'Marca');
+        $hojaGeneral->setCellValue('C1', 'Modelo');
+        $hojaGeneral->setCellValue('D1', 'Tipo de activo');
+        $hojaGeneral->setCellValue('E1', 'Ubicación');
+
+        // Estilo para las cabeceras
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF808080'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+
+        $hojaGeneral->getStyle('A1:E1')->applyFromArray($styleArray);
+
+        // Ajustar ancho de columnas
+        foreach (range('A', 'E') as $columnID) {
+            $hojaGeneral->getColumnDimension($columnID)->setAutoSize(true);
         }
 
-        $datosGenerales = $hojaGeneral->toArray(null, true, true, true);
+        // Consultar los tipos de activos
+        $tiposActivos = TipoActivo::with('caracteristicasAdicionales')->get();
 
-        DB::beginTransaction();
-        try {
+        foreach ($tiposActivos as $tipoActivo) {
+            if ($tipoActivo->caracteristicasAdicionales->isEmpty()) {
+                continue;
+            }
+            $hoja = $spreadsheet->createSheet();
+            $hoja->setTitle($tipoActivo->nombre);
+
+            // Cabecera por defecto
+            $hoja->setCellValue('A1', 'Número de serie');
+
+            // Consultar las características adicionales para el tipo de activo
+            $caracteristicas = $tipoActivo->caracteristicasAdicionales->pluck('nombre_caracteristica')->toArray();
+
+            // Asignar cabeceras adicionales
+            $columna = 'B';
+            foreach ($caracteristicas as $caracteristica) {
+                $hoja->setCellValue($columna . '1', $caracteristica);
+                $columna++;
+            }
+            $columna = chr(ord($columna) - 1);
+            // Aplicar estilo a las cabeceras
+            $hoja->getStyle('A1:' . $columna . '1')->applyFromArray($styleArray);
+
+            // Ajustar ancho de columnas
+            foreach (range('A', $columna) as $columnID) {
+                $hoja->getColumnDimension($columnID)->setAutoSize(true);
+            }
+        }
+
+        // Crear archivo Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Plantilla_Importacion_Activos.xlsx';
+        $filePath = storage_path('app/public/' . $fileName);
+
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $this->importarExcelService->validarArchivo($request);
+
+        return $this->importarExcelService->manejarTransaccion(function () use ($request) {
+            $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
+            $hojaGeneral = $spreadsheet->getSheetByName('General');
+
+            if (!$hojaGeneral) {
+                throw new \Exception('La hoja General no fue encontrada en el archivo.');
+            }
+
+            $datosGenerales = $hojaGeneral->toArray(null, true, true, true);
+
             $activos = [];
             $errores = [];
 
@@ -123,25 +221,12 @@ class ImportarActivosController extends Controller
             ->where('tipo_activo_id', $tipoActivo->id)
             ->pluck('id', 'nombre_caracteristica');
 
-        foreach ($datosEspecificos as $idx => $filaEspecifica) {
-            if ($idx == 1 || $filaEspecifica['A'] !== $nroSerie) continue;
+            // Crear registro en el historial
+            $this->crearRegistro('IMPORTÓ ACTIVOS');
 
-            $columna = 'B';
-            foreach ($caracteristicas as $nombre => $caracteristicaId) {
-                if (!isset($filaEspecifica[$columna])) break;
-
-                DB::table('valores_adicionales')->insert([
-                    'id_activo' => $activo->id,
-                    'id_caracteristica' => $caracteristicaId,
-                    'valor' => $filaEspecifica[$columna]
-                ]);
-
-                $caracteristicasAdicionales[] = ['nombre' => $nombre, 'valor' => $filaEspecifica[$columna]];
-                $columna++;
-            }
-        }
-
-        return $caracteristicasAdicionales;
+            return view('importar.importarActivos', compact('datosGenerales', 'activos', 'errores'))
+                ->with('success', 'Importación realizada con éxito.');
+        });
     }
 
     private function formatoActivo($fila, $tipoActivo, $ubicacion, $caracteristicasAdicionales)
