@@ -60,6 +60,9 @@ class ActivoController extends Controller
             $activo->save();
 
             $usuarios = $request->usuarios;
+            if($usuarios == NULL){
+                $usuarios = [];
+            }
             if ($request->responsable != NULL && !in_array($request->responsable, $usuarios)) {
                 array_push($usuarios, $request->responsable);
             }
