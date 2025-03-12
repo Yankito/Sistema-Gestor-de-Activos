@@ -8,18 +8,28 @@ use App\Models\Persona;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\ImportarTrait;
+use App\Services\ImportarExcelService;
 
 class ImportarPersonasController extends Controller
 {
+    use ImportarTrait;  // Usar el trait
+
+    protected $importarExcelService;
+
+    public function __construct(ImportarExcelService $importarExcelService)
+    {
+        $this->importarExcelService = $importarExcelService;
+    }
+
     public function index()
     {
-        // Verificar si el usuario es administrador
-        if (!auth()->user()->es_administrador) {
-            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
-        }else{
-            return view('importar.importarPersonas');
+        if ($redirect = $this->redirigirSiNoEsAdmin()) {
+            return $redirect;
         }
+        return view('importar.importarPersonas');
     }
+
     private function convertirEstadoEmpleado($valor)
     {
         $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
@@ -62,29 +72,15 @@ class ImportarPersonasController extends Controller
         return $prefix . $randomString;
     }
 
-    private function eliminarTildesYMayusculas($cadena)
-    {
-        $cadena = strtoupper($cadena);
-        $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
-        $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
-        return str_replace($buscar, $reemplazar, $cadena);
-    }
-
     public function importExcel(Request $request)
     {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
-        ], [
-            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
-        ]);
+        $this->importarExcelService->validarArchivo($request);
 
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hoja = $spreadsheet->getActiveSheet();
-        $datos = $hoja->toArray(null, true, true, true);
+        return $this->importarExcelService->manejarTransaccion(function () use ($request) {
+            $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
+            $hoja = $spreadsheet->getActiveSheet();
+            $datos = $hoja->toArray(null, true, true, true);
 
-        DB::beginTransaction();
-        try {
             $personas = [];
             $errores = [];
 
@@ -128,8 +124,8 @@ class ImportarPersonasController extends Controller
                     $user = $this->generarUserProvisional();
                 }
 
-                // Verificar si el user ya existe en la base de datos (sin excepciones)
-                if (Persona::where('user', operator: $user)->exists()) {
+                // Verificar si el user ya existe en la base de datos
+                if (Persona::where('user', $user)->exists()) {
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "El user '{$user}' ya existe en la base de datos."
@@ -178,20 +174,13 @@ class ImportarPersonasController extends Controller
                     'correo' => $fila['J']
                 ];
             }
-            // Crear registro en el historial para el nuevo activo
-            $registro = new Registro();
-            $registro->activo = null;
-            $registro->persona = null;
-            $registro->tipo_cambio = 'IMPORTÓ PERSONAS';
-            $registro->encargado_cambio = Auth::user()->id;
-            $registro->save();
 
-            DB::commit();
-            return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))->with('success', 'Datos importados correctamente.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Error al importar los datos: ' . $e->getMessage());
-        }
+            // Crear registro en el historial
+            $this->crearRegistro('IMPORTÓ PERSONAS');
+
+            return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))
+                ->with('success', 'Datos importados correctamente.');
+        });
     }
 
     public function confirmarImportacion()

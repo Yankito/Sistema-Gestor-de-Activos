@@ -3,32 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Registro;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Activo;
 use App\Models\TipoActivo;
 use Illuminate\Support\Facades\DB;
+use App\Traits\ImportarTrait;
+use App\Services\ImportarExcelService;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ImportarActivosController extends Controller
 {
-    public function index()
+    use ImportarTrait;  // Usar el trait
+
+    protected $importarExcelService;
+
+    public function __construct(ImportarExcelService $importarExcelService)
     {
-        if (!auth()->user()->es_administrador) {
-            return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
-        } else {
-            return view('importar.importarActivos');
-        }
+        $this->importarExcelService = $importarExcelService;
     }
 
-    private function eliminarTildesYMayusculas($cadena)
+    public function index()
     {
-        $cadena = strtoupper($cadena);
-        $buscar = ['Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ'];
-        $reemplazar = ['A', 'E', 'I', 'O', 'U', 'N'];
-        return str_replace($buscar, $reemplazar, $cadena);
+        if ($redirect = $this->redirigirSiNoEsAdmin()) {
+            return $redirect;
+        }
+        return view('importar.importarActivos');
     }
 
     public function generarPlantilla()
@@ -77,7 +78,7 @@ class ImportarActivosController extends Controller
         $tiposActivos = TipoActivo::with('caracteristicasAdicionales')->get();
 
         foreach ($tiposActivos as $tipoActivo) {
-            if($tipoActivo->caracteristicasAdicionales->isEmpty()) {
+            if ($tipoActivo->caracteristicasAdicionales->isEmpty()) {
                 continue;
             }
             $hoja = $spreadsheet->createSheet();
@@ -117,24 +118,18 @@ class ImportarActivosController extends Controller
 
     public function importExcel(Request $request)
     {
-        $request->validate([
-            'archivo_excel' => 'required|mimes:xlsx,xls|max:5120',
-        ], [
-            'archivo_excel.max' => 'El archivo no debe ser mayor a 5 MB.',
-        ]);
+        $this->importarExcelService->validarArchivo($request);
 
-        $archivo = $request->file('archivo_excel');
-        $spreadsheet = IOFactory::load($archivo->getPathname());
-        $hojaGeneral = $spreadsheet->getSheetByName('General');
+        return $this->importarExcelService->manejarTransaccion(function () use ($request) {
+            $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
+            $hojaGeneral = $spreadsheet->getSheetByName('General');
 
-        if (!$hojaGeneral) {
-            return back()->with('error', 'La hoja General no fue encontrada en el archivo.');
-        }
+            if (!$hojaGeneral) {
+                throw new \Exception('La hoja General no fue encontrada en el archivo.');
+            }
 
-        $datosGenerales = $hojaGeneral->toArray(null, true, true, true);
+            $datosGenerales = $hojaGeneral->toArray(null, true, true, true);
 
-        DB::beginTransaction();
-        try {
             $activos = [];
             $errores = [];
 
@@ -236,20 +231,11 @@ class ImportarActivosController extends Controller
                 ];
             }
 
-            // Crear registro en el historial para el nuevo activo
-            $registro = new Registro();
-            $registro->activo = null;
-            $registro->persona = null;
-            $registro->tipo_cambio = 'IMPORTÓ ACTIVOS';
-            $registro->encargado_cambio = Auth::user()->id;
-            $registro->save();
+            // Crear registro en el historial
+            $this->crearRegistro('IMPORTÓ ACTIVOS');
 
-            DB::commit();
-
-            return view('importar.importarActivos', compact('datosGenerales','activos', 'errores'))-> with('success', 'Importación realizada con éxito.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Error durante la importación: ' . $e->getMessage());
-        }
+            return view('importar.importarActivos', compact('datosGenerales', 'activos', 'errores'))
+                ->with('success', 'Importación realizada con éxito.');
+        });
     }
 }
