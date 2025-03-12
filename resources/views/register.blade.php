@@ -1,6 +1,10 @@
 @extends('layouts.app')
 <!doctype html>
 <html lang="es">
+<head>
+    <title>Registro de usuarios</title>
+</head>
+
 @section('content')
 <section class="h-100 gradient-form" style="background-color: #eee;">
     <div class="container py-5 h-100">

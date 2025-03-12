@@ -2,10 +2,11 @@
 <!doctype html>
 <html lang="es">
 <head>
-      <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <title>Gestionar Tipo de Activo</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
 </head>
 @section('content')
     <section class="h-100 gradient-form" style="background-color: #eee;">

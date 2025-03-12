@@ -1,6 +1,10 @@
 @extends('layouts.app')
 <!doctype html>
 <html lang="es">
+<head>
+    <title>Exportar</title>
+</head>
+
 @section('content')
 <section class = "content">
       <div class="container-fluid">

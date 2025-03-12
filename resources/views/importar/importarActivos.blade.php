@@ -1,6 +1,10 @@
 @extends('layouts.app')
 <!doctype html>
 <html lang="es">
+<head>
+    <title>Importar Activos</title>
+</head>
+
 @section('content')
     <section class="content">
         <div class="container-fluid">
