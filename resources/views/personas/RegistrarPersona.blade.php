@@ -127,7 +127,7 @@
                                             <!-- Activo -->
                                             <div class="form-outline mb-4">
                                                 <div class="form-group">
-                                                    <label class = "form-label">Activos</label>
+                                                    <label class="form-label" for="activo">Activos</label>
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         <option value="" selected>SIN ACTIVO</option>
                                                         @foreach($activos as $activo)
