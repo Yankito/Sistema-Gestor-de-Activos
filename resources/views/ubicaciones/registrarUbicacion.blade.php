@@ -64,7 +64,7 @@
 
                                         <!-- Map Container -->
                                         <div class="col-md-12">
-                                            <label class="form-label">Seleccione la Ubicación</label>
+                                            <label>Seleccione la Ubicación</label>
                                             <div id="map" style="height: 400px; margin-bottom: 15px;"></div>
                                             <input type="hidden" id="latitud" name="latitud" />
                                             <input type="hidden" id="longitud" name="longitud" />
