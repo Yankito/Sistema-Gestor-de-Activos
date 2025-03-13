@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Traits\ImportarTrait;
 use App\Services\ImportarExcelService;
 
+
 class ImportarController extends Controller
 {
     use ImportarTrait;  // Usar el trait
@@ -130,7 +131,7 @@ class ImportarController extends Controller
                 }
 
                 // Si el estado es 2 (preparación), establecer responsable y usuarios a null
-                if ($activo->estado == 2) {
+                if (in_array($activo->estado, [2, 8, 9, 10])) {
                     $activo->responsable_de_activo = null;
                     $activo->usuarioDeActivo()->sync([]);
                 }
@@ -145,7 +146,7 @@ class ImportarController extends Controller
 
                 $asignaciones[] = [
                     'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
-                    'usuario_activo' => ($activo->estado == 2) ? null : ($usuario ? strtoupper($usuario->user) : null),
+                    'usuario_activo' => (in_array($activo->estado, [2, 8, 9, 10])) ? null : ($usuario ? strtoupper($usuario->user) : null),
                     'numero_serie' => $activo->nro_serie,
                     'estado' => $estado->nombre_estado,
                     'justificacion' => $activo->justificacion_doble_activo,
