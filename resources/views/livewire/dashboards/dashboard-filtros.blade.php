@@ -22,7 +22,7 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="navbar-dropdown">
-                        <a class="dropdown-item dropdown-footer" style="cursor: pointer;" onclick="updateGeneral()" >DASHBOARD GENERAL</a>
+                        <button type="button" class="dropdown-item dropdown-footer" style="cursor: pointer;" onclick="updateGeneral()" >DASHBOARD GENERAL</button>
                     </div>
                 </div>
             </div>
