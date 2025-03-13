@@ -50,7 +50,10 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') { this.click(); }">
+                        <i class="fas fa-bars"></i>
+                    </a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="dashboard" class="nav-link">Inicio</a>
@@ -75,7 +78,7 @@
             <div class="user-panel mt-2 pb-2 mb-2 d-flex align-items-center">
                 <!-- Imagen de perfil -->
                 <div class="image" style="width: 40px;">
-                <img src="pictures/perfil.png" class="img-circle elevation-2" alt="User Image">
+                <img src="pictures/perfil.png" class="img-circle elevation-2" alt="Perfil de usuario">
                 </div>
 
                 <!-- Nombre de usuario -->
@@ -89,7 +92,9 @@
                     @csrf
                     <button type="submit" class="btn btn-link nav-link p-0" style="color: #c2c7d0; font-size: 15px;"
                         onmouseover="this.style.color='red';"
-                        onmouseout="this.style.color='#c2c7d0';">
+                        onmouseout="this.style.color='#c2c7d0';"
+                        onfocus="this.style.color='red';"
+                        onblur="this.style.color='#c2c7d0';">
                     <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </form>

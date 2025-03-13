@@ -225,9 +225,18 @@ class ImportarController extends Controller
                     $activo->usuarioDeActivo()->sync([$usuario->id]);
                 }
 
+                if (in_array($activo->estado, [2, 8, 9, 10])) {
+                    $usuarioActivo = null;
+                } else {
+                    $usuarioActivo = $usuario ? strtoupper($usuario->user) : null;
+                }
+
+                // Evaluar el valor de 'responsable' por separado
+                $responsable = $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null;
+
                 $asignaciones[] = [
-                    'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
-                    'usuario_activo' => (in_array($activo->estado, [2, 8, 9, 10])) ? null : ($usuario ? strtoupper($usuario->user) : null),
+                    'responsable' => $responsable,
+                    'usuario_activo' => $usuarioActivo,
                     'numero_serie' => $activo->nro_serie,
                     'estado' => $estado->nombre_estado,
                     'justificacion' => $activo->justificacion_doble_activo,
