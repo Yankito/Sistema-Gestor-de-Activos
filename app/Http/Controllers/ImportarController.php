@@ -20,7 +20,6 @@ use App\Traits\DescargarErroresTrait;
 
 class ImportarController extends Controller
 {
-    use ImportarTrait;  // Usar el trait
     use ImportarTrait, DescargarErroresTrait;  // Usar los traits
     protected $importarExcelService;
 
