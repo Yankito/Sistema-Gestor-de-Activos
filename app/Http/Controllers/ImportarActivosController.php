@@ -242,16 +242,4 @@ class ImportarActivosController extends Controller
         return $caracteristicasAdicionales;
     }
 
-    private function registrarError(&$errores, $fila, $motivo) {
-        $errores[] = [
-            'fila' => [
-                'A' => $fila['A'] ?? '-', // Número de Serie
-                'B' => $fila['B'] ?? '-', // Marca
-                'C' => $fila['C'] ?? '-', // Modelo
-                'D' => $fila['D'] ?? '-', // Tipo de Activo
-                'E' => $fila['E'] ?? '-', // Ubicacion
-            ],
-            'motivo' => $motivo
-        ];
-    }
 }

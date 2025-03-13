@@ -175,16 +175,5 @@ class ImportarController extends Controller
                 ->with('success', 'Datos importados correctamente.');
         });
     }
-    private function registrarError(&$errores, $fila, $motivo) {
-        $errores[] = [
-            'fila' => [
-                'A' => $fila['A'] ?? '-',
-                'B' => $fila['B'] ?? '-',
-                'C' => $fila['C'] ?? '-',
-                'D' => $fila['D'] ?? '-',
-                'E' => $fila['E'] ?? '-',
-            ],
-            'motivo' => $motivo
-        ];
-    }
+
 }

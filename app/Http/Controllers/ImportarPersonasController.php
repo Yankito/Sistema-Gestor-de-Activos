@@ -122,7 +122,7 @@ class ImportarPersonasController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $this->registrarError($errores, $fila, "La ubicación '{$ubicacion}' no existe en la base de datos.");
+                    $this->registrarErrorPersonas($errores, $fila, "La ubicación '{$ubicacion}' no existe en la base de datos.");
                     continue;
                 }
 
@@ -140,19 +140,19 @@ class ImportarPersonasController extends Controller
                     if($this->actualizarEstadoYUbicacion($fila, $ubicacionId)){
                         continue;
                     }
-                    $this->registrarError($errores, $fila, "El user '{$user}' ya existe en la base de datos.");
+                    $this->registrarErrorPersonas($errores, $fila, "El user '{$user}' ya existe en la base de datos.");
                     continue;
                 }
 
                 // Verificar si el RUT ya existe en la base de datos
                 if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
-                    $this->registrarError($errores, $fila, "El RUT '{$fila['B']}' ya existe en la base de datos.");
+                    $this->registrarErrorPersonas($errores, $fila, "El RUT '{$fila['B']}' ya existe en la base de datos.");
                     continue;
                 }
 
                 // Verificar que la fecha no sea null
                 if ($fila['F'] == null || $fila['F'] == '-' || !$this->convertirFecha($fila['F'])) {
-                    $this->registrarError($errores, $fila, "La fecha de ingreso no puede ser nula.");
+                    $this->registrarErrorPersonas($errores, $fila, "La fecha de ingreso no puede ser nula.");
                     continue;
                 }
 
@@ -254,7 +254,7 @@ class ImportarPersonasController extends Controller
         return $cambio;
     }
 
-    private function registrarError(&$errores, $fila, $motivo) {
+    private function registrarErrorPersonas(&$errores, $fila, $motivo) {
         $errores[] = [
             'fila' => [
                 'A' => $fila['A'] ?? '-', // User
