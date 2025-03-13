@@ -1,8 +1,4 @@
 <div>
-    <!-- Select2 -->
-    <link rel="stylesheet" href="vendor/adminlte/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-
     <!-- Theme style -->
     <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
 
@@ -114,10 +110,7 @@
     </form>
 @endif
 </div>
-    @if(isset($activo))
-        <!-- Select2 -->
-        <script src="vendor/adminlte/plugins/select2/js/select2.full.min.js"></script>
-    @endif
+
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {

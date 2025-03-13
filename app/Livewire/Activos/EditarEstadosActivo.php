@@ -49,9 +49,6 @@ class EditarEstadosActivo extends Component
         $this->responsable_de_activo = $this->activo->responsable_de_activo;
         $this->ubicacion = $this->activo->ubicacion;
         $this->usuarios = $this->activo->usuarioDeActivo->pluck('id')->toArray();
-        if (in_array($this->responsable_de_activo, $this->usuarios)) {
-            $this->usuarios = array_diff($this->usuarios, [$this->responsable_de_activo]);
-        }
         $this->dispatch('$refresh');
         $this->dispatch('modal-cargado');
     }
