@@ -99,6 +99,10 @@ Route::middleware(['auth'])->group(function(){
         return Response::download($filePath, 'PlantillaPersonas.xlsx');
     })->name('descargarPersonas.excel');
 
+    Route::get('/descargar-erroresAsignaciones-excel', [ImportarController::class, 'descargarErrores'])->name('descargar.erroresAsignaciones.excel');
+    Route::get('/descargar-erroresActivos-excel', [ImportarActivosController::class, 'descargarErrores'])->name('descargar.erroresActivos.excel');
+    Route::get('/descargar-erroresPersonas-excel', [ImportarPersonasController::class, 'descargarErrores'])->name('descargar.erroresPersonas.excel');
+    
     // Ruta para cerrar sesión
     Route::post('/logout', function () {
         Auth::logout();

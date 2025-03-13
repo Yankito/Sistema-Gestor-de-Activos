@@ -12,6 +12,9 @@ use App\Models\Registro;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ImportarTrait;
 use App\Services\ImportarExcelService;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ImportarPersonasController extends Controller
 {
@@ -32,6 +35,87 @@ class ImportarPersonasController extends Controller
         return view('importar.importarPersonas');
     }
 
+    public function descargarErrores()
+    {
+        $errores = session('errores', []);
+
+        if (empty($errores)) {
+            return redirect()->back()->with('error', 'No hay errores para descargar.');
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Errores de Importación');
+
+        // Encabezados
+        $sheet->setCellValue('A1', 'User');
+        $sheet->setCellValue('B1', 'Rut');
+        $sheet->setCellValue('C1', 'Nombre Completo');
+        $sheet->setCellValue('D1', 'Nombre Empresa');
+        $sheet->setCellValue('E1', 'Estado');
+        $sheet->setCellValue('F1', 'Fecha Ingreso');
+        $sheet->setCellValue('G1', 'Fecha Término');
+        $sheet->setCellValue('H1', 'Cargo');
+        $sheet->setCellValue('I1', 'Ubicación');
+        $sheet->setCellValue('J1', 'Correo');
+        $sheet->setCellValue('K1', 'Motivo del Error');
+
+        // Estilo para las cabeceras
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF808080'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A1:K1')->applyFromArray($styleArray);
+
+        // Llenar datos
+        $row = 2;
+        foreach ($errores as $error) {
+            $sheet->setCellValue('A' . $row, $error['fila']['A'] ?? '-');
+            $sheet->setCellValue('B' . $row, $error['fila']['B'] ?? '-');
+            $sheet->setCellValue('C' . $row, $error['fila']['C'] ?? '-');
+            $sheet->setCellValue('D' . $row, $error['fila']['D'] ?? '-');
+            $sheet->setCellValue('E' . $row, $error['fila']['E'] ?? '-');
+            $sheet->setCellValue('F' . $row, $error['fila']['F'] ?? '-');
+            $sheet->setCellValue('G' . $row, $error['fila']['G'] ?? '-');
+            $sheet->setCellValue('H' . $row, $error['fila']['H'] ?? '-');
+            $sheet->setCellValue('I' . $row, $error['fila']['I'] ?? '-');
+            $sheet->setCellValue('J' . $row, $error['fila']['J'] ?? '-');
+            $sheet->setCellValue('K' . $row, $error['motivo']);
+            $row++;
+        }
+
+        // Ajustar ancho de columnas
+        foreach (range('A', 'K') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Crear archivo Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Errores_Importacion_Personas.xlsx';
+        $filePath = storage_path('app/public/' . $fileName);
+
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
     private function convertirEstadoEmpleado($valor)
     {
         $valor = strtoupper($this->eliminarTildesYMayusculas($valor));
@@ -48,8 +132,8 @@ class ImportarPersonasController extends Controller
 
     private function convertirFecha($fecha)
     {
-        if (!$fecha) {
-            return null; // Si la fecha está vacía, devolver null
+        if (!$fecha || $fecha === '-') {
+            return null; // Si la fecha está vacía o es '-', devolver null
         }
 
         $fecha = trim($fecha);
@@ -133,7 +217,7 @@ class ImportarPersonasController extends Controller
                 }
 
                 // Verificar que la fecha no sea null
-                if ($fila['F'] == null) {
+                if ($fila['F'] == null || $fila['F'] == '-' || !$this->convertirFecha($fila['F'])) {
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "La fecha de ingreso no puede ser nula."
@@ -183,6 +267,8 @@ class ImportarPersonasController extends Controller
                     'correo' => $fila['J']
                 ];
             }
+            // Almacenar errores en la sesión para su descarga
+            session(['errores' => $errores]);
 
             // Crear registro en el historial
             $this->crearRegistro('IMPORTÓ PERSONAS');
