@@ -33,7 +33,7 @@ class EditarValoresActivo extends Component
         $this->ubicaciones = Ubicacion::all();
         $this->tiposDeActivo = TipoActivo::all();
 
-        if($this->activo != NULL) {
+        if($this->activo != null) {
             $this->responsable_de_activo = $this->activo->responsable_de_activo;
             $this->ubicacion = $this->activo->responsable_de_activo->ubicacion;
             $this->nro_serie = $this->activo->nro_serie;
@@ -153,4 +153,3 @@ class EditarValoresActivo extends Component
     }
 
 }
-?>

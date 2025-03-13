@@ -39,11 +39,11 @@ class ActivoController extends Controller
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
             $activo->estado = 1; // Estado inicial (por ejemplo, "Adquirido")
-            $activo->responsable_de_activo = NULL;
+            $activo->responsable_de_activo = null;
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;
             $activo->precio = $request->precio;
-            if($request->responsable != NULL){
+            if($request->responsable != null){
                 $activo->responsable_de_activo = $request->responsable;
                 $activo->estado = 4; // Cambiar el estado a "Asignado"
                 $activo->ubicacion = Persona::findOrFail($request->responsable)->ubicacion;
@@ -60,14 +60,14 @@ class ActivoController extends Controller
             $activo->save();
 
             $usuarios = $request->usuarios;
-            if($usuarios == NULL){
+            if($usuarios == null){
                 $usuarios = [];
             }
-            if ($request->responsable != NULL && !in_array($request->responsable, $usuarios)) {
+            if ($request->responsable != null && !in_array($request->responsable, $usuarios)) {
                 array_push($usuarios, $request->responsable);
             }
 
-            if($usuarios != NULL){
+            if($usuarios != null){
                 foreach ($usuarios as $usuarioId) {
                     Asignacion::create([
                         'id_persona' => $usuarioId,
@@ -76,9 +76,9 @@ class ActivoController extends Controller
                 }
             }
 
-            if($request->caracteristicas != NULL){
+            if($request->caracteristicas != null){
                 foreach ($request->caracteristicas as $caracteristica => $valor) {
-                    if($valor == NULL){
+                    if($valor == null){
                         continue;
                     }
                     ValorAdicional::create([
@@ -148,4 +148,3 @@ class ActivoController extends Controller
 
 
 }
-?>

@@ -79,7 +79,7 @@ class FilaActivo extends Component
 
         // Crear un registro para el cambio de estado
         $registroCambioEstado = new Registro();
-        $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser NULL)
+        $registroCambioEstado->persona = $activo->responsable_de_activo; // Persona asociada al activo (puede ser null)
         $registroCambioEstado->activo = $activo_id;
         $registroCambioEstado->tipo_cambio = $estados[$nuevo_estado]; // Mapear el estado numérico a un valor de ENUM
         $registroCambioEstado->encargado_cambio = Auth::user()->id; // Usuario que realizó el cambio
@@ -96,4 +96,3 @@ class FilaActivo extends Component
         $this->dispatch('cargarModal', $activo);
     }
 }
-?>

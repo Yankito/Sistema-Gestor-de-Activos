@@ -27,7 +27,7 @@ class EditarEstadosActivo extends Component
     {
         $this->personas = Persona::all();
         $this->ubicaciones = Ubicacion::all();
-        if($this->activo != NULL) {
+        if($this->activo != null) {
             $this->responsable_de_activo = $this->activo->responsable_de_activo;
             $this->ubicacion = $this->activo->responsable_de_activo->ubicacion;
         }
@@ -59,8 +59,8 @@ class EditarEstadosActivo extends Component
     public function cambiarEstado($activo_id, $nuevo_estado){
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){
-            $activo->responsable_de_activo = NULL;
-            $this->responsable_de_activo = NULL;
+            $activo->responsable_de_activo = null;
+            $this->responsable_de_activo = null;
             $this->usuarios = [];
             $this->manejarAsignaciones($activo->id);
         }
@@ -124,10 +124,10 @@ class EditarEstadosActivo extends Component
         // Eliminar asignaciones anteriores para este activo (opcional, dependiendo de tu lógica)
         Asignacion::where('id_activo', $activoId)->delete();
         // Iterar sobre los usuarios y crear nuevas asignaciones
-        if($this->usuarios == NULL){
+        if($this->usuarios == null){
             $this->usuarios = [];
         }
-        if ($this->responsable_de_activo != NULL && !in_array($this->responsable_de_activo, $this->usuarios)) {
+        if ($this->responsable_de_activo != null && !in_array($this->responsable_de_activo, $this->usuarios)) {
             array_push($this->usuarios, $this->responsable_de_activo);
         }
 
@@ -176,4 +176,3 @@ class EditarEstadosActivo extends Component
         $this->responsable_de_activo = $data;
     }
 }
-?>

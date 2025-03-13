@@ -25,4 +25,3 @@ class TipoActivo extends Model
         return $this->hasMany(CaracteristicaAdicional::class, 'tipo_activo_id', 'id');
     }
 }
-?>

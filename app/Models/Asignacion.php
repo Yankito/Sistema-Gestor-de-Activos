@@ -29,4 +29,3 @@ class Asignacion extends Model
         return $this->belongsTo(Activo::class, 'id_activo');
     }
 }
-?>

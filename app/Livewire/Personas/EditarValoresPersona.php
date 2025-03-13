@@ -42,7 +42,7 @@ class EditarValoresPersona extends Component
     public function mount()
     {
         $this->ubicaciones = Ubicacion::all();
-        if($this->persona != NULL) {
+        if($this->persona != null) {
             $this->asignarVariables();
         }
     }
@@ -90,14 +90,14 @@ class EditarValoresPersona extends Component
                 $persona->fecha_ter = date('Y-m-d');
                 foreach ($activos as $activo) {
                     $activo->estado = 7;
-                    $activo->responsable_de_activo = NULL;
+                    $activo->responsable_de_activo = null;
                     Asignacion::where('id_activo', $activo->id)->delete();
                     $activo->update();
                 }
             }
             else{
                 $persona->estado_empleado = $this->estado_empleado;
-                $persona->fecha_ter = NULL;
+                $persona->fecha_ter = null;
             }
         }
         try {
@@ -114,4 +114,3 @@ class EditarValoresPersona extends Component
         $this->reset(['persona', 'rut', 'user', 'nombre_completo', 'nombre_empresa', 'cargo', 'correo', 'fecha_ing','fecha_ter', 'ubicacion', 'estado_empleado']);
     }
 }
-?>

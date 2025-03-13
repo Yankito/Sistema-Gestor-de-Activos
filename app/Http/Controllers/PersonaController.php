@@ -53,13 +53,13 @@ class PersonaController extends Controller
                         }
                     },
                 ],
-                'user' => self::STRING_RULE,,
-                'nombres' => self::STRING_RULE,,
-                'primer_apellido' => self::STRING_RULE,,
+                'user' => self::STRING_RULE,
+                'nombres' => self::STRING_RULE,
+                'primer_apellido' => self::STRING_RULE,
                 'segundo_apellido' => 'nullable|string|max:100',
-                'nombre_empresa' => self::STRING_RULE,,
+                'nombre_empresa' => self::STRING_RULE,
                 'fecha_ing' => 'required|date',
-                'cargo' => self::STRING_RULE,,
+                'cargo' => self::STRING_RULE,
                 'ubicacion' => 'nullable|exists:ubicaciones,id',
                 'correo' => self::STRING_RULE,
             ], [
@@ -181,12 +181,12 @@ class PersonaController extends Controller
                     }
                 },
             ],
-            'nombre_completo' => self::STRING_RULE,,
-            'nombre_empresa' => self::STRING_RULE,,
+            'nombre_completo' => self::STRING_RULE,
+            'nombre_empresa' => self::STRING_RULE,
             'estado_empleado' => 'required|boolean',
             'fecha_ing' => 'required|date',
             'fecha_ter' => 'required|date',
-            'cargo' => self::STRING_RULE,,
+            'cargo' => self::STRING_RULE,
             'ubicacion' => 'nullable|exists:ubicaciones,id',
             'correo' => self::STRING_RULE,
         ], [
@@ -223,4 +223,3 @@ class PersonaController extends Controller
         return response()->json(['exists' => $persona !== null]);
     }
 }
-?>

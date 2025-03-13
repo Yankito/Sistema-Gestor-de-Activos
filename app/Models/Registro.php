@@ -36,4 +36,3 @@ class Registro extends Model
     }
 
 }
-?>

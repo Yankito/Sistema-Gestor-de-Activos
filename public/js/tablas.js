@@ -206,11 +206,6 @@ $(document).ready(function () {
 
         updateSelectAllCheckbox(index);
 
-        let checkedValues = [];
-        $(`.filter-checkbox[data-index="${index}"]:checked`).each(function () {
-            checkedValues.push($(this).val());
-        });
-
         applyFilter(index);
     });
 

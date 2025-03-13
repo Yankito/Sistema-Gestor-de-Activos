@@ -15,4 +15,3 @@ class TablaActivosController extends Controller
         return view('activos.tablaActivos', compact( 'activos', 'estados'));
     }
 }
-?>

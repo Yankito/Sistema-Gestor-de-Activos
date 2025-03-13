@@ -31,4 +31,3 @@ class FilaPersona extends Component
         $this->dispatch('refreshModalValores', $persona);
     }
 }
-?>
