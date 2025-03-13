@@ -26,4 +26,3 @@ class AdminMiddleware
         return redirect('/dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 }
-?>

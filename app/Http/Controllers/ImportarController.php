@@ -34,20 +34,20 @@ class ImportarController extends Controller
     public function importExcel(Request $request)
     {
         $this->importarExcelService->validarArchivo($request);
-    
+
         return $this->importarExcelService->manejarTransaccion(function () use ($request) {
             $spreadsheet = IOFactory::load($request->file('archivo_excel')->getPathname());
             $hoja = $spreadsheet->getActiveSheet();
             $datos = $hoja->toArray(null, true, true, true);
-    
+
             $asignaciones = [];
             $errores = [];
-    
+
             foreach ($datos as $index => $fila) {
                 if ($index == 1 || $this->filaVacia($fila, 'A', 'E')) {
                     continue;
                 }
-    
+
                 $fila['A'] = strtoupper($fila['A']);
                 $fila['B'] = strtoupper($fila['B']);
                 $fila['C'] = strtoupper($fila['C']);
@@ -57,7 +57,7 @@ class ImportarController extends Controller
                 $nroSerie = $this->eliminarTildesYMayusculas($fila['C']);
                 $estadoExcel = $this->eliminarTildesYMayusculas($fila['D']);
                 $justificacion = $fila['E'];
-    
+
                 // Buscar el activo
                 $activo = Activo::where('nro_serie', $nroSerie)->first();
                 if (!$activo) {
@@ -67,7 +67,7 @@ class ImportarController extends Controller
                     ];
                     continue;
                 }
-    
+
                 // Buscar el estado
                 $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
                 if (!$estado) {
@@ -77,7 +77,7 @@ class ImportarController extends Controller
                     ];
                     continue;
                 }
-    
+
                 // Manejar el responsable
                 if (!empty($responsableUser)) {
                     // Si se proporciona un responsable en el archivo, buscarlo
@@ -102,7 +102,7 @@ class ImportarController extends Controller
                     }
                     // No es necesario actualizar el responsable, se mantiene el actual
                 }
-    
+
                 // Buscar el usuario
                 if (!empty($usuarioUser)) {
                     $usuario = Persona::where('user', $usuarioUser)->first();
@@ -116,11 +116,11 @@ class ImportarController extends Controller
                 } else {
                     $usuario = null;
                 }
-    
+
                 // Actualizar el estado y la justificación del activo
                 $activo->estado = $estado->id;
                 $activo->justificacion_doble_activo = $justificacion ?: null;
-    
+
                 // Actualizar la ubicación del activo a la ubicación del responsable (si existe)
                 if ($activo->responsable_de_activo) {
                     $responsable = Persona::find($activo->responsable_de_activo);
@@ -128,21 +128,21 @@ class ImportarController extends Controller
                         $activo->ubicacion = $responsable->ubicacion;
                     }
                 }
-    
+
                 // Si el estado es 2 (preparación), establecer responsable y usuarios a null
                 if ($activo->estado == 2) {
                     $activo->responsable_de_activo = null;
                     $activo->usuarioDeActivo()->sync([]);
                 }
-    
+
                 $activo->save();
-    
+
                 // Crear o actualizar la asignación en la tabla asignaciones
                 if ($usuario) {
                     // Usar sync en lugar de syncWithoutDetaching para evitar recrear asignaciones eliminadas
                     $activo->usuarioDeActivo()->sync([$usuario->id]);
                 }
-    
+
                 $asignaciones[] = [
                     'responsable' => $activo->responsable_de_activo ? strtoupper(Persona::find($activo->responsable_de_activo)->user) : null,
                     'usuario_activo' => ($activo->estado == 2) ? null : ($usuario ? strtoupper($usuario->user) : null),
@@ -151,13 +151,12 @@ class ImportarController extends Controller
                     'justificacion' => $activo->justificacion_doble_activo,
                 ];
             }
-    
+
             // Crear registro en el historial
             $this->crearRegistro('IMPORTÓ ASIGNACIONES');
-    
+
             return view('importar.importar', compact('datos', 'asignaciones', 'errores'))
                 ->with('success', 'Datos importados correctamente.');
         });
     }
 }
-?>

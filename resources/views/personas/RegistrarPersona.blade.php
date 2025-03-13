@@ -37,7 +37,7 @@
                                             <!-- RUT -->
                                             <div class="form-outline mb-4">
                                                 <label class="form-label" for="rut">RUT </label>
-                                                <label>Formato: 12345678-9</label>
+                                                <small class="text-muted">Formato: 12345678-9</small>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
                                                 <span id="rutError" class="text-danger" style="display:none;">RUT inválido. Use el formato 12345678-9.</span>
                                                 <span id="rutRepetido" class="text-danger" style="display:none;">El RUT ya se encuentra registrado.</span>
@@ -127,7 +127,7 @@
                                             <!-- Activo -->
                                             <div class="form-outline mb-4">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="activo">Activo</label>
+                                                    <label class = "form-label">Activos</label>
                                                     <select name="activo" id="activo" class="form-control select2bs4" style="width: 100%;">
                                                         <option value="" selected>SIN ACTIVO</option>
                                                         @foreach($activos as $activo)

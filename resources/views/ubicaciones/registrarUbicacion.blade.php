@@ -63,8 +63,8 @@
 
 
                                         <!-- Map Container -->
-                                        <div class="col-md-12">
-                                            <label>Seleccione la Ubicación</label>
+                                        <div class="col-md-12 mt-3">
+                                            <label class="form-label" for="latitud">Seleccione la Ubicación</label>
                                             <div id="map" style="height: 400px; margin-bottom: 15px;"></div>
                                             <input type="hidden" id="latitud" name="latitud" />
                                             <input type="hidden" id="longitud" name="longitud" />

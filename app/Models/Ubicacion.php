@@ -23,4 +23,3 @@ class Ubicacion extends Model
         return Hashids::encode($this->id);
     }
 }
-?>

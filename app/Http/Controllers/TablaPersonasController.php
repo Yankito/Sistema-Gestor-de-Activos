@@ -14,4 +14,3 @@ class TablaPersonasController extends Controller
         return view('personas.tablaPersonas', compact('personas'));
     }
 }
-?>

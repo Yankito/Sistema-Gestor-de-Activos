@@ -98,7 +98,7 @@
 
             <!-- Sidebar Menu -->
             <nav class="mt-2" style="margin-right: 10px;">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="font-size: 15px;">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false" style="font-size: 15px;">
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">

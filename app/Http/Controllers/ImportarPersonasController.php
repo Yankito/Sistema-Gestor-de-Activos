@@ -49,7 +49,7 @@ class ImportarPersonasController extends Controller
     private function convertirFecha($fecha)
     {
         if (!$fecha) {
-            return null; // Si la fecha está vacía, devolver NULL
+            return null; // Si la fecha está vacía, devolver null
         }
 
         $fecha = trim($fecha);
@@ -161,7 +161,7 @@ class ImportarPersonasController extends Controller
                 if($estadoEmpleado == 0){
                     foreach ($activos as $activo) {
                         $activo->estado = 7;
-                        $activo->responsable_de_activo = NULL;
+                        $activo->responsable_de_activo = null;
                         Asignacion::where('id_activo', $activo->id)->delete();
                         $activo->update();
                     }
@@ -197,4 +197,3 @@ class ImportarPersonasController extends Controller
         return view('confirmar-importacion');
     }
 }
-?>

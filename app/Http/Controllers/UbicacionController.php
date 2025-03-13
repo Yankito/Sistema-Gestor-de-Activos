@@ -103,4 +103,3 @@ class UbicacionController extends Controller
         return redirect()->route('ubicaciones')->with('success', 'Ubicación eliminada exitosamente.');
     }
 }
-?>

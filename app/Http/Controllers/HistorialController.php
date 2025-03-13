@@ -29,5 +29,4 @@ class HistorialController extends Controller
         return view('historial', compact('registros', 'filterDate'));
     }
 
-}
-?>
+    }

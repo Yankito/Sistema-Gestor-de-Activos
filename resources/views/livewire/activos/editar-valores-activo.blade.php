@@ -93,7 +93,7 @@
         <div class = "row">
 
             @if ($activo->tipoDeActivo->caracteristicasAdicionales->count() > 0)
-                <label>Características Adicionales (opcionales)</label>
+                <legend class="form-label">Características Adicionales</legend>
                 @foreach ($valoresAdicionales as $index => $valorAdicional)
                     <div class="col-md-6 d-flex align-items-center">
                         <i class="fas fa-pencil-alt text-primary mr-2 toggle-edit" data-target="caracteristica_{{ $index }}"></i>
