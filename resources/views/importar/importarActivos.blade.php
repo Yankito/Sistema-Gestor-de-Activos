@@ -174,11 +174,13 @@
                             @endif
 
                             <!-- Download Template Button -->
-                            <div class="text-center mt-4">
-                                <a href="{{ route('descargarActivos.excel') }}" class="btn btn-secondary">
-                                    <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
-                                </a>
-                            </div>
+                            @if (!((isset($activos) && count($activos) > 0) || (isset($errores) && count($errores) > 0)))
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('descargarActivos.excel') }}" class="btn btn-secondary">
+                                        <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
