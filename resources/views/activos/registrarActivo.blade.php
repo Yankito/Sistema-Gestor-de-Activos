@@ -101,7 +101,7 @@
                                             <select name="responsable" id="responsable" select class="form-control select2bs4">
                                                 <option value="" disabled selected>Seleccione un responsable</option>
                                                 @foreach($personas as $persona)
-                                                    <option value="{{$persona->id}}" data-ubicacion-id="{{$persona->ubicacion}}">{{$persona->rut}}: {{$persona->nombre_completo}}</option>
+                                                    <option value="{{$persona->id}}" data-ubicacion-id="{{$persona->ubicacion}}">{{$persona->user}}: {{$persona->nombre_completo}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -119,7 +119,7 @@
                                             <select name="usuarios[]" id="usuarios_select" class="form-control select2bs4" multiple>
                                                 @foreach($personas as $persona)
                                                     <option value="{{$persona->id}}">
-                                                        {{$persona->nombre_completo}} ({{$persona->rut}})
+                                                        {{$persona->nombre_completo}} ({{$persona->user}})
                                                     </option>
                                                 @endforeach
                                             </select>

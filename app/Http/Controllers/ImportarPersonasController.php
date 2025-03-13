@@ -123,7 +123,7 @@ class ImportarPersonasController extends Controller
         if ($valor === 'ACTIVO') {
             return 1;
         }
-        if ($valor === 'TERMINADO') {
+        if ($valor === 'INACTIVO') {
             return 0;
         }
 
@@ -192,14 +192,7 @@ class ImportarPersonasController extends Controller
                 // Obtener el ID de la ubicación
                 $ubicacionId = $ubicacionExistente->id;
 
-                // Verificar si el RUT ya existe en la base de datos
-                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
-                    ];
-                    continue;
-                }
+
 
                 // Verificar si el user es 0 y generar un user provisional
                 $user = strtoupper($fila['A']);
@@ -209,9 +202,21 @@ class ImportarPersonasController extends Controller
 
                 // Verificar si el user ya existe en la base de datos
                 if (Persona::where('user', $user)->exists()) {
+                    if($this->actualizarEstadoYUbicacion($fila, $ubicacionId)){
+                        continue;
+                    }
                     $errores[] = [
                         'fila' => $fila,
                         'motivo' => "El user '{$user}' ya existe en la base de datos."
+                    ];
+                    continue;
+                }
+
+                // Verificar si el RUT ya existe en la base de datos
+                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
+                    $errores[] = [
+                        'fila' => $fila,
+                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
                     ];
                     continue;
                 }
@@ -276,6 +281,51 @@ class ImportarPersonasController extends Controller
             return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))
                 ->with('success', 'Datos importados correctamente.');
         });
+    }
+
+    public function actualizarEstadoYUbicacion($fila, $ubicacionId){
+        $cambio = false;
+        $personaExistente = Persona::where('rut', $fila['B'])->first();
+        if ($personaExistente) {
+            $camposIguales = $personaExistente->nombre_completo === $fila['C'] &&
+                            $personaExistente->nombre_empresa === $fila['D'] &&
+                            $personaExistente->fecha_ing === $this->convertirFecha($fila['F']) &&
+                            $personaExistente->cargo === $fila['H'] &&
+                            $personaExistente->correo === $fila['J'];
+            if ($camposIguales) {
+                if($personaExistente->ubicacion != $ubicacionId){
+                    $personaExistente->update([
+                        'ubicacion' => $ubicacionId,
+                    ]);
+                    Activo::where('responsable_de_activo', $personaExistente->id)->update(['ubicacion' => $ubicacionId]);
+                    $cambio = true;
+                }
+                if($personaExistente->estado_empleado != $this->convertirEstadoEmpleado($fila['E'])){
+                    if($this->convertirEstadoEmpleado($fila['E']) == 0){
+                        $activos = Activo::where('responsable_de_activo', $personaExistente->id)->get();
+                        foreach ($activos as $activo) {
+                            $activo->estado = 3;
+                            $activo->responsable_de_activo = null;
+                            Asignacion::where('id_activo', $activo->id)->delete();
+                            $activo->update();
+                        }
+                        Asignacion::where('id_persona', $personaExistente->id)->delete();
+                        $personaExistente->update([
+                            'estado_empleado' => 0,
+                            'fecha_ter' => date('Y-m-d')
+                        ]);
+                    }
+                    else{
+                        $personaExistente->update([
+                            'estado_empleado' => 1,
+                            'fecha_ter' => null
+                        ]);
+                    }
+                    $cambio = true;
+                }
+            }
+        }
+        return $cambio;
     }
 
     public function confirmarImportacion()
