@@ -17,15 +17,15 @@ class CreatePersonasTable extends Migration
             // Definir la estructura de la tabla
             $table->id();
             $table->string('user', 20)->unique();
-            $table->string('rut', 15);  
-            $table->string('nombre_completo', 100); 
-            $table->string('nombre_empresa', 100);         
-            $table->boolean('estado_empleado')->default(true);  
-            $table->date('fecha_ing'); 
-            $table->date('fecha_ter')->nullable();  
-            $table->string('cargo', 100);        
-            $table->unsignedBigInteger('ubicacion')->nullable();  
-            $table->string('correo', 100);     
+            $table->string('rut', 15);
+            $table->string('nombre_completo', 100);
+            $table->string('nombre_empresa', 100);
+            $table->boolean('estado_empleado')->default(true);
+            $table->date('fecha_ing');
+            $table->date('fecha_ter')->nullable();
+            $table->string('cargo', 100);
+            $table->unsignedBigInteger('ubicacion')->nullable();
+            $table->string('correo', 100);
             // Definir la relación con la tabla 'ubicaciones'
             $table->foreign('ubicacion')->references('id')->on('ubicaciones')->onDelete('set null');
 

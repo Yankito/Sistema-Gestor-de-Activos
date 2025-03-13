@@ -157,6 +157,11 @@ class ImportarPersonasController extends Controller
                 }
 
                 // Crear la persona
+                $correo = strtolower($fila['J']);
+                if (!preg_match('/@(iansa|patagoniafresh|iacton)\.[a-z]{2,3}$/', $correo)) {
+                    $correo = "-";
+                }
+
                 $persona = Persona::create([
                     'user' => $user,
                     'rut' => $fila['B'],
@@ -167,7 +172,7 @@ class ImportarPersonasController extends Controller
                     'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
                     'cargo' => $fila['H'],
                     'ubicacion' => $ubicacionId,
-                    'correo' => $fila['J']
+                    'correo' => $correo
                 ]);
 
                 // Transformar el estado y la ubicación para mostrarlos en la vista
@@ -195,7 +200,7 @@ class ImportarPersonasController extends Controller
                     'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
                     'cargo' => $fila['H'],
                     'ubicacion' => $ubicacionNombre, // Mostrar el nombre de la ubicación
-                    'correo' => $fila['J']
+                    'correo' => $correo
                 ];
             }
             // Almacenar errores en la sesión para su descarga
