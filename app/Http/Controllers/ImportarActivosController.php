@@ -62,29 +62,8 @@ class ImportarActivosController extends Controller
         $hojaGeneral->setCellValue('D1', 'Tipo de activo');
         $hojaGeneral->setCellValue('E1', 'Ubicación');
 
-        // Estilo para las cabeceras
-        $styleArray = [
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => 'FFFFFFFF'],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF808080'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-            ],
-        ];
 
-        $hojaGeneral->getStyle('A1:E1')->applyFromArray($styleArray);
+        $hojaGeneral->getStyle('A1:E1')->applyFromArray($this->getHeaderStyle());
 
         // Ajustar ancho de columnas
         foreach (range('A', 'E') as $columnID) {

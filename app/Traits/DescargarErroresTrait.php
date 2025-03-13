@@ -8,6 +8,30 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait DescargarErroresTrait
 {
+
+    private function getHeaderStyle(): array
+    {
+        return [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF808080'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+    }
     /**
      * Descarga un archivo Excel con los errores de importación.
      *
@@ -36,29 +60,9 @@ trait DescargarErroresTrait
         // Agregar la columna "Motivo del Error"
         $sheet->setCellValue($columna . '1', 'Motivo del Error');
 
-        // Estilo para las cabeceras
-        $styleArray = [
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => 'FFFFFFFF'],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF808080'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-            ],
-        ];
+        // Estilo para las cabecera
 
-        $sheet->getStyle('A1:' . $columna . '1')->applyFromArray($styleArray);
+        $sheet->getStyle('A1:' . $columna . '1')->applyFromArray($this->getHeaderStyle());
 
         // Llenar datos
         $row = 2;
