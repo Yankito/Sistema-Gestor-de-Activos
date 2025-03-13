@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <title>@yield('title')</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -8,8 +9,6 @@
         <link rel="stylesheet" href="vendor/adminlte/plugins/fontawesome-free/css/all.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- Tempusdominus Bootstrap 4 -->
-        <link rel="stylesheet" href="vendor/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css?v=3.2.0">
         <!-- Select2 -->
@@ -288,20 +287,8 @@
 
     <!-- jQuery -->
     <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
     <!-- Bootstrap 4 -->
     <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="vendor/adminlte/plugins/chart.js/Chart.min.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="vendor/adminlte/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="vendor/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- overlayScrollbars -->
     <!-- AdminLTE App -->
     <script src="vendor/adminlte/dist/js/adminlte.js?v=3.2.0"></script>
     <!-- Select2 -->

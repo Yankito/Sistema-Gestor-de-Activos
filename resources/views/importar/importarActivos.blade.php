@@ -61,7 +61,7 @@
                             <!-- Tabs for Imported Data and Errors -->
                             @if ((isset($activos) && count($activos) > 0) || (isset($errores) && count($errores) > 0))
                                 <hr class="my-4">
-                                <ul class="nav nav-tabs" id="importTabs" role="tablist">
+                                <ul class="nav nav-tabs" id="importTabs">
                                     @if (isset($activos) && count($activos) > 0)
                                         <li class="nav-item">
                                             <a class="nav-link active" id="success-tab" data-toggle="tab" href="#success" role="tab" aria-controls="success" aria-selected="true">
@@ -180,10 +180,6 @@
 @endsection
 
 @section('scripts')
-    <!-- jQuery -->
-    <script src="vendor/adminlte/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables -->
     <script src="vendor/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
