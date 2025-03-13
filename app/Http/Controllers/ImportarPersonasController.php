@@ -19,7 +19,6 @@ use App\Traits\DescargarErroresTrait;
 
 class ImportarPersonasController extends Controller
 {
-    use ImportarTrait;  // Usar el trait
     use ImportarTrait, DescargarErroresTrait;  // Usar los traits
 
     protected $importarExcelService;
