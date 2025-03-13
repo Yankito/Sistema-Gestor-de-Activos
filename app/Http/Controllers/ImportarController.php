@@ -14,13 +14,13 @@ use App\Services\ImportarExcelService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Traits\DescargarErroresTrait;
 
 
 
 class ImportarController extends Controller
 {
-    use ImportarTrait;  // Usar el trait
-
+    use ImportarTrait, DescargarErroresTrait;  // Usar los traits
     protected $importarExcelService;
 
     public function __construct(ImportarExcelService $importarExcelService)
@@ -35,82 +35,20 @@ class ImportarController extends Controller
         }
         return view('importar.importar');
     }
-
-    public function descargarErrores(Request $request)
+    public function descargarErrores()
     {
-        $errores = session('errores'); // Obtener los errores de la sesión
-
-        if (empty($errores)) {
-            return redirect()->back()->with('error', 'No hay errores para descargar.');
-        }
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Encabezados
-        $sheet->setCellValue('A1', 'Responsable');
-        $sheet->setCellValue('B1', 'Usuario Activo');
-        $sheet->setCellValue('C1', 'Número de Serie');
-        $sheet->setCellValue('D1', 'Estado');
-        $sheet->setCellValue('E1', 'Justificación Doble Activo');
-        $sheet->setCellValue('F1', 'Motivo del Error');
-
-        // Estilo para las cabeceras
-        $styleArray = [
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => 'FFFFFFFF'],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF808080'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-            ],
+        $errores = session('errores', []);
+    
+        // Definir los encabezados que coinciden con las claves de $error['fila']
+        $encabezados = [
+            'A' => 'Responsable',
+            'B' => 'Usuario Activo',
+            'C' => 'Número de Serie',
+            'D' => 'Estado',
+            'E' => 'Justificación Doble Activo',
         ];
-
-        $sheet->getStyle('A1:F1')->applyFromArray($styleArray);
-
-        // Llenar datos
-        $row = 2;
-        foreach ($errores as $error) {
-            $sheet->setCellValue('A' . $row, $error['fila']['A'] ?? '-');
-            $sheet->setCellValue('B' . $row, $error['fila']['B'] ?? '-');
-            $sheet->setCellValue('C' . $row, $error['fila']['C'] ?? '-');
-            $sheet->setCellValue('D' . $row, $error['fila']['D'] ?? '-');
-            $sheet->setCellValue('E' . $row, $error['fila']['E'] ?? '-');
-            $sheet->setCellValue('F' . $row, $error['motivo']);
-            $row++;
-        }
-
-        // Ajustar el tamaño de las columnas automáticamente
-        foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
-        }
-
-        // Crear el archivo Excel
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'errores_importacion.xlsx';
-
-        $response = new StreamedResponse(
-            function () use ($writer) {
-                $writer->save('php://output');
-            }
-        );
-
-        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="' . $fileName . '"');
-        $response->headers->set('Cache-Control', 'max-age=0');
-
-        return $response;
+    
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion.xlsx');
     }
 
     public function importExcel(Request $request)
@@ -144,7 +82,13 @@ class ImportarController extends Controller
                 $activo = Activo::where('nro_serie', $nroSerie)->first();
                 if (!$activo) {
                     $errores[] = [
-                        'fila' => $fila,
+                        'fila' => [
+                            'A' => $fila['A'] ?? '-', // Número de serie
+                            'B' => $fila['B'] ?? '-', // Marca
+                            'C' => $fila['C'] ?? '-', // Modelo
+                            'D' => $fila['D'] ?? '-', // Tipo de activo
+                            'E' => $fila['E'] ?? '-', // Ubicación
+                        ],
                         'motivo' => "Activo con número de serie '$nroSerie' no encontrado."
                     ];
                     continue;
@@ -154,7 +98,13 @@ class ImportarController extends Controller
                 $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
                 if (!$estado) {
                     $errores[] = [
-                        'fila' => $fila,
+                        'fila' => [
+                            'A' => $fila['A'] ?? '-', // Número de serie
+                            'B' => $fila['B'] ?? '-', // Marca
+                            'C' => $fila['C'] ?? '-', // Modelo
+                            'D' => $fila['D'] ?? '-', // Tipo de activo
+                            'E' => $fila['E'] ?? '-', // Ubicación
+                        ],
                         'motivo' => "Estado '$estadoExcel' no encontrado en la base de datos."
                     ];
                     continue;
@@ -166,7 +116,13 @@ class ImportarController extends Controller
                     $responsable = Persona::where('user', $responsableUser)->first();
                     if (!$responsable) {
                         $errores[] = [
-                            'fila' => $fila,
+                            'fila' => [
+                                'A' => $fila['A'] ?? '-', // Número de serie
+                                'B' => $fila['B'] ?? '-', // Marca
+                                'C' => $fila['C'] ?? '-', // Modelo
+                                'D' => $fila['D'] ?? '-', // Tipo de activo
+                                'E' => $fila['E'] ?? '-', // Ubicación
+                            ],
                             'motivo' => "Responsable '$responsableUser' no encontrado."
                         ];
                         continue;
@@ -177,7 +133,13 @@ class ImportarController extends Controller
                     // Si no se proporciona un responsable, mantener el responsable actual (si existe)
                     if (!$activo->responsable_de_activo) {
                         $errores[] = [
-                            'fila' => $fila,
+                            'fila' => [
+                                'A' => $fila['A'] ?? '-', // Número de serie
+                                'B' => $fila['B'] ?? '-', // Marca
+                                'C' => $fila['C'] ?? '-', // Modelo
+                                'D' => $fila['D'] ?? '-', // Tipo de activo
+                                'E' => $fila['E'] ?? '-', // Ubicación
+                            ],
                             'motivo' => "El activo no tiene un responsable actual y no se proporcionó uno en el archivo."
                         ];
                         continue;
@@ -190,7 +152,13 @@ class ImportarController extends Controller
                     $usuario = Persona::where('user', $usuarioUser)->first();
                     if (!$usuario) {
                         $errores[] = [
-                            'fila' => $fila,
+                            'fila' => [
+                                'A' => $fila['A'] ?? '-', // Número de serie
+                                'B' => $fila['B'] ?? '-', // Marca
+                                'C' => $fila['C'] ?? '-', // Modelo
+                                'D' => $fila['D'] ?? '-', // Tipo de activo
+                                'E' => $fila['E'] ?? '-', // Ubicación
+                            ],
                             'motivo' => "Usuario '$usuarioUser' no encontrado."
                         ];
                         continue;

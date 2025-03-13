@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ImportarTrait;
 use App\Services\ImportarExcelService;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Traits\DescargarErroresTrait;
 
 class ImportarActivosController extends Controller
 {
-    use ImportarTrait;  // Usar el trait
+    use ImportarTrait, DescargarErroresTrait;  // Usar los traits
 
     protected $importarExcelService;
 
@@ -35,72 +36,17 @@ class ImportarActivosController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-
-        if (empty($errores)) {
-            return redirect()->back()->with('error', 'No hay errores para descargar.');
-        }
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('General');
-
-        // Encabezados
-        $sheet->setCellValue('A1', 'Número de serie');
-        $sheet->setCellValue('B1', 'Marca');
-        $sheet->setCellValue('C1', 'Modelo');
-        $sheet->setCellValue('D1', 'Tipo de activo');
-        $sheet->setCellValue('E1', 'Ubicación');
-        $sheet->setCellValue('F1', 'Motivo del Error');
-
-        // Estilo para las cabeceras
-        $styleArray = [
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => 'FFFFFFFF'],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF808080'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-            ],
+    
+        // Definir los encabezados que coinciden con las claves de $error['fila']
+        $encabezados = [
+            'A' => 'Número de serie',
+            'B' => 'Marca',
+            'C' => 'Modelo',
+            'D' => 'Tipo de activo',
+            'E' => 'Ubicación',
         ];
-
-        $sheet->getStyle('A1:F1')->applyFromArray($styleArray);
-
-        // Llenar datos
-        $row = 2;
-        foreach ($errores as $error) {
-            $sheet->setCellValue('A' . $row, $error['fila']['A'] ?? '-');
-            $sheet->setCellValue('B' . $row, $error['fila']['B'] ?? '-');
-            $sheet->setCellValue('C' . $row, $error['fila']['C'] ?? '-');
-            $sheet->setCellValue('D' . $row, $error['fila']['D'] ?? '-');
-            $sheet->setCellValue('E' . $row, $error['fila']['E'] ?? '-');
-            $sheet->setCellValue('F' . $row, $error['motivo']);
-            $row++;
-        }
-
-        // Ajustar ancho de columnas
-        foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
-        }
-
-        // Crear archivo Excel
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'Errores_Importacion_Activos.xlsx';
-        $filePath = storage_path('app/public/' . $fileName);
-
-        $writer->save($filePath);
-
-        return response()->download($filePath)->deleteFileAfterSend(true);
+    
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Activos.xlsx');
     }
 
     public function generarPlantilla()
@@ -116,29 +62,8 @@ class ImportarActivosController extends Controller
         $hojaGeneral->setCellValue('D1', 'Tipo de activo');
         $hojaGeneral->setCellValue('E1', 'Ubicación');
 
-        // Estilo para las cabeceras
-        $styleArray = [
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => 'FFFFFFFF'],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF808080'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-            ],
-        ];
 
-        $hojaGeneral->getStyle('A1:E1')->applyFromArray($styleArray);
+        $hojaGeneral->getStyle('A1:E1')->applyFromArray($this->getHeaderStyle());
 
         // Ajustar ancho de columnas
         foreach (range('A', 'E') as $columnID) {
@@ -187,9 +112,6 @@ class ImportarActivosController extends Controller
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
-    public function descargarErroresExcel(Request $request){
-
-    }
 
     public function importExcel(Request $request)
     {
@@ -217,7 +139,15 @@ class ImportarActivosController extends Controller
                 $tipoActivo = DB::table('tipo_activo')->where('nombre', $tipoActivoNombre)->first();
 
                 if (!$tipoActivo) {
-                    $errores[] = ['fila' => $fila, 'motivo' => "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos."];
+                    $errores[] = [
+                        'fila' => [
+                            'A' => $fila['A'] ?? '-', // Responsable
+                            'B' => $fila['B'] ?? '-', // Usuario Activo
+                            'C' => $fila['C'] ?? '-', // Número de Serie
+                            'D' => $fila['D'] ?? '-', // Estado
+                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
+                        ], 
+                        'motivo' => "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos."];
                     continue;
                 }
 
@@ -229,14 +159,30 @@ class ImportarActivosController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $errores[] = ['fila' => $fila, 'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."];
+                    $errores[] = [
+                        'fila' => [
+                            'A' => $fila['A'] ?? '-', // Responsable
+                            'B' => $fila['B'] ?? '-', // Usuario Activo
+                            'C' => $fila['C'] ?? '-', // Número de Serie
+                            'D' => $fila['D'] ?? '-', // Estado
+                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
+                        ], 
+                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."];
                     continue;
                 }
 
                 $estado = DB::table('estados')->where('nombre_estado', 'Adquirido')->first();
 
                 if (Activo::where('nro_serie', strtoupper($fila['A']))->exists()) {
-                    $errores[] = ['fila' => $fila, 'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
+                    $errores[] = [
+                        'fila' => [
+                            'A' => $fila['A'] ?? '-', // Responsable
+                            'B' => $fila['B'] ?? '-', // Usuario Activo
+                            'C' => $fila['C'] ?? '-', // Número de Serie
+                            'D' => $fila['D'] ?? '-', // Estado
+                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
+                        ], 
+                        'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
                     continue;
                 }
 

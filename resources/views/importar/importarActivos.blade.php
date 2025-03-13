@@ -167,18 +167,20 @@
                             @if (isset($errores) && count($errores) > 0)
                             <!-- boton para descargar errores -->
                                 <div class="text-left mt-3">
-                                    <a href="{{ route('descargar.erroresActivos.excel') }}" class="btn btn-danger">
+                                    <a href="{{ route('descargar.errores.importacion.activos') }}" class="btn btn-danger">
                                         <i class="fas fa-file-excel mr-2"></i> Descargar Errores
                                     </a>
                                 </div>
                             @endif
 
                             <!-- Download Template Button -->
-                            <div class="text-center mt-4">
-                                <a href="{{ route('descargarActivos.excel') }}" class="btn btn-secondary">
-                                    <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
-                                </a>
-                            </div>
+                            @if (!((isset($activos) && count($activos) > 0) || (isset($errores) && count($errores) > 0)))
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('descargarActivos.excel') }}" class="btn btn-secondary">
+                                        <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
