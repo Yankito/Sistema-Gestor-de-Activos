@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Traits\ImportarTrait;
 use App\Services\ImportarExcelService;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 
 class ImportarController extends Controller
@@ -30,6 +34,83 @@ class ImportarController extends Controller
             return $redirect;
         }
         return view('importar.importar');
+    }
+
+    public function descargarErrores(Request $request)
+    {
+        $errores = session('errores'); // Obtener los errores de la sesión
+
+        if (empty($errores)) {
+            return redirect()->back()->with('error', 'No hay errores para descargar.');
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Encabezados
+        $sheet->setCellValue('A1', 'Responsable');
+        $sheet->setCellValue('B1', 'Usuario Activo');
+        $sheet->setCellValue('C1', 'Número de Serie');
+        $sheet->setCellValue('D1', 'Estado');
+        $sheet->setCellValue('E1', 'Justificación Doble Activo');
+        $sheet->setCellValue('F1', 'Motivo del Error');
+
+        // Estilo para las cabeceras
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF808080'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A1:F1')->applyFromArray($styleArray);
+
+        // Llenar datos
+        $row = 2;
+        foreach ($errores as $error) {
+            $sheet->setCellValue('A' . $row, $error['fila']['A'] ?? '-');
+            $sheet->setCellValue('B' . $row, $error['fila']['B'] ?? '-');
+            $sheet->setCellValue('C' . $row, $error['fila']['C'] ?? '-');
+            $sheet->setCellValue('D' . $row, $error['fila']['D'] ?? '-');
+            $sheet->setCellValue('E' . $row, $error['fila']['E'] ?? '-');
+            $sheet->setCellValue('F' . $row, $error['motivo']);
+            $row++;
+        }
+
+        // Ajustar el tamaño de las columnas automáticamente
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Crear el archivo Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'errores_importacion.xlsx';
+
+        $response = new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $fileName . '"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 
     public function importExcel(Request $request)
@@ -155,6 +236,8 @@ class ImportarController extends Controller
 
             // Crear registro en el historial
             $this->crearRegistro('IMPORTÓ ASIGNACIONES');
+            //guardar errores en la sesión
+            session(['errores' => $errores]);
 
             return view('importar.importar', compact('datos', 'asignaciones', 'errores'))
                 ->with('success', 'Datos importados correctamente.');

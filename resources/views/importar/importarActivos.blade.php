@@ -164,6 +164,14 @@
                                     @endif
                                 </div>
                             @endif
+                            @if (isset($errores) && count($errores) > 0)
+                            <!-- boton para descargar errores -->
+                                <div class="text-left mt-3">
+                                    <a href="{{ route('descargar.erroresActivos.excel') }}" class="btn btn-danger">
+                                        <i class="fas fa-file-excel mr-2"></i> Descargar Errores
+                                    </a>
+                                </div>
+                            @endif
 
                             <!-- Download Template Button -->
                             <div class="text-center mt-4">
