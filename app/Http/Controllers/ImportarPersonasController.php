@@ -122,46 +122,12 @@ class ImportarPersonasController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
-                    ];
+                    $this->registrarError($errores, $fila, "La ubicación '{$ubicacion}' no existe en la base de datos.");
                     continue;
                 }
 
                 // Obtener el ID de la ubicación
                 $ubicacionId = $ubicacionExistente->id;
-
-                // Verificar si el RUT ya existe en la base de datos
-                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
-                    ];
-                    continue;
-                }
 
                 // Verificar si el user es 0 y generar un user provisional
                 $user = strtoupper($fila['A']);
@@ -174,50 +140,19 @@ class ImportarPersonasController extends Controller
                     if($this->actualizarEstadoYUbicacion($fila, $ubicacionId)){
                         continue;
                     }
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "El user '{$user}' ya existe en la base de datos."
-                    ];
+                    $this->registrarError($errores, $fila, "El user '{$user}' ya existe en la base de datos.");
                     continue;
                 }
 
                 // Verificar si el RUT ya existe en la base de datos
                 if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
-                    $errores[] = [
-                        'fila' => $fila,
-                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
-                    ];
+                    $this->registrarError($errores, $fila, "El RUT '{$fila['B']}' ya existe en la base de datos.");
                     continue;
                 }
 
                 // Verificar que la fecha no sea null
                 if ($fila['F'] == null || $fila['F'] == '-' || !$this->convertirFecha($fila['F'])) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "La fecha de ingreso no puede ser nula."
-                    ];
+                    $this->registrarError($errores, $fila, "La fecha de ingreso no puede ser nula.");
                     continue;
                 }
 
@@ -317,6 +252,24 @@ class ImportarPersonasController extends Controller
             }
         }
         return $cambio;
+    }
+
+    private function registrarError(&$errores, $fila, $motivo) {
+        $errores[] = [
+            'fila' => [
+                'A' => $fila['A'] ?? '-', // User
+                'B' => $fila['B'] ?? '-', // Rut
+                'C' => $fila['C'] ?? '-', // Nombre Completo
+                'D' => $fila['D'] ?? '-', // Nombre Empresa
+                'E' => $fila['E'] ?? '-', // Estado
+                'F' => $fila['F'] ?? '-', // Fecha Ingreso
+                'G' => $fila['G'] ?? '-', // Fecha Término
+                'H' => $fila['H'] ?? '-', // Cargo
+                'I' => $fila['I'] ?? '-', // Ubicación
+                'J' => $fila['J'] ?? '-', // Correo
+            ],
+            'motivo' => $motivo
+        ];
     }
 
     public function confirmarImportacion()
