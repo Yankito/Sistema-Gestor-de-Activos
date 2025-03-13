@@ -97,18 +97,33 @@
                 <div class="card-footer bg-transparent" style="background-color: #00b5c4 !important">
                     <div class="row">
                         @foreach($cantidadPorEstados as $nombre => $estado)
-                            <div class="col-md-6">
-                                <div class="progress-group">
-                                    {{ $nombre }}
-                                    <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
-                                        data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}" wire:ignore>
-                                    </i>
-                                    <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
-                                    <div class="progress progress-sm">
-                                        <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
+                            @if ($loop->first)
+                                <div class="col-md-6">
+                                    <div class="progress-group">
+                                        ADQUIRIDO
+                                        <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                            data-toggle="tooltip" data-placement="top" title="Cantidad total de activos." wire:ignore>
+                                        </i>
+                                        <span class="float-right"><b>{{ $cantidadActivos }}</b></span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? 100 : 0 }}%"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="col-md-6">
+                                    <div class="progress-group">
+                                        {{ $nombre }}
+                                        <i class="fas fa-info-circle" style="color: rgba(255, 255, 255, 0.7);"
+                                            data-toggle="tooltip" data-placement="top" title="{{ $estado['descripcion'] }}" wire:ignore>
+                                        </i>
+                                        <span class="float-right"><b>{{ $estado['cantidad'] }}</b>/{{ $cantidadActivos }}</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" style="width: {{ $cantidadActivos != 0 ? ($estado['cantidad'] / $cantidadActivos) * 100 : 0 }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
 
