@@ -165,7 +165,7 @@
                                 </div>
                             @endif
                             @if (isset($errores) && count($errores) > 0)
-                                <div class="text-center mt-4">
+                                <div class="text-left mt-4">
                                     <a href="{{ route('descargar.errores.importacion.personas') }}" class="btn btn-danger">
                                         <i class="fas fa-file-excel mr-2"></i> Descargar Errores en Excel
                                     </a>
@@ -173,11 +173,13 @@
                             @endif
 
                             <!-- Download Template Button -->
-                            <div class="text-center mt-4">
-                                <a href="{{ route('descargarPersonas.excel') }}" class="btn btn-secondary">
-                                    <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
-                                </a>
-                            </div>
+                            @if (!((isset($personas) && count($personas) > 0) || (isset($errores) && count($errores) > 0)))
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('descargarPersonas.excel') }}" class="btn btn-secondary">
+                                        <i class="fas fa-file-excel mr-2"></i> Descargar Plantilla Excel
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
