@@ -55,13 +55,10 @@ class PersonaController extends Controller
                 ],
                 'user' => self::STRING_RULE,
                 'nombres' => self::STRING_RULE,
-                'primer_apellido' => self::STRING_RULE,
-                'segundo_apellido' => 'nullable|string|max:100',
                 'nombre_empresa' => self::STRING_RULE,
                 'fecha_ing' => 'required|date',
                 'cargo' => self::STRING_RULE,
                 'ubicacion' => 'nullable|exists:ubicaciones,id',
-                'correo' => self::STRING_RULE,
             ], [
                 'rut.regex' => 'El campo rut debe ser un rut válido',
             ]);
