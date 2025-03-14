@@ -29,13 +29,18 @@
                                     <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
                                 </div>
 
-                                <h2>Registrar nueva Persona</h2>
+                                <h2>Registrar nueva Persona
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="grupoCheckbox">
+                                        <label class="form-check-label" for="grupoCheckbox">Grupo</label>
+                                    </div>
+                                </h2>
                                 <form action="/personas" method="POST" id="formPersona">
                                     @csrf
-                                    <div class = "row">
+                                    <div class = "row" style="display: flex; flex-wrap: wrap;" id="row1">
                                         <div class="col-md-6">
                                             <!-- RUT -->
-                                            <div class="form-outline mb-4">
+                                            <div class="form-outline mb-4" id="rutSection">
                                                 <label class="form-label" for="rut">RUT </label>
                                                 <small class="text-muted">Formato: 12345678-9</small>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
@@ -53,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class = "row">
+                                    <div class = "row" style="display: flex; flex-wrap: wrap;" id="row2">
                                         <div class="col-md-6">
                                             <!-- Nombres -->
                                             <div class="form-outline mb-4">
@@ -63,54 +68,54 @@
                                         </div>
                                         <div class="col-md-6">
                                             <!-- Primer Apellido -->
-                                            <div class="form-outline mb-4">
+                                            <div class="form-outline mb-4"  id= "primerApellidoSection">
                                             <label class="form-label" for="primer_apellido">Primer Apellido </label>
                                                 <input type="text" name="primer_apellido" id="primer_apellido" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <!-- Segundo Apellido -->
-                                    <div class = "row">
+                                    <div class = "row"style="display: flex; flex-wrap: wrap;" id="row3">
                                         <div class="col-md-6">
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
+                                            <div class="form-outline mb-4" id="segundoApellidoSection">
+                                                <label class="form-label" for="segundo_apellido" >Segundo Apellido</label>
                                                 <input type="text" name="segundo_apellido" id="segundo_apellido" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Empresa -->
-                                            <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombre_empresa">Empresa </label>
+                                            <div class="form-outline mb-4" id="empresaSection">
+                                            <label class="form-label" for="nombre_empresa" >Empresa </label>
                                                 <input type="text" name="nombre_empresa" id="nombre_empresa" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class = "row">
+                                    <div class = "row" style="display: flex; flex-wrap: wrap;" id="row4">
                                         <div class = "col-md-6">
                                             <!-- Cargo -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="cargo">Cargo</label>
+                                            <div class="form-outline mb-4" id="cargoSection">
+                                                <label class="form-label" for="cargo" >Cargo</label>
                                                 <input type="text" name="cargo" id="cargo" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Fecha Inicio -->
-                                            <div class="form-outline mb-4">
+                                            <div class="form-outline mb-4" id="fecha_ingSection">
                                                 <label class="form-label" for="fecha_ing">Fecha Inicio</label>
                                                 <input type="date" name="fecha_ing" id="fecha_ing" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class = "row">
+                                    <div class = "row" style="display: flex; flex-wrap: wrap;" id="row5">
                                         <div class = "col-md-6">
                                             <!-- Correo -->
-                                            <div class="form-outline mb-4">
-                                                <label class="form-label" for="correo">Correo</label>
+                                            <div class="form-outline mb-4" id="correoSection">
+                                                <label class="form-label" for="correo" >Correo</label>
                                                 <input type="email" name="correo" id="correo" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class = "row">
+                                    <div class = "row" style="display: flex; flex-wrap: wrap;" id="row6">
                                         <div class = "col-md-6">
                                              <!-- Ubicación -->
                                             <div class="form-outline mb-4">
@@ -372,7 +377,10 @@
             }
 
             async function comprobarRutRepetido(rut) {
-                // Comprobar si el RUT ya existe en la base de datos
+                // Comprobar si el RUT ya existe en la base de datos, excepto el RUT 11111111-1
+                if (rut === '11111111-1') {
+                    return false; // No se considera repetido
+                }
                 try {
                     let response = await fetch('/personas/' + rut);
                     if (response.ok) {
@@ -392,14 +400,14 @@
                 var errorSpan = document.getElementById('rutError');
                 var repetidoSpan = document.getElementById('rutRepetido');
 
-                if (!validarRUT(rut)) {
+                if (!validarRUT(rut) && rut != '11111111-1') {
                     errorSpan.style.display = 'block';
                     this.classList.add('is-invalid');
                     repetidoSpan.style.display = 'none';
                 } else {
                     errorSpan.style.display = 'none';
                     this.classList.remove('is-invalid');
-                    if(await comprobarRutRepetido(rut)) {
+                    if (rut !== '11111111-1' && await comprobarRutRepetido(rut)) {
                         repetidoSpan.style.display = 'block';
                         this.classList.add('is-invalid');
                     } else {
@@ -447,7 +455,7 @@
                 var user = document.getElementById('user').value;
                 var repetidoUserSpan = document.getElementById('userRepetido');
 
-                if (!validarRUT(rut)) {
+                if (!validarRUT(rut) && rut!='11111111-1') {
                     errorSpan.style.display = 'block';
                     document.getElementById('rut').classList.add('is-invalid');
                     document.getElementById('rut').focus();
@@ -474,7 +482,116 @@
                 }
 
             });
+            document.getElementById('grupoCheckbox').addEventListener('change', function() {
+                var rutSection = document.getElementById('rutSection');
+                var primerApellidoSection = document.getElementById('primerApellidoSection');
+                var segundoApellidoSection = document.getElementById('segundoApellidoSection');
+                var empresaSection = document.getElementById('empresaSection');
+                var cargoSection = document.getElementById('cargoSection');
+                var correoSection = document.getElementById('correoSection');
+                var fechaIngSection = document.getElementById('fecha_ingSection');
 
+                if (this.checked) {
+                    // Ocultar secciones y eliminar el atributo required
+                    rutSection.style.display = 'none';
+                    rutSection.querySelector('input').removeAttribute('required');
+
+                    primerApellidoSection.style.display = 'none';
+                    primerApellidoSection.querySelector('input').removeAttribute('required');
+
+                    segundoApellidoSection.style.display = 'none';
+                    segundoApellidoSection.querySelector('input').removeAttribute('required');
+
+                    empresaSection.style.display = 'none';
+                    empresaSection.querySelector('input').removeAttribute('required');
+
+                    cargoSection.style.display = 'none';
+                    cargoSection.querySelector('input').removeAttribute('required');
+
+                    correoSection.style.display = 'none';
+                    correoSection.querySelector('input').removeAttribute('required');
+
+                    fechaIngSection.style.display = 'none';
+                    fechaIngSection.querySelector('input').removeAttribute('required');
+
+                    // Asignar valores por defecto
+                    document.getElementById('rut').value = '11111111-1';
+                    document.getElementById('primer_apellido').value = '';
+                    document.getElementById('segundo_apellido').value = '';
+                    document.getElementById('nombre_empresa').value = 'EMPRESAS IANSA S.A.';
+                    document.getElementById('cargo').value = 'default';
+                    document.getElementById('correo').value = 'default@iansa.cl';
+
+                    // Asignar la fecha actual
+                    var fechaActual = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    document.getElementById('fecha_ing').value = fechaActual;
+
+                    // Reorganizar los campos visibles
+                    var row1 = document.getElementById('row1');
+                    var row2 = document.getElementById('row2');
+
+                    if (row1) {
+                        row1.querySelectorAll('.col-md-6').forEach(function(col) {
+                            col.classList.remove('col-md-6');
+                            col.classList.add('col-md-12');
+                        });
+                    }
+                    if (row2) {
+                        row2.querySelectorAll('.col-md-6').forEach(function(col) {
+                            col.classList.remove('col-md-6');
+                            col.classList.add('col-md-12');
+                        });
+                    }
+                } else {
+                    // Mostrar secciones y restaurar el atributo required
+                    rutSection.style.display = 'block';
+                    rutSection.querySelector('input').setAttribute('required', true);
+
+                    primerApellidoSection.style.display = 'block';
+                    primerApellidoSection.querySelector('input').setAttribute('required', true);
+
+                    segundoApellidoSection.style.display = 'block';
+                    segundoApellidoSection.querySelector('input').setAttribute('required', true);
+
+                    empresaSection.style.display = 'block';
+                    empresaSection.querySelector('input').setAttribute('required', true);
+
+                    cargoSection.style.display = 'block';
+                    cargoSection.querySelector('input').setAttribute('required', true);
+
+                    correoSection.style.display = 'block';
+                    correoSection.querySelector('input').setAttribute('required', true);
+
+                    fechaIngSection.style.display = 'block';
+                    fechaIngSection.querySelector('input').setAttribute('required', true);
+
+                    // Limpiar valores por defecto (opcional)
+                    document.getElementById('rut').value = '';
+                    document.getElementById('primer_apellido').value = '';
+                    document.getElementById('segundo_apellido').value = '';
+                    document.getElementById('nombre_empresa').value = '';
+                    document.getElementById('cargo').value = '';
+                    document.getElementById('correo').value = '';
+                    document.getElementById('fecha_ing').value = '';
+
+                    // Restaurar el diseño original
+                    var row1 = document.getElementById('row1');
+                    var row2 = document.getElementById('row2');
+
+                    if (row1) {
+                        row1.querySelectorAll('.col-md-12').forEach(function(col) {
+                            col.classList.remove('col-md-12');
+                            col.classList.add('col-md-6');
+                        });
+                    }
+                    if (row2) {
+                        row2.querySelectorAll('.col-md-12').forEach(function(col) {
+                            col.classList.remove('col-md-12');
+                            col.classList.add('col-md-6');
+                        });
+                    }
+                }
+            });
         </script>
 
         <style>
