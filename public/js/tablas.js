@@ -8,7 +8,7 @@ $(document).ready(function () {
     if (!$.fn.DataTable.isDataTable('#tabla')) {
         table = $("#tabla").DataTable({
             fixedHeader: true,
-            scrollX: true,
+            scrollX: true, // Habilitar scroll horizontal
             responsive: false,
             lengthChange: false,
             autoWidth: true,
@@ -63,11 +63,11 @@ $(document).ready(function () {
             columns: ':not(:first)',
             format: {
                 header: function (data, columnIdx) {
-                let tempDiv = document.createElement("div");
-                tempDiv.innerHTML = data;
-                return tempDiv.childNodes[0].nodeValue.trim();
+                    let tempDiv = document.createElement("div");
+                    tempDiv.innerHTML = data;
+                    return tempDiv.childNodes[0].nodeValue.trim();
+                    }
                 }
-            }
             }
         };
     }
@@ -77,17 +77,19 @@ $(document).ready(function () {
 
     // Show/hide filters on button click (toggle functionality)
     $('.filter-btn').click(function(event) {
+        event.stopPropagation(); // Detener la propagación del evento
         let index = $(this).data('index');
         let filterContainer = $(`#filter-${index}`);
 
         // Obtener la posición del botón de filtro
         let buttonPosition = $(this).offset();
-        let buttonHeight = $(this).outerHeight();
+        let scrollTop = $(window).scrollTop(); // Obtener el desplazamiento vertical
 
-        // Posicionar el contenedor de filtros debajo del botón
+        // Ajustar la posición del contenedor de filtros
         filterContainer.css({
-            "top": buttonPosition.top + buttonHeight + 5, // 5px de margen
-            "left": buttonPosition.left
+            "top": buttonPosition.top - scrollTop + $(this).outerHeight(), // Ajustar con el scrollTop
+            "left": buttonPosition.left,
+            "position": "fixed" // Usar posición fija para que se ajuste con el scroll
         });
 
         // Llamar a la función toggleFilterContainer con el desplazamiento
@@ -96,31 +98,26 @@ $(document).ready(function () {
 
     // Función para alternar la visibilidad del contenedor de filtros
     function toggleFilterContainer(filterContainer, event, index) {
-        // Si la posición de desplazamiento no está en la parte superior, desplazar al principio
-        if ($(window).scrollTop() !== 0) {
-            $('html, body').animate({ scrollTop: 0 }, 'fast', function() {
-                // Después de desplazar a|l principio, mostrar el contenedor de filtros
-                if (filterContainer.is(':visible')) {
-                    filterContainer.hide(); // Ocultar si ya está visible
-                } else {
-                    // Ocultar otros filtros
-                    $('.filter-container').not(filterContainer).hide();
-                    filterContainer.show(); // Mostrar el contenedor de filtros
-                }
-            });
+        // Si ya está en la parte superior, simplemente alternar la visibilidad
+        if (filterContainer.is(':visible')) {
+            filterContainer.hide(); // Ocultar si ya está visible
         } else {
-            // Si ya está en la parte superior, simplemente alternar la visibilidad
-            if (filterContainer.is(':visible')) {
-                filterContainer.hide(); // Ocultar si ya está visible
-            } else {
-                // Ocultar otros filtros
-                $('.filter-container').not(filterContainer).hide();
-                filterContainer.show(); // Mostrar el contenedor de filtros
-            }
+            // Ocultar otros filtros
+            $('.filter-container').not(filterContainer).hide();
+            filterContainer.show(); // Mostrar el contenedor de filtros
         }
 
-        event.stopPropagation();
+        event.stopPropagation(); // Detener la propagación del evento
     }
+
+
+
+    // Cerrar el filtro al hacer clic fuera del contenedor
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.filter-container').length && !$(event.target).closest('.filter-btn').length) {
+            $('.filter-container').hide(); // Ocultar todos los filtros
+        }
+    });
 
     // Generate checkboxes for each column
     $('.checkbox-filters').each(function () {
@@ -162,6 +159,15 @@ $(document).ready(function () {
 
     });
 
+    // Evento para aplicar el filtro
+    $(document).on('click', '.aplicar-filtro', function (event) {
+        console.log("Aplicando filtro...");
+        event.stopPropagation(); // Detener la propagación del evento
+        let index = $(this).data('index');
+        applyFilter(index);
+        $(`#filter-${index}`).hide(); // Ocultar el contenedor de filtros
+    });
+
     // Función para actualizar el estado del checkbox "Seleccionar todo"
     function updateSelectAllCheckbox(index) {
         let uniqueCheckboxes = new Set();
@@ -177,7 +183,8 @@ $(document).ready(function () {
     }
 
     // Evento para seleccionar/deseleccionar todos los checkboxes
-    $(document).on('change', '.select-all', function () {
+    $(document).on('change', '.select-all', function (event) {
+        event.stopPropagation(); // Detener la propagación del evento
         let index = $(this).data('index');
         let isChecked = $(this).is(':checked');
 
@@ -186,11 +193,12 @@ $(document).ready(function () {
         });
 
         // Aplicar el filtro después de actualizar los checkboxes
-        applyFilter(index);
+        //applyFilter(index);
     });
 
     // Search inside checkboxes (but NOT the table)
-    $(document).on('input', '.column-search', function() {
+    $(document).on('input', '.column-search', function(event) {
+        event.stopPropagation(); // Detener la propagación del evento
         let searchText = $(this).val().toLowerCase();
         let index = $(this).data('index');
 
@@ -201,15 +209,14 @@ $(document).ready(function () {
     });
 
     // Evento para actualizar filtro cuando cambian los checkboxes individuales
-    $(document).on('change', '.filter-checkbox', function () {
+    $(document).on('change', '.filter-checkbox', function (event) {
+        event.stopPropagation(); // Detener la propagación del evento
         let index = $(this).data('index');
 
         updateSelectAllCheckbox(index);
 
-        applyFilter(index);
+        //applyFilter(index);
     });
-
-
 
     // Función para aplicar el filtro en la tabla
     function applyFilter(index) {
@@ -227,17 +234,25 @@ $(document).ready(function () {
     // Evento para limpiar todos los filtros
     $('#clear-filters').click(function () {
         table.columns().search('').draw();
-        $('.filter-checkbox').prop('checked', false);
-        $('.select-all').prop('checked', false);
+        $('.filter-checkbox').prop('checked', true);
+        $('.select-all').prop('checked', true);
         $('.filter-container').hide();
     });
 
-    // Debounce scroll event
+    // Debounce scroll event (vertical y horizontal)
     let scrollTimeout;
     $(window).on('scroll', function() {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
             $('.filter-container').hide();
-        }, 0); // Adjust the delay as needed
+        }, 100); // Ajusta el retraso según sea necesario
+    });
+
+    // Detectar scroll horizontal en el contenedor de scroll de la tabla
+    $('#tabla .dataTables_scrollBody').on('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+            $('.filter-container').hide();
+        }, 100); // Ajusta el retraso según sea necesario
     });
 });
