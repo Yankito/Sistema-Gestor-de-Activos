@@ -18,7 +18,7 @@
 
         <style>
             .gradient-custom-2 {
-                background-color: #04646c; /* Color sólido */
+                background-color: #005856; /* Color sólido */
             }
         </style>
 
@@ -34,11 +34,12 @@
                     <div class="col-lg-6">
                     <div class="card-body p-md-5 mx-md-4">
 
-                        <div class="text-center">
+                        <div class="text-center mb-3">
                         <img src="{{asset('pictures/Logo Empresas Iansa.png')}}"
                             style="width: 300px;" alt="logo">
 
                         </div>
+                        <h3 class="text-center mb-4" style="color: #005856;" >Sistema de Gestión de Activos Tecnológicos</h3>
                         <form action="/login" method="POST">
                             @csrf
                             <div data-mdb-input-init class="form-outline mb-4">

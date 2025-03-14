@@ -82,3 +82,13 @@
 </section>
 @endsection
 </html>
+
+@section('scripts')
+@if(session('error'))
+        <script>
+            $(document).ready(function () {
+                toastr.error("{{ session('error') }}");
+            });
+        </script>
+    @endif
+@endsection
