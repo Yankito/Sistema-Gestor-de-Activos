@@ -62,7 +62,7 @@ class PersonaController extends Controller
             ]);
 
             // Establecer valor predeterminado para estado_empleado si no se proporciona
-            $nombre_completo = $request->nombres . ' ' .$request->primer_apellido . ' ' . $request->segundo_apellido.
+            $nombre_completo = $request->nombres . ' ' .$request->primer_apellido . ' ' . $request->segundo_apellido;
             $data = $request->all();
             $data['nombre_completo'] = $nombre_completo;
             $data['estado_empleado'] = $data['estado_empleado'] ?? true;
