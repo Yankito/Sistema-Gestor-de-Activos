@@ -48,7 +48,7 @@ class ImportarController extends Controller
             'E' => 'Justificación Doble Activo',
         ];
 
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion.xlsx');
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Asignacion de Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function importExcel(Request $request)

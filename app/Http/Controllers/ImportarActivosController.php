@@ -46,7 +46,7 @@ class ImportarActivosController extends Controller
             'E' => 'Ubicación',
         ];
 
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Activos.xlsx');
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function generarPlantilla()
