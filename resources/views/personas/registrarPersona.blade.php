@@ -29,12 +29,13 @@
                                     <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
                                 </div>
 
-                                <h2>Registrar nueva persona
-                                    <div class="form-check form-check-inline">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h2>Registrar nueva persona</h2>
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="grupoCheckbox">
                                         <label class="form-check-label" for="grupoCheckbox">Grupo</label>
                                     </div>
-                                </h2>
+                                </div>
                                 <form action="/personas" method="POST" id="formPersona">
                                     @csrf
                                     <div class = "row" style="display: flex; flex-wrap: wrap;" id="row1">
@@ -188,7 +189,7 @@
 
                                     </div>
                                     <!-- Botón de Enviar -->
-                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit" id="botonRegistrar">Registrar Persona</button>
+                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 text-center" type="submit" id="botonRegistrar" onclick="this.disabled=true; this.form.submit();">Registrar Persona</button>
                                 </form>
                                 <!-- Botón de Volver atrás -->
                                 <a href="/dashboard" type="button" class="btn btn-outline-danger text-center">Volver atrás</a>
