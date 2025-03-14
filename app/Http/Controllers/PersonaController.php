@@ -95,7 +95,7 @@ class PersonaController extends Controller
             // Asignar responsable a activo de tal numero de serie
             if ($request->has('responsable')) {
                 $activo->responsable_de_activo = $request->responsable;
-                $activo->ubicacion = Persona::where('id', $request->ubicacion)->first()->ubicacion;
+                $activo->ubicacion = Persona::where('id', $request->responsable)->first()->ubicacion;
             } else {
                 $activo->responsable_de_activo = $idPersona;
             }
@@ -123,7 +123,7 @@ class PersonaController extends Controller
                         $activoAdicional->ubicacion = $request->ubicacion;
                         if ($request->has('responsable')) {
                             $activoAdicional->responsable_de_activo = $request->responsable;
-                            $activoAdicional->ubicacion = Persona::where('id', $request->ubicacion)->first()->ubicacion;
+                            $activoAdicional->ubicacion = Persona::where('id', $request->responsable)->first()->ubicacion;
                         } else {
                             $activoAdicional->responsable_de_activo = $idPersona;
                         }
@@ -135,8 +135,8 @@ class PersonaController extends Controller
                         $activoAdicional->update();
 
                         $registroAdicional = new Registro();
-                        $registroAdicional->persona = $activo->responsable_de_activo;
-                        $registroAdicional->activo = $activo->id;
+                        $registroAdicional->persona = $activoAdicional->responsable_de_activo;
+                        $registroAdicional->activo = $activoAdicional->id;
                         $registroAdicional->tipo_cambio = 'ASIGNACION';
                         $registroAdicional->encargado_cambio = Auth::user()->id;
                         $registroAdicional->save();

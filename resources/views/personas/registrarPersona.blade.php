@@ -140,10 +140,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="form-outline mb-4" id="asignarResponsableSection" style="display: none;">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="asignarResponsable" name="asignarResponsable">
-                                                <label class="form-check-label" for="asignarResponsable">Asignar Responsable</label>
+                                                <label class="form-check-label" for="asignarResponsable">Asignar responsable a activo seleccionado</label>
                                             </div>
                                         </div>
                                         <div class="form-outline mb-4" id="responsableSection" style="display: none;">
@@ -158,10 +158,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="form-outline mb-4" id="agregarActivoSection" style="display: none;">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="agregarActivo" name="agregarActivo">
-                                                <label class="form-check-label" for="agregarActivo">Agregar Activo adicional</label>
+                                                <label class="form-check-label" for="agregarActivo">Agregar activo adicional a la persona</label>
                                             </div>
                                         </div>
 
@@ -208,6 +208,24 @@
             });
 
             document.addEventListener('DOMContentLoaded', function() {
+                const activoSelect = document.getElementById('activo');
+                $(activoSelect).on('change', function() {
+                    console.log(this.value);
+                    if (this.value !== "") {
+                        asignarResponsableSection.style.display = 'block';
+                        agregarActivoSection.style.display = 'block';
+                    } else {
+                        asignarResponsableSection.style.display = 'none';
+                        agregarActivoSection.style.display = 'none';
+                        document.getElementById('asignarResponsable').checked = false;
+                        document.getElementById('agregarActivo').checked = false;
+                        document.getElementById('responsableSection').style.display = 'none';
+                        document.getElementById('activoSection').style.display = 'none';
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
                 // Verifica que el select con id 'activosAdicionales' existe
                 const selectElement = document.getElementById('activosAdicionales');
 
@@ -218,7 +236,6 @@
                     // Escucha el cambio de selección usando select2
                     $(selectElement).on('change', function() {
                         var selectedActivos = Array.from(this.selectedOptions).map(option => option.value);
-                        console.log(selectedActivos);
                         updateJustifications(selectedActivos); // Actualiza las justificaciones cada vez que se seleccionen activos
                     });
                 } else {
@@ -230,7 +247,16 @@
             function updateJustifications(selectedActivos) {
                 var justificacionContainer = document.getElementById('justificacionContainer');
 
-                // Limpiar cualquier justificación previa
+                // Obtener las justificaciones actuales
+                var currentJustifications = Array.from(justificacionContainer.children).reduce((acc, child) => {
+                    var input = child.querySelector('input');
+                    if (input) {
+                        acc[input.name] = input.value;
+                    }
+                    return acc;
+                }, {});
+
+                // Limpiar el contenedor de justificaciones
                 justificacionContainer.innerHTML = '';
 
                 // Para cada activo seleccionado, generar un campo de justificación
@@ -241,9 +267,6 @@
                     var label = document.createElement('label');
                     label.classList.add('form-label');
                     var activo = JSON.parse(activo);
-                    console.log("activo: ", activo);
-                    console.log("activo id: ", activo.id);
-                    console.log("activo nro_serie: ", activo.nro_serie);
                     label.textContent = 'Justificación para ' + activo.nro_serie;
 
                     var input = document.createElement('input');
@@ -251,6 +274,11 @@
                     input.name = 'justificaciones[' + activo.id + ']';
                     input.classList.add('form-control');
                     input.id = 'justificaciones[' + activo.id + ']';
+
+                    // Restaurar la justificación si ya existe
+                    if (currentJustifications[input.name]) {
+                        input.value = currentJustifications[input.name];
+                    }
 
                     div.appendChild(label);
                     div.appendChild(input);
@@ -317,7 +345,6 @@
                         var option = document.createElement('option');
                         option.value = JSON.stringify({ id: activo.id, nro_serie: activo.nro_serie });
                         option.textContent = activo.nro_serie;
-                        console.log(option.value);
                         // Restaurar selección si estaba previamente seleccionado
                         if (seleccionados.includes(option.value)) {
                             option.selected = true;

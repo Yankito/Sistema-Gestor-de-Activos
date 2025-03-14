@@ -289,7 +289,6 @@ $(document).ready(function () {
         else{
             $(`.filter-btn[data-index="${index}"]`).addClass('filter-active');
         }
-
     }
 
     // Evento para limpiar todos los filtros
