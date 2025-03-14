@@ -136,18 +136,18 @@ $(document).ready(function () {
 
         // Agregar checkbox "Seleccionar todo"
         checkboxContainer.append(`
-            <div>
+            <div style="cursor: pointer;">
                 <input type="checkbox" class="select-all" data-index="${index}" checked>
-                <label>Seleccionar todo</label>
+                <label style="cursor: pointer;">Seleccionar todo</label>
             </div>
         `);
 
         // Agregar checkboxes individuales
         [...uniqueValues].forEach(value => {
             checkboxContainer.append(`
-                <div>
+                <div style="cursor: pointer;">
                     <input type="checkbox" class="filter-checkbox" data-index="${index}" value="${value}">
-                    <label>${value}</label>
+                    <label style="cursor: pointer;">${value}</label>
                 </div>
             `);
         });
@@ -199,18 +199,18 @@ $(document).ready(function () {
 
             // Agregar checkbox "Seleccionar todo"
             checkboxContainer.append(`
-                <div>
+                <div style="cursor: pointer;">
                     <input type="checkbox" class="select-all" data-index="${index}" checked>
-                    <label>Seleccionar todo</label>
+                    <label style="cursor: pointer;">Seleccionar todo</label>
                 </div>
             `);
 
             // Agregar checkboxes individuales
             [...uniqueValues].forEach(value => {
                 checkboxContainer.append(`
-                    <div>
+                    <div style="cursor: pointer;">
                         <input type="checkbox" class="filter-checkbox" data-index="${index}" value="${value}" checked>
-                        <label>${value}</label>
+                        <label style="cursor: pointer;">${value}</label>
                     </div>
                 `);
             });
@@ -320,5 +320,16 @@ $(document).ready(function () {
         scrollTimeout = setTimeout(function() {
             $('.filter-container').hide();
         }, 100); // Ajusta el retraso según sea necesario
+    });
+
+    $(document).on('click', '.checkbox-filters div', function (event) {
+        // Verificar si el clic fue directamente en el checkbox para evitar doble cambio
+        if (!$(event.target).is('input[type="checkbox"]')) {
+            let checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked'));
+
+            // Disparar el evento change manualmente para que se aplique el filtro
+            checkbox.trigger('change');
+        }
     });
 });

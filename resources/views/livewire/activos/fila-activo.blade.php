@@ -76,20 +76,19 @@
                 @foreach ($usuarios->take(3) as $usuario)
                     <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
                 @endforeach
+
+                @if ($totalUsuarios > 3)
+                        <div id="usuarios-{{ $activo->id }}" class="collapse">
+                            @foreach ($usuarios->skip(3) as $usuario)
+                                <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
+                            @endforeach
+                        </div>
+                    <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
+                        Ver más
+                    </button>
+                @endif
             </ul>
 
-            @if ($totalUsuarios > 3)
-                <ul>
-                    <div id="usuarios-{{ $activo->id }}" class="collapse">
-                        @foreach ($usuarios->skip(3) as $usuario)
-                            <li style="font-size: 12px;">{{ $usuario->nombre_completo }} ({{ $usuario->user }})</li>
-                        @endforeach
-                    </div>
-                </ul>
-                <button type="button" class="btn btn-link btn-sm" data-toggle="collapse" data-target="#usuarios-{{ $activo->id }}">
-                    Ver más
-                </button>
-            @endif
         @else
             <span style="font-size: 12px;">Sin usuarios</span>
         @endif
