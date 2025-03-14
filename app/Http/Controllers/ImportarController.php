@@ -119,7 +119,7 @@ class ImportarController extends Controller
                         continue;
                     }
                 } else {
-                    $usuario = null;
+                    $usuario = $responsable;
                 }
 
                 // Actualizar el estado y la justificación del activo
