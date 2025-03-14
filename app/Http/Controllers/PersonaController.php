@@ -55,20 +55,23 @@ class PersonaController extends Controller
                 ],
                 'user' => self::STRING_RULE,
                 'nombres' => self::STRING_RULE,
-                'nombre_empresa' => self::STRING_RULE,
                 'fecha_ing' => 'required|date',
-                'cargo' => self::STRING_RULE,
                 'ubicacion' => 'nullable|exists:ubicaciones,id',
             ], [
                 'rut.regex' => 'El campo rut debe ser un rut válido',
             ]);
 
             // Establecer valor predeterminado para estado_empleado si no se proporciona
-            $nombre_completo = $request->primer_apellido . ' ' . $request->segundo_apellido . ' ' . $request->nombres;
+            $nombre_completo = $request->nombres . ' ' .$request->primer_apellido . ' ' . $request->segundo_apellido.
             $data = $request->all();
             $data['nombre_completo'] = $nombre_completo;
             $data['estado_empleado'] = $data['estado_empleado'] ?? true;
             $data['user'] = strtoupper($data['user']);
+            $data['cargo'] = $data['cargo'] ?? 'Sin cargo';
+            $data['nombre_empresa'] = $data['nombre_empresa'] ?? 'Sin empresa';
+            $data['correo'] = $data['correo'] ?? 'Sin correo';
+            $data['fecha_ter'] = $data['fecha_ter'] ?? null;
+            $data['fecha_ing'] = $data['fecha_ing'] ?? null;
             //dd($data);
             //dd($request, $data);
             // Crear una nueva persona con los datos validados
@@ -85,7 +88,7 @@ class PersonaController extends Controller
                 throw new \Exception('El activo no se encontró.');
             }
 
-            $idPersona = Persona::where('rut', $request->rut)->first()->id;
+            $idPersona = Persona::where('user', $request->user)->first()->id;
             $activo->estado = 4;
             $activo->ubicacion = $request->ubicacion;
 

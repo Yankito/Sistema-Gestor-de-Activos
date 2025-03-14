@@ -159,7 +159,7 @@ class ImportarPersonasController extends Controller
                 // Crear la persona
                 $correo = strtolower($fila['J']);
                 if (!preg_match('/@(iansa|patagoniafresh|iacton)\.[a-z]{2,3}$/', $correo)) {
-                    $correo = "-";
+                    $correo = "Sin correo";
                 }
 
                 $persona = Persona::create([

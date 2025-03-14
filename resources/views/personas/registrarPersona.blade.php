@@ -29,7 +29,7 @@
                                     <img src="{{asset('pictures/Logo Empresas Iansa.png')}}" style="width: 300px;" alt="logo">
                                 </div>
 
-                                <h2>Registrar nueva Persona
+                                <h2>Registrar nueva persona
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="grupoCheckbox">
                                         <label class="form-check-label" for="grupoCheckbox">Grupo</label>
@@ -41,7 +41,7 @@
                                         <div class="col-md-6">
                                             <!-- RUT -->
                                             <div class="form-outline mb-4" id="rutSection">
-                                                <label class="form-label" for="rut">RUT </label>
+                                                <label class="form-label" for="rut">RUT <span class="required-asterisk">*</span></label>
                                                 <small class="text-muted">Formato: 12345678-9</small>
                                                 <input type="text" name="rut" id="rut" required class="form-control" />
                                                 <span id="rutError" class="text-danger" style="display:none;">RUT inválido. Use el formato 12345678-9.</span>
@@ -52,7 +52,7 @@
                                         <div class="col-md-6">
                                         <!-- Nombre de Usuario -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="user">Username </label>
+                                            <label class="form-label" for="user">Username <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="user" id="user" required class="form-control" />
                                                 <span id="userRepetido" class="text-danger" style="display:none;">El user ya se encuentra registrado.</span>
                                             </div>
@@ -62,14 +62,14 @@
                                         <div class="col-md-6">
                                             <!-- Nombres -->
                                             <div class="form-outline mb-4">
-                                            <label class="form-label" for="nombres">Nombres </label>
+                                            <label class="form-label" for="nombres">Nombres <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="nombres" id="nombres" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <!-- Primer Apellido -->
                                             <div class="form-outline mb-4"  id= "primerApellidoSection">
-                                            <label class="form-label" for="primer_apellido">Primer Apellido </label>
+                                            <label class="form-label" for="primer_apellido">Primer Apellido <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="primer_apellido" id="primer_apellido" required class="form-control" />
                                             </div>
                                         </div>
@@ -78,15 +78,15 @@
                                     <div class = "row"style="display: flex; flex-wrap: wrap;" id="row3">
                                         <div class="col-md-6">
                                             <div class="form-outline mb-4" id="segundoApellidoSection">
-                                                <label class="form-label" for="segundo_apellido" >Segundo Apellido</label>
+                                                <label class="form-label" for="segundo_apellido" >Segundo Apellido <span class="required-asterisk">*</span></label>
                                                 <input type="text" name="segundo_apellido" id="segundo_apellido" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Empresa -->
                                             <div class="form-outline mb-4" id="empresaSection">
-                                            <label class="form-label" for="nombre_empresa" >Empresa </label>
-                                                <input type="text" name="nombre_empresa" id="nombre_empresa" required class="form-control" />
+                                            <label class="form-label" for="nombre_empresa" >Empresa</label>
+                                                <input type="text" name="nombre_empresa" id="nombre_empresa" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -95,14 +95,14 @@
                                             <!-- Cargo -->
                                             <div class="form-outline mb-4" id="cargoSection">
                                                 <label class="form-label" for="cargo" >Cargo</label>
-                                                <input type="text" name="cargo" id="cargo" required class="form-control" />
+                                                <input type="text" name="cargo" id="cargo" class="form-control" />
                                             </div>
                                         </div>
                                         <div class = "col-md-6">
                                             <!-- Fecha Inicio -->
                                             <div class="form-outline mb-4" id="fecha_ingSection">
                                                 <label class="form-label" for="fecha_ing">Fecha Inicio</label>
-                                                <input type="date" name="fecha_ing" id="fecha_ing" required class="form-control" />
+                                                <input type="date" name="fecha_ing" id="fecha_ing" required class="form-control" value="{{ date('Y-m-d') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                             <!-- Correo -->
                                             <div class="form-outline mb-4" id="correoSection">
                                                 <label class="form-label" for="correo" >Correo</label>
-                                                <input type="email" name="correo" id="correo" required class="form-control" />
+                                                <input type="email" name="correo" id="correo" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -427,7 +427,7 @@
                 var errorSpan = document.getElementById('rutError');
                 var repetidoSpan = document.getElementById('rutRepetido');
 
-                if (!validarRUT(rut) && rut != '11111111-1') {
+                if (!validarRUT(rut)) {
                     errorSpan.style.display = 'block';
                     this.classList.add('is-invalid');
                     repetidoSpan.style.display = 'none';
