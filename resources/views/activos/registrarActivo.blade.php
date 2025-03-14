@@ -36,21 +36,21 @@
                                         <div class = " col-md-6">
                                             <!-- Nro Serie -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="nro_serie">Nro. Serie</label>
+                                                <label class="form-label" for="nro_serie">Nro. Serie<span class="required-asterisk">*</span></label>
                                                 <input type="text" name="nro_serie" id="nro_serie" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = " col-md-6">
                                             <!-- Marca -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="marca">Marca</label>
+                                                <label class="form-label" for="marca">Marca<span class="required-asterisk">*</span></label>
                                                 <input type="text" name="marca" id="marca" required class="form-control" />
                                             </div>
                                         </div>
                                         <div class = " col-md-6">
                                             <!-- Modelo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="modelo">Modelo</label>
+                                                <label class="form-label" for="modelo">Modelo<span class="required-asterisk">*</span></label>
                                                 <input type="text" name="modelo" id="modelo" required class="form-control" />
                                             </div>
                                         </div>
@@ -58,7 +58,7 @@
                                         <div class = " col-md-6">
                                             <!-- Tipo de Activo -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="tipo_de_activo">Tipo de Activo</label>
+                                                <label class="form-label" for="tipo_de_activo">Tipo de Activo<span class="required-asterisk">*</span></label>
                                                 <select name="tipo_de_activo" id="tipo_de_activo" class="form-control" required>
                                                     @foreach($tiposDeActivo as $tipoDeActivo)
                                                         <option value="{{$tipoDeActivo->id}}" data-caracteristicas="{{ json_encode($tipoDeActivo->caracteristicasAdicionales) }}">
@@ -72,14 +72,14 @@
                                             <!-- Precio -->
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="precio">Precio</label>
-                                                <input type="number" name="precio" id="precio" required class="form-control" />
+                                                <input type="number" name="precio" id="precio" value="0" required class="form-control" />
                                             </div>
                                         </div>
 
                                         <div class = " col-md-6">
                                             <!-- Ubicación -->
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="ubicacion">Ubicación</label>
+                                                <label class="form-label" for="ubicacion">Ubicación<span class="required-asterisk">*</span></label>
                                                 <select name="ubicacion" id="ubicacion" class="form-control" required>
                                                     @foreach($ubicaciones as $ubicacion)
                                                         <option value="{{$ubicacion->id}}">{{$ubicacion->sitio}}</option>
