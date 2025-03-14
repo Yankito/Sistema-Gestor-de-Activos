@@ -125,8 +125,9 @@ $(document).ready(function () {
         let uniqueValues = new Set();
 
         // Obtener valores únicos de la columna
-        table.column(index).data().each(function (value) {
-            uniqueValues.add(value);
+        table.column(index).nodes().each(function (node) {
+            let cellText = $(node).text().trim(); // Extraer solo el texto visible
+            uniqueValues.add(cellText);
         });
 
         // Limpiar contenedor antes de agregar nuevos checkboxes
@@ -166,7 +167,58 @@ $(document).ready(function () {
         let index = $(this).data('index');
         applyFilter(index);
         $(`#filter-${index}`).hide(); // Ocultar el contenedor de filtros
+        updateCheckboxes();
     });
+
+    // Funcion para actualizar los checkbox de todas las columnas y eliminar checkbox de columnas ocultas
+    function updateCheckboxes() {
+        // Obtener los datos visibles en la tabla filtrada
+        let visibleData = table.rows({ search: 'applied' }).data();
+
+        // Iterar sobre cada columna para actualizar los checkboxes
+        table.columns().every(function (index) {
+            // Verificar si la columna tiene un filtro activo
+            let isFilterActive = $(`.filter-btn[data-index="${index}"]`).hasClass('filter-active');
+
+            // Si la columna tiene un filtro activo, no actualizamos sus checkboxes
+            if (isFilterActive) {
+                return; // Saltar esta columna
+            }
+
+            let uniqueValues = new Set();
+
+            // Obtener valores únicos de la columna en los datos visibles
+            visibleData.column(index).nodes().each(function (node) {
+                let cellText = $(node).text().trim(); // Extraer solo el texto visible
+                uniqueValues.add(cellText);
+            });
+
+            // Limpiar contenedor antes de agregar nuevos checkboxes
+            let checkboxContainer = $(`.checkbox-filters[data-index="${index}"]`);
+            checkboxContainer.empty();
+
+            // Agregar checkbox "Seleccionar todo"
+            checkboxContainer.append(`
+                <div>
+                    <input type="checkbox" class="select-all" data-index="${index}" checked>
+                    <label>Seleccionar todo</label>
+                </div>
+            `);
+
+            // Agregar checkboxes individuales
+            [...uniqueValues].forEach(value => {
+                checkboxContainer.append(`
+                    <div>
+                        <input type="checkbox" class="filter-checkbox" data-index="${index}" value="${value}" checked>
+                        <label>${value}</label>
+                    </div>
+                `);
+            });
+
+            // Actualizar el estado del checkbox "Seleccionar todo"
+            updateSelectAllCheckbox(index);
+        });
+    }
 
     // Función para actualizar el estado del checkbox "Seleccionar todo"
     function updateSelectAllCheckbox(index) {
@@ -226,9 +278,18 @@ $(document).ready(function () {
 
         if (selectedValues.length > 0) {
             table.column(index).search(selectedValues.join('|'), true, false).draw();
+            // Resaltar el ícono de filtrado
         } else {
             table.column(index).search('^$', true, false).draw(); // Esto oculta todos los elementos si nada está seleccionado
         }
+        let cantidadCheckboxes = $(`.filter-checkbox[data-index="${index}`).length;
+        if(selectedValues.length === cantidadCheckboxes){
+            $(`.filter-btn[data-index="${index}"]`).removeClass('filter-active');
+        }
+        else{
+            $(`.filter-btn[data-index="${index}"]`).addClass('filter-active');
+        }
+
     }
 
     // Evento para limpiar todos los filtros
@@ -237,7 +298,13 @@ $(document).ready(function () {
         $('.filter-checkbox').prop('checked', true);
         $('.select-all').prop('checked', true);
         $('.filter-container').hide();
+        updateCheckboxes();
+        eliminarFilterActive();
     });
+
+    function eliminarFilterActive() {
+        $('.filter-btn').removeClass('filter-active');
+    }
 
     // Debounce scroll event (vertical y horizontal)
     let scrollTimeout;

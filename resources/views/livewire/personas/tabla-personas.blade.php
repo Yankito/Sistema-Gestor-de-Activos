@@ -1,4 +1,10 @@
 <div>
+    <style>
+        .filter-active {
+            color: #ff0000; /* Cambia el color del ícono a rojo */
+            font-weight: bold; /* Hace que el ícono sea más grueso */
+        }
+    </style>
     <div style = "overflow-x:auto">
         <table id="tabla" class="table table-bordered table-hover table-striped dataTable dtr-inline" data-user-is-admin="{{ $user->es_administrador }}" data-tipo-tabla="Personas">
             <thead>
