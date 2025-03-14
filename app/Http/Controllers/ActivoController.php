@@ -38,7 +38,7 @@ class ActivoController extends Controller
             $activo->marca = strtoupper($request->marca);
             $activo->modelo = $request->modelo;
             $activo->tipo_de_activo = $request->tipo_de_activo;
-            $activo->estado = 1; // Estado inicial (por ejemplo, "Adquirido")
+            $activo->estado = 2; // Estado inicial (por ejemplo, "Preparacion")
             $activo->responsable_de_activo = null;
             $activo->ubicacion = $request->ubicacion;
             $activo->justificacion_doble_activo = $request->justificacion_doble_activo;

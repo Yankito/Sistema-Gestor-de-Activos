@@ -39,7 +39,7 @@ class ImportarPersonasController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-    
+
         $encabezados = [
             'A' => 'User',
             'B' => 'Rut',
@@ -52,8 +52,8 @@ class ImportarPersonasController extends Controller
             'I' => 'Ubicación',
             'J' => 'Correo',
         ];
-    
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Personas.xlsx');
+
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Personas '. date('Y-m-d').'.xlsx');
     }
 
     private function convertirEstadoEmpleado($valor)
@@ -63,7 +63,7 @@ class ImportarPersonasController extends Controller
         if ($valor === 'ACTIVO') {
             return 1;
         }
-        if ($valor === 'TERMINADO') {
+        if ($valor === 'INACTIVO') {
             return 0;
         }
 
@@ -122,46 +122,12 @@ class ImportarPersonasController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."
-                    ];
+                    $this->registrarErrorPersonas($errores, $fila, "La ubicación '{$ubicacion}' no existe en la base de datos.");
                     continue;
                 }
 
                 // Obtener el ID de la ubicación
                 $ubicacionId = $ubicacionExistente->id;
-
-                // Verificar si el RUT ya existe en la base de datos
-                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "El RUT '{$fila['B']}' ya existe en la base de datos."
-                    ];
-                    continue;
-                }
 
                 // Verificar si el user es 0 y generar un user provisional
                 $user = strtoupper($fila['A']);
@@ -171,45 +137,31 @@ class ImportarPersonasController extends Controller
 
                 // Verificar si el user ya existe en la base de datos
                 if (Persona::where('user', $user)->exists()) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "El user '{$user}' ya existe en la base de datos."
-                    ];
+                    if($this->actualizarEstadoYUbicacion($fila, $ubicacionId)){
+                        continue;
+                    }
+                    $this->registrarErrorPersonas($errores, $fila, "El user '{$user}' ya existe en la base de datos.");
+                    continue;
+                }
+
+                // Verificar si el RUT ya existe en la base de datos
+                if ($fila['B'] !== '11111111-1' && Persona::where('rut', $fila['B'])->exists()) {
+                    $this->registrarErrorPersonas($errores, $fila, "El RUT '{$fila['B']}' ya existe en la base de datos.");
                     continue;
                 }
 
                 // Verificar que la fecha no sea null
                 if ($fila['F'] == null || $fila['F'] == '-' || !$this->convertirFecha($fila['F'])) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // User
-                            'B' => $fila['B'] ?? '-', // Rut
-                            'C' => $fila['C'] ?? '-', // Nombre Completo
-                            'D' => $fila['D'] ?? '-', // Nombre Empresa
-                            'E' => $fila['E'] ?? '-', // Estado
-                            'F' => $fila['F'] ?? '-', // Fecha Ingreso
-                            'G' => $fila['G'] ?? '-', // Fecha Término
-                            'H' => $fila['H'] ?? '-', // Cargo
-                            'I' => $fila['I'] ?? '-', // Ubicación
-                            'J' => $fila['J'] ?? '-', // Correo
-                        ],
-                        'motivo' => "La fecha de ingreso no puede ser nula."
-                    ];
+                    $this->registrarErrorPersonas($errores, $fila, "La fecha de ingreso no puede ser nula.");
                     continue;
                 }
 
                 // Crear la persona
+                $correo = strtolower($fila['J']);
+                if (!preg_match('/@(iansa|patagoniafresh|iacton)\.[a-z]{2,3}$/', $correo)) {
+                    $correo = "-";
+                }
+
                 $persona = Persona::create([
                     'user' => $user,
                     'rut' => $fila['B'],
@@ -220,7 +172,7 @@ class ImportarPersonasController extends Controller
                     'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
                     'cargo' => $fila['H'],
                     'ubicacion' => $ubicacionId,
-                    'correo' => $fila['J']
+                    'correo' => $correo
                 ]);
 
                 // Transformar el estado y la ubicación para mostrarlos en la vista
@@ -248,7 +200,7 @@ class ImportarPersonasController extends Controller
                     'fecha_ter' => $fila['F'] ? $this->convertirFecha($fila['G']) : null,
                     'cargo' => $fila['H'],
                     'ubicacion' => $ubicacionNombre, // Mostrar el nombre de la ubicación
-                    'correo' => $fila['J']
+                    'correo' => $correo
                 ];
             }
             // Almacenar errores en la sesión para su descarga
@@ -260,6 +212,69 @@ class ImportarPersonasController extends Controller
             return view('importar.importarPersonas', compact('datos', 'personas', 'errores'))
                 ->with('success', 'Datos importados correctamente.');
         });
+    }
+
+    public function actualizarEstadoYUbicacion($fila, $ubicacionId){
+        $cambio = false;
+        $personaExistente = Persona::where('rut', $fila['B'])->first();
+        if ($personaExistente) {
+            $camposIguales = $personaExistente->nombre_completo === $fila['C'] &&
+                            $personaExistente->nombre_empresa === $fila['D'] &&
+                            $personaExistente->fecha_ing === $this->convertirFecha($fila['F']) &&
+                            $personaExistente->cargo === $fila['H'] &&
+                            $personaExistente->correo === $fila['J'];
+            if ($camposIguales) {
+                if($personaExistente->ubicacion != $ubicacionId){
+                    $personaExistente->update([
+                        'ubicacion' => $ubicacionId,
+                    ]);
+                    Activo::where('responsable_de_activo', $personaExistente->id)->update(['ubicacion' => $ubicacionId]);
+                    $cambio = true;
+                }
+                if($personaExistente->estado_empleado != $this->convertirEstadoEmpleado($fila['E'])){
+                    if($this->convertirEstadoEmpleado($fila['E']) == 0){
+                        $activos = Activo::where('responsable_de_activo', $personaExistente->id)->get();
+                        foreach ($activos as $activo) {
+                            $activo->estado = 3;
+                            $activo->responsable_de_activo = null;
+                            Asignacion::where('id_activo', $activo->id)->delete();
+                            $activo->update();
+                        }
+                        Asignacion::where('id_persona', $personaExistente->id)->delete();
+                        $personaExistente->update([
+                            'estado_empleado' => 0,
+                            'fecha_ter' => date('Y-m-d')
+                        ]);
+                    }
+                    else{
+                        $personaExistente->update([
+                            'estado_empleado' => 1,
+                            'fecha_ter' => null
+                        ]);
+                    }
+                    $cambio = true;
+                }
+            }
+        }
+        return $cambio;
+    }
+
+    private function registrarErrorPersonas(&$errores, $fila, $motivo) {
+        $errores[] = [
+            'fila' => [
+                'A' => $fila['A'] ?? '-', // User
+                'B' => $fila['B'] ?? '-', // Rut
+                'C' => $fila['C'] ?? '-', // Nombre Completo
+                'D' => $fila['D'] ?? '-', // Nombre Empresa
+                'E' => $fila['E'] ?? '-', // Estado
+                'F' => $fila['F'] ?? '-', // Fecha Ingreso
+                'G' => $fila['G'] ?? '-', // Fecha Término
+                'H' => $fila['H'] ?? '-', // Cargo
+                'I' => $fila['I'] ?? '-', // Ubicación
+                'J' => $fila['J'] ?? '-', // Correo
+            ],
+            'motivo' => $motivo
+        ];
     }
 
     public function confirmarImportacion()

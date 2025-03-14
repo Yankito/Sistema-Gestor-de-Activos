@@ -59,4 +59,17 @@ trait ImportarTrait
         }
         return true;
     }
+
+    protected function registrarError(&$errores, $fila, $motivo) {
+        $errores[] = [
+            'fila' => [
+                'A' => $fila['A'] ?? '-',
+                'B' => $fila['B'] ?? '-',
+                'C' => $fila['C'] ?? '-',
+                'D' => $fila['D'] ?? '-',
+                'E' => $fila['E'] ?? '-',
+            ],
+            'motivo' => $motivo
+        ];
+    }
 }

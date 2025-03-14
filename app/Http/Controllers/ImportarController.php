@@ -38,7 +38,7 @@ class ImportarController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-    
+
         // Definir los encabezados que coinciden con las claves de $error['fila']
         $encabezados = [
             'A' => 'Responsable',
@@ -47,8 +47,8 @@ class ImportarController extends Controller
             'D' => 'Estado',
             'E' => 'Justificación Doble Activo',
         ];
-    
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion.xlsx');
+
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Asignacion de Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function importExcel(Request $request)
@@ -81,32 +81,14 @@ class ImportarController extends Controller
                 // Buscar el activo
                 $activo = Activo::where('nro_serie', $nroSerie)->first();
                 if (!$activo) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // Número de serie
-                            'B' => $fila['B'] ?? '-', // Marca
-                            'C' => $fila['C'] ?? '-', // Modelo
-                            'D' => $fila['D'] ?? '-', // Tipo de activo
-                            'E' => $fila['E'] ?? '-', // Ubicación
-                        ],
-                        'motivo' => "Activo con número de serie '$nroSerie' no encontrado."
-                    ];
+                    $this->registrarError($errores, $fila, "Activo con número de serie '$nroSerie' no encontrado.");
                     continue;
                 }
 
                 // Buscar el estado
                 $estado = DB::table('estados')->where('nombre_estado', $estadoExcel)->first();
                 if (!$estado) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // Número de serie
-                            'B' => $fila['B'] ?? '-', // Marca
-                            'C' => $fila['C'] ?? '-', // Modelo
-                            'D' => $fila['D'] ?? '-', // Tipo de activo
-                            'E' => $fila['E'] ?? '-', // Ubicación
-                        ],
-                        'motivo' => "Estado '$estadoExcel' no encontrado en la base de datos."
-                    ];
+                    $this->registrarError($errores, $fila, "Estado '$estadoExcel' no encontrado en la base de datos.");
                     continue;
                 }
 
@@ -115,16 +97,7 @@ class ImportarController extends Controller
                     // Si se proporciona un responsable en el archivo, buscarlo
                     $responsable = Persona::where('user', $responsableUser)->first();
                     if (!$responsable) {
-                        $errores[] = [
-                            'fila' => [
-                                'A' => $fila['A'] ?? '-', // Número de serie
-                                'B' => $fila['B'] ?? '-', // Marca
-                                'C' => $fila['C'] ?? '-', // Modelo
-                                'D' => $fila['D'] ?? '-', // Tipo de activo
-                                'E' => $fila['E'] ?? '-', // Ubicación
-                            ],
-                            'motivo' => "Responsable '$responsableUser' no encontrado."
-                        ];
+                        $this->registrarError($errores, $fila, "Responsable '$responsableUser' no encontrado.");
                         continue;
                     }
                     // Actualizar el responsable del activo
@@ -132,16 +105,7 @@ class ImportarController extends Controller
                 } else {
                     // Si no se proporciona un responsable, mantener el responsable actual (si existe)
                     if (!$activo->responsable_de_activo) {
-                        $errores[] = [
-                            'fila' => [
-                                'A' => $fila['A'] ?? '-', // Número de serie
-                                'B' => $fila['B'] ?? '-', // Marca
-                                'C' => $fila['C'] ?? '-', // Modelo
-                                'D' => $fila['D'] ?? '-', // Tipo de activo
-                                'E' => $fila['E'] ?? '-', // Ubicación
-                            ],
-                            'motivo' => "El activo no tiene un responsable actual y no se proporcionó uno en el archivo."
-                        ];
+                        $this->registrarError($errores, $fila, "El activo no tiene un responsable actual y no se proporcionó uno en el archivo.");
                         continue;
                     }
                     // No es necesario actualizar el responsable, se mantiene el actual
@@ -151,16 +115,7 @@ class ImportarController extends Controller
                 if (!empty($usuarioUser)) {
                     $usuario = Persona::where('user', $usuarioUser)->first();
                     if (!$usuario) {
-                        $errores[] = [
-                            'fila' => [
-                                'A' => $fila['A'] ?? '-', // Número de serie
-                                'B' => $fila['B'] ?? '-', // Marca
-                                'C' => $fila['C'] ?? '-', // Modelo
-                                'D' => $fila['D'] ?? '-', // Tipo de activo
-                                'E' => $fila['E'] ?? '-', // Ubicación
-                            ],
-                            'motivo' => "Usuario '$usuarioUser' no encontrado."
-                        ];
+                        $this->registrarError($errores, $fila, "Usuario '$usuarioUser' no encontrado.");
                         continue;
                     }
                 } else {
@@ -220,4 +175,5 @@ class ImportarController extends Controller
                 ->with('success', 'Datos importados correctamente.');
         });
     }
+
 }

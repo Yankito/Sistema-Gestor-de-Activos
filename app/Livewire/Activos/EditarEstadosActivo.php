@@ -54,6 +54,19 @@ class EditarEstadosActivo extends Component
     }
 
     public function cambiarEstado($activo_id, $nuevo_estado){
+        $estados = [
+            1 => 'ADQUIRIDO',
+            2 => 'PREPARACION',
+            3 => 'DISPONIBLE',
+            4 => 'ASIGNADO',
+            5 => 'PERDIDO',
+            6 => 'ROBADO',
+            7 => 'DEVUELTO',
+            8 => 'PARA_BAJA',
+            9 => 'DONADO',
+            10 => 'VENDIDO',
+        ];
+
         $activo = Activo::with('usuarioDeActivo', 'responsableDeActivo', 'ubicacionRelation', 'estadoRelation')->findOrFail($activo_id);
         if( $activo->estado == 7){
             $activo->responsable_de_activo = null;
@@ -69,6 +82,15 @@ class EditarEstadosActivo extends Component
             $registroAntiguoResponsable->encargado_cambio = Auth::user()->id;
             $registroAntiguoResponsable->save();
         }
+        else{
+            $registroVendido = new Registro();
+            $registroVendido->persona = $activo->responsable_de_activo;
+            $registroVendido->activo = $activo_id;
+            $registroVendido->tipo_cambio = $estados[$nuevo_estado];
+            $registroVendido->encargado_cambio = Auth::user()->id;
+            $registroVendido->save();
+        }
+
         $activo->estado = $nuevo_estado;
         $activo->update();
 

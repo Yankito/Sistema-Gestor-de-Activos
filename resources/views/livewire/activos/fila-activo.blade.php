@@ -95,8 +95,7 @@
         @endif
     </td>
     <td>
-        {{ $activo->responsableDeActivo->nombre_completo ?? 'Sin responsable' }}
-        ({{ $activo->responsableDeActivo->user ?? 'Sin usuario' }})
+        {{ $activo->responsableDeActivo->nombre_completo ?? 'Sin responsable' }} ({{ $activo->responsableDeActivo->user ?? 'Sin usuario' }})
     </td>
     <td>{{ $activo->ubicacionRelation->sitio }}</td>
     <td>{{ $activo->ubicacionRelation->soporte_ti }}</td>

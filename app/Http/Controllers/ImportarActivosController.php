@@ -36,7 +36,7 @@ class ImportarActivosController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-    
+
         // Definir los encabezados que coinciden con las claves de $error['fila']
         $encabezados = [
             'A' => 'Número de serie',
@@ -45,8 +45,8 @@ class ImportarActivosController extends Controller
             'D' => 'Tipo de activo',
             'E' => 'Ubicación',
         ];
-    
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Activos.xlsx');
+
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function generarPlantilla()
@@ -94,7 +94,7 @@ class ImportarActivosController extends Controller
             }
             $columna = chr(ord($columna) - 1);
             // Aplicar estilo a las cabeceras
-            $hoja->getStyle('A1:' . $columna . '1')->applyFromArray($styleArray);
+            $hoja->getStyle('A1:' . $columna . '1')->applyFromArray($this->getHeaderStyle());
 
             // Ajustar ancho de columnas
             foreach (range('A', $columna) as $columnID) {
@@ -139,15 +139,7 @@ class ImportarActivosController extends Controller
                 $tipoActivo = DB::table('tipo_activo')->where('nombre', $tipoActivoNombre)->first();
 
                 if (!$tipoActivo) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // Responsable
-                            'B' => $fila['B'] ?? '-', // Usuario Activo
-                            'C' => $fila['C'] ?? '-', // Número de Serie
-                            'D' => $fila['D'] ?? '-', // Estado
-                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
-                        'motivo' => "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos."];
+                    $this->registrarError($errores, $fila, "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos.");
                     continue;
                 }
 
@@ -159,30 +151,14 @@ class ImportarActivosController extends Controller
                 $ubicacionExistente = DB::table('ubicaciones')->where('sitio', $ubicacion)->first();
 
                 if (!$ubicacionExistente) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // Responsable
-                            'B' => $fila['B'] ?? '-', // Usuario Activo
-                            'C' => $fila['C'] ?? '-', // Número de Serie
-                            'D' => $fila['D'] ?? '-', // Estado
-                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
-                        'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."];
+                    $this->registrarError($errores, $fila, "La ubicación '{$ubicacion}' no existe en la base de datos.");
                     continue;
                 }
 
-                $estado = DB::table('estados')->where('nombre_estado', 'Adquirido')->first();
+                $estado = DB::table('estados')->where('nombre_estado', 'Disponible')->first();
 
                 if (Activo::where('nro_serie', strtoupper($fila['A']))->exists()) {
-                    $errores[] = [
-                        'fila' => [
-                            'A' => $fila['A'] ?? '-', // Responsable
-                            'B' => $fila['B'] ?? '-', // Usuario Activo
-                            'C' => $fila['C'] ?? '-', // Número de Serie
-                            'D' => $fila['D'] ?? '-', // Estado
-                            'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
-                        'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
+                    $this->registrarError($errores, $fila, "El activo con número de serie '{$fila['A']}' ya existe en la base de datos.");
                     continue;
                 }
 
