@@ -131,7 +131,7 @@
 
 
                                     <!-- Botón de Enviar -->
-                                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Registrar Activo</button>
+                                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit"  onclick="this.disabled=true; this.form.submit();">Registrar Activo</button>
                                 </form>
 
                                 <a href="/dashboard" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Volver atrás</a>
@@ -252,6 +252,7 @@
 
             // Resetea el valor del campo 'responsable' antes de enviar el formulario
             document.querySelector('form').addEventListener('submit', function() {
+                event.preventDefault();
                 var asignarResponsable = document.getElementById('asignarResponsable');
                 var responsableSelect = document.getElementById('responsable');
 
@@ -265,6 +266,7 @@
                 if (!asignarUsuarios.checked) {
                     usuariosSelect.value = null;  // No envía el valor cuando no está marcado
                 }
+                this.submit();
             });
 
             $(document).ready(function () {
