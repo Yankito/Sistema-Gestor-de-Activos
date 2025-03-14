@@ -54,8 +54,8 @@
     </div>
 
     <div class="row" wire:poll.5s>
-        <div class="col-lg-5 connectedSortable ui-sortable">
-            <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
+        <div class="col-lg-5">
+            <a href="/tablaActivos" class="inner text-center" style="display: block; text-decoration: none;">
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner text-center">
@@ -67,8 +67,8 @@
                     </div>
                     <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
-            <div style="cursor: pointer;" onclick="window.location.href='/tablaActivos'" >
+            </a>
+            <a href="/tablaActivos" class="inner text-center" style="display: block; text-decoration: none;">
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner text-center">
@@ -80,10 +80,10 @@
                     </div>
                     <a href="/tablaActivos" class="small-box-footer">Ver activos <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
+            </a>
         </div>
 
-        <div class="col-lg-7 connectedSortable ui-sortable" >
+        <div class="col-lg-7" >
             <div class="card bg-gradient-info" style="border: #00b5c4 !important;" >
                 <div class="card-header border-0" style="background-color: #00b5c4 !important;">
                     <h3 class="card-title" style="color: #ffffff !important;">
@@ -141,9 +141,7 @@
             @if($conteoValores !=null)
                 @foreach($conteoValores as $id => $valores)
 
-                    <div class="col-lg-3 col-6" style="cursor: pointer;"
-                        onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" :
-                                ($filtro === 'ubicacion' ? "updateUbicacion('" .$id. "')" : '') }}">
+                    <button class="col-lg-3 col-6" style="cursor: pointer; background: none; border: none; text-align: left;" onclick="{{ $filtro === 'tipo_de_activo' ? "updateTipoDeActivo('" .$id. "')" : ($filtro === 'ubicacion' ? "updateUbicacion('" .$id. "')" : '') }}">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
@@ -154,7 +152,7 @@
                                 <i class="ion ion-stats-bars"></i>
                             </div>
                         </div>
-                    </div>
+                    </button>
                 @endforeach
             @endif
 
