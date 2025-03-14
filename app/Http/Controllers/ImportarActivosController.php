@@ -36,7 +36,7 @@ class ImportarActivosController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-    
+
         // Definir los encabezados que coinciden con las claves de $error['fila']
         $encabezados = [
             'A' => 'Número de serie',
@@ -45,8 +45,8 @@ class ImportarActivosController extends Controller
             'D' => 'Tipo de activo',
             'E' => 'Ubicación',
         ];
-    
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Activos.xlsx');
+
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function generarPlantilla()
@@ -146,7 +146,7 @@ class ImportarActivosController extends Controller
                             'C' => $fila['C'] ?? '-', // Número de Serie
                             'D' => $fila['D'] ?? '-', // Estado
                             'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
+                        ],
                         'motivo' => "El tipo de activo '{$tipoActivoNombre}' no existe en la base de datos."];
                     continue;
                 }
@@ -166,7 +166,7 @@ class ImportarActivosController extends Controller
                             'C' => $fila['C'] ?? '-', // Número de Serie
                             'D' => $fila['D'] ?? '-', // Estado
                             'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
+                        ],
                         'motivo' => "La ubicación '{$ubicacion}' no existe en la base de datos."];
                     continue;
                 }
@@ -181,7 +181,7 @@ class ImportarActivosController extends Controller
                             'C' => $fila['C'] ?? '-', // Número de Serie
                             'D' => $fila['D'] ?? '-', // Estado
                             'E' => $fila['E'] ?? '-', // Justificación Doble Activo
-                        ], 
+                        ],
                         'motivo' => "El activo con número de serie '{$fila['A']}' ya existe en la base de datos."];
                     continue;
                 }

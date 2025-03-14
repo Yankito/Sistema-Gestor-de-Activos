@@ -38,7 +38,7 @@ class ImportarController extends Controller
     public function descargarErrores()
     {
         $errores = session('errores', []);
-    
+
         // Definir los encabezados que coinciden con las claves de $error['fila']
         $encabezados = [
             'A' => 'Responsable',
@@ -47,8 +47,8 @@ class ImportarController extends Controller
             'D' => 'Estado',
             'E' => 'Justificación Doble Activo',
         ];
-    
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion.xlsx');
+
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Asignacion de Activos '. date('Y-m-d').'.xlsx');
     }
 
     public function importExcel(Request $request)

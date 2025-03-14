@@ -53,7 +53,7 @@ class ImportarPersonasController extends Controller
             'J' => 'Correo',
         ];
 
-        return $this->descargarErroresExcel($errores, $encabezados, 'Errores_Importacion_Personas.xlsx');
+        return $this->descargarErroresExcel($errores, $encabezados, 'Errores Importacion Personas '. date('Y-m-d').'.xlsx');
     }
 
     private function convertirEstadoEmpleado($valor)

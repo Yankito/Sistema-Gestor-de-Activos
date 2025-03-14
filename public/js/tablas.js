@@ -57,17 +57,17 @@ $(document).ready(function () {
     function crearBotonExportacion(tipo, texto) {
         return {
             extend: tipo,
-            title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString(),
+            title: "Iansa - Tabla de " + tipoTabla + " - " + new Date().toLocaleDateString('en-GB').split('/').reverse().join('-'),
             text: texto,
             exportOptions: {
-                columns: ':not(:first)',
-                format: {
-                    header: function (data, columnIdx) {
-                        let tempDiv = document.createElement("div");
-                        tempDiv.innerHTML = data;
-                        return tempDiv.childNodes[0].nodeValue.trim();
-                    }
+            columns: ':not(:first)',
+            format: {
+                header: function (data, columnIdx) {
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = data;
+                return tempDiv.childNodes[0].nodeValue.trim();
                 }
+            }
             }
         };
     }
